@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1976d2" />
+  <meta name="description" content="MIA Logistics Manager - Hệ thống quản lý vận chuyển chuyên nghiệp" />
+  <meta name="keywords" content="logistics, transport, warehouse, quản lý vận chuyển, kho bãi" />
+  <meta name="author" content="MIA Logistics Team" />
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="MIA Logistics Manager" />
+  <meta property="og:description" content="Hệ thống quản lý vận chuyển chuyên nghiệp" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="%PUBLIC_URL%" />
+  <meta property="og:image" content="%PUBLIC_URL%/logo192.png" />
+
+  <!-- Apple Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MIA Logistics" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+
+  <!-- Manifest -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://maps.googleapis.com" />
+  <link rel="preconnect" href="https://sheets.googleapis.com" />
+  <link rel="preconnect" href="https://drive.googleapis.com" />
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <!-- Leaflet CSS for Maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <title>MIA Logistics Manager</title>
+
+  <style>
+    /* Loading screen styles */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: white;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .loading-logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    .loading-text {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .loading-subtitle {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+    }
+
+    /* Hide loading screen when app loads */
+    .app-loaded .loading-screen {
+      display: none;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #f5f5f5;
+    }
+
+    code {
+      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    }
+
+    /* Responsive design helpers */
+    .mobile-only {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-only {
+        display: block;
+      }
+
+      .desktop-only {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <div style="text-align: center; padding: 50px; font-family: 'Roboto', sans-serif;">
+      <h2>Vui lòng bật JavaScript</h2>
+      <p>Ứng dụng MIA Logistics Manager cần JavaScript để hoạt động.</p>
+      <p>Please enable JavaScript to run MIA Logistics Manager.</p>
+    </div>
+  </noscript>
+
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-logo">
+      <svg viewBox="0 0 100 100" fill="currentColor">
+        <path d="M20 80 L50 20 L80 80 M30 65 L70 65" stroke="currentColor" stroke-width="4" fill="none" />
+        <circle cx="25" cy="75" r="3" fill="currentColor" />
+        <circle cx="50" cy="75" r="3" fill="currentColor" />
+        <circle cx="75" cy="75" r="3" fill="currentColor" />
+      </svg>
+    </div>
+    <div class="loading-text">MIA Logistics</div>
+    <div class="loading-subtitle">Hệ thống quản lý vận chuyển chuyên nghiệp</div>
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- App Root -->
+  <div id="root"></div>
+
+  <!-- Service Worker Registration -->
+  <script>
+    // Hide loading screen when page loads
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        document.body.classList.add('app-loaded');
+      }, 1000);
+    });
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('%PUBLIC_URL%/sw.js')
+          .then(function (registration) {
+            console.log('SW registered: ', registration);
+          })
+          .catch(function (registrationError) {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+
+    // Global error handler
+    window.addEventListener('error', function (e) {
+      console.error('Global error:', e.error);
+      // You can send error to logging service here
+    });
+
+    // Unhandled promise rejection handler
+    window.addEventListener('unhandledrejection', function (e) {
+      console.error('Unhandled promise rejection:', e.reason);
+      // You can send error to logging service here
+    });
+  </script>
+</body>
+
+</html>

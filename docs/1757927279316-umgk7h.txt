@@ -1,0 +1,334 @@
+# Hướng dẫn các biến trong dự án TransportRequests
+
+## 📋 Tổng quan
+
+File này mô tả các biến quan trọng trong `/src/features/shipments/components/TransportRequests.tsx` để tránh nhầm lẫn khi phát triển.
+
+## 🔧 Các biến chính
+
+### 1. **State Variables (useState)**
+
+#### Form Data
+
+```typescript
+const [newTransportForm, setNewTransportForm] = useState({
+  // Thông tin cơ bản
+  pickupLocation: '', // ID của điểm nguồn
+  selectedTransfers: new Set<string>(), // Set các ID phiếu đã chọn
+  status: '', // Trạng thái yêu cầu
+  note: '', // Ghi chú
+
+  // Thông tin vận chuyển
+  carrierName: '', // Tên nhà vận chuyển
+  carrierId: '', // ID nhà vận chuyển
+  pricingMethod: '', // Phương thức tính tiền (perKm, perM3, perTrip)
+  vehicleType: '', // Loại xe
+
+  // Thông tin tài xế
+  driverId: '', // Mã tài xế
+  driverName: '', // Tên tài xế
+  driverPhone: '', // Số điện thoại tài xế
+  driverLicense: '', // Số bằng lái
+
+  // Hình ảnh và phòng ban
+  loadingImages: '', // Hình ảnh lên hàng
+  department: '', // Phòng ban sử dụng
+
+  // Định giá và phí phụ
+  serviceArea: '', // Khu vực phục vụ
+  pricePerKm: 0, // Giá/km (VNĐ)
+  pricePerM3: 0, // Giá/khối (VNĐ/m³)
+  pricePerTrip: 0, // Giá/chuyến (VNĐ)
+  stopFee: 0, // Chi phí điểm dừng (VNĐ/điểm)
+  fuelSurcharge: 0, // Phí phụ xăng (VNĐ)
+  tollFee: 0, // Phí cầu đường (VNĐ)
+  insuranceFee: 0, // Phí bảo hiểm (VNĐ)
+  baseRate: 0, // Base rate (VNĐ)
+});
+```
+
+#### UI State
+
+```typescript
+const [currentRequestId, setCurrentRequestId] = useState<string | null>(null);
+const [currentRowIndex, setCurrentRowIndex] = useState<number | null>(null);
+const [editing, setEditing] = useState(false);
+const [open, setOpen] = useState(false);
+const [closingDialog, setClosingDialog] = useState(false);
+const [activeTab, setActiveTab] = useState(0);
+const [generatingId, setGeneratingId] = useState(false);
+const [submittingRequest, setSubmittingRequest] = useState(false);
+```
+
+#### Selection State
+
+```typescript
+const [selectedStopPoints, setSelectedStopPoints] = useState<Set<string>>(
+  new Set()
+);
+const [selectedTransferInStop, setSelectedTransferInStop] = useState<
+  string | null
+>(null);
+const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+```
+
+#### Distance Calculation State
+
+```typescript
+const [calculatedDistance, setCalculatedDistance] = useState<number | null>(
+  null
+); // ⚠️ BIẾN CŨ - KHÔNG DÙNG
+const [isCalculatingDistance, setIsCalculatingDistance] = useState(false); // ⚠️ BIẾN CŨ - KHÔNG DÙNG
+```
+
+### 2. **Hook Variables**
+
+#### Distance Calculation Hook
+
+```typescript
+const {
+  distances: stopPointDistances, // ✅ BIẾN MỚI - DÙNG CHO KHOẢNG CÁCH
+  isCalculating,
+  error,
+  calculateStopDistances,
+  getDistancePayload,
+} = useDistanceCalculation();
+```
+
+#### Cost Calculation Hook
+
+```typescript
+const { calculateCost } = useTransportCostCalculation();
+```
+
+### 3. **Data Variables**
+
+#### API Data
+
+```typescript
+const [transportRequests, setTransportRequests] = useState<Transfer[]>([]);
+const [locations, setLocations] = useState<Location[]>([]);
+const [carriers, setCarriers] = useState<Carrier[]>([]);
+```
+
+#### Computed Data
+
+```typescript
+const groupedLocations = useMemo(() => {
+  /* ... */
+}, [locations]);
+const groupedCarriers = useMemo(() => {
+  /* ... */
+}, [carriers]);
+const filteredTransfers = useMemo(() => {
+  /* ... */
+}, [transportRequests, newTransportForm.pickupLocation]);
+```
+
+## 🚨 Các biến quan trọng cần lưu ý
+
+### **Khoảng cách (Distance)**
+
+```typescript
+// ❌ BIẾN CŨ - KHÔNG DÙNG
+calculatedDistance; // Tính từ function cũ, có thể = 0
+
+// ✅ BIẾN MỚI - DÙNG CHO TÍNH TOÁN
+stopPointDistances; // Tính từ hook useDistanceCalculation
+Object.values(stopPointDistances).reduce((sum, distance) => sum + distance, 0); // Tổng khoảng cách
+```
+
+### **Phương thức tính tiền (Pricing Method)**
+
+```typescript
+// Sheet format (từ Google Sheets)
+'PER_KM'; // Tính theo km
+'PER_M3'; // Tính theo khối
+'PER_TRIP'; // Tính theo chuyến
+
+// Form format (trong React component)
+'perKm'; // Tính theo km
+'perM3'; // Tính theo khối
+'perTrip'; // Tính theo chuyến
+```
+
+### **Mapping giữa 2 format**
+
+```typescript
+const pricingMethodMap: { [key: string]: 'perKm' | 'perTrip' | 'perM3' } = {
+  PER_KM: 'perKm',
+  PER_TRIP: 'perTrip',
+  PER_M3: 'perM3',
+};
+
+const reverseMap: { [key: string]: string } = {
+  perKm: 'PER_KM',
+  perM3: 'PER_M3',
+  perTrip: 'PER_TRIP',
+};
+```
+
+## 🔄 Các function quan trọng
+
+### **Tính toán chi phí**
+
+```typescript
+// Function cũ - sử dụng cho "Chi phí vận chuyển"
+calculateEstimatedCost()  // Trả về số tiền (number)
+
+// Component mới - sử dụng cho "Chi tiết tính toán chi phí"
+<CostCalculationDetails formData={{...}} />  // Hiển thị chi tiết
+```
+
+### **Tìm thông tin carrier**
+
+```typescript
+getSelectedCarrierInfo(); // Trả về carrier object hoặc null
+```
+
+### **Validation**
+
+```typescript
+validateTransportSubmission(); // Trả về { ok: boolean, messages: string[] }
+```
+
+## ⚠️ Lưu ý quan trọng
+
+1. **KHÔNG dùng `calculatedDistance`** - biến cũ, có thể = 0
+2. **DÙNG `stopPointDistances`** - biến mới từ hook
+3. **Mapping format** - luôn chuyển đổi giữa sheet format và form format
+4. **Validation** - kiểm tra `stopPointDistances` thay vì `calculatedDistance`
+5. **Tính toán chi phí** - 2 nơi khác nhau, cần đồng bộ
+
+## 🔧 Cách sử dụng đúng
+
+### **Lấy tổng khoảng cách**
+
+```typescript
+// ✅ ĐÚNG
+const totalDistance = Object.values(stopPointDistances).reduce(
+  (sum, distance) => sum + distance,
+  0
+);
+
+// ❌ SAI
+const totalDistance = calculatedDistance || 0;
+```
+
+### **Validation khoảng cách**
+
+```typescript
+// ✅ ĐÚNG
+const distanceOk =
+  Object.values(stopPointDistances).reduce(
+    (sum, distance) => sum + distance,
+    0
+  ) > 0;
+
+// ❌ SAI
+const distanceOk = !!calculatedDistance && calculatedDistance > 0;
+```
+
+### **Mapping pricing method**
+
+```typescript
+// ✅ ĐÚNG
+const sheetPricingMethod =
+  pricingMethodMap[formPricingMethod] || formPricingMethod;
+const formPricingMethod = reverseMap[sheetPricingMethod] || 'perKm';
+```
+
+## 📝 Cập nhật
+
+- **Ngày tạo:** 26/08/2025
+- **Phiên bản:** 1.1
+- **Cập nhật cuối:** 26/08/2025 - Debug transfer_ids không ghi nhận vào sheet
+
+## 🔧 Cải tiến mới (v1.1)
+
+### **Thông báo thành công cải tiến**
+
+- ✅ **Chi phí ước tính đúng**: Tính lại `calculateEstimatedCost()` trước khi hiển thị
+- ✅ **Thông tin đầy đủ**: Hiển thị tất cả thông tin từ bảng tổng hợp
+- ✅ **Chi tiết điểm dừng**: Liệt kê từng điểm dừng với khoảng cách, kiện, khối lượng
+
+### **Tối ưu tốc độ**
+
+- ✅ **Loading state**: Hiển thị "Đang xử lý yêu cầu vận chuyển..."
+- ✅ **Tính khoảng cách thông minh**: Chỉ tính nếu chưa có dữ liệu
+- ✅ **Non-blocking reload**: Không await `fetchTransfers()` để không block UI
+- ✅ **Debug logs**: Chỉ hiển thị trong development mode
+
+### **Hiển thị transfer_id (v1.1)**
+
+- ✅ **Thêm transferId**: Vào interface TransportRequest
+- ✅ **Transform dữ liệu**: Map từ `transfer.transfer_id`
+- ✅ **Hiển thị trong bảng**: Dưới requestCode với format "ID: [transfer_id]"
+- ✅ **Hiển thị trong Tab 2**: Dưới mỗi chip phiếu với format "ID: [transfer_id]"
+- ✅ **Danh sách Transfer IDs**: Trong phần tổng hợp với tất cả transfer_id đã chọn
+
+### **Sheet TransportRequests - Transfer IDs (v1.1)**
+
+- ✅ **10 cột mới**: `stop1TransferIds` đến `stop10TransferIds`
+- ✅ **Backend headers**: Cập nhật `TRANSPORT_REQUESTS_REQUIRED` (102 cột)
+- ✅ **Frontend mapping**: Tạo danh sách transfer_ids cho từng điểm dừng
+- ✅ **Format dữ liệu**: Transfer IDs được join bằng dấu phẩy (", ")
+- ✅ **Script tự động**: `add-transfer-ids-columns.cjs` để thêm cột an toàn
+
+### **Debug Transfer IDs (v1.1)**
+
+- ✅ **Cột đã tồn tại**: 10 cột transfer_ids đã được thêm vào sheet (cột 89-98)
+- ✅ **Backend headers**: `TRANSPORT_REQUESTS_REQUIRED` đã có đủ 98 cột
+- ✅ **Frontend mapping**: Logic tạo `stopTransferIds` đã được implement
+- ✅ **Debug logs**: Thêm logs để kiểm tra dữ liệu frontend và backend
+  - 🔍 **Vấn đề**: Transfer IDs không được ghi nhận vào sheet khi tạo yêu cầu
+  - 🔍 **Nguyên nhân có thể**: Logic mapping `selectedTransfersForStop` hoặc `transferId`
+  - 🔧 **Fix đã thực hiện**:
+    - Sử dụng `t.transferId || t.id` trong `stopPoints.transfers`
+    - Cập nhật logic lọc `selectedTransfersForStop` để so sánh đúng `transferId`
+
+  - 🔍 **Vấn đề**: Không có validation cho số điểm dừng (có thể vượt quá 10 điểm)
+  - 🔧 **Fix đã thực hiện**:
+    - Thêm validation trong `handleTransferClick`: kiểm tra tối đa 10 điểm dừng
+    - Thêm validation trong `handleSubmitNewRequest`: kiểm tra ít nhất 1 điểm, tối đa 10 điểm
+    - Thêm cảnh báo visual trong "Thông tin tổng hợp": chip đổi màu đỏ khi > 10 điểm
+    - Thêm validation trong "Danh sách điểm giao hàng": disable chip khi đã đạt 10 điểm
+    - Hiển thị thông báo cảnh báo khi vượt quá giới hạn
+
+  - 🔍 **Vấn đề**: Thiếu cột "SL sản phẩm" trong bảng dữ liệu đề nghị vận chuyển
+  - 🔧 **Fix đã thực hiện**:
+    - Thêm cột "SL sản phẩm" vào TableHead
+    - Thêm nội dung hiển thị `totalProducts` trong TableBody
+    - Mapping dữ liệu từ `transfer.quantity` sang `totalProducts`
+    - Hiển thị "N/A" khi không có dữ liệu
+
+  - 🔍 **Vấn đề**: Thiếu thông tin "SL sản phẩm" trong Tab 2 "Điểm giao hàng"
+  - 🔧 **Fix đã thực hiện**:
+    - Thêm trường `totalProducts` vào interface `DeliveryPoint`
+    - Cập nhật logic tính toán trong `getDeliveryPoints()` để tính tổng số sản phẩm
+    - Thêm chip "SL sản phẩm" vào hiển thị mỗi điểm giao hàng (màu xanh lá)
+    - Thêm chip "SL sản phẩm" vào phần "Tổng hợp" (màu xanh lá)
+    - Logic tương tự như số kiện và số khối đã có từ trước
+
+  - 🔍 **Vấn đề**: Các cột `stop1Products` đến `stop10Products` và `totalProducts` chưa được ghi nhận vào sheet
+  - 🔧 **Fix đã thực hiện**:
+    - Thêm logic tính toán `stopProducts` cho từng điểm dừng trong `handleSubmitNewRequest`
+    - Thêm logic tính toán `totalProducts` tổng hợp
+    - Thêm `stopProducts` và `totalProducts` vào payload gửi đến backend
+    - Thêm debug logs để kiểm tra dữ liệu sản phẩm
+    - Đảm bảo dữ liệu được lưu vào các cột tương ứng trong Google Sheets
+
+  ### **Test Results (v1.2)**
+  - ✅ **Script test tạo request**: Tạo thành công đề nghị vận chuyển với đầy đủ trường sản phẩm
+  - ✅ **Backend response**: Nhận và xử lý đúng các trường `stop1Products`, `stop2Products`, `stop3Products`, `totalProducts`
+  - ✅ **Google Sheets verification**: Các trường sản phẩm đã được lưu đúng vào sheet
+  - ✅ **Data validation**: Dữ liệu sản phẩm khớp giữa frontend, backend và sheet
+  - Thêm debug logs chi tiết để kiểm tra mapping
+
+### **Test Results (v1.1)**
+
+- ✅ **Script test**: Tạo thành công đề nghị vận chuyển với đầy đủ dữ liệu
+- ✅ **Backend**: Nhận và xử lý dữ liệu đúng
+- ❌ **Transfer IDs**: `stop1TransferIds` và `stop2TransferIds` vẫn rỗng
+- ⚠️ **Format**: Một số trường có giá trị nhưng format không đúng
+- 🔍 **Nguyên nhân**: Logic mapping trong frontend vẫn cần debug thêm

@@ -1,0 +1,176 @@
+# 🚀 MIA Logistics Manager - Scripts Hướng Dẫn
+
+## 📋 Tổng Quan
+
+Dự án MIA Logistics Manager cung cấp các script tự động để quản lý việc khởi động, dừng và restart toàn bộ hệ thống.
+
+## 🛠️ Các Script Có Sẵn
+
+### 1. `start-project.sh` - Khởi Động Dự Án
+
+```bash
+./start-project.sh
+```
+
+**Chức năng:**
+
+- ✅ Dọn dẹp tất cả Node.js processes cũ
+- ✅ Giải phóng các port cần thiết (3001, 5050, 3000)
+- ✅ Kiểm tra môi trường (Node.js, npm)
+- ✅ Tạo file `.env` mẫu nếu chưa có
+- ✅ Cài đặt dependencies cho root và server
+- ✅ Kiểm tra Google Service Account
+- ✅ Khởi động Backend Server (port 5050)
+- ✅ Khởi động Frontend (port 3001)
+- ✅ Hiển thị thông tin kết nối
+- ✅ Theo dõi logs và xử lý Ctrl+C
+
+### 2. `stop-project.sh` - Dừng Dự Án
+
+```bash
+./stop-project.sh
+```
+
+**Chức năng:**
+
+- 🛑 Dừng tất cả Node.js processes
+- 🛑 Giải phóng các port (3001, 5050, 3000)
+- 🛑 Force kill các process còn sót lại
+- 🛑 Kiểm tra và báo cáo trạng thái ports
+
+### 3. `restart-project.sh` - Restart Dự Án
+
+```bash
+./restart-project.sh
+```
+
+**Chức năng:**
+
+- 🔄 Dừng dự án hiện tại
+- 🔄 Đợi 3 giây để đảm bảo dừng hoàn toàn
+- 🔄 Khởi động lại dự án
+
+## 🎯 Cách Sử Dụng
+
+### Khởi Động Lần Đầu
+
+```bash
+# Cấp quyền thực thi (chỉ cần làm 1 lần)
+chmod +x *.sh
+
+# Khởi động dự án
+./start-project.sh
+```
+
+### Quản Lý Dự Án
+
+```bash
+# Dừng dự án
+./stop-project.sh
+
+# Restart dự án
+./restart-project.sh
+
+# Hoặc dừng bằng Ctrl+C khi đang chạy start-project.sh
+```
+
+## 🔧 Cấu Hình Cần Thiết
+
+### 1. File `.env`
+
+Script sẽ tự động tạo file `.env` mẫu nếu chưa có:
+
+```env
+VITE_GOOGLE_SHEETS_SPREADSHEET_ID=your_spreadsheet_id_here
+VITE_GOOGLE_APPS_SCRIPT_URL=your_google_apps_script_url_here
+SHEET_ID=your_spreadsheet_id_here
+ACTIVE_SPREADSHEET_ID=your_spreadsheet_id_here
+SERVICE_ACCOUNT_PATH=./server/service-account-key.json
+PORT=5050
+NODE_ENV=development
+```
+
+### 2. Google Service Account
+
+Đặt file `service-account-key.json` vào thư mục `server/`
+
+### 3. Dependencies
+
+Script sẽ tự động cài đặt:
+
+- Root project dependencies (`npm install`)
+- Server dependencies (`cd server && npm install`)
+
+## 📊 Thông Tin Kết Nối
+
+Sau khi khởi động thành công:
+
+- 🌐 **Backend API**: <http://localhost:5050>
+- 📱 **Frontend App**: <http://localhost:3001>
+- 📊 **Google Sheets**: Đã kết nối
+- 🔐 **Bảo mật**: Đã kích hoạt
+
+## 🚨 Xử Lý Lỗi
+
+### Port Đã Được Sử Dụng
+
+```bash
+# Script sẽ tự động giải phóng port
+# Nếu vẫn lỗi, chạy thủ công:
+lsof -ti:3001 | xargs kill -9
+lsof -ti:5050 | xargs kill -9
+```
+
+### Dependencies Lỗi
+
+```bash
+# Xóa node_modules và cài lại
+rm -rf node_modules server/node_modules
+./start-project.sh
+```
+
+### Google Service Account Lỗi
+
+- Kiểm tra file `server/service-account-key.json` có tồn tại
+- Kiểm tra quyền truy cập Google Sheets
+- Kiểm tra `SPREADSHEET_ID` trong `.env`
+
+## 🔍 Kiểm Tra Trạng Thái
+
+### Kiểm Tra Processes
+
+```bash
+# Xem tất cả Node.js processes
+ps aux | grep node
+
+# Xem processes trên port cụ thể
+lsof -i:3001
+lsof -i:5050
+```
+
+### Kiểm Tra Logs
+
+```bash
+# Backend logs
+tail -f server/logs/*.log
+
+# Hoặc xem trực tiếp khi chạy start-project.sh
+```
+
+## 📝 Ghi Chú
+
+- ✅ Scripts đã được tối ưu cho macOS/Linux
+- ✅ Tự động xử lý cleanup khi dừng
+- ✅ Hiển thị thông báo màu sắc trực quan
+- ✅ Kiểm tra môi trường trước khi khởi động
+- ✅ Tự động cài đặt dependencies
+- ✅ Xử lý Ctrl+C để dừng an toàn
+
+## 🆘 Hỗ Trợ
+
+Nếu gặp vấn đề:
+
+1. Kiểm tra file `.env` có đúng cấu hình
+2. Kiểm tra Google Service Account
+3. Chạy `./stop-project.sh` rồi `./start-project.sh`
+4. Kiểm tra logs trong terminal
