@@ -27,14 +27,14 @@
 ### **Phase 1: Google Cloud Foundation**
 **Timeline:** Tuần 1 (9-15 tháng 10, 2025)
 
-#### **Sprint 1.1: Google Cloud Setup** (2/4 tasks) 🚧
-- [x] **Google Cloud Project**
+#### **Sprint 1.1: Google Cloud Setup** (3/4 tasks) 🚧
+- [x] **Google Cloud Project** ✅
   - [x] ✅ Google Cloud Console opened
   - [x] ✅ Tạo project: "mia-logistics-manager-2025"
   - [x] ✅ Copy Project ID vào `.env`
   - [ ] ⏳ Enable billing (nếu cần)
 
-- [ ] **Service Account Configuration**
+- [ ] **Service Account Configuration** 🔥 IN PROGRESS
   - [ ] ⏳ Tạo service account: `mia-logistics-service`
   - [ ] ⏳ Download `service-account-key.json`
   - [ ] ⏳ Copy file vào `/server/service-account-key.json`
@@ -46,8 +46,12 @@
   - [x] ✅ Enable Google Maps JavaScript API
   - [x] ✅ Enable Google Apps Script API
 
-- [x] **Environment Setup**
+- [x] **Environment Setup** ✅
   - [x] ✅ Tạo `.env` template file
+  - [x] ✅ Tạo `.env` file với project ID
+  - [x] ✅ Google Sheets service implementation
+  - [x] ✅ React hooks for data integration
+  - [x] ✅ Test scripts created
   - [x] ✅ Tạo `.env` file với project ID
   - [ ] ⏳ Test connection với Google APIs
   - [ ] ⏳ Verify authentication works#### **Sprint 1.2: Google Sheets Integration** (0/3 tasks)
@@ -223,40 +227,45 @@
 - [x] ✅ Security gitignore setup
 - [x] ✅ Google Cloud Console opened
 
-#### **🔥 CURRENT TASK: Create Service Account & Download Key**
-**Status:** 🚧 In Progress
-**Next Action:** Service Account creation in Google Cloud Console
+#### **🔥 CURRENT TASK: Complete Service Account & Create Spreadsheet**
+**Status:** 🚧 Ready for execution
+**Next Action:** Service Account creation → Spreadsheet setup
 
-**Step-by-step Guide:**
-1. **Navigate to Credentials:**
+**Service Account Steps (In Browser):**
+1. **Google Cloud Console - Credentials:**
    - Go to: APIs & Services > Credentials
-   - Click "+ CREATE CREDENTIALS"
-   - Select "Service account"
+   - Click "+ CREATE CREDENTIALS" > "Service account"
+   - Name: `mia-logistics-service`
+   - Description: `Service account for MIA Logistics Manager`
+   - CREATE AND CONTINUE → DONE
 
-2. **Service Account Details:**
-   - **Name:** `mia-logistics-service`
-   - **ID:** `mia-logistics-service`
-   - **Description:** `Service account for MIA Logistics Manager`
-   - Click "CREATE AND CONTINUE"
-
-3. **Download JSON Key:**
+2. **Download JSON Key:**
    - Click on service account name
-   - Go to "KEYS" tab → "ADD KEY" → "Create new key"
-   - Select JSON format → CREATE
-   - Rename downloaded file to `service-account-key.json`
-   - Move to `/server/` directory
+   - KEYS tab → ADD KEY → Create new key → JSON
+   - Download → rename to `service-account-key.json`
+   - Move to `/server/service-account-key.json`
 
-#### **📋 NEXT TASKS (Tonight/Tomorrow)**
-- [ ] **Complete Service Account:**
-  - [ ] Download & secure JSON key file
-  - [ ] Test service account authentication
-  - [ ] Verify project permissions
+**Spreadsheet Setup Steps:**
+1. **Create Google Spreadsheet:**
+   - Go to [Google Sheets](https://sheets.google.com/)
+   - Create new → Name: "MIA Logistics Manager"
+   - Create 6 sheets: LocationsSheet, EmployeesSheet, CarriersSheet, TransportRequestsSheet, TransfersSheet, OrdersSheet
 
-- [ ] **Create Google Spreadsheet:**
-  - [ ] Create spreadsheet: "MIA Logistics Manager"
-  - [ ] Add required sheets (Employees, Locations, etc.)
-  - [ ] Share with service account email
-  - [ ] Copy Spreadsheet ID to .env
+2. **Share & Configure:**
+   - Share with service account email
+   - Copy Spreadsheet ID to .env
+   - Add headers to each sheet
+
+#### **📋 AFTER COMPLETION (Tonight)**
+- [ ] **Test Integration:**
+  - [ ] Run test script: `testGoogleSheets.js`
+  - [ ] Verify connection works
+  - [ ] Test CRUD operations
+
+- [ ] **Update LocationsList:**
+  - [ ] Connect to real Google Sheets data
+  - [ ] Replace mock data with useLocations hook
+  - [ ] Test UI with real data
   - [ ] Download JSON key file
   - [ ] Secure file placement
 
@@ -276,10 +285,10 @@
 ## 📊 **METRICS & TRACKING**
 
 ### **Development Velocity**
-- **Completed Tasks:** 23/64 (35.9%) ⬆️⬆️
-- **Current Sprint:** Phase 1 - Google Cloud Foundation (Sprint 1.1: 2/4 tasks complete)
-- **Today's Achievement:** Google Cloud Project + APIs enabled + Environment setup
-- **Next Milestone:** Service Account creation & Google Spreadsheet setup
+- **Completed Tasks:** 27/68 (39.7%) ⬆️⬆️⬆️
+- **Current Sprint:** Phase 1 - Google Cloud Foundation (Sprint 1.1: 75% complete)
+- **Today's Achievement:** Complete Google Sheets integration framework ready
+- **Next Milestone:** Service Account setup → Live data integration
 - **Estimated Completion:** 26 tháng 11, 2025
 
 ### **Technical Debt**
