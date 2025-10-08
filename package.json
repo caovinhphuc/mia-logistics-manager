@@ -42,7 +42,7 @@
     "crypto-js": "^4.2.0",
     "date-fns": "^2.30.0",
     "exceljs": "^4.4.0",
-    "google-auth-library": "^9.4.1",
+    "google-auth-library": "^9.15.1",
     "googleapis": "^128.0.0",
     "html2canvas": "^1.4.1",
     "i18next": "^23.7.6",

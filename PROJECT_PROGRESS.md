@@ -27,11 +27,11 @@
 ### **Phase 1: Google Cloud Foundation**
 **Timeline:** Tuần 1 (9-15 tháng 10, 2025)
 
-#### **Sprint 1.1: Google Cloud Setup** (1/4 tasks) 🚧
+#### **Sprint 1.1: Google Cloud Setup** (2/4 tasks) 🚧
 - [x] **Google Cloud Project**
   - [x] ✅ Google Cloud Console opened
-  - [ ] ⏳ Tạo project: "mia-logistics-manager-2025"
-  - [ ] ⏳ Copy Project ID vào `.env`
+  - [x] ✅ Tạo project: "mia-logistics-manager-2025"
+  - [x] ✅ Copy Project ID vào `.env`
   - [ ] ⏳ Enable billing (nếu cần)
 
 - [ ] **Service Account Configuration**
@@ -40,14 +40,15 @@
   - [ ] ⏳ Copy file vào `/server/service-account-key.json`
   - [x] ✅ Update gitignore để bảo vệ credentials
 
-- [ ] **API Enablement**
-  - [ ] ⏳ Enable Google Sheets API
-  - [ ] ⏳ Enable Google Drive API
-  - [ ] ⏳ Enable Google Maps JavaScript API
-  - [ ] ⏳ Enable Google Apps Script API
+- [x] **API Enablement** ✅
+  - [x] ✅ Enable Google Sheets API
+  - [x] ✅ Enable Google Drive API
+  - [x] ✅ Enable Google Maps JavaScript API
+  - [x] ✅ Enable Google Apps Script API
 
-- [ ] **Environment Setup**
-  - [ ] ⏳ Tạo `.env` file với credentials
+- [x] **Environment Setup**
+  - [x] ✅ Tạo `.env` template file
+  - [x] ✅ Tạo `.env` file với project ID
   - [ ] ⏳ Test connection với Google APIs
   - [ ] ⏳ Verify authentication works#### **Sprint 1.2: Google Sheets Integration** (0/3 tasks)
 - [ ] **Spreadsheet Creation**
@@ -222,32 +223,40 @@
 - [x] ✅ Security gitignore setup
 - [x] ✅ Google Cloud Console opened
 
-#### **🔥 CURRENT TASK: Create Google Cloud Project**
+#### **🔥 CURRENT TASK: Create Service Account & Download Key**
 **Status:** 🚧 In Progress
-**Next Action:** Complete project creation in browser
+**Next Action:** Service Account creation in Google Cloud Console
 
 **Step-by-step Guide:**
-1. **In Google Cloud Console:**
-   - Click "Select a project" (top bar)
-   - Click "NEW PROJECT"
-   - **Project name:** `MIA Logistics Manager`
-   - **Project ID:** `mia-logistics-manager-2025`
-   - Click "CREATE"
+1. **Navigate to Credentials:**
+   - Go to: APIs & Services > Credentials
+   - Click "+ CREATE CREDENTIALS"
+   - Select "Service account"
 
-2. **After Project Created:**
-   - Wait 1-2 minutes for setup
-   - Copy Project ID for .env file
-   - Proceed to API enablement
+2. **Service Account Details:**
+   - **Name:** `mia-logistics-service`
+   - **ID:** `mia-logistics-service`
+   - **Description:** `Service account for MIA Logistics Manager`
+   - Click "CREATE AND CONTINUE"
 
-#### **📋 TOMORROW'S TASKS (9 tháng 10)**
-- [ ] **Enable Required APIs:**
-  - [ ] Google Sheets API
-  - [ ] Google Drive API
-  - [ ] Google Maps JavaScript API
-  - [ ] Google Apps Script API
+3. **Download JSON Key:**
+   - Click on service account name
+   - Go to "KEYS" tab → "ADD KEY" → "Create new key"
+   - Select JSON format → CREATE
+   - Rename downloaded file to `service-account-key.json`
+   - Move to `/server/` directory
 
-- [ ] **Create Service Account:**
-  - [ ] Name: `mia-logistics-service`
+#### **📋 NEXT TASKS (Tonight/Tomorrow)**
+- [ ] **Complete Service Account:**
+  - [ ] Download & secure JSON key file
+  - [ ] Test service account authentication
+  - [ ] Verify project permissions
+
+- [ ] **Create Google Spreadsheet:**
+  - [ ] Create spreadsheet: "MIA Logistics Manager"
+  - [ ] Add required sheets (Employees, Locations, etc.)
+  - [ ] Share with service account email
+  - [ ] Copy Spreadsheet ID to .env
   - [ ] Download JSON key file
   - [ ] Secure file placement
 
@@ -267,10 +276,10 @@
 ## 📊 **METRICS & TRACKING**
 
 ### **Development Velocity**
-- **Completed Tasks:** 19/64 (29.7%) ⬆️
-- **Current Sprint:** Phase 1 - Google Cloud Foundation (IN PROGRESS 🚧)
-- **Today's Achievement:** Repository setup, roadmap planning, GCP Console access
-- **Next Milestone:** Google Cloud Project creation & API enablement
+- **Completed Tasks:** 23/64 (35.9%) ⬆️⬆️
+- **Current Sprint:** Phase 1 - Google Cloud Foundation (Sprint 1.1: 2/4 tasks complete)
+- **Today's Achievement:** Google Cloud Project + APIs enabled + Environment setup
+- **Next Milestone:** Service Account creation & Google Spreadsheet setup
 - **Estimated Completion:** 26 tháng 11, 2025
 
 ### **Technical Debt**
