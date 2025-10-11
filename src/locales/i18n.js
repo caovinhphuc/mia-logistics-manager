@@ -1,20 +1,18 @@
-import i18n from 'i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import {
-  initReactI18next
-} from 'react-i18next';
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { initReactI18next } from "react-i18next";
 
 // Import translations
-import enTranslations from './en.json';
-import viTranslations from './vi.json';
+import enTranslations from "./en.json";
+import viTranslations from "./vi.json";
 
 const resources = {
   vi: {
-    translation: viTranslations
-    },
+    translation: viTranslations,
+  },
   en: {
-    translation: enTranslations
-    }
+    translation: enTranslations,
+  },
 };
 
 i18n
@@ -22,14 +20,12 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'vi',
-    debug: process.env.NODE_ENV === 'development',
+    fallbackLng: "vi",
+    debug: process.env.NODE_ENV === "development",
 
     detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'
-        ],
-      caches: ['localStorage'
-        ],
+      order: ["localStorage", "navigator", "htmlTag"],
+      caches: ["localStorage"],
     },
 
     interpolation: {
@@ -38,7 +34,7 @@ i18n
 
     react: {
       useSuspense: false,
-    }
-});
+    },
+  });
 
 export default i18n;

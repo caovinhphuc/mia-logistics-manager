@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import apiService from '../services/api';
+import { useCallback, useEffect, useState } from "react";
+import apiService from "../services/api";
 
 interface UseApiState<T> {
   data: T | null;
@@ -15,7 +15,7 @@ interface UseApiOptions {
 
 export function useApi<T>(
   apiCall: () => Promise<T>,
-  options: UseApiOptions = {}
+  options: UseApiOptions = {},
 ): UseApiState<T> & { refetch: () => Promise<void> } {
   const [state, setState] = useState<UseApiState<T>>({
     data: null,
@@ -26,14 +26,15 @@ export function useApi<T>(
   const { immediate = true, onSuccess, onError } = options;
 
   const execute = useCallback(async () => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
       const data = await apiCall();
       setState({ data, loading: false, error: null });
       onSuccess?.(data);
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Đã xảy ra lỗi';
+      const errorMessage =
+        error.response?.data?.message || error.message || "Đã xảy ra lỗi";
       setState({ data: null, loading: false, error: errorMessage });
       onError?.(errorMessage);
     }
@@ -67,7 +68,7 @@ export function useShipments() {
 // Mutation hook for API calls that modify data
 export function useApiMutation<T, P = any>(
   apiCall: (params: P) => Promise<T>,
-  options: UseApiOptions = {}
+  options: UseApiOptions = {},
 ) {
   const [state, setState] = useState<UseApiState<T>>({
     data: null,
@@ -77,21 +78,25 @@ export function useApiMutation<T, P = any>(
 
   const { onSuccess, onError } = options;
 
-  const mutate = useCallback(async (params: P) => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+  const mutate = useCallback(
+    async (params: P) => {
+      setState((prev) => ({ ...prev, loading: true, error: null }));
 
-    try {
-      const data = await apiCall(params);
-      setState({ data, loading: false, error: null });
-      onSuccess?.(data);
-      return data;
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Đã xảy ra lỗi';
-      setState({ data: null, loading: false, error: errorMessage });
-      onError?.(errorMessage);
-      throw error;
-    }
-  }, [apiCall, onSuccess, onError]);
+      try {
+        const data = await apiCall(params);
+        setState({ data, loading: false, error: null });
+        onSuccess?.(data);
+        return data;
+      } catch (error: any) {
+        const errorMessage =
+          error.response?.data?.message || error.message || "Đã xảy ra lỗi";
+        setState({ data: null, loading: false, error: errorMessage });
+        onError?.(errorMessage);
+        throw error;
+      }
+    },
+    [apiCall, onSuccess, onError],
+  );
 
   return {
     ...state,

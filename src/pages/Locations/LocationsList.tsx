@@ -10,7 +10,7 @@ import {
   LocationOn,
   Sync,
   ViewList,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -29,11 +29,13 @@ import {
   Select,
   TextField,
   Typography,
-} from '@mui/material';
-import { useEffect, useState } from 'react';
-import DataTable from '../../components/shared/DataTable.tsx';
-import GridView, { type GridViewItem } from '../../components/shared/GridView.tsx';
-import CreateLocationDialog from './CreateLocationDialog.tsx';
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import DataTable from "../../components/shared/DataTable.tsx";
+import GridView, {
+  type GridViewItem,
+} from "../../components/shared/GridView.tsx";
+import CreateLocationDialog from "./CreateLocationDialog.tsx";
 
 interface LocationData {
   id: string;
@@ -42,7 +44,7 @@ interface LocationData {
   category: string;
   subcategory: string;
   address: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   ward: string;
   district: string;
   province: string;
@@ -51,141 +53,141 @@ interface LocationData {
 
 const mockLocations: LocationData[] = [
   {
-    id: '1',
-    code: 'LOC001',
-    avatar: '🏢',
-    category: 'Kho hàng',
-    subcategory: 'Kho trung tâm',
-    address: '123 Đường ABC, Phường 1',
-    status: 'active',
-    ward: 'Phường 1',
-    district: 'Quận 1',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Kho chính của công ty',
+    id: "1",
+    code: "LOC001",
+    avatar: "🏢",
+    category: "Kho hàng",
+    subcategory: "Kho trung tâm",
+    address: "123 Đường ABC, Phường 1",
+    status: "active",
+    ward: "Phường 1",
+    district: "Quận 1",
+    province: "TP. Hồ Chí Minh",
+    note: "Kho chính của công ty",
   },
   {
-    id: '2',
-    code: 'LOC002',
-    avatar: '🏪',
-    category: 'Cửa hàng',
-    subcategory: 'Showroom',
-    address: '456 Đường XYZ, Phường 2',
-    status: 'active',
-    ward: 'Phường 2',
-    district: 'Quận 3',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Showroom trưng bày sản phẩm',
+    id: "2",
+    code: "LOC002",
+    avatar: "🏪",
+    category: "Cửa hàng",
+    subcategory: "Showroom",
+    address: "456 Đường XYZ, Phường 2",
+    status: "active",
+    ward: "Phường 2",
+    district: "Quận 3",
+    province: "TP. Hồ Chí Minh",
+    note: "Showroom trưng bày sản phẩm",
   },
   {
-    id: '3',
-    code: 'LOC003',
-    avatar: '🏭',
-    category: 'Nhà máy',
-    subcategory: 'Sản xuất',
-    address: '789 Đường DEF, Phường 3',
-    status: 'inactive',
-    ward: 'Phường 3',
-    district: 'Quận 7',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Nhà máy sản xuất',
+    id: "3",
+    code: "LOC003",
+    avatar: "🏭",
+    category: "Nhà máy",
+    subcategory: "Sản xuất",
+    address: "789 Đường DEF, Phường 3",
+    status: "inactive",
+    ward: "Phường 3",
+    district: "Quận 7",
+    province: "TP. Hồ Chí Minh",
+    note: "Nhà máy sản xuất",
   },
   {
-    id: '4',
-    code: 'LOC004',
-    avatar: '🏪',
-    category: 'Cửa hàng',
-    subcategory: 'Showroom',
-    address: '456 Đường XYZ, Phường 12',
-    status: 'active',
-    ward: 'Phường 12',
-    district: 'Quận 3',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Showroom trưng bày sản phẩm',
+    id: "4",
+    code: "LOC004",
+    avatar: "🏪",
+    category: "Cửa hàng",
+    subcategory: "Showroom",
+    address: "456 Đường XYZ, Phường 12",
+    status: "active",
+    ward: "Phường 12",
+    district: "Quận 3",
+    province: "TP. Hồ Chí Minh",
+    note: "Showroom trưng bày sản phẩm",
   },
   {
-    id: '5',
-    code: 'LOC005',
-    avatar: '🏢',
-    category: 'Văn phòng',
-    subcategory: 'Trụ sở chính',
-    address: '321 Đường GHI, Phường 4',
-    status: 'active',
-    ward: 'Phường 4',
-    district: 'Quận 1',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Trụ sở chính công ty',
+    id: "5",
+    code: "LOC005",
+    avatar: "🏢",
+    category: "Văn phòng",
+    subcategory: "Trụ sở chính",
+    address: "321 Đường GHI, Phường 4",
+    status: "active",
+    ward: "Phường 4",
+    district: "Quận 1",
+    province: "TP. Hồ Chí Minh",
+    note: "Trụ sở chính công ty",
   },
   {
-    id: '6',
-    code: 'LOC006',
-    avatar: '🏬',
-    category: 'Trung tâm thương mại',
-    subcategory: 'Mall',
-    address: '654 Đường JKL, Phường 5',
-    status: 'active',
-    ward: 'Phường 5',
-    district: 'Quận 10',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Trung tâm thương mại lớn',
+    id: "6",
+    code: "LOC006",
+    avatar: "🏬",
+    category: "Trung tâm thương mại",
+    subcategory: "Mall",
+    address: "654 Đường JKL, Phường 5",
+    status: "active",
+    ward: "Phường 5",
+    district: "Quận 10",
+    province: "TP. Hồ Chí Minh",
+    note: "Trung tâm thương mại lớn",
   },
   {
-    id: '7',
-    code: 'LOC007',
-    avatar: '🏗️',
-    category: 'Công trường',
-    subcategory: 'Xây dựng',
-    address: '987 Đường MNO, Phường 6',
-    status: 'inactive',
-    ward: 'Phường 6',
-    district: 'Quận 2',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Công trường xây dựng',
+    id: "7",
+    code: "LOC007",
+    avatar: "🏗️",
+    category: "Công trường",
+    subcategory: "Xây dựng",
+    address: "987 Đường MNO, Phường 6",
+    status: "inactive",
+    ward: "Phường 6",
+    district: "Quận 2",
+    province: "TP. Hồ Chí Minh",
+    note: "Công trường xây dựng",
   },
   {
-    id: '8',
-    code: 'LOC008',
-    avatar: '🚚',
-    category: 'Kho vận',
-    subcategory: 'Logistics',
-    address: '147 Đường PQR, Phường 7',
-    status: 'active',
-    ward: 'Phường 7',
-    district: 'Quận 8',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Kho logistics',
+    id: "8",
+    code: "LOC008",
+    avatar: "🚚",
+    category: "Kho vận",
+    subcategory: "Logistics",
+    address: "147 Đường PQR, Phường 7",
+    status: "active",
+    ward: "Phường 7",
+    district: "Quận 8",
+    province: "TP. Hồ Chí Minh",
+    note: "Kho logistics",
   },
   {
-    id: '9',
-    code: 'LOC009',
-    avatar: '🏠',
-    category: 'Nhà ở',
-    subcategory: 'Căn hộ',
-    address: '258 Đường STU, Phường 8',
-    status: 'active',
-    ward: 'Phường 8',
-    district: 'Quận 9',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Căn hộ cao cấp',
+    id: "9",
+    code: "LOC009",
+    avatar: "🏠",
+    category: "Nhà ở",
+    subcategory: "Căn hộ",
+    address: "258 Đường STU, Phường 8",
+    status: "active",
+    ward: "Phường 8",
+    district: "Quận 9",
+    province: "TP. Hồ Chí Minh",
+    note: "Căn hộ cao cấp",
   },
   {
-    id: '10',
-    code: 'LOC010',
-    avatar: '🏢',
-    category: 'Văn phòng',
-    subcategory: 'Chi nhánh',
-    address: '369 Đường VWX, Phường 9',
-    status: 'active',
-    ward: 'Phường 9',
-    district: 'Quận 11',
-    province: 'TP. Hồ Chí Minh',
-    note: 'Chi nhánh miền Nam',
+    id: "10",
+    code: "LOC010",
+    avatar: "🏢",
+    category: "Văn phòng",
+    subcategory: "Chi nhánh",
+    address: "369 Đường VWX, Phường 9",
+    status: "active",
+    ward: "Phường 9",
+    district: "Quận 11",
+    province: "TP. Hồ Chí Minh",
+    note: "Chi nhánh miền Nam",
   },
 ];
 
-const SHEET_ID = '18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As';
+const SHEET_ID = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
 
 const getStringFrom = (obj: Record<string, unknown>, key: string): string => {
-  return String(obj[key] || '');
+  return String(obj[key] || "");
 };
 
 const Locations = () => {
@@ -197,7 +199,7 @@ const Locations = () => {
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid');
+  const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
   // Biến để chuyển đổi Location sang định dạng GridViewItem
   const mapLocationsToGridItems = (locations: LocationData[]) => {
     return locations.map((location) => ({
@@ -205,41 +207,41 @@ const Locations = () => {
       title: location.code,
       subtitle: location.subcategory,
       avatarText: location.avatar,
-      status: location.status === 'active' ? 'Hoạt động' : 'Tạm dừng',
+      status: location.status === "active" ? "Hoạt động" : "Tạm dừng",
       details: [
         {
-          label: 'Danh mục',
+          label: "Danh mục",
           value: location.category,
-          color: '#4a90e2',
+          color: "#4a90e2",
         },
         {
-          label: 'Địa chỉ',
+          label: "Địa chỉ",
           value: location.address,
-          color: '#50b46e',
+          color: "#50b46e",
         },
         {
-          label: 'Khu vực',
+          label: "Khu vực",
           value: `${location.ward}, ${location.district}, ${location.province}`,
-          color: '#ff9966',
+          color: "#ff9966",
         },
       ],
       actions: [
         {
-          label: 'Chỉnh sửa',
+          label: "Chỉnh sửa",
           icon: <Edit fontSize="small" />,
           onClick: (item: GridViewItem) => {
             setEditing(locations.find((loc) => loc.id === item.id) || null);
             setOpen(true);
           },
-          color: 'primary',
+          color: "primary",
         },
         {
-          label: 'Xóa',
+          label: "Xóa",
           icon: <Delete fontSize="small" />,
           onClick: (item: GridViewItem) => {
             handleDelete(locations.find((loc) => loc.id === item.id)!);
           },
-          color: 'error',
+          color: "error",
         },
       ],
     }));
@@ -247,12 +249,12 @@ const Locations = () => {
   const [showAllGrid, setShowAllGrid] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
-    province: '',
-    district: '',
-    ward: '',
-    category: '',
-    status: '',
-    search: '',
+    province: "",
+    district: "",
+    ward: "",
+    category: "",
+    status: "",
+    search: "",
   });
 
   // Load từ Google Sheets
@@ -261,31 +263,31 @@ const Locations = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/locations?spreadsheetId=${encodeURIComponent(SHEET_ID)}`
+          `/api/locations?spreadsheetId=${encodeURIComponent(SHEET_ID)}`,
         );
         if (res.ok) {
           const data = await res.json();
           const mapped: LocationData[] = (
             data as Array<Record<string, unknown>>
           ).map((r) => ({
-            id: getStringFrom(r, 'id'),
-            code: getStringFrom(r, 'code'),
-            avatar: getStringFrom(r, 'avatar'),
-            category: getStringFrom(r, 'category'),
-            subcategory: getStringFrom(r, 'subcategory'),
-            address: getStringFrom(r, 'address'),
-            status: getStringFrom(r, 'status') as 'active' | 'inactive',
-            ward: getStringFrom(r, 'ward'),
-            district: getStringFrom(r, 'district'),
-            province: getStringFrom(r, 'province'),
-            note: getStringFrom(r, 'note'),
+            id: getStringFrom(r, "id"),
+            code: getStringFrom(r, "code"),
+            avatar: getStringFrom(r, "avatar"),
+            category: getStringFrom(r, "category"),
+            subcategory: getStringFrom(r, "subcategory"),
+            address: getStringFrom(r, "address"),
+            status: getStringFrom(r, "status") as "active" | "inactive",
+            ward: getStringFrom(r, "ward"),
+            district: getStringFrom(r, "district"),
+            province: getStringFrom(r, "province"),
+            note: getStringFrom(r, "note"),
           }));
           setLocations(mapped);
         } else {
           setLocations(mockLocations);
         }
       } catch {
-        setError('Lỗi tải danh sách địa điểm');
+        setError("Lỗi tải danh sách địa điểm");
         setLocations(mockLocations);
       } finally {
         setLoading(false);
@@ -313,12 +315,17 @@ const Locations = () => {
   // Lọc dữ liệu
   const filteredLocations = sortedLocations.filter((location) => {
     const matchesProvince =
-      !filters.province || location.province.toLowerCase().includes(filters.province.toLowerCase());
+      !filters.province ||
+      location.province.toLowerCase().includes(filters.province.toLowerCase());
     const matchesDistrict =
-      !filters.district || location.district.toLowerCase().includes(filters.district.toLowerCase());
-    const matchesWard = !filters.ward || location.ward.toLowerCase().includes(filters.ward.toLowerCase());
+      !filters.district ||
+      location.district.toLowerCase().includes(filters.district.toLowerCase());
+    const matchesWard =
+      !filters.ward ||
+      location.ward.toLowerCase().includes(filters.ward.toLowerCase());
     const matchesCategory =
-      !filters.category || location.category.toLowerCase().includes(filters.category.toLowerCase());
+      !filters.category ||
+      location.category.toLowerCase().includes(filters.category.toLowerCase());
     const matchesStatus = !filters.status || location.status === filters.status;
     const matchesSearch =
       !filters.search ||
@@ -341,19 +348,19 @@ const Locations = () => {
   // Columns for DataTable
   const tableColumns = [
     {
-      id: 'code',
-      label: 'Địa điểm',
-      width: '25%',
+      id: "code",
+      label: "Địa điểm",
+      width: "25%",
       render: (_v: unknown, location: LocationData) => {
-        const isActive = location.status === 'active';
+        const isActive = location.status === "active";
         return (
           <Box display="flex" alignItems="center" gap={1.5}>
             <Avatar
               sx={{
                 width: 32,
                 height: 32,
-                bgcolor: isActive ? 'primary.main' : 'grey.400',
-                fontSize: '1rem',
+                bgcolor: isActive ? "primary.main" : "grey.400",
+                fontSize: "1rem",
               }}
             >
               {location.avatar}
@@ -368,23 +375,23 @@ const Locations = () => {
         );
       },
     },
-    { id: 'category', label: 'Danh mục', width: '15%' },
+    { id: "category", label: "Danh mục", width: "15%" },
     {
-      id: 'address',
-      label: 'Địa chỉ',
-      width: '35%',
+      id: "address",
+      label: "Địa chỉ",
+      width: "35%",
       render: (_v: unknown, location: LocationData) => (
         <Box>
           <Typography
             variant="body2"
             sx={{
               maxWidth: 150,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
-            {location.address || '-'}
+            {location.address || "-"}
           </Typography>
           <Typography variant="caption" color="text.secondary">
             {location.ward}, {location.district}, {location.province}
@@ -393,14 +400,14 @@ const Locations = () => {
       ),
     },
     {
-      id: 'status',
-      label: 'Trạng thái',
-      width: '12%',
-      align: 'center',
+      id: "status",
+      label: "Trạng thái",
+      width: "12%",
+      align: "center",
       render: (_v: unknown, location: LocationData) => (
         <Chip
-          label={location.status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
-          color={location.status === 'active' ? 'success' : 'default'}
+          label={location.status === "active" ? "Hoạt động" : "Tạm dừng"}
+          color={location.status === "active" ? "success" : "default"}
           size="small"
           onClick={() => handleToggleStatus(location)}
           disabled={togglingId === location.id}
@@ -408,10 +415,10 @@ const Locations = () => {
       ),
     },
     {
-      id: 'id',
-      label: 'Thao tác',
-      width: '13%',
-      align: 'center' as const,
+      id: "id",
+      label: "Thao tác",
+      width: "13%",
+      align: "center" as const,
       render: (_v: unknown, location: LocationData) => (
         <Box>
           <IconButton
@@ -439,28 +446,28 @@ const Locations = () => {
   const handleToggleStatus = async (location: LocationData) => {
     setTogglingId(location.id);
     try {
-      const newStatus = location.status === 'active' ? 'inactive' : 'active';
+      const newStatus = location.status === "active" ? "inactive" : "active";
       const updatedLocation = {
         ...location,
-        status: newStatus as 'active' | 'inactive',
+        status: newStatus as "active" | "inactive",
       };
 
       const res = await fetch(
         `/api/locations/${location.id}?spreadsheetId=${encodeURIComponent(SHEET_ID)}`,
         {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(updatedLocation),
-        }
+        },
       );
 
       if (res.ok) {
         setLocations((prev) =>
-          prev.map((loc) => (loc.id === location.id ? updatedLocation : loc))
+          prev.map((loc) => (loc.id === location.id ? updatedLocation : loc)),
         );
       }
     } catch (err) {
-      console.error('Lỗi cập nhật trạng thái:', err);
+      console.error("Lỗi cập nhật trạng thái:", err);
     } finally {
       setTogglingId(null);
     }
@@ -483,14 +490,14 @@ const Locations = () => {
     try {
       const res = await fetch(
         `/api/locations/${location.id}?spreadsheetId=${encodeURIComponent(SHEET_ID)}`,
-        { method: 'DELETE' }
+        { method: "DELETE" },
       );
 
       if (res.ok) {
         setLocations((prev) => prev.filter((loc) => loc.id !== location.id));
       }
     } catch (err) {
-      console.error('Lỗi xóa địa điểm:', err);
+      console.error("Lỗi xóa địa điểm:", err);
     } finally {
       setDeletingId(null);
     }
@@ -500,29 +507,29 @@ const Locations = () => {
     setRefreshing(true);
     try {
       const res = await fetch(
-        `/api/locations?spreadsheetId=${encodeURIComponent(SHEET_ID)}`
+        `/api/locations?spreadsheetId=${encodeURIComponent(SHEET_ID)}`,
       );
       if (res.ok) {
         const data = await res.json();
-        const mapped: LocationData[] = (data as Array<Record<string, unknown>>).map(
-          (r) => ({
-            id: getStringFrom(r, 'id'),
-            code: getStringFrom(r, 'code'),
-            avatar: getStringFrom(r, 'avatar'),
-            category: getStringFrom(r, 'category'),
-            subcategory: getStringFrom(r, 'subcategory'),
-            address: getStringFrom(r, 'address'),
-            status: getStringFrom(r, 'status') as 'active' | 'inactive',
-            ward: getStringFrom(r, 'ward'),
-            district: getStringFrom(r, 'district'),
-            province: getStringFrom(r, 'province'),
-            note: getStringFrom(r, 'note'),
-          })
-        );
+        const mapped: LocationData[] = (
+          data as Array<Record<string, unknown>>
+        ).map((r) => ({
+          id: getStringFrom(r, "id"),
+          code: getStringFrom(r, "code"),
+          avatar: getStringFrom(r, "avatar"),
+          category: getStringFrom(r, "category"),
+          subcategory: getStringFrom(r, "subcategory"),
+          address: getStringFrom(r, "address"),
+          status: getStringFrom(r, "status") as "active" | "inactive",
+          ward: getStringFrom(r, "ward"),
+          district: getStringFrom(r, "district"),
+          province: getStringFrom(r, "province"),
+          note: getStringFrom(r, "note"),
+        }));
         setLocations(mapped);
       }
     } catch (err) {
-      console.error('Lỗi làm mới:', err);
+      console.error("Lỗi làm mới:", err);
     } finally {
       setRefreshing(false);
     }
@@ -530,40 +537,44 @@ const Locations = () => {
 
   // Tính toán thống kê
   const totalLocations = locations.length;
-  const activeLocations = locations.filter(loc => loc.status === 'active').length;
-  const inactiveLocations = locations.filter(loc => loc.status === 'inactive').length;
-  const uniqueProvinces = new Set(locations.map(loc => loc.province)).size;
+  const activeLocations = locations.filter(
+    (loc) => loc.status === "active",
+  ).length;
+  const inactiveLocations = locations.filter(
+    (loc) => loc.status === "inactive",
+  ).length;
+  const uniqueProvinces = new Set(locations.map((loc) => loc.province)).size;
 
   // Stats cards data
   const statsCards = [
     {
-      title: 'Tổng địa điểm',
+      title: "Tổng địa điểm",
       value: totalLocations,
-      icon: <LocationOn sx={{ fontSize: 40, color: '#1976d2' }} />,
-      color: '#1976d2',
-      bgColor: '#e3f2fd'
+      icon: <LocationOn sx={{ fontSize: 40, color: "#1976d2" }} />,
+      color: "#1976d2",
+      bgColor: "#e3f2fd",
     },
     {
-      title: 'Đang hoạt động',
+      title: "Đang hoạt động",
       value: activeLocations,
-      icon: <CheckCircle sx={{ fontSize: 40, color: '#2e7d32' }} />,
-      color: '#2e7d32',
-      bgColor: '#e8f5e8'
+      icon: <CheckCircle sx={{ fontSize: 40, color: "#2e7d32" }} />,
+      color: "#2e7d32",
+      bgColor: "#e8f5e8",
     },
     {
-      title: 'Tạm dừng',
+      title: "Tạm dừng",
       value: inactiveLocations,
-      icon: <Cancel sx={{ fontSize: 40, color: '#d32f2f' }} />,
-      color: '#d32f2f',
-      bgColor: '#ffebee'
+      icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} />,
+      color: "#d32f2f",
+      bgColor: "#ffebee",
     },
     {
-      title: 'Tỉnh/thành phố',
+      title: "Tỉnh/thành phố",
       value: uniqueProvinces,
-      icon: <LocationCity sx={{ fontSize: 40, color: '#f57c00' }} />,
-      color: '#f57c00',
-      bgColor: '#fff3e0'
-    }
+      icon: <LocationCity sx={{ fontSize: 40, color: "#f57c00" }} />,
+      color: "#f57c00",
+      bgColor: "#fff3e0",
+    },
   ];
 
   return (
@@ -574,27 +585,25 @@ const Locations = () => {
           <Grid item xs={12} sm={6} md={3} key={index}>
             <Card
               sx={{
-                height: '100%',
+                height: "100%",
                 background: `linear-gradient(135deg, ${card.bgColor} 0%, white 100%)`,
                 border: `1px solid ${card.color}20`,
-                transition: 'transform 0.2s, box-shadow 0.2s',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: `0 8px 25px ${card.color}20`
-                }
+                transition: "transform 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: `0 8px 25px ${card.color}20`,
+                },
               }}
             >
-              <CardContent sx={{ display: 'flex', alignItems: 'center', p: 3 }}>
-                <Box sx={{ mr: 2 }}>
-                  {card.icon}
-                </Box>
+              <CardContent sx={{ display: "flex", alignItems: "center", p: 3 }}>
+                <Box sx={{ mr: 2 }}>{card.icon}</Box>
                 <Box>
                   <Typography
                     variant="h4"
                     sx={{
-                      fontWeight: 'bold',
+                      fontWeight: "bold",
                       color: card.color,
-                      mb: 0.5
+                      mb: 0.5,
                     }}
                   >
                     {card.value.toLocaleString()}
@@ -642,11 +651,11 @@ const Locations = () => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => setViewMode(viewMode === 'table' ? 'grid' : 'table')}
-            startIcon={viewMode === 'table' ? <GridView /> : <ViewList />}
+            onClick={() => setViewMode(viewMode === "table" ? "grid" : "table")}
+            startIcon={viewMode === "table" ? <GridView /> : <ViewList />}
             sx={{ mr: 1 }}
           >
-            {viewMode === 'table' ? 'Lưới' : 'Bảng'}
+            {viewMode === "table" ? "Lưới" : "Bảng"}
           </Button>
           <Button
             variant="contained"
@@ -676,12 +685,12 @@ const Locations = () => {
               size="small"
               onClick={() =>
                 setFilters({
-                  province: '',
-                  district: '',
-                  ward: '',
-                  category: '',
-                  status: '',
-                  search: '',
+                  province: "",
+                  district: "",
+                  ward: "",
+                  category: "",
+                  status: "",
+                  search: "",
                 })
               }
               startIcon={<Clear />}
@@ -717,7 +726,7 @@ const Locations = () => {
                 >
                   <MenuItem value="">Tất cả</MenuItem>
                   {Array.from(
-                    new Set(locations?.map((l) => l.province) || [])
+                    new Set(locations?.map((l) => l.province) || []),
                   ).map((province) => (
                     <MenuItem key={province} value={province}>
                       {province}
@@ -741,7 +750,7 @@ const Locations = () => {
                 >
                   <MenuItem value="">Tất cả</MenuItem>
                   {Array.from(
-                    new Set(locations?.map((l) => l.district) || [])
+                    new Set(locations?.map((l) => l.district) || []),
                   ).map((district) => (
                     <MenuItem key={district} value={district}>
                       {district}
@@ -766,7 +775,7 @@ const Locations = () => {
                       <MenuItem key={ward} value={ward}>
                         {ward}
                       </MenuItem>
-                    )
+                    ),
                   )}
                 </Select>
               </FormControl>
@@ -786,7 +795,7 @@ const Locations = () => {
                 >
                   <MenuItem value="">Tất cả</MenuItem>
                   {Array.from(
-                    new Set(locations?.map((l) => l.category) || [])
+                    new Set(locations?.map((l) => l.category) || []),
                   ).map((category) => (
                     <MenuItem key={category} value={category}>
                       {category}
@@ -829,7 +838,7 @@ const Locations = () => {
           <Typography color="error">{error}</Typography>
         </Paper>
       ) : locations && locations.length > 0 ? (
-        viewMode === 'table' ? (
+        viewMode === "table" ? (
           <DataTable
             columns={tableColumns}
             data={filteredLocations}
@@ -847,7 +856,7 @@ const Locations = () => {
                 items={mapLocationsToGridItems(
                   showAllGrid
                     ? filteredLocations
-                    : filteredLocations.slice(0, 8)
+                    : filteredLocations.slice(0, 8),
                 )}
                 onEdit={(item) => {
                   const location = locations.find((loc) => loc.id === item.id);
@@ -869,8 +878,8 @@ const Locations = () => {
             {filteredLocations.length > 8 && !showAllGrid && (
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
+                  display: "flex",
+                  justifyContent: "center",
                   mt: 4,
                   pb: 2,
                 }}
@@ -883,11 +892,11 @@ const Locations = () => {
                     px: 4,
                     py: 1.5,
                     borderRadius: 2,
-                    borderColor: 'primary.main',
-                    color: 'primary.main',
-                    '&:hover': {
-                      backgroundColor: 'primary.50',
-                      borderColor: 'primary.dark',
+                    borderColor: "primary.main",
+                    color: "primary.main",
+                    "&:hover": {
+                      backgroundColor: "primary.50",
+                      borderColor: "primary.dark",
                     },
                   }}
                 >
@@ -900,8 +909,8 @@ const Locations = () => {
             {showAllGrid && filteredLocations.length > 8 && (
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
+                  display: "flex",
+                  justifyContent: "center",
                   mt: 4,
                   pb: 2,
                 }}
@@ -914,11 +923,11 @@ const Locations = () => {
                     px: 4,
                     py: 1.5,
                     borderRadius: 2,
-                    borderColor: 'grey.500',
-                    color: 'grey.700',
-                    '&:hover': {
-                      backgroundColor: 'grey.50',
-                      borderColor: 'grey.600',
+                    borderColor: "grey.500",
+                    color: "grey.700",
+                    "&:hover": {
+                      backgroundColor: "grey.50",
+                      borderColor: "grey.600",
                     },
                   }}
                 >
@@ -929,7 +938,7 @@ const Locations = () => {
           </>
         )
       ) : (
-        <Paper sx={{ p: 4, textAlign: 'center' }}>
+        <Paper sx={{ p: 4, textAlign: "center" }}>
           <Typography variant="h6" color="text.secondary" mb={2}>
             Chưa có địa điểm nào
           </Typography>
