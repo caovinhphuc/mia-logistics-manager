@@ -184,17 +184,35 @@
       }, 1000);
     });
 
-    // Register service worker
+    // Register service worker (skip on localhost during development to avoid serving stale cached bundles)
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('%PUBLIC_URL%/sw.js')
-          .then(function (registration) {
-            console.log('SW registered: ', registration);
-          })
-          .catch(function (registrationError) {
-            console.log('SW registration failed: ', registrationError);
-          });
-      });
+      // Do not register service worker when running on localhost (dev mode)
+      const isLocalhost = Boolean(
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname === ''
+      );
+
+      if (!isLocalhost) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('%PUBLIC_URL%/sw.js')
+            .then(function (registration) {
+              console.log('SW registered: ', registration);
+            })
+            .catch(function (registrationError) {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      } else {
+        // In development, ensure any previously-registered service workers are not active.
+        window.addEventListener('load', function () {
+          if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
+            navigator.serviceWorker.getRegistrations().then(function (regs) {
+              regs.forEach(function (reg) { reg.unregister(); });
+            });
+          }
+        });
+      }
     }
 
     // Global error handler

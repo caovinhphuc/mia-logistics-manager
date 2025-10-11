@@ -41,9 +41,5 @@
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "vi",
-  "categories": [
-    "business",
-    "productivity",
-    "logistics"
-  ]
+  "categories": ["business", "productivity", "logistics"]
 }
