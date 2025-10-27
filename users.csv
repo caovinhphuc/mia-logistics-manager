@@ -1,0 +1,5 @@
+Email,Password,Id,Name,Role,Department,Phone,Status,Picture
+admin@mialogistics.com,240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9,user_001,Admin User,admin,IT,0901234567,active,
+manager@mialogistics.com,866485796cfa8d7c0cf7111640205b83076433547577511d81f8030ae99ecea5,user_002,Manager User,manager,Operations,0901234568,active,
+operator@mialogistics.com,ec6e1c25258002eb1c67d15c7f45da7945fa4c58778fd7d88faa5e53e3b4698d,user_003,Operator User,operator,Warehouse,0901234569,active,
+driver@mialogistics.com,494d022492052a06f8f81949639a1d148c1051fa3d4e4688fbd96efe649cd382,user_004,Driver User,driver,Transport,0901234570,active,

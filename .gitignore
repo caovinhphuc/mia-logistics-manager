@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Production
+/build
+/dist
+
+# Misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Credentials
+credentials/
+*.json
+!package.json
+!package-lock.json
+*.pem
+*.key
+
+# Service account keys
+*-*.json
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# OS files
+Thumbs.db
+desktop.ini
+
+# Local Netlify folder
+.netlify
