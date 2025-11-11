@@ -1,0 +1,433 @@
+openapi: 3.0.3
+info:
+  title: MIA Logistics Manager API
+  description: |
+    API documentation cho MIA Logistics Manager
+
+    Hệ thống quản lý vận chuyển chuyên nghiệp cho Việt Nam
+  version: 2.1.1
+  contact:
+    name: MIA Logistics Team
+    email: kho.1@mia.vn
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:5050
+    description: Development server
+  - url: https://api.mialogistics.com
+    description: Production server
+
+tags:
+  - name: Health
+    description: Health check endpoints
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Carriers
+    description: Carrier management
+  - name: Locations
+    description: Location management
+  - name: Transfers
+    description: Transfer management
+  - name: Inbound
+    description: Inbound shipment management
+  - name: RBAC
+    description: Role-based access control
+  - name: Utilities
+    description: Utility endpoints
+
+paths:
+  /api/health:
+    get:
+      tags:
+        - Health
+      summary: Health check
+      description: Kiểm tra trạng thái server
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  timestamp:
+                    type: string
+                    format: date-time
+                  uptime:
+                    type: number
+                    example: 3600
+                  version:
+                    type: string
+                    example: 2.1.1
+
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Đăng nhập hệ thống
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: admin@example.com
+                password:
+                  type: string
+                  format: password
+                  example: admin123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user
+      description: Đăng ký tài khoản mới
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - name
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                name:
+                  type: string
+                role:
+                  type: string
+                  enum: [Admin, Manager, Operator, Driver, Warehouse Staff]
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: Invalid input
+
+  /api/carriers:
+    get:
+      tags:
+        - Carriers
+      summary: Get carriers list
+      description: Lấy danh sách nhà vận chuyển
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+        - in: query
+          name: search
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Carrier'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Carriers
+      summary: Create carrier
+      description: Tạo nhà vận chuyển mới
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrierInput'
+      responses:
+        '201':
+          description: Carrier created
+        '400':
+          description: Invalid input
+
+  /api/carriers/{id}:
+    get:
+      tags:
+        - Carriers
+      summary: Get carrier by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carrier'
+        '404':
+          description: Carrier not found
+
+    put:
+      tags:
+        - Carriers
+      summary: Update carrier
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarrierInput'
+      responses:
+        '200':
+          description: Carrier updated
+        '404':
+          description: Carrier not found
+
+    delete:
+      tags:
+        - Carriers
+      summary: Delete carrier
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Carrier deleted
+        '404':
+          description: Carrier not found
+
+  /api/transfers:
+    get:
+      tags:
+        - Transfers
+      summary: Get transfers list
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, in_transit, completed]
+        - in: query
+          name: fromDate
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: toDate
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transfer'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        role:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+
+    Carrier:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        contactPerson:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        serviceAreas:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    CarrierInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        contactPerson:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        serviceAreas:
+          type: array
+          items:
+            type: string
+
+    Transfer:
+      type: object
+      properties:
+        id:
+          type: string
+        fromLocation:
+          type: string
+        toLocation:
+          type: string
+        date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [pending, in_transit, completed]
+        volume:
+          type: number
+        items:
+          type: array
+          items:
+            type: object
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        pages:
+          type: integer
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: boolean
+          example: true
+        message:
+          type: string
+        code:
+          type: string
+        details:
+          type: object
+
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: true
+            message: Unauthorized access
+            code: UNAUTHORIZED

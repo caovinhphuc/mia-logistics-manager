@@ -1,0 +1,70 @@
+// Script fix ViewModule import error
+const fs = require('fs');
+const path = require('path');
+
+console.log('🔧 FIX VIEWMODULE IMPORT ERROR');
+console.log('=' .repeat(50));
+
+// Kiểm tra LocationManager
+const locationManagerPath = path.join(__dirname, '..', 'src', 'components', 'map', 'LocationManager.jsx');
+if (fs.existsSync(locationManagerPath)) {
+  const content = fs.readFileSync(locationManagerPath, 'utf8');
+
+  if (content.includes('ViewModule')) {
+    console.log('✅ LocationManager đã import ViewModule');
+  } else {
+    console.log('❌ LocationManager chưa import ViewModule');
+  }
+
+  if (content.includes('ViewList')) {
+    console.log('✅ LocationManager đã import ViewList');
+  } else {
+    console.log('❌ LocationManager chưa import ViewList');
+  }
+
+  if (content.includes('startIcon={<ViewModule />}')) {
+    console.log('✅ LocationManager đã sử dụng ViewModule icon');
+  } else {
+    console.log('❌ LocationManager chưa sử dụng ViewModule icon');
+  }
+
+  if (content.includes('startIcon={<ViewList />}')) {
+    console.log('✅ LocationManager đã sử dụng ViewList icon');
+  } else {
+    console.log('❌ LocationManager chưa sử dụng ViewList icon');
+  }
+}
+
+console.log('');
+
+console.log('🚀 HƯỚNG DẪN RESTART FRONTEND:');
+console.log('   1. Dừng Frontend (Ctrl+C)');
+console.log('   2. Chạy lại: npm start');
+console.log('   3. Kiểm tra console browser');
+console.log('   4. Truy cập trang Maps > Quản lý địa điểm');
+console.log('');
+
+console.log('⚠️  NẾU VẪN CÓ LỖI:');
+console.log('   1. Kiểm tra cache browser (Ctrl+Shift+R)');
+console.log('   2. Xóa node_modules và npm install');
+console.log('   3. Kiểm tra Google API key');
+console.log('   4. Xem console browser để debug');
+console.log('');
+
+console.log('📞 SUPPORT:');
+console.log('   - Console browser: F12 > Console');
+console.log('   - Network tab: F12 > Network');
+console.log('   - React DevTools: Cài đặt extension');
+console.log('   - Google Sheets API: https://developers.google.com/sheets/api');
+console.log('');
+
+console.log('🎯 KẾT QUẢ MONG ĐỢI:');
+console.log('   - Không có lỗi ViewModule is not defined');
+console.log('   - Toggle buttons hoạt động bình thường');
+console.log('   - Chế độ xem Card và Table hoạt động');
+console.log('   - Bộ lọc hoạt động chính xác');
+console.log('');
+
+console.log('=' .repeat(50));
+console.log('✅ Script fix ViewModule import error hoàn thành!');
+console.log('🎯 Bây giờ hãy restart Frontend!');

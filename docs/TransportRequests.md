@@ -1,0 +1,572 @@
+# 📋 Hướng dẫn Sheet TransportRequests
+
+## 📊 Thống kê tổng quan
+
+- **Tổng số cột:** 92 cột (A-CN)
+- **Sheet ID:** 18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
+- **Sheet Name:** TransportRequests
+- **Sheet ID (internal):** 1642076962
+- **Số hàng:** 1060
+- **Trạng thái:** ✅ **HOÀN THÀNH** - Tất cả headers đã được đặt đúng (bao gồm 11 cột distance + 11 cột order count + 6 cột driver/image/dept + 8 cột pricing)
+
+## 🗺️ Real-time Distance Calculation
+
+### **Google Apps Script Integration**
+
+- **Script URL:** <https://script.google.com/macros/s/AKfycbw8xo0xm576l67BXb2fVcEg4cOE4rQD7MgUKxAWZmTVK7-b2k5ZR303EEmOyvbd3nTQfQ/exec>
+- **Method:** Google Maps Services có sẵn (không cần API key)
+- **Features:** Real-time geocoding, Haversine calculation, road distance adjustment
+- **Performance:** Response time < 2 giây
+- **Fallback:** Sử dụng fallback distances khi cần thiết
+
+## 📝 Chi tiết tất cả 92 cột
+
+| STT | Cột | Tên cột (EN)       | Tên cột (VI)                     | Định nghĩa                                                                 | Kiểu dữ liệu | Bắt buộc |
+| --- | --- | ------------------ | -------------------------------- | -------------------------------------------------------------------------- | ------------ | -------- |
+| 1   | A   | `requestId`        | **ID Yêu cầu vận chuyển**        | ID duy nhất cho yêu cầu vận chuyển                                         | Text         | ✅       |
+| 2   | B   | `createdAt`        | **Ngày tạo yêu cầu**             | Thời gian tạo yêu cầu                                                      | DateTime     | ✅       |
+| 3   | C   | `pickupAddress`    | **Địa chỉ lấy hàng**             | Địa chỉ điểm lấy hàng                                                      | Text         | ✅       |
+| 4   | D   | `stop1Address`     | **Địa chỉ điểm dừng 1**          | Địa chỉ giao hàng đầu tiên                                                 | Text         | ❌       |
+| 5   | E   | `stop2Address`     | **Địa chỉ điểm dừng 2**          | Địa chỉ giao hàng thứ 2                                                    | Text         | ❌       |
+| 6   | F   | `stop3Address`     | **Địa chỉ điểm dừng 3**          | Địa chỉ giao hàng thứ 3                                                    | Text         | ❌       |
+| 7   | G   | `stop4Address`     | **Địa chỉ điểm dừng 4**          | Địa chỉ giao hàng thứ 4                                                    | Text         | ❌       |
+| 8   | H   | `stop5Address`     | **Địa chỉ điểm dừng 5**          | Địa chỉ giao hàng thứ 5                                                    | Text         | ❌       |
+| 9   | I   | `stop6Address`     | **Địa chỉ điểm dừng 6**          | Địa chỉ giao hàng thứ 6                                                    | Text         | ❌       |
+| 10  | J   | `stop7Address`     | **Địa chỉ điểm dừng 7**          | Địa chỉ giao hàng thứ 7                                                    | Text         | ❌       |
+| 11  | K   | `stop8Address`     | **Địa chỉ điểm dừng 8**          | Địa chỉ giao hàng thứ 8                                                    | Text         | ❌       |
+| 12  | L   | `stop9Address`     | **Địa chỉ điểm dừng 9**          | Địa chỉ giao hàng thứ 9                                                    | Text         | ❌       |
+| 13  | M   | `stop10Address`    | **Địa chỉ điểm dừng 10**         | Địa chỉ giao hàng thứ 10                                                   | Text         | ❌       |
+| 14  | N   | `stop1Products`    | **Sản phẩm điểm dừng 1**         | Danh sách sản phẩm tại điểm 1                                              | Text         | ❌       |
+| 15  | O   | `stop2Products`    | **Sản phẩm điểm dừng 2**         | Danh sách sản phẩm tại điểm 2                                              | Text         | ❌       |
+| 16  | P   | `stop3Products`    | **Sản phẩm điểm dừng 3**         | Danh sách sản phẩm tại điểm 3                                              | Text         | ❌       |
+| 17  | Q   | `stop4Products`    | **Sản phẩm điểm dừng 4**         | Danh sách sản phẩm tại điểm 4                                              | Text         | ❌       |
+| 18  | R   | `stop5Products`    | **Sản phẩm điểm dừng 5**         | Danh sách sản phẩm tại điểm 5                                              | Text         | ❌       |
+| 19  | S   | `stop6Products`    | **Sản phẩm điểm dừng 6**         | Danh sách sản phẩm tại điểm 6                                              | Text         | ❌       |
+| 20  | T   | `stop7Products`    | **Sản phẩm điểm dừng 7**         | Danh sách sản phẩm tại điểm 7                                              | Text         | ❌       |
+| 21  | U   | `stop8Products`    | **Sản phẩm điểm dừng 8**         | Danh sách sản phẩm tại điểm 8                                              | Text         | ❌       |
+| 22  | V   | `stop9Products`    | **Sản phẩm điểm dừng 9**         | Danh sách sản phẩm tại điểm 9                                              | Text         | ❌       |
+| 23  | W   | `stop10Products`   | **Sản phẩm điểm dừng 10**        | Danh sách sản phẩm tại điểm 10                                             | Text         | ❌       |
+| 24  | X   | `stop1VolumeM3`    | **Khối lượng điểm dừng 1 (m³)**  | Tổng khối lượng hàng tại điểm 1                                            | Number       | ❌       |
+| 25  | Y   | `stop2VolumeM3`    | **Khối lượng điểm dừng 2 (m³)**  | Tổng khối lượng hàng tại điểm 2                                            | Number       | ❌       |
+| 26  | Z   | `stop3VolumeM3`    | **Khối lượng điểm dừng 3 (m³)**  | Tổng khối lượng hàng tại điểm 3                                            | Number       | ❌       |
+| 27  | [   | `stop4VolumeM3`    | **Khối lượng điểm dừng 4 (m³)**  | Tổng khối lượng hàng tại điểm 4                                            | Number       | ❌       |
+| 28  | \   | `stop5VolumeM3`    | **Khối lượng điểm dừng 5 (m³)**  | Tổng khối lượng hàng tại điểm 5                                            | Number       | ❌       |
+| 29  | ]   | `stop6VolumeM3`    | **Khối lượng điểm dừng 6 (m³)**  | Tổng khối lượng hàng tại điểm 6                                            | Number       | ❌       |
+| 30  | ^   | `stop7VolumeM3`    | **Khối lượng điểm dừng 7 (m³)**  | Tổng khối lượng hàng tại điểm 7                                            | Number       | ❌       |
+| 31  | \_  | `stop8VolumeM3`    | **Khối lượng điểm dừng 8 (m³)**  | Tổng khối lượng hàng tại điểm 8                                            | Number       | ❌       |
+| 32  | `   | `stop9VolumeM3`    | **Khối lượng điểm dừng 9 (m³)**  | Tổng khối lượng hàng tại điểm 9                                            | Number       | ❌       |
+| 33  | a   | `stop10VolumeM3`   | **Khối lượng điểm dừng 10 (m³)** | Tổng khối lượng hàng tại điểm 10                                           | Number       | ❌       |
+| 34  | b   | `stop1Packages`    | **Số kiện điểm dừng 1**          | Tổng số kiện hàng tại điểm 1                                               | Number       | ❌       |
+| 35  | c   | `stop2Packages`    | **Số kiện điểm dừng 2**          | Tổng số kiện hàng tại điểm 2                                               | Number       | ❌       |
+| 36  | d   | `stop3Packages`    | **Số kiện điểm dừng 3**          | Tổng số kiện hàng tại điểm 3                                               | Number       | ❌       |
+| 37  | e   | `stop4Packages`    | **Số kiện điểm dừng 4**          | Tổng số kiện hàng tại điểm 4                                               | Number       | ❌       |
+| 38  | f   | `stop5Packages`    | **Số kiện điểm dừng 5**          | Tổng số kiện hàng tại điểm 5                                               | Number       | ❌       |
+| 39  | g   | `stop6Packages`    | **Số kiện điểm dừng 6**          | Tổng số kiện hàng tại điểm 6                                               | Number       | ❌       |
+| 40  | h   | `stop7Packages`    | **Số kiện điểm dừng 7**          | Tổng số kiện hàng tại điểm 7                                               | Number       | ❌       |
+| 41  | i   | `stop8Packages`    | **Số kiện điểm dừng 8**          | Tổng số kiện hàng tại điểm 8                                               | Number       | ❌       |
+| 42  | j   | `stop9Packages`    | **Số kiện điểm dừng 9**          | Tổng số kiện hàng tại điểm 9                                               | Number       | ❌       |
+| 43  | k   | `stop10Packages`   | **Số kiện điểm dừng 10**         | Tổng số kiện hàng tại điểm 10                                              | Number       | ❌       |
+| 44  | l   | `totalProducts`    | **Tổng sản phẩm**                | Tổng hợp tất cả sản phẩm                                                   | Text         | ❌       |
+| 45  | m   | `totalVolumeM3`    | **Tổng khối lượng (m³)**         | Tổng khối lượng toàn bộ hàng                                               | Number       | ❌       |
+| 46  | n   | `totalPackages`    | **Tổng số kiện**                 | Tổng số kiện toàn bộ hàng                                                  | Number       | ❌       |
+| 47  | o   | `pricingMethod`    | **Phương thức tính giá**         | Cách tính phí vận chuyển                                                   | Text         | ❌       |
+| 48  | p   | `carrierId`        | **ID đơn vị vận chuyển**         | ID của đơn vị vận chuyển                                                   | Text         | ❌       |
+| 49  | q   | `carrierName`      | **Tên đơn vị vận chuyển**        | Tên công ty vận chuyển                                                     | Text         | ❌       |
+| 50  | r   | `carrierContact`   | **Người liên hệ**                | Tên người liên hệ                                                          | Text         | ❌       |
+| 51  | s   | `carrierPhone`     | **Số điện thoại**                | SĐT liên hệ                                                                | Text         | ❌       |
+| 52  | t   | `carrierEmail`     | **Email**                        | Email liên hệ                                                              | Text         | ❌       |
+| 53  | u   | `estimatedCost`    | **Chi phí ước tính**             | Chi phí vận chuyển ước tính                                                | Number       | ❌       |
+| 54  | v   | `status`           | **Trạng thái**                   | Trạng thái yêu cầu vận chuyển                                              | Text         | ❌       |
+| 55  | w   | `note`             | **Ghi chú**                      | Ghi chú bổ sung                                                            | Text         | ❌       |
+| 56  | x   | `vehicleType`      | **Loại xe**                      | Loại phương tiện vận chuyển                                                | Text         | ❌       |
+| 57  | BE  | `distance1`        | **Quãng đường 1 (km)**           | Khoảng cách từ điểm nguồn đến điểm dừng 1 (tính bằng Google Apps Script)   | Number       | ❌       |
+| 58  | BF  | `distance2`        | **Quãng đường 2 (km)**           | Khoảng cách từ điểm dừng 1 đến điểm dừng 2 (tính bằng Google Apps Script)  | Number       | ❌       |
+| 59  | BG  | `distance3`        | **Quãng đường 3 (km)**           | Khoảng cách từ điểm dừng 2 đến điểm dừng 3 (tính bằng Google Apps Script)  | Number       | ❌       |
+| 60  | BH  | `distance4`        | **Quãng đường 4 (km)**           | Khoảng cách từ điểm dừng 3 đến điểm dừng 4 (tính bằng Google Apps Script)  | Number       | ❌       |
+| 61  | BI  | `distance5`        | **Quãng đường 5 (km)**           | Khoảng cách từ điểm dừng 4 đến điểm dừng 5 (tính bằng Google Apps Script)  | Number       | ❌       |
+| 62  | BJ  | `distance6`        | **Quãng đường 6 (km)**           | Khoảng cách từ điểm dừng 5 đến điểm dừng 6 (tính bằng Google Apps Script)  | Number       | ❌       |
+| 63  | BK  | `distance7`        | **Quãng đường 7 (km)**           | Khoảng cách từ điểm dừng 6 đến điểm dừng 7 (tính bằng Google Apps Script)  | Number       | ❌       |
+| 64  | BL  | `distance8`        | **Quãng đường 8 (km)**           | Khoảng cách từ điểm dừng 7 đến điểm dừng 8 (tính bằng Google Apps Script)  | Number       | ❌       |
+| 65  | BM  | `distance9`        | **Quãng đường 9 (km)**           | Khoảng cách từ điểm dừng 8 đến điểm dừng 9 (tính bằng Google Apps Script)  | Number       | ❌       |
+| 66  | BN  | `distance10`       | **Quãng đường 10 (km)**          | Khoảng cách từ điểm dừng 9 đến điểm dừng 10 (tính bằng Google Apps Script) | Number       | ❌       |
+| 67  | BO  | `totalDistance`    | **Tổng quãng đường (km)**        | Tổng khoảng cách của toàn bộ chuyến đi (tính bằng Google Apps Script)      | Number       | ❌       |
+| 68  | BP  | `stop1OrderCount`  | **Số phiếu điểm dừng 1**         | Số lượng phiếu đơn hàng tại điểm dừng 1                                    | Number       | ❌       |
+| 69  | BQ  | `stop2OrderCount`  | **Số phiếu điểm dừng 2**         | Số lượng phiếu đơn hàng tại điểm dừng 2                                    | Number       | ❌       |
+| 70  | BR  | `stop3OrderCount`  | **Số phiếu điểm dừng 3**         | Số lượng phiếu đơn hàng tại điểm dừng 3                                    | Number       | ❌       |
+| 71  | BS  | `stop4OrderCount`  | **Số phiếu điểm dừng 4**         | Số lượng phiếu đơn hàng tại điểm dừng 4                                    | Number       | ❌       |
+| 72  | BT  | `stop5OrderCount`  | **Số phiếu điểm dừng 5**         | Số lượng phiếu đơn hàng tại điểm dừng 5                                    | Number       | ❌       |
+| 73  | BU  | `stop6OrderCount`  | **Số phiếu điểm dừng 6**         | Số lượng phiếu đơn hàng tại điểm dừng 6                                    | Number       | ❌       |
+| 74  | BV  | `stop7OrderCount`  | **Số phiếu điểm dừng 7**         | Số lượng phiếu đơn hàng tại điểm dừng 7                                    | Number       | ❌       |
+| 75  | BW  | `stop8OrderCount`  | **Số phiếu điểm dừng 8**         | Số lượng phiếu đơn hàng tại điểm dừng 8                                    | Number       | ❌       |
+| 76  | BX  | `stop9OrderCount`  | **Số phiếu điểm dừng 9**         | Số lượng phiếu đơn hàng tại điểm dừng 9                                    | Number       | ❌       |
+| 77  | BY  | `stop10OrderCount` | **Số phiếu điểm dừng 10**        | Số lượng phiếu đơn hàng tại điểm dừng 10                                   | Number       | ❌       |
+| 78  | BZ  | `totalOrderCount`  | **Tổng số phiếu đơn hàng**       | Tổng số phiếu đơn hàng của toàn bộ chuyến                                  | Number       | ❌       |
+| 79  | CA  | `driverId`         | **ID Tài xế**                    | ID duy nhất của tài xế                                                     | Text         | ❌       |
+| 80  | CB  | `driverName`       | **Tên Tài xế**                   | Họ tên đầy đủ của tài xế                                                   | Text         | ❌       |
+| 81  | CC  | `driverPhone`      | **SĐT Tài xế**                   | Số điện thoại liên hệ tài xế                                               | Text         | ❌       |
+| 82  | CD  | `driverLicense`    | **Bằng lái xe**                  | Số bằng lái xe của tài xế                                                  | Text         | ❌       |
+| 83  | CE  | `loadingImages`    | **Hình ảnh lên hàng**            | Link hình ảnh chụp sau khi lên hàng lên xe                                 | Text         | ❌       |
+| 84  | CF  | `department`       | **Phòng ban**                    | Phòng ban sử dụng dịch vụ vận chuyển                                       | Text         | ❌       |
+| 85  | CG  | `serviceArea`      | **Khu vực phục vụ**              | Khu vực/vùng phục vụ vận chuyển                                            | Text         | ❌       |
+| 86  | CH  | `pricePerKm`       | **Giá/km**                       | Giá cơ bản theo km                                                         | Number       | ❌       |
+| 87  | CI  | `pricePerM3`       | **Giá/khối**                     | Giá theo khối lượng (m³)                                                   | Number       | ❌       |
+| 88  | CJ  | `pricePerTrip`     | **Giá/chuyến**                   | Giá cố định theo chuyến                                                    | Number       | ❌       |
+| 89  | CK  | `fuelSurcharge`    | **Phí phụ xăng**                 | Phụ phí nhiên liệu                                                         | Number       | ❌       |
+| 90  | CL  | `tollFee`          | **Phí cầu đường**                | Phí cầu, phí đường                                                         | Number       | ❌       |
+| 91  | CM  | `insuranceFee`     | **Phí bảo hiểm**                 | Phí bảo hiểm vận chuyển                                                    | Number       | ❌       |
+| 92  | CN  | `baseRate`         | **Base rate**                    | Giá cơ bản                                                                 | Number       | ❌       |
+
+## 📁 Phân nhóm chức năng
+
+### 🔹 Thông tin cơ bản (4 cột)
+
+- **A** `requestId` - ID Yêu cầu vận chuyển
+- **B** `createdAt` - Ngày tạo yêu cầu
+- **v** `status` - Trạng thái yêu cầu
+- **w** `note` - Ghi chú bổ sung
+
+### 🔹 Điểm lấy hàng (1 cột)
+
+- **C** `pickupAddress` - Địa chỉ lấy hàng
+
+### 🔹 Điểm dừng (10 cột)
+
+- **D-M** `stop1Address` đến `stop10Address` - Địa chỉ 10 điểm dừng
+
+### 🔹 Sản phẩm điểm dừng (10 cột)
+
+- **N-W** `stop1Products` đến `stop10Products` - Sản phẩm tại 10 điểm dừng
+
+### 🔹 Khối lượng điểm dừng (10 cột)
+
+- **X-a** `stop1VolumeM3` đến `stop10VolumeM3` - Khối lượng tại 10 điểm dừng
+
+### 🔹 Số kiện điểm dừng (10 cột)
+
+- **b-k** `stop1Packages` đến `stop10Packages` - Số kiện tại 10 điểm dừng
+
+### 🔹 Tổng hợp (3 cột)
+
+- **l** `totalProducts` - Tổng sản phẩm
+- **m** `totalVolumeM3` - Tổng khối lượng (m³)
+- **n** `totalPackages` - Tổng số kiện
+
+### 🔹 Thông tin vận chuyển (8 cột)
+
+- **o** `pricingMethod` - Phương thức tính giá
+- **p** `carrierId` - ID đơn vị vận chuyển
+- **q** `carrierName` - Tên đơn vị vận chuyển
+- **r** `carrierContact` - Người liên hệ
+- **s** `carrierPhone` - Số điện thoại
+- **t** `carrierEmail` - Email
+- **u** `estimatedCost` - Chi phí ước tính
+- **x** `vehicleType` - Loại xe
+
+### 🔹 Quãng đường (11 cột)
+
+- **BE** `distance1` - Quãng đường từ điểm nguồn đến điểm dừng 1
+- **BF** `distance2` - Quãng đường từ điểm dừng 1 đến điểm dừng 2
+- **BG** `distance3` - Quãng đường từ điểm dừng 2 đến điểm dừng 3
+- **BH** `distance4` - Quãng đường từ điểm dừng 3 đến điểm dừng 4
+- **BI** `distance5` - Quãng đường từ điểm dừng 4 đến điểm dừng 5
+- **BJ** `distance6` - Quãng đường từ điểm dừng 5 đến điểm dừng 6
+- **BK** `distance7` - Quãng đường từ điểm dừng 6 đến điểm dừng 7
+- **BL** `distance8` - Quãng đường từ điểm dừng 7 đến điểm dừng 8
+- **BM** `distance9` - Quãng đường từ điểm dừng 8 đến điểm dừng 9
+- **BN** `distance10` - Quãng đường từ điểm dừng 9 đến điểm dừng 10
+- **BO** `totalDistance` - Tổng quãng đường của toàn bộ chuyến đi
+
+### 🔹 Số phiếu đơn hàng (11 cột)
+
+- **BP** `stop1OrderCount` - Số phiếu đơn hàng tại điểm dừng 1
+- **BQ** `stop2OrderCount` - Số phiếu đơn hàng tại điểm dừng 2
+- **BR** `stop3OrderCount` - Số phiếu đơn hàng tại điểm dừng 3
+- **BS** `stop4OrderCount` - Số phiếu đơn hàng tại điểm dừng 4
+- **BT** `stop5OrderCount` - Số phiếu đơn hàng tại điểm dừng 5
+- **BU** `stop6OrderCount` - Số phiếu đơn hàng tại điểm dừng 6
+- **BV** `stop7OrderCount` - Số phiếu đơn hàng tại điểm dừng 7
+- **BW** `stop8OrderCount` - Số phiếu đơn hàng tại điểm dừng 8
+- **BX** `stop9OrderCount` - Số phiếu đơn hàng tại điểm dừng 9
+- **BY** `stop10OrderCount` - Số phiếu đơn hàng tại điểm dừng 10
+- **BZ** `totalOrderCount` - Tổng số phiếu đơn hàng của toàn bộ chuyến
+
+### 🔹 Thông tin Tài xế (4 cột)
+
+- **CA** `driverId` - ID duy nhất của tài xế
+- **CB** `driverName` - Họ tên đầy đủ của tài xế
+- **CC** `driverPhone` - Số điện thoại liên hệ tài xế
+- **CD** `driverLicense` - Số bằng lái xe của tài xế
+
+### 🔹 Hình ảnh và Phòng ban (2 cột)
+
+- **CE** `loadingImages` - Link hình ảnh chụp sau khi lên hàng lên xe
+- **CF** `department` - Phòng ban sử dụng dịch vụ vận chuyển
+
+### 🔹 Định giá và Phí phụ (8 cột)
+
+- **CG** `serviceArea` - Khu vực/vùng phục vụ vận chuyển
+- **CH** `pricePerKm` - Giá cơ bản theo km
+- **CI** `pricePerM3` - Giá theo khối lượng (m³)
+- **CJ** `pricePerTrip` - Giá cố định theo chuyến
+- **CK** `fuelSurcharge` - Phụ phí nhiên liệu
+- **CL** `tollFee` - Phí cầu, phí đường
+- **CM** `insuranceFee` - Phí bảo hiểm vận chuyển
+- **CN** `baseRate` - Giá cơ bản
+
+## 🔧 Cấu hình trong code
+
+### Headers Array (server/index.js)
+
+```javascript
+const TRANSPORT_REQUESTS_HEADERS = [
+  'requestId',
+  'createdAt',
+  'pickupAddress',
+  'stop1Address',
+  'stop2Address',
+  'stop3Address',
+  'stop4Address',
+  'stop5Address',
+  'stop6Address',
+  'stop7Address',
+  'stop8Address',
+  'stop9Address',
+  'stop10Address',
+  'stop1Products',
+  'stop2Products',
+  'stop3Products',
+  'stop4Products',
+  'stop5Products',
+  'stop6Products',
+  'stop7Products',
+  'stop8Products',
+  'stop9Products',
+  'stop10Products',
+  'stop1VolumeM3',
+  'stop2VolumeM3',
+  'stop3VolumeM3',
+  'stop4VolumeM3',
+  'stop5VolumeM3',
+  'stop6VolumeM3',
+  'stop7VolumeM3',
+  'stop8VolumeM3',
+  'stop9VolumeM3',
+  'stop10VolumeM3',
+  'stop1Packages',
+  'stop2Packages',
+  'stop3Packages',
+  'stop4Packages',
+  'stop5Packages',
+  'stop6Packages',
+  'stop7Packages',
+  'stop8Packages',
+  'stop9Packages',
+  'stop10Packages',
+  'totalProducts',
+  'totalVolumeM3',
+  'totalPackages',
+  'pricingMethod',
+  'carrierId',
+  'carrierName',
+  'carrierContact',
+  'carrierPhone',
+  'carrierEmail',
+  'estimatedCost',
+  'status',
+  'note',
+  'vehicleType',
+  'distance1',
+  'distance2',
+  'distance3',
+  'distance4',
+  'distance5',
+  'distance6',
+  'distance7',
+  'distance8',
+  'distance9',
+  'distance10',
+  'totalDistance',
+  'stop1OrderCount',
+  'stop2OrderCount',
+  'stop3OrderCount',
+  'stop4OrderCount',
+  'stop5OrderCount',
+  'stop6OrderCount',
+  'stop7OrderCount',
+  'stop8OrderCount',
+  'stop9OrderCount',
+  'stop10OrderCount',
+  'totalOrderCount',
+  'driverId',
+  'driverName',
+  'driverPhone',
+  'driverLicense',
+  'loadingImages',
+  'department',
+];
+```
+
+### Vietnamese Names Mapping
+
+```javascript
+const VIETNAMESE_NAMES = {
+  requestId: 'ID Yêu cầu vận chuyển',
+  createdAt: 'Ngày tạo yêu cầu',
+  pickupAddress: 'Địa chỉ lấy hàng',
+  stop1Address: 'Địa chỉ điểm dừng 1',
+  stop2Address: 'Địa chỉ điểm dừng 2',
+  stop3Address: 'Địa chỉ điểm dừng 3',
+  stop4Address: 'Địa chỉ điểm dừng 4',
+  stop5Address: 'Địa chỉ điểm dừng 5',
+  stop6Address: 'Địa chỉ điểm dừng 6',
+  stop7Address: 'Địa chỉ điểm dừng 7',
+  stop8Address: 'Địa chỉ điểm dừng 8',
+  stop9Address: 'Địa chỉ điểm dừng 9',
+  stop10Address: 'Địa chỉ điểm dừng 10',
+  stop1Products: 'Sản phẩm điểm dừng 1',
+  stop2Products: 'Sản phẩm điểm dừng 2',
+  stop3Products: 'Sản phẩm điểm dừng 3',
+  stop4Products: 'Sản phẩm điểm dừng 4',
+  stop5Products: 'Sản phẩm điểm dừng 5',
+  stop6Products: 'Sản phẩm điểm dừng 6',
+  stop7Products: 'Sản phẩm điểm dừng 7',
+  stop8Products: 'Sản phẩm điểm dừng 8',
+  stop9Products: 'Sản phẩm điểm dừng 9',
+  stop10Products: 'Sản phẩm điểm dừng 10',
+  stop1VolumeM3: 'Khối lượng điểm dừng 1 (m³)',
+  stop2VolumeM3: 'Khối lượng điểm dừng 2 (m³)',
+  stop3VolumeM3: 'Khối lượng điểm dừng 3 (m³)',
+  stop4VolumeM3: 'Khối lượng điểm dừng 4 (m³)',
+  stop5VolumeM3: 'Khối lượng điểm dừng 5 (m³)',
+  stop6VolumeM3: 'Khối lượng điểm dừng 6 (m³)',
+  stop7VolumeM3: 'Khối lượng điểm dừng 7 (m³)',
+  stop8VolumeM3: 'Khối lượng điểm dừng 8 (m³)',
+  stop9VolumeM3: 'Khối lượng điểm dừng 9 (m³)',
+  stop10VolumeM3: 'Khối lượng điểm dừng 10 (m³)',
+  stop1Packages: 'Số kiện điểm dừng 1',
+  stop2Packages: 'Số kiện điểm dừng 2',
+  stop3Packages: 'Số kiện điểm dừng 3',
+  stop4Packages: 'Số kiện điểm dừng 4',
+  stop5Packages: 'Số kiện điểm dừng 5',
+  stop6Packages: 'Số kiện điểm dừng 6',
+  stop7Packages: 'Số kiện điểm dừng 7',
+  stop8Packages: 'Số kiện điểm dừng 8',
+  stop9Packages: 'Số kiện điểm dừng 9',
+  stop10Packages: 'Số kiện điểm dừng 10',
+  totalProducts: 'Tổng sản phẩm',
+  totalVolumeM3: 'Tổng khối lượng (m³)',
+  totalPackages: 'Tổng số kiện',
+  pricingMethod: 'Phương thức tính giá',
+  carrierId: 'ID đơn vị vận chuyển',
+  carrierName: 'Tên đơn vị vận chuyển',
+  carrierContact: 'Người liên hệ',
+  carrierPhone: 'Số điện thoại',
+  carrierEmail: 'Email',
+  estimatedCost: 'Chi phí ước tính',
+  status: 'Trạng thái',
+  note: 'Ghi chú',
+  vehicleType: 'Loại xe',
+  distance1: 'Quãng đường 1 (km)',
+  distance2: 'Quãng đường 2 (km)',
+  distance3: 'Quãng đường 3 (km)',
+  distance4: 'Quãng đường 4 (km)',
+  distance5: 'Quãng đường 5 (km)',
+  distance6: 'Quãng đường 6 (km)',
+  distance7: 'Quãng đường 7 (km)',
+  distance8: 'Quãng đường 8 (km)',
+  distance9: 'Quãng đường 9 (km)',
+  distance10: 'Quãng đường 10 (km)',
+  totalDistance: 'Tổng quãng đường (km)',
+  stop1OrderCount: 'Số phiếu điểm dừng 1',
+  stop2OrderCount: 'Số phiếu điểm dừng 2',
+  stop3OrderCount: 'Số phiếu điểm dừng 3',
+  stop4OrderCount: 'Số phiếu điểm dừng 4',
+  stop5OrderCount: 'Số phiếu điểm dừng 5',
+  stop6OrderCount: 'Số phiếu điểm dừng 6',
+  stop7OrderCount: 'Số phiếu điểm dừng 7',
+  stop8OrderCount: 'Số phiếu điểm dừng 8',
+  stop9OrderCount: 'Số phiếu điểm dừng 9',
+  stop10OrderCount: 'Số phiếu điểm dừng 10',
+  totalOrderCount: 'Tổng số phiếu đơn hàng',
+  driverId: 'ID Tài xế',
+  driverName: 'Tên Tài xế',
+  driverPhone: 'SĐT Tài xế',
+  driverLicense: 'Bằng lái xe',
+  loadingImages: 'Hình ảnh lên hàng',
+  department: 'Phòng ban',
+  serviceArea: 'Khu vực phục vụ',
+  pricePerKm: 'Giá/km',
+  pricePerM3: 'Giá/khối',
+  pricePerTrip: 'Giá/chuyến',
+  fuelSurcharge: 'Phí phụ xăng',
+  tollFee: 'Phí cầu đường',
+  insuranceFee: 'Phí bảo hiểm',
+  baseRate: 'Base rate',
+};
+```
+
+## 📋 Quy tắc đặt tên cột
+
+### Pattern chung
+
+- **Điểm dừng:** `stop{number}{type}`
+  - `stop1Address`, `stop2Address`, ..., `stop10Address`
+  - `stop1Products`, `stop2Products`, ..., `stop10Products`
+  - `stop1VolumeM3`, `stop2VolumeM3`, ..., `stop10VolumeM3`
+  - `stop1Packages`, `stop2Packages`, ..., `stop10Packages`
+
+### Quy ước
+
+- **Address:** Địa chỉ đầy đủ
+- **Products:** Danh sách sản phẩm (text)
+- **VolumeM3:** Khối lượng tính bằng mét khối (number)
+- **Packages:** Số lượng kiện hàng (number)
+
+## 🎯 Mục đích sử dụng
+
+### 1. **Quản lý yêu cầu vận chuyển**
+
+- Tạo và theo dõi các yêu cầu vận chuyển
+- Quản lý trạng thái từ lúc tạo đến hoàn thành
+
+### 2. **Lập kế hoạch tuyến đường**
+
+- Điểm lấy hàng (pickupAddress)
+- Tối đa 10 điểm dừng giao hàng
+- Tối ưu hóa tuyến đường
+
+### 3. **Tính toán chi phí**
+
+- Khối lượng hàng hóa (m³)
+- Số kiện hàng
+- Phương thức tính giá
+- Chi phí ước tính
+
+### 4. **Quản lý đối tác vận chuyển**
+
+- Thông tin đơn vị vận chuyển
+- Liên hệ và thông tin thanh toán
+
+### 5. **Quản lý phương tiện**
+
+- Loại xe vận chuyển phù hợp
+
+## 🔄 Luồng dữ liệu
+
+1. **Tạo yêu cầu:** requestId + createdAt + pickupAddress
+2. **Chọn điểm dừng:** stop1Address - stop10Address
+3. **Nhập sản phẩm:** stop1Products - stop10Products
+4. **Tính toán:** stop1VolumeM3 - stop10VolumeM3, stop1Packages - stop10Packages
+5. **Tổng hợp:** totalProducts, totalVolumeM3, totalPackages
+6. **Chọn đối tác:** carrierId, carrierName, carrierContact, carrierPhone, carrierEmail
+7. **Tính giá:** pricingMethod, estimatedCost
+8. **Chọn xe:** vehicleType
+9. **Cập nhật trạng thái:** status, note
+
+## ✅ Kết luận
+
+**Sheet TransportRequests đã được thiết lập hoàn chỉnh với:**
+
+- ✅ 92 cột đầy đủ (A-CN)
+- ✅ Tất cả headers đã được đặt đúng (bao gồm 11 cột distance + 11 cột order count + 6 cột driver/image/dept + 8 cột pricing)
+- ✅ Cấu trúc logic và phân nhóm rõ ràng
+- ✅ Hỗ trợ tính toán quãng đường tự động
+- ✅ Hỗ trợ đếm số phiếu đơn hàng theo điểm dừng
+- ✅ Hỗ trợ quản lý thông tin tài xế và hình ảnh
+- ✅ Hỗ trợ tính toán chi phí chi tiết với các phí phụ
+- ✅ Sẵn sàng cho việc phát triển tính năng "Đặt xe mới" với tính toán chi phí tự động
+
+**Các cột distance mới:**
+
+- `distance1-distance10`: Quãng đường giữa các điểm dừng
+- `totalDistance`: Tổng quãng đường của chuyến đi
+
+**Các cột order count mới:**
+
+- `stop1OrderCount-stop10OrderCount`: Số phiếu đơn hàng tại từng điểm dừng
+- `totalOrderCount`: Tổng số phiếu đơn hàng của toàn bộ chuyến
+
+**Các cột thông tin tài xế, hình ảnh và phòng ban mới:**
+
+- `driverId, driverName, driverPhone, driverLicense`: Thông tin tài xế
+- `loadingImages`: Hình ảnh chụp sau khi lên hàng lên xe
+- `department`: Phòng ban sử dụng dịch vụ vận chuyển
+
+**Các cột định giá và phí phụ mới:**
+
+- `serviceArea`: Khu vực phục vụ
+- `pricePerKm, pricePerM3, pricePerTrip`: Giá theo km/khối/chuyến
+- `fuelSurcharge, tollFee, insuranceFee`: Các phí phụ
+- `baseRate`: Giá cơ bản
+
+**Bước tiếp theo:** Cập nhật code backend và frontend để sử dụng đúng cấu trúc 92 cột này và tích hợp tính toán quãng đường tự động cùng với đếm số phiếu đơn hàng, quản lý thông tin tài xế và tính toán chi phí chi tiết.
+
+## 🔧 Tính chi phí vận chuyển (UPDATED)
+
+### Công thức chuẩn
+
+- **Theo km (perKm):**
+  - **≤ 4km:** `Base rate + Chi phí điểm dừng (Giá/điểm × Tổng điểm dừng) + Phụ phí (nếu có)`
+  - **> 4km:** `Base rate + (Khoảng cách - 4km) × Giá/km + Chi phí điểm dừng (Giá/điểm × Tổng điểm dừng) + Phụ phí (nếu có)`
+- **Theo chuyến (perTrip):** `Giá/chuyến + Phụ phí (nếu có)`
+- **Theo khối (perM3):** `(Tổng khối × Giá/khối) + Phụ phí (nếu có)`
+
+**Phụ phí = Phí phụ xăng + Phí cầu đường + Phí bảo hiểm**
+
+**Ví dụ tính theo km:**
+
+- Quãng đường 3,4km: `Base rate + Chi phí điểm dừng (Giá/điểm × Tổng điểm dừng) + Phụ phí (nếu có)` (không tính thêm theo km)
+- Quãng đường 8,7km: `Base rate + (8,7-4) × Giá/km + Chi phí điểm dừng (Giá/điểm × Tổng điểm dừng) + Phụ phí (nếu có)` = `Base rate + 4,7 × Giá/km + Chi phí điểm dừng + Phụ phí (nếu có)`
+
+**Định dạng số thập phân:**
+
+- Khoảng cách: 3,4km, 8,7km (dấu phẩy cho phần thập phân)
+- Khối lượng: 12,50m³, 2,27m³ (dấu phẩy cho phần thập phân)
+- Tiền tệ: 1.234.567 VND (dấu chấm cho hàng nghìn, dấu phẩy cho phần thập phân nếu có)
+
+### Triển khai trong code
+
+- Hook: `src/hooks/useTransportCostCalculation.ts`
+  - Hàm `calculateCost(formData)` trả về breakdown: `{ baseCost, distanceCost, stopCost, surchargeCost, totalCost, formula }`.
+  - Hàm `getFormulaDescription(pricingMethod)` mô tả công thức ngắn gọn.
+- Component: `src/components/CostCalculationDetails.tsx`
+  - Hiển thị breakdown chi phí (ẩn các khoản = 0), kèm công thức chi tiết.
+- Tích hợp: `src/features/shipments/components/TransportRequests.tsx`
+  - Thay thế hàm `calculateEstimatedCost` cũ bằng hook `calculateCost`.
+  - Map phương thức sheet → hook: `PER_KM|PER_TRIP|PER_M3` → `perKm|perTrip|perM3`.
+  - Thêm section chi tiết dưới "💰 Chi phí vận chuyển".
+
+### Điều kiện hiển thị (UI)
+
+- "💰 Định giá": chỉ hiển thị nếu bất kỳ giá trị nào > 0 trong: `pricePerKm, pricePerTrip, pricePerM3, stopFee, baseRate`.
+- "📋 Phụ phí": chỉ hiển thị nếu bất kỳ giá trị nào > 0 trong: `fuelSurcharge, tollFee, insuranceFee`.
+- Mỗi trường trong các nhóm trên chỉ render khi giá trị > 0 (không hiển thị 0, undefined, null).
+- "💰 Chi phí vận chuyển": hiển thị khi đã chọn ít nhất 1 phiếu.
+
+---
+
+## 📁 Cấu trúc dự án (UPDATED)
+
+```
+src/
+├── components/
+│   └── CostCalculationDetails.tsx
+├── hooks/
+│   └── useTransportCostCalculation.ts
+├── features/
+│   └── shipments/
+│       └── components/
+│           └── TransportRequests.tsx
+```
+
+Ghi chú: Các file tạm/legacy đã dọn dẹp khỏi tài liệu. Luôn ưu tiên lấy dữ liệu pricing từ Google Sheets, không dùng fallback bộ nhớ.
+
+---
+
+## ✅ Lưu ý triển khai
+
+- **Number formatting:** dùng `toLocaleString('vi-VN')` và các helper `formatNumber`, `parseFormattedNumber` trong `TransportRequests.tsx`.
+- **Distance formatting:** khoảng cách hiển thị 1 số thập phân theo định dạng Việt Nam (`.toLocaleString('vi-VN', { minimumFractionDigits: 1, maximumFractionDigits: 1 })`) như 3,4km, 8,7km.
+- **Volume formatting:** khối lượng hiển thị 2 số thập phân theo định dạng Việt Nam (`.toLocaleString('vi-VN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })`) như 12,50m³.
+- **Input pricing:** cho phép nhập linh hoạt (xóa rỗng, ký hiệu "₫"), parse an toàn; nạp tự động giá từ sheet khi chọn carrier/method/vehicle.
+- **UI optimization:** tránh hiển thị số 0 trong phần định giá/phụ phí để UI trực quan.

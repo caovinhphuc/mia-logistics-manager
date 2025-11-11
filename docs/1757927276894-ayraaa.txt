@@ -1,0 +1,448 @@
+# 🚀 MIA Logistics Manager - Hướng dẫn tổng hợp
+
+## 📋 Tổng quan dự án
+
+**MIA Logistics Manager** là hệ thống quản lý logistics chuyên nghiệp với đầy đủ tính năng quản lý vận chuyển, kho hàng, nhân viên và phân quyền.
+
+### 🎯 Tính năng chính
+
+#### 📊 **Dashboard & Báo cáo**
+
+- Dashboard tổng quan với các KPI chính
+- Biểu đồ thống kê vận chuyển theo tháng
+- Hoạt động gần đây
+
+#### 🚛 **Quản lý Vận chuyển**
+
+- **Vận chuyển**: Giao diện bảng và grid view cho yêu cầu vận chuyển
+- **Yêu cầu vận chuyển**: Tạo và quản lý yêu cầu vận chuyển
+- **Chờ chuyển giao**: Theo dõi hàng chờ chuyển giao
+- **Địa điểm lưu**: Quản lý các địa điểm lưu trữ
+- **Tính toán chi phí**: Tự động tính phí vận chuyển dựa trên phương thức tính
+- **Tính toán khoảng cách**: Tích hợp Google Apps Script với Google Maps Services
+- **Bảng tính khối**: Cấu hình quy tắc tính khối hàng
+
+#### 📥 **Quản lý Nhập hàng**
+
+- **Nhập hàng - Quốc tế**: Quản lý lịch nhập hàng quốc tế
+- **Nhập hàng - Quốc nội**: Quản lý lịch nhập hàng nội địa
+- **Lịch nhập**: Lịch trình nhập hàng tổng hợp
+
+#### 📦 **Quản lý Kho hàng**
+
+- **Phiếu chuyển kho**: Quản lý các phiếu chuyển kho với giao diện Grid/Table view
+- **Đơn hàng**: Theo dõi đơn hàng
+- **Tồn kho**: Quản lý hàng tồn kho
+
+#### 👥 **Quản lý Nhân viên**
+
+- **Danh sách nhân viên**: Xem danh sách nhân viên (Grid + Table view)
+- **Thêm/Sửa nhân viên**: Form quản lý thông tin nhân viên
+- **Phân quyền**: Gán vai trò và quyền cho nhân viên
+
+#### 🏢 **Quản lý Đối tác**
+
+- **Nhà vận chuyển**: Quản lý thông tin nhà vận chuyển
+- **Địa điểm**: Quản lý các địa điểm
+
+#### 🗺️ **Tính năng nâng cao**
+
+- **Bản đồ**: Tích hợp Google Maps để hiển thị địa điểm và tính toán tuyến đường
+- **Theo dõi**: Hệ thống tracking và monitoring
+- **Thông báo**: Hệ thống notification đa kênh (Email, Telegram, In-app)
+- **Lịch trình**: Job scheduling và cron jobs
+- **Báo cáo**: Hệ thống logging và audit trail
+
+## 🔐 Hệ thống Authentication & Authorization
+
+### **Đăng nhập**
+
+- **Login**: Trang đăng nhập với email/password
+- **Session Management**: Quản lý phiên đăng nhập qua localStorage
+- **Auto Redirect**: Tự động chuyển hướng khi chưa đăng nhập
+- **Remember Me**: Lưu thông tin đăng nhập
+
+### **Phân quyền (RBAC)**
+
+- **Vai trò (Roles)**: Admin, Manager, Staff, etc.
+- **Quyền (Permissions)**: Chi tiết theo resource:action
+  - `employees:view/create/update/delete`
+  - `transfers:view/create/update/delete`
+  - `carriers:view/create/update/delete`
+  - `locations:view/create/update/delete`
+  - `transport-requests:view/create/update/delete`
+  - `inbound-international:view`
+  - `inbound-domestic:view`
+  - `inbound-schedule:view`
+  - `settings:view/update`
+
+### **Route Guards**
+
+- **Permission-based routing**: Ẩn/hiện route theo quyền
+- **Action guards**: Ẩn/hiện button/action theo quyền
+- **HOC guards**: `withPermission()`, `requirePermission()`
+- **SecurityGuard**: Component bảo vệ route với authentication
+
+### **Session Management & Security**
+
+- **Session Timeout**: 30 phút tự động hết hạn
+- **Warning System**: Cảnh báo 5 phút trước khi hết hạn
+- **Smart Extension**: Gia hạn session có điều kiện để đảm bảo bảo mật
+- **Auto Redirect**: Tự động quay về vị trí cũ sau khi đăng nhập lại
+- **Security Guards**: Component bảo vệ route với authentication
+- **Activity Monitoring**: Theo dõi hoạt động người dùng để reset session timer
+- **UI Warning**: Cảnh báo thông minh với màu sắc và nút hành động
+
+## 🗄️ Cấu trúc Database (Google Sheets)
+
+### **Sheets chính**
+
+1. **Users**: Quản lý người dùng hệ thống
+2. **Roles**: Định nghĩa các vai trò
+3. **RolePermissions**: Phân quyền cho từng vai trò
+4. **Employees**: Quản lý nhân viên
+5. **Transfers**: Phiếu chuyển kho
+6. **Carriers**: Nhà vận chuyển
+7. **Locations**: Địa điểm
+8. **TransportRequests**: Yêu cầu vận chuyển (92 cột)
+9. **TransportProposals**: Đề nghị vận chuyển mới
+10. **InboundInternational**: Lịch nhập hàng quốc tế
+11. **InboundDomestic**: Lịch nhập hàng quốc nội
+12. **InboundSchedule**: Lịch nhập hàng tổng hợp (54 cột)
+
+### **Sheet TransportRequests (92 cột)**
+
+- **Thông tin cơ bản**: requestId, createdAt, status, note
+- **Điểm lấy hàng**: pickupAddress
+- **Điểm dừng**: stop1Address đến stop10Address
+- **Sản phẩm**: stop1Products đến stop10Products
+- **Khối lượng**: stop1VolumeM3 đến stop10VolumeM3
+- **Số kiện**: stop1Packages đến stop10Packages
+- **Tổng hợp**: totalProducts, totalVolumeM3, totalPackages
+- **Thông tin vận chuyển**: pricingMethod, carrierId, carrierName, etc.
+- **Quãng đường**: distance1 đến distance10, totalDistance
+- **Số phiếu**: stop1OrderCount đến stop10OrderCount, totalOrderCount
+- **Thông tin tài xế**: driverId, driverName, driverPhone, driverLicense
+- **Hình ảnh và phòng ban**: loadingImages, department
+- **Định giá**: serviceArea, pricePerKm, pricePerM3, pricePerTrip, etc.
+
+### **Sheet InboundSchedule (54 cột)**
+
+- **Thông tin cơ bản**: id, date, pi, supplier, origin, destination, product, category, quantity, container, status, carrier
+- **Thông tin bổ sung**: purpose, receiveTime, poNumbers
+- **Thông tin đóng gói**: packagingTypes, packagingQuantities, packagingDescriptions
+- **Timeline vận chuyển**: 6 mốc thời gian × 3 trường (dự kiến, thực tế, trạng thái)
+- **Trạng thái chứng từ**: 5 mốc thời gian × 3 trường (dự kiến, thực tế, trạng thái)
+- **Thông tin hệ thống**: notes, createdAt, updatedAt
+
+## 🎨 UI/UX Standards
+
+### **Theme System**
+
+- **Typography Scale**: H1-H6, subtitle1-2, body1-2, caption, button, overline
+- **Color Palette**: Primary, secondary, success, warning, error, info + grey scale
+- **Component Styles**: Button, Chip, Paper, Card, Table, Dialog, TextField, IconButton, Alert, Snackbar, Tooltip, Badge, Avatar, Divider, List, Menu, Select, Checkbox, Radio, Switch
+- **Transitions**: Smooth animations và hover effects
+- **Spacing & Breakpoints**: Responsive design system
+
+### **Shared Components**
+
+- **StatusChip**: Hiển thị trạng thái với màu sắc chuẩn
+- **ActionButton**: Button với variants và styling đồng nhất
+- **DataTable**: Table với pagination, sorting, filtering
+- **FormField**: Input fields với validation và styling
+- **LoadingState**: Loading indicators (spinner, skeleton, linear)
+- **EmptyState**: Empty states với actions và icons
+- **ErrorBoundary**: Error handling với fallback UI
+- **GridView**: Grid view component với card layout và expandable details
+- **IconSet**: Chuẩn hóa tất cả icons trong ứng dụng
+- **ModernPageLayout**: Layout component chuẩn cho các trang
+
+### **Best Practices**
+
+- **Typography**: Sử dụng variant có sẵn, không tùy chỉnh fontSize
+- **Buttons**: Sử dụng ActionButton thay vì Button trực tiếp
+- **Status Display**: Sử dụng StatusChip cho tất cả trạng thái
+- **Tables**: Sử dụng DataTable thay vì Table trực tiếp
+- **Icons**: Sử dụng IconSet thay vì import trực tiếp từ @mui/icons-material
+
+## 🇻🇳 Việt hóa
+
+### **Hoàn thành 100%**
+
+- ✅ **12/12 trang** đã Việt hoá hoàn toàn
+- ✅ **Dropdown menus** đã Việt hoá (Action, Resource, Status)
+- ✅ **Table headers** đã Việt hoá
+- ✅ **Button labels** đã Việt hoá
+- ✅ **Error messages** đã Việt hoá
+- ✅ **Success messages** đã Việt hoá
+- ✅ **Dialog titles** đã Việt hoá
+- ✅ **Form labels** đã Việt hoá
+- ✅ **Validation messages** đã Việt hoá
+- ✅ **Empty states** đã Việt hoá
+
+### **Cấu hình timezone Việt Nam**
+
+- ✅ **Backend**: `getVietnamTimeString()`, `getVietnamTimeDisplay()`
+- ✅ **Frontend**: Store config `Asia/Ho_Chi_Minh`
+- ✅ **Format ngày giờ**: `vi-VN` locale
+- ✅ **Number formatting**: `toLocaleString('vi-VN')`
+
+### **Thông báo khởi động server**
+
+- ✅ **Việt hóa hoàn toàn**: Tất cả thông báo khởi động bằng tiếng Việt
+- ✅ **Trực quan**: Icons và format đẹp mắt
+- ✅ **Đầy đủ thông tin**: Trạng thái tất cả dịch vụ
+- ✅ **Chuyên nghiệp**: Layout nhất quán
+
+## 🛠️ Cài đặt và Chạy
+
+### **Yêu cầu hệ thống**
+
+- Node.js 18+
+- npm hoặc yarn
+- Google Sheets API credentials
+- Google Maps API key (cho tính năng bản đồ)
+
+### **Cài đặt**
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd mia-logistics-manager
+
+# Cài đặt dependencies
+npm install
+cd server && npm install
+cd ..
+
+# Cấu hình Google Sheets
+cp server/env.example server/.env
+# Chỉnh sửa .env với SHEET_ID và SERVICE_ACCOUNT_KEY
+```
+
+### **Cấu hình Google Apps Script cho tính toán khoảng cách**
+
+1. Truy cập [Google Apps Script](https://script.google.com/)
+2. Tạo project mới
+3. Copy code từ file `google-apps-script/distance-calculator.gs`
+4. Deploy script với type: **Web app**
+5. Cập nhật file `.env` với URL deployment
+
+### **Khởi động**
+
+```bash
+# Terminal 1: Backend
+cd server
+npm start
+
+# Terminal 2: Frontend
+npm run dev
+```
+
+### **Tài khoản mặc định**
+
+- **Email**: <admin@mia.vn>
+- **Password**: admin@123
+- **Role**: Admin (full permissions)
+
+## 🔧 API Endpoints
+
+### **Authentication**
+
+- `POST /api/auth/login` - Đăng nhập
+- `POST /api/auth/init` - Khởi tạo auth sheets
+
+### **Roles & Permissions**
+
+- `GET /api/auth/roles` - Lấy danh sách vai trò
+- `POST /api/auth/roles` - Tạo/sửa vai trò
+- `GET /api/auth/role-permissions` - Lấy quyền của vai trò
+- `POST /api/auth/role-permissions` - Cập nhật quyền
+
+### **Users**
+
+- `GET /api/auth/users` - Lấy danh sách người dùng
+- `POST /api/auth/users` - Tạo người dùng
+- `PUT /api/auth/users/:id` - Sửa người dùng
+
+### **Business Data**
+
+- `GET /api/transfers` - Phiếu chuyển kho
+- `GET /api/carriers` - Nhà vận chuyển
+- `GET /api/locations` - Địa điểm
+- `GET /api/transport-requests` - Yêu cầu vận chuyển
+- `POST /api/transport-proposals` - Tạo đề nghị vận chuyển mới
+- `GET /api/inbound/international` - Lịch nhập hàng quốc tế
+- `GET /api/inbound/domestic` - Lịch nhập hàng quốc nội
+- `GET /api/inbound/schedule` - Lịch nhập hàng tổng hợp
+
+### **Maps & Distance**
+
+- `GET /api/maps/distance` - Tính khoảng cách giữa các địa điểm
+- `GET /api/maps/geocode` - Chuyển đổi địa chỉ thành tọa độ
+
+## 📊 Tính năng nâng cao
+
+### **Real-time Updates**
+
+- Socket.IO integration
+- Live notifications
+- Real-time data sync
+
+### **Notifications**
+
+- Email notifications (SendGrid, Nodemailer)
+- Telegram bot integration
+- In-app notifications
+- Push notifications (Web Push API)
+
+### **Maps & Location Services**
+
+- Google Maps integration
+- Distance calculation
+- Route optimization
+- Geocoding services
+
+### **Business Logic**
+
+- Transport cost calculation
+- Volume calculation algorithms
+- Genetic algorithm optimization
+- Performance monitoring
+
+### **Reporting & Analytics**
+
+- Daily/weekly/monthly reports
+- Export to Excel/PDF
+- Custom report builder
+- Audit logging
+
+## 🔒 Bảo mật
+
+### **Authentication**
+
+- bcrypt password hashing
+- JWT tokens (planned)
+- Session management
+- Security context và guards
+
+### **Authorization**
+
+- Role-based access control (RBAC)
+- Resource-level permissions
+- Action-level permissions
+- Route-level protection
+
+### **Data Protection**
+
+- Input validation (Joi, Zod)
+- SQL injection prevention
+- XSS protection
+- CORS configuration
+
+## 🚀 Deployment
+
+### **Production**
+
+```bash
+# Build frontend
+npm run build
+
+# Start production server
+cd server
+NODE_ENV=production npm start
+```
+
+### **Environment Variables**
+
+```bash
+# Backend (.env)
+SHEET_ID=your_google_sheet_id
+SERVICE_ACCOUNT_KEY=path_to_service_account.json
+PORT=5050
+NODE_ENV=production
+
+# Frontend (.env)
+VITE_API_BASE_URL=http://localhost:5050/api
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
+VITE_GOOGLE_APPS_SCRIPT_URL=https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
+```
+
+## 🔧 Troubleshooting
+
+### **Tính toán khoảng cách không hoạt động**
+
+1. Kiểm tra Google Apps Script URL trong .env
+2. Test script trực tiếp với curl
+3. Kiểm tra console logs trong Developer Tools
+4. Hệ thống có fallback khi Google Apps Script không hoạt động
+
+### **Session không hoạt động**
+
+- Kiểm tra JWT token validity
+- Verify IP address consistency
+- Check device fingerprint
+
+### **Auto logout quá sớm**
+
+- Kiểm tra activity monitoring
+- Verify timer configuration
+- Check browser compatibility
+
+## 📝 Changelog
+
+### **v1.2.0 (2024-12-19)**
+
+- ✅ **Quản lý Nhập hàng**: Thêm module quản lý lịch nhập hàng với 3 mục con
+- ✅ **Phân quyền mở rộng**: Thêm 3 quyền mới cho module nhập hàng
+- ✅ **Sidebar Navigation**: Cập nhật cấu trúc menu với nhóm "Nhập hàng"
+- ✅ **Route Protection**: Bảo vệ routes nhập hàng với permission-based guards
+- ✅ **Session Auto-refresh**: Tự động cập nhật session permissions
+
+### **v1.1.1 (2024-09-03)**
+
+- ✅ **Session Timeout Warning System**: Cảnh báo thông minh 5 phút trước khi hết hạn
+- ✅ **Smart Session Extension**: Chỉ cho phép gia hạn session < 20 phút
+- ✅ **Auto Redirect System**: Tự động quay về vị trí cũ sau khi đăng nhập lại
+- ✅ **UI Warning Improvements**: Warning ở center top, không che nút đăng xuất
+- ✅ **Security Enhancement**: Kiểm tra strict session validity
+
+### **v1.1.0 (2024-09-11)**
+
+- ✅ **Cải thiện tính toán khoảng cách**: Tích hợp Google Apps Script với Google Maps Services
+- ✅ **Tối ưu hóa hệ thống**: Dọn dẹp code và file tạm thời
+- ✅ **Cải thiện error handling**: Và logging
+- ✅ **Cập nhật documentation**: Chi tiết
+
+### **v1.0.0 (2024-08-28)**
+
+- ✅ Hệ thống authentication hoàn chỉnh
+- ✅ UI Phân quyền (Roles/Permissions/Users)
+- ✅ Quản lý nhân viên (CRUD)
+- ✅ Route guards và permission-based UI
+- ✅ Google Sheets integration
+- ✅ Responsive design
+- ✅ Shared UI components
+
+## 🤝 Đóng góp
+
+1. Fork repository
+2. Tạo feature branch
+3. Commit changes
+4. Push to branch
+5. Tạo Pull Request
+
+## 📄 License
+
+MIT License - xem file LICENSE để biết thêm chi tiết.
+
+## 📞 Liên hệ
+
+- **Email**: <support@mia.vn>
+- **Website**: <https://mia.vn>
+- **Documentation**: [Wiki](link-to-wiki)
+
+---
+
+© 2024 MIA Logistics Manager - Hệ thống quản lý logistics chuyên nghiệp

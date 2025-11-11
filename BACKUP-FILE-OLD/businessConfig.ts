@@ -1,0 +1,38 @@
+export const BUSINESS_CONFIG = {
+  PRICING: {
+    TAX_RATE: 0.1, // 10% VAT
+    DIMENSIONAL_FACTOR: 167, // Standard air freight factor
+    DEFAULT_FUEL_SURCHARGE: 0.12,
+    DEFAULT_INSURANCE_RATE: 0.005,
+  },
+  ROUTING: {
+    GENETIC_ALGORITHM: {
+      POPULATION_SIZE: 50,
+      MAX_GENERATIONS: 100,
+      CROSSOVER_RATE: 0.8,
+      MUTATION_RATE: 0.1,
+      TOURNAMENT_SIZE: 20,
+    },
+    OPTIMIZATION_TIMEOUT: 30000, // 30 seconds
+    MAX_WAYPOINTS: 50,
+  },
+  VEHICLES: {
+    UTILIZATION_TARGETS: {
+      MIN_EFFICIENT: 0.6, // 60%
+      OPTIMAL_MIN: 0.7, // 70%
+      OPTIMAL_MAX: 0.9, // 90%
+      MAX_SAFE: 0.95, // 95%
+    },
+  },
+  CONSOLIDATION: {
+    MAX_TIME_WINDOW: 4, // hours
+    MAX_DISTANCE_VARIANCE: 10, // km
+    MIN_SAVINGS_THRESHOLD: 50000, // VND
+    COMPATIBILITY_THRESHOLD: 70, // score out of 100
+  },
+  PERFORMANCE: {
+    CACHE_TTL: 5 * 60 * 1000, // 5 minutes
+    MAX_CACHE_SIZE: 1000,
+    BENCHMARK_ITERATIONS: 1000,
+  }
+} as const;

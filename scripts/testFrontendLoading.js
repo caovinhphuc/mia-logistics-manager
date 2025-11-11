@@ -1,0 +1,210 @@
+// Script test Frontend loading từ Google Sheets
+const fs = require('fs');
+const path = require('path');
+
+console.log('🧪 TEST FRONTEND LOADING TỪ GOOGLE SHEETS');
+console.log('=' .repeat(50));
+
+// Kiểm tra file .env
+const envPath = path.join(__dirname, '..', '.env');
+if (fs.existsSync(envPath)) {
+  console.log('✅ File .env đã tồn tại');
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  console.log('📋 Nội dung .env:');
+  console.log(envContent);
+} else {
+  console.log('❌ File .env chưa tồn tại');
+}
+
+console.log('');
+
+// Kiểm tra cấu hình Google
+const googleConfigPath = path.join(__dirname, '..', 'src', 'config', 'google.js');
+if (fs.existsSync(googleConfigPath)) {
+  console.log('✅ File google.js đã tồn tại');
+} else {
+  console.log('❌ File google.js chưa tồn tại');
+}
+
+console.log('');
+
+// Kiểm tra services
+const servicesPath = path.join(__dirname, '..', 'src', 'services');
+const services = [
+  'google/googleSheetsService.js',
+  'google/googleAuthService.js',
+  'map/locationsService.js'
+];
+
+services.forEach(service => {
+  const servicePath = path.join(servicesPath, service);
+  if (fs.existsSync(servicePath)) {
+    console.log(`✅ ${service} đã tồn tại`);
+  } else {
+    console.log(`❌ ${service} chưa tồn tại`);
+  }
+});
+
+console.log('');
+
+// Kiểm tra components
+const componentsPath = path.join(__dirname, '..', 'src', 'components');
+const components = [
+  'map/InteractiveMap.jsx',
+  'map/LocationManager.jsx'
+];
+
+components.forEach(component => {
+  const componentPath = path.join(componentsPath, component);
+  if (fs.existsSync(componentPath)) {
+    console.log(`✅ ${component} đã tồn tại`);
+  } else {
+    console.log(`❌ ${component} chưa tồn tại`);
+  }
+});
+
+console.log('');
+
+// Kiểm tra pages
+const pagesPath = path.join(__dirname, '..', 'src', 'pages');
+const pages = [
+  'Maps.jsx'
+];
+
+pages.forEach(page => {
+  const pagePath = path.join(pagesPath, page);
+  if (fs.existsSync(pagePath)) {
+    console.log(`✅ ${page} đã tồn tại`);
+  } else {
+    console.log(`❌ ${page} chưa tồn tại`);
+  }
+});
+
+console.log('');
+
+// Kiểm tra package.json
+const packageJsonPath = path.join(__dirname, '..', 'package.json');
+if (fs.existsSync(packageJsonPath)) {
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+  console.log('📦 DEPENDENCIES:');
+
+  const requiredDeps = [
+    'react',
+    'react-dom',
+    'react-router-dom',
+    '@mui/material',
+    'leaflet',
+    'react-leaflet'
+  ];
+
+  requiredDeps.forEach(dep => {
+    if (packageJson.dependencies[dep]) {
+      console.log(`   ✅ ${dep}: ${packageJson.dependencies[dep]}`);
+    } else {
+      console.log(`   ❌ ${dep}: CHƯA CÀI ĐẶT`);
+    }
+  });
+}
+
+console.log('');
+
+// Kiểm tra Google Sheets service
+console.log('🔍 KIỂM TRA GOOGLE SHEETS SERVICE:');
+const locationsServicePath = path.join(__dirname, '..', 'src', 'services', 'map', 'locationsService.js');
+if (fs.existsSync(locationsServicePath)) {
+  const serviceContent = fs.readFileSync(locationsServicePath, 'utf8');
+
+  // Kiểm tra các method quan trọng
+  const methods = [
+    'getLocations',
+    'initialize',
+    'mapCategoryToType',
+    'buildFullAddress'
+  ];
+
+  methods.forEach(method => {
+    if (serviceContent.includes(method)) {
+      console.log(`   ✅ Method ${method} đã có`);
+    } else {
+      console.log(`   ❌ Method ${method} chưa có`);
+    }
+  });
+}
+
+console.log('');
+
+// Kiểm tra InteractiveMap component
+console.log('🗺️ KIỂM TRA INTERACTIVE MAP:');
+const interactiveMapPath = path.join(__dirname, '..', 'src', 'components', 'map', 'InteractiveMap.jsx');
+if (fs.existsSync(interactiveMapPath)) {
+  const mapContent = fs.readFileSync(interactiveMapPath, 'utf8');
+
+  // Kiểm tra các import quan trọng
+  const imports = [
+    'react-leaflet',
+    'leaflet',
+    'LocationsService'
+  ];
+
+  imports.forEach(imp => {
+    if (mapContent.includes(imp)) {
+      console.log(`   ✅ Import ${imp} đã có`);
+    } else {
+      console.log(`   ❌ Import ${imp} chưa có`);
+    }
+  });
+}
+
+console.log('');
+
+// Kiểm tra Maps page
+console.log('📄 KIỂM TRA MAPS PAGE:');
+const mapsPagePath = path.join(__dirname, '..', 'src', 'pages', 'Maps.jsx');
+if (fs.existsSync(mapsPagePath)) {
+  const mapsContent = fs.readFileSync(mapsPagePath, 'utf8');
+
+  // Kiểm tra các import quan trọng
+  const mapsImports = [
+    'InteractiveMap',
+    'LocationManager'
+  ];
+
+  mapsImports.forEach(imp => {
+    if (mapsContent.includes(imp)) {
+      console.log(`   ✅ Import ${imp} đã có`);
+    } else {
+      console.log(`   ❌ Import ${imp} chưa có`);
+    }
+  });
+}
+
+console.log('');
+
+console.log('🚀 HƯỚNG DẪN DEBUG FRONTEND:');
+console.log('   1. Mở browser: http://localhost:3000');
+console.log('   2. Mở Developer Tools (F12)');
+console.log('   3. Xem tab Console để tìm lỗi');
+console.log('   4. Xem tab Network để kiểm tra API calls');
+console.log('   5. Truy cập trang Maps');
+console.log('   6. Kiểm tra tab "Quản lý địa điểm"');
+console.log('   7. Kiểm tra tab "Bản đồ tương tác"');
+console.log('');
+
+console.log('⚠️  CÁC LỖI THƯỜNG GẶP:');
+console.log('   1. CORS error: Cần cấu hình Google OAuth');
+console.log('   2. 403 Forbidden: Cần share Google Sheet');
+console.log('   3. 404 Not Found: Kiểm tra Spreadsheet ID');
+console.log('   4. Import error: Kiểm tra đường dẫn file');
+console.log('   5. Component error: Kiểm tra syntax JSX');
+console.log('');
+
+console.log('📞 SUPPORT:');
+console.log('   - Console browser: F12 > Console');
+console.log('   - Network tab: F12 > Network');
+console.log('   - React DevTools: Cài đặt extension');
+console.log('   - Google Sheets API: https://developers.google.com/sheets/api');
+console.log('');
+
+console.log('=' .repeat(50));
+console.log('✅ Test Frontend loading hoàn thành!');
+console.log('🎯 Bây giờ hãy kiểm tra Frontend trong browser!');

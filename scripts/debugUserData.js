@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+/**
+ * Script debug dữ liệu user từ Google Sheets
+ */
+
+console.log('🔍 Debug dữ liệu user từ Google Sheets...');
+
+console.log('\n📋 Vấn đề hiện tại:');
+console.log('- Hệ thống đã kết nối thành công với Google Sheets');
+console.log('- Lấy được 3 người dùng từ Google Sheets');
+console.log('- Nhưng có lỗi "Tài khoản đã bị vô hiệu hóa"');
+
+console.log('\n🔍 Nguyên nhân có thể:');
+console.log('1. Dữ liệu trong Google Sheets không đúng format');
+console.log('2. Trường is_active không được xử lý đúng');
+console.log('3. User không tồn tại hoặc bị vô hiệu hóa');
+
+console.log('\n🔧 Cách debug:');
+console.log('1. Kiểm tra dữ liệu trong Google Sheets');
+console.log('2. Kiểm tra cách dữ liệu được map từ Google Sheets');
+console.log('3. Kiểm tra class User constructor');
+console.log('4. Kiểm tra AuthService login logic');
+
+console.log('\n📊 Cấu trúc dữ liệu mong đợi:');
+console.log('- Headers: id, username, email, password_hash, full_name, phone, avatar_url, is_active, last_login, created_at, updated_at');
+console.log('- is_active: "true" hoặc "false" (string)');
+console.log('- User.isActive: boolean (true/false)');
+
+console.log('\n🔧 Cách fix:');
+console.log('1. Đảm bảo dữ liệu trong Google Sheets đúng format');
+console.log('2. Đảm bảo is_active = "true" cho user test');
+console.log('3. Kiểm tra password_hash có đúng không');
+
+console.log('\n📝 Cách test:');
+console.log('1. Mở browser: http://localhost:3000/login');
+console.log('2. Thử đăng nhập với email: admin@mia-logistics.com, password: admin123');
+console.log('3. Kiểm tra console để xem debug info');
+console.log('4. Kiểm tra dữ liệu user được load như thế nào');
+
+console.log('\n✅ Script hoàn thành');
