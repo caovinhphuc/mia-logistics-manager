@@ -3,7 +3,7 @@
 echo "🔧 Fixing .env file..."
 
 # Fix REACT_APP_API_BASE_URL
-sed -i.bak "s|REACT_APP_API_BASE_URL=http://localhost:\${BACKEND_PORT}|REACT_APP_API_BASE_URL=http://localhost:5050|g" .env
+sed -i.bak "s|REACT_APP_API_BASE_URL=http://localhost:\${BACKEND_PORT}|REACT_APP_API_BASE_URL=http://localhost:3100|g" .env
 
 echo "✅ Fixed REACT_APP_API_BASE_URL"
 echo ""

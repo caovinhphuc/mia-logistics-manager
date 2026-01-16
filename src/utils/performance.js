@@ -17,7 +17,11 @@ function sendToAnalytics(metric) {
 
   // Send to custom analytics endpoint (only if properly configured)
   const analyticsEndpoint = process.env.REACT_APP_ANALYTICS_ENDPOINT;
-  if (analyticsEndpoint && analyticsEndpoint !== 'YOUR_ANALYTICS_ENDPOINT_HERE' && !analyticsEndpoint.includes('YOUR_')) {
+  if (
+    analyticsEndpoint &&
+    analyticsEndpoint !== 'YOUR_ANALYTICS_ENDPOINT_HERE' &&
+    !analyticsEndpoint.includes('YOUR_')
+  ) {
     fetch(analyticsEndpoint, {
       method: 'POST',
       headers: {
@@ -33,7 +37,11 @@ function sendToAnalytics(metric) {
   }
 
   // Log to console in development (only for real metrics, not fallback ones)
-  if (process.env.NODE_ENV === 'development' && metric.name !== 'PageLoadTime' && metric.value > 0) {
+  if (
+    process.env.NODE_ENV === 'development' &&
+    metric.name !== 'PageLoadTime' &&
+    metric.value > 0
+  ) {
     console.debug('Web Vital:', metric);
   }
 }
@@ -50,10 +58,15 @@ function initPerformanceMonitoring() {
   if ('performance' in window) {
     // Monitor page load time (only if performance.timing is available and valid)
     window.addEventListener('load', () => {
-      if (performance.timing && performance.timing.loadEventEnd > 0 && performance.timing.navigationStart > 0) {
+      if (
+        performance.timing &&
+        performance.timing.loadEventEnd > 0 &&
+        performance.timing.navigationStart > 0
+      ) {
         const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
         // Only send if loadTime is valid (positive and reasonable)
-        if (loadTime > 0 && loadTime < 60000) { // Less than 60 seconds
+        if (loadTime > 0 && loadTime < 60000) {
+          // Less than 60 seconds
           sendToAnalytics({
             name: 'PageLoadTime',
             value: loadTime,
