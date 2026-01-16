@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -21,14 +21,14 @@ import {
   Chip,
   Grid,
   Alert,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Save as SaveIcon,
   Cancel as CancelIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 interface VolumeRule {
   id: string;
@@ -43,41 +43,41 @@ interface VolumeRule {
 const VolumeRules: React.FC = () => {
   const [rules, setRules] = useState<VolumeRule[]>([
     {
-      id: "1",
-      name: "Quy tắc chuẩn",
-      description: "Tính khối lượng theo công thức cơ bản",
-      formula: "Volume = Length × Width × Height",
-      unit: "m³",
+      id: '1',
+      name: 'Quy tắc chuẩn',
+      description: 'Tính khối lượng theo công thức cơ bản',
+      formula: 'Volume = Length × Width × Height',
+      unit: 'm³',
       isActive: true,
-      createdAt: "2024-01-15",
+      createdAt: '2024-01-15',
     },
     {
-      id: "2",
-      name: "Quy tắc thùng carton",
-      description: "Tính khối cho thùng carton có chiều cao cố định",
-      formula: "Volume = Length × Width × 0.5",
-      unit: "m³",
+      id: '2',
+      name: 'Quy tắc thùng carton',
+      description: 'Tính khối cho thùng carton có chiều cao cố định',
+      formula: 'Volume = Length × Width × 0.5',
+      unit: 'm³',
       isActive: true,
-      createdAt: "2024-01-15",
+      createdAt: '2024-01-15',
     },
   ]);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [editingRule, setEditingRule] = useState<VolumeRule | null>(null);
   const [formData, setFormData] = useState<Partial<VolumeRule>>({
-    name: "",
-    description: "",
-    formula: "",
-    unit: "m³",
+    name: '',
+    description: '',
+    formula: '',
+    unit: 'm³',
   });
 
   const handleAdd = () => {
     setEditingRule(null);
     setFormData({
-      name: "",
-      description: "",
-      formula: "",
-      unit: "m³",
+      name: '',
+      description: '',
+      formula: '',
+      unit: 'm³',
     });
     setOpenDialog(true);
   };
@@ -104,7 +104,7 @@ const VolumeRules: React.FC = () => {
         ...(formData as VolumeRule),
         id: Date.now().toString(),
         isActive: true,
-        createdAt: new Date().toISOString().split("T")[0],
+        createdAt: new Date().toISOString().split('T')[0],
       };
       setRules((prev) => [...prev, newRule]);
     }
@@ -112,7 +112,7 @@ const VolumeRules: React.FC = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa quy tắc này?")) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa quy tắc này?')) {
       setRules((prev) => prev.filter((r) => r.id !== id));
     }
   };
@@ -122,9 +122,9 @@ const VolumeRules: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-        <Typography variant="h4" sx={{ color: "primary.main", fontWeight: 700 }}>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" sx={{ color: 'primary.main', fontWeight: 700 }}>
           Quy tắc tính khối (m³)
         </Typography>
         <Button
@@ -145,20 +145,20 @@ const VolumeRules: React.FC = () => {
       <TableContainer component={Paper} elevation={2}>
         <Table>
           <TableHead>
-            <TableRow sx={{ bgcolor: "primary.main" }}>
-              <TableCell sx={{ color: "white", fontWeight: 600 }}>Tên quy tắc</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: 600 }}>Mô tả</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: 600 }}>Công thức</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: 600 }} align="center">
+            <TableRow sx={{ bgcolor: 'primary.main' }}>
+              <TableCell sx={{ color: 'white', fontWeight: 600 }}>Tên quy tắc</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 600 }}>Mô tả</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 600 }}>Công thức</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 600 }} align="center">
                 Đơn vị
               </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: 600 }} align="center">
+              <TableCell sx={{ color: 'white', fontWeight: 600 }} align="center">
                 Trạng thái
               </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: 600 }} align="center">
+              <TableCell sx={{ color: 'white', fontWeight: 600 }} align="center">
                 Ngày tạo
               </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: 600 }} align="center">
+              <TableCell sx={{ color: 'white', fontWeight: 600 }} align="center">
                 Hành động
               </TableCell>
             </TableRow>
@@ -181,9 +181,9 @@ const VolumeRules: React.FC = () => {
                     <Box
                       component="code"
                       sx={{
-                        color: "primary.main",
-                        fontSize: "0.9em",
-                        fontFamily: "monospace",
+                        color: 'primary.main',
+                        fontSize: '0.9em',
+                        fontFamily: 'monospace',
                       }}
                     >
                       {rule.formula}
@@ -192,11 +192,11 @@ const VolumeRules: React.FC = () => {
                   <TableCell align="center">{rule.unit}</TableCell>
                   <TableCell align="center">
                     <Chip
-                      label={rule.isActive ? "Hoạt động" : "Tạm dừng"}
-                      color={rule.isActive ? "success" : "default"}
+                      label={rule.isActive ? 'Hoạt động' : 'Tạm dừng'}
+                      color={rule.isActive ? 'success' : 'default'}
                       size="small"
                       onClick={() => toggleActive(rule.id)}
-                      sx={{ cursor: "pointer" }}
+                      sx={{ cursor: 'pointer' }}
                     />
                   </TableCell>
                   <TableCell align="center">{rule.createdAt}</TableCell>
@@ -228,7 +228,7 @@ const VolumeRules: React.FC = () => {
       {/* Add/Edit Dialog */}
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>
-          {editingRule ? "Sửa quy tắc tính khối" : "Thêm quy tắc tính khối mới"}
+          {editingRule ? 'Sửa quy tắc tính khối' : 'Thêm quy tắc tính khối mới'}
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>

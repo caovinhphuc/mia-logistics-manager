@@ -9,11 +9,7 @@ import {
   Box,
   Typography,
 } from '@mui/material';
-import {
-  PackagingItem,
-  TimelineItem,
-  DocumentStatusItem,
-} from '../../types/inbound';
+import { PackagingItem, TimelineItem, DocumentStatusItem } from '../../types/inbound';
 
 interface EditItemDialogProps {
   open: boolean;
@@ -83,22 +79,14 @@ const EditItemDialog: React.FC<EditItemDialogProps> = ({
             sx={{ mt: 2 }}
           />
 
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ mt: 1, display: 'block' }}
-          >
+          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
             * Mô tả mới sẽ thay thế mô tả cũ và không thể sửa lại
           </Typography>
         </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Hủy</Button>
-        <Button
-          onClick={onSave}
-          variant="contained"
-          disabled={!description.trim()}
-        >
+        <Button onClick={onSave} variant="contained" disabled={!description.trim()}>
           Cập nhật
         </Button>
       </DialogActions>

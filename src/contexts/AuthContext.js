@@ -5,15 +5,15 @@ import React, {
   useEffect,
   useCallback,
   useMemo,
-} from "react";
-import { googleAuthService } from "../services/googleAuthService";
-import { sessionService } from "../services/sesionService";
-import { logService } from "../services/logService";
-import sessionManager from "../services/sessionManager";
+} from 'react';
+import { googleAuthService } from '../services/googleAuthService';
+import { sessionService } from '../services/sesionService';
+import { logService } from '../services/logService';
+import sessionManager from '../services/sessionManager';
 import {
   getPermissionsByRole as getPermissionsByRoleFromRBAC,
   hasPermission as hasPermissionFromRBAC,
-} from "../utils/rbac";
+} from '../utils/rbac';
 
 // Auth state structure
 const initialState = {
@@ -27,14 +27,14 @@ const initialState = {
 
 // Auth actions
 const AUTH_ACTIONS = {
-  SET_LOADING: "SET_LOADING",
-  LOGIN_SUCCESS: "LOGIN_SUCCESS",
-  LOGIN_FAILURE: "LOGIN_FAILURE",
-  LOGOUT: "LOGOUT",
-  UPDATE_USER: "UPDATE_USER",
-  SET_ERROR: "SET_ERROR",
-  CLEAR_ERROR: "CLEAR_ERROR",
-  SET_PERMISSIONS: "SET_PERMISSIONS",
+  SET_LOADING: 'SET_LOADING',
+  LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+  LOGIN_FAILURE: 'LOGIN_FAILURE',
+  LOGOUT: 'LOGOUT',
+  UPDATE_USER: 'UPDATE_USER',
+  SET_ERROR: 'SET_ERROR',
+  CLEAR_ERROR: 'CLEAR_ERROR',
+  SET_PERMISSIONS: 'SET_PERMISSIONS',
 };
 
 // Auth reducer
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }) => {
           });
 
           // Log successful session restore
-          logService.log("auth", "Session restored", { userId: user.id });
+          logService.log('auth', 'Session restored', { userId: user.id });
           return;
         }
       }
@@ -127,7 +127,7 @@ export const AuthProvider = ({ children }) => {
       sessionService.clearSession();
       dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
     } catch (error) {
-      console.error("Auth initialization error:", error);
+      console.error('Auth initialization error:', error);
       dispatch({ type: AUTH_ACTIONS.SET_ERROR, payload: error.message });
     }
   }, []);
@@ -170,18 +170,18 @@ export const AuthProvider = ({ children }) => {
       });
 
       // Log successful login
-      logService.log("auth", "Login successful", {
+      logService.log('auth', 'Login successful', {
         userId: user.id,
-        method: credentials.googleToken ? "google" : "email",
+        method: credentials.googleToken ? 'google' : 'email',
       });
 
       return { success: true, user };
     } catch (error) {
-      const errorMessage = error.message || "Đăng nhập thất bại";
+      const errorMessage = error.message || 'Đăng nhập thất bại';
       dispatch({ type: AUTH_ACTIONS.LOGIN_FAILURE, payload: errorMessage });
 
       // Log failed login
-      logService.log("auth", "Login failed", {
+      logService.log('auth', 'Login failed', {
         error: errorMessage,
         email: credentials.email,
       });
@@ -191,7 +191,7 @@ export const AuthProvider = ({ children }) => {
   }, []); // No dependencies - all functions used are stable
 
   const logout = useCallback(
-    async (reason = "User logout") => {
+    async (reason = 'User logout') => {
       try {
         const userId = state.user?.id;
 
@@ -209,9 +209,9 @@ export const AuthProvider = ({ children }) => {
         dispatch({ type: AUTH_ACTIONS.LOGOUT });
 
         // Log logout
-        logService.log("auth", "Logout", { userId, reason });
+        logService.log('auth', 'Logout', { userId, reason });
       } catch (error) {
-        console.error("Logout error:", error);
+        console.error('Logout error:', error);
         // Force logout anyway
         dispatch({ type: AUTH_ACTIONS.LOGOUT });
       }
@@ -246,7 +246,7 @@ export const AuthProvider = ({ children }) => {
   // Role-based checks (backward compatible)
   const hasRole = useCallback(
     (role) => {
-      return state.user?.role === role || state.user?.role === "admin";
+      return state.user?.role === role || state.user?.role === 'admin';
     },
     [state.user?.role]
   );
@@ -309,7 +309,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };

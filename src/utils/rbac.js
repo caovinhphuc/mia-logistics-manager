@@ -5,65 +5,65 @@
 
 // ==================== ROLES ====================
 export const ROLES = {
-  ADMIN: "admin",
-  MANAGER: "manager",
-  OPERATOR: "operator",
-  DRIVER: "driver",
-  WAREHOUSE_STAFF: "warehouse_staff",
-  HR: "hr",
+  ADMIN: 'admin',
+  MANAGER: 'manager',
+  OPERATOR: 'operator',
+  DRIVER: 'driver',
+  WAREHOUSE_STAFF: 'warehouse_staff',
+  HR: 'hr',
 };
 
 // ==================== PERMISSIONS ====================
 // Format: resource:action
 export const PERMISSIONS = {
   // Employees
-  EMPLOYEES_VIEW: "employees:view",
-  EMPLOYEES_CREATE: "employees:create",
-  EMPLOYEES_UPDATE: "employees:update",
-  EMPLOYEES_DELETE: "employees:delete",
+  EMPLOYEES_VIEW: 'employees:view',
+  EMPLOYEES_CREATE: 'employees:create',
+  EMPLOYEES_UPDATE: 'employees:update',
+  EMPLOYEES_DELETE: 'employees:delete',
 
   // Transfers
-  TRANSFERS_VIEW: "transfers:view",
-  TRANSFERS_CREATE: "transfers:create",
-  TRANSFERS_UPDATE: "transfers:update",
-  TRANSFERS_DELETE: "transfers:delete",
+  TRANSFERS_VIEW: 'transfers:view',
+  TRANSFERS_CREATE: 'transfers:create',
+  TRANSFERS_UPDATE: 'transfers:update',
+  TRANSFERS_DELETE: 'transfers:delete',
 
   // Carriers
-  CARRIERS_VIEW: "carriers:view",
-  CARRIERS_CREATE: "carriers:create",
-  CARRIERS_UPDATE: "carriers:update",
-  CARRIERS_DELETE: "carriers:delete",
+  CARRIERS_VIEW: 'carriers:view',
+  CARRIERS_CREATE: 'carriers:create',
+  CARRIERS_UPDATE: 'carriers:update',
+  CARRIERS_DELETE: 'carriers:delete',
 
   // Locations
-  LOCATIONS_VIEW: "locations:view",
-  LOCATIONS_CREATE: "locations:create",
-  LOCATIONS_UPDATE: "locations:update",
-  LOCATIONS_DELETE: "locations:delete",
+  LOCATIONS_VIEW: 'locations:view',
+  LOCATIONS_CREATE: 'locations:create',
+  LOCATIONS_UPDATE: 'locations:update',
+  LOCATIONS_DELETE: 'locations:delete',
 
   // Transport Requests
-  TRANSPORT_REQUESTS_VIEW: "transport-requests:view",
-  TRANSPORT_REQUESTS_CREATE: "transport-requests:create",
-  TRANSPORT_REQUESTS_UPDATE: "transport-requests:update",
-  TRANSPORT_REQUESTS_DELETE: "transport-requests:delete",
+  TRANSPORT_REQUESTS_VIEW: 'transport-requests:view',
+  TRANSPORT_REQUESTS_CREATE: 'transport-requests:create',
+  TRANSPORT_REQUESTS_UPDATE: 'transport-requests:update',
+  TRANSPORT_REQUESTS_DELETE: 'transport-requests:delete',
 
   // Inbound
-  INBOUND_INTERNATIONAL_VIEW: "inbound-international:view",
-  INBOUND_DOMESTIC_VIEW: "inbound-domestic:view",
-  INBOUND_SCHEDULE_VIEW: "inbound-schedule:view",
+  INBOUND_INTERNATIONAL_VIEW: 'inbound-international:view',
+  INBOUND_DOMESTIC_VIEW: 'inbound-domestic:view',
+  INBOUND_SCHEDULE_VIEW: 'inbound-schedule:view',
 
   // Settings
-  SETTINGS_VIEW: "settings:view",
-  SETTINGS_UPDATE: "settings:update",
+  SETTINGS_VIEW: 'settings:view',
+  SETTINGS_UPDATE: 'settings:update',
 
   // Reports
-  REPORTS_VIEW: "reports:view",
-  REPORTS_CREATE: "reports:create",
+  REPORTS_VIEW: 'reports:view',
+  REPORTS_CREATE: 'reports:create',
 
   // Partners
-  PARTNERS_VIEW: "partners:view",
-  PARTNERS_CREATE: "partners:create",
-  PARTNERS_UPDATE: "partners:update",
-  PARTNERS_DELETE: "partners:delete",
+  PARTNERS_VIEW: 'partners:view',
+  PARTNERS_CREATE: 'partners:create',
+  PARTNERS_UPDATE: 'partners:update',
+  PARTNERS_DELETE: 'partners:delete',
 };
 
 // ==================== ROLE PERMISSIONS MAPPING ====================
@@ -241,7 +241,7 @@ export const getAvailableActions = (userRole, resource) => {
 
   getPermissionsByRole(userRole).forEach((permission) => {
     if (permission.startsWith(permissionPrefix)) {
-      const action = permission.split(":")[1];
+      const action = permission.split(':')[1];
       actions.push(action);
     }
   });
@@ -256,7 +256,7 @@ export const getAvailableActions = (userRole, resource) => {
  * @param {string} action - Action name (optional)
  * @returns {boolean} True if user has access
  */
-export const hasAccess = (userRole, resource, action = "view") => {
+export const hasAccess = (userRole, resource, action = 'view') => {
   if (!userRole) return false;
 
   const permission = action ? `${resource}:${action}` : `${resource}:view`;

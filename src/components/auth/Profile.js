@@ -4,7 +4,7 @@ import {
   Edit as EditIcon,
   PhotoCamera as PhotoCameraIcon,
   Save as SaveIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -22,11 +22,11 @@ import {
   IconButton,
   TextField,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import { useNotification } from "../../contexts/NotificationContext";
-import { formatDate } from "../../utils/format";
+} from '@mui/material';
+import { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNotification } from '../../contexts/NotificationContext';
+import { formatDate } from '../../utils/format';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -38,11 +38,11 @@ const Profile = () => {
 
   const handleEditStart = () => {
     setEditForm({
-      fullName: user.fullName || user.username || "",
-      email: user.email || "",
-      phone: user.phone || "",
-      department: user.department || "",
-      position: user.position || "",
+      fullName: user.fullName || user.username || '',
+      email: user.email || '',
+      phone: user.phone || '',
+      department: user.department || '',
+      position: user.position || '',
     });
     setIsEditing(true);
   };
@@ -56,9 +56,9 @@ const Profile = () => {
     try {
       await updateUser(editForm);
       setIsEditing(false);
-      showSuccess("Cập nhật hồ sơ thành công!");
+      showSuccess('Cập nhật hồ sơ thành công!');
     } catch (error) {
-      showError("Cập nhật hồ sơ thất bại");
+      showError('Cập nhật hồ sơ thất bại');
     }
   };
 
@@ -71,22 +71,22 @@ const Profile = () => {
 
   const getRoleColor = (role) => {
     const colors = {
-      admin: "error",
-      manager: "warning",
-      operator: "info",
-      driver: "success",
-      warehouse_staff: "secondary",
+      admin: 'error',
+      manager: 'warning',
+      operator: 'info',
+      driver: 'success',
+      warehouse_staff: 'secondary',
     };
-    return colors[role] || "default";
+    return colors[role] || 'default';
   };
 
   const getRoleLabel = (role) => {
     const labels = {
-      admin: "Quản trị viên",
-      manager: "Quản lý",
-      operator: "Nhân viên điều hành",
-      driver: "Tài xế",
-      warehouse_staff: "Nhân viên kho",
+      admin: 'Quản trị viên',
+      manager: 'Quản lý',
+      operator: 'Nhân viên điều hành',
+      driver: 'Tài xế',
+      warehouse_staff: 'Nhân viên kho',
     };
     return labels[role] || role;
   };
@@ -95,8 +95,8 @@ const Profile = () => {
     <Container maxWidth="lg">
       <Box sx={{ py: 4 }}>
         {/* Header */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
-          <AccountCircle sx={{ mr: 2, fontSize: 32, color: "primary.main" }} />
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+          <AccountCircle sx={{ mr: 2, fontSize: 32, color: 'primary.main' }} />
           <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
             Hồ sơ cá nhân
           </Typography>
@@ -116,12 +116,12 @@ const Profile = () => {
                       <IconButton
                         size="small"
                         sx={{
-                          position: "absolute",
+                          position: 'absolute',
                           bottom: -5,
                           right: -5,
-                          bgcolor: "primary.main",
-                          color: "white",
-                          "&:hover": { bgcolor: "primary.dark" },
+                          bgcolor: 'primary.main',
+                          color: 'white',
+                          '&:hover': { bgcolor: 'primary.dark' },
                         }}
                         onClick={() => setAvatarDialogOpen(true)}
                       >
@@ -176,10 +176,10 @@ const Profile = () => {
                     <TextField
                       fullWidth
                       label="Họ và tên"
-                      value={isEditing ? editForm.fullName : user?.fullName || user?.username || ""}
-                      onChange={(e) => handleInputChange("fullName", e.target.value)}
+                      value={isEditing ? editForm.fullName : user?.fullName || user?.username || ''}
+                      onChange={(e) => handleInputChange('fullName', e.target.value)}
                       disabled={!isEditing}
-                      variant={isEditing ? "outlined" : "standard"}
+                      variant={isEditing ? 'outlined' : 'standard'}
                     />
                   </Grid>
 
@@ -187,10 +187,10 @@ const Profile = () => {
                     <TextField
                       fullWidth
                       label="Email"
-                      value={isEditing ? editForm.email : user?.email || ""}
-                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      value={isEditing ? editForm.email : user?.email || ''}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
                       disabled={!isEditing}
-                      variant={isEditing ? "outlined" : "standard"}
+                      variant={isEditing ? 'outlined' : 'standard'}
                     />
                   </Grid>
 
@@ -198,10 +198,10 @@ const Profile = () => {
                     <TextField
                       fullWidth
                       label="Số điện thoại"
-                      value={isEditing ? editForm.phone : user?.phone || ""}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      value={isEditing ? editForm.phone : user?.phone || ''}
+                      onChange={(e) => handleInputChange('phone', e.target.value)}
                       disabled={!isEditing}
-                      variant={isEditing ? "outlined" : "standard"}
+                      variant={isEditing ? 'outlined' : 'standard'}
                     />
                   </Grid>
 
@@ -209,10 +209,10 @@ const Profile = () => {
                     <TextField
                       fullWidth
                       label="Phòng ban"
-                      value={isEditing ? editForm.department : user?.department || ""}
-                      onChange={(e) => handleInputChange("department", e.target.value)}
+                      value={isEditing ? editForm.department : user?.department || ''}
+                      onChange={(e) => handleInputChange('department', e.target.value)}
                       disabled={!isEditing}
-                      variant={isEditing ? "outlined" : "standard"}
+                      variant={isEditing ? 'outlined' : 'standard'}
                     />
                   </Grid>
 
@@ -220,10 +220,10 @@ const Profile = () => {
                     <TextField
                       fullWidth
                       label="Chức vụ"
-                      value={isEditing ? editForm.position : user?.position || ""}
-                      onChange={(e) => handleInputChange("position", e.target.value)}
+                      value={isEditing ? editForm.position : user?.position || ''}
+                      onChange={(e) => handleInputChange('position', e.target.value)}
                       disabled={!isEditing}
-                      variant={isEditing ? "outlined" : "standard"}
+                      variant={isEditing ? 'outlined' : 'standard'}
                     />
                   </Grid>
 

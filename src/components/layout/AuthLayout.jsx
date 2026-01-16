@@ -9,7 +9,7 @@ import {
   Star as StarIcon,
   TrendingUp as TrendingUpIcon,
   Warning as WarningIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Alert,
   AlertTitle,
@@ -27,11 +27,11 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@mui/material";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useLanguage } from "../../contexts/LanguageContext";
-import { useTheme as useThemeContext } from "../../contexts/ThemeContext";
+} from '@mui/material';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { useTheme as useThemeContext } from '../../contexts/ThemeContext';
 
 const AuthLayout = ({
   children,
@@ -41,7 +41,7 @@ const AuthLayout = ({
   showAnnouncements = true,
 }) => {
   const theme = useTheme();
-  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const { isDarkMode, toggleTheme } = useThemeContext();
   const { language, changeLanguage } = useLanguage();
@@ -76,7 +76,7 @@ const AuthLayout = ({
       transition: {
         duration: 4,
         repeat: Infinity,
-        ease: "easeInOut",
+        ease: 'easeInOut',
       },
     },
   };
@@ -85,36 +85,36 @@ const AuthLayout = ({
   const features = [
     {
       icon: <SecurityIcon />,
-      title: "Bảo mật cao",
-      description: "Hệ thống bảo mật đa lớp với mã hóa end-to-end",
-      color: "primary",
+      title: 'Bảo mật cao',
+      description: 'Hệ thống bảo mật đa lớp với mã hóa end-to-end',
+      color: 'primary',
     },
     {
       icon: <SpeedIcon />,
-      title: "Tốc độ nhanh",
-      description: "Xử lý dữ liệu real-time với hiệu suất cao",
-      color: "secondary",
+      title: 'Tốc độ nhanh',
+      description: 'Xử lý dữ liệu real-time với hiệu suất cao',
+      color: 'secondary',
     },
     {
       icon: <TrendingUpIcon />,
-      title: "Tối ưu hóa",
-      description: "Thuật toán AI tối ưu hóa tuyến đường vận chuyển",
-      color: "success",
+      title: 'Tối ưu hóa',
+      description: 'Thuật toán AI tối ưu hóa tuyến đường vận chuyển',
+      color: 'success',
     },
   ];
 
   // Announcements
   const announcements = [
     {
-      type: "info",
-      title: "Cập nhật mới",
-      message: "Phiên bản 2.0 với nhiều tính năng mới đã được phát hành!",
+      type: 'info',
+      title: 'Cập nhật mới',
+      message: 'Phiên bản 2.0 với nhiều tính năng mới đã được phát hành!',
       icon: <InfoIcon />,
     },
     {
-      type: "warning",
-      title: "Bảo trì hệ thống",
-      message: "Hệ thống sẽ bảo trì từ 2:00 - 4:00 ngày mai.",
+      type: 'warning',
+      title: 'Bảo trì hệ thống',
+      message: 'Hệ thống sẽ bảo trì từ 2:00 - 4:00 ngày mai.',
       icon: <WarningIcon />,
     },
   ];
@@ -127,7 +127,7 @@ const AuthLayout = ({
       }, 3000);
       return () => clearInterval(interval);
     }
-  }, [showFeatures]);
+  }, [showFeatures, features.length]);
 
   const handleLanguageChange = (langCode) => {
     changeLanguage(langCode);
@@ -141,22 +141,22 @@ const AuthLayout = ({
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
       <Box
         sx={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
           padding: theme.spacing(2),
-          position: "relative",
-          overflow: "hidden",
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
         {/* Loading indicator */}
         {false && (
           <Box
             sx={{
-              width: "100%",
-              position: "absolute",
+              width: '100%',
+              position: 'absolute',
               top: 0,
               left: 0,
               zIndex: 9999,
@@ -169,13 +169,13 @@ const AuthLayout = ({
         {/* Background decorative elements */}
         <Box
           sx={{
-            position: "absolute",
-            top: "-50%",
-            left: "-50%",
-            width: "200%",
-            height: "200%",
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
             background: `radial-gradient(circle, ${theme.palette.primary.main}20 0%, transparent 70%)`,
-            animation: "rotate 20s linear infinite",
+            animation: 'rotate 20s linear infinite',
             zIndex: 0,
           }}
         />
@@ -187,11 +187,11 @@ const AuthLayout = ({
             variants={floatingVariants}
             animate="float"
             style={{
-              position: "absolute",
-              width: "4px",
-              height: "4px",
+              position: 'absolute',
+              width: '4px',
+              height: '4px',
               backgroundColor: theme.palette.primary.main,
-              borderRadius: "50%",
+              borderRadius: '50%',
               left: `${20 + index * 15}%`,
               top: `${30 + index * 10}%`,
               opacity: 0.3,
@@ -199,7 +199,7 @@ const AuthLayout = ({
           />
         ))}
 
-        <Container maxWidth={isTablet ? "sm" : "md"} sx={{ position: "relative", zIndex: 1 }}>
+        <Container maxWidth={isTablet ? 'sm' : 'md'} sx={{ position: 'relative', zIndex: 1 }}>
           <Grid container spacing={4} alignItems="center">
             {/* Left side - Features showcase (desktop only) */}
             {!isTablet && showFeatures && (
@@ -210,12 +210,12 @@ const AuthLayout = ({
                     sx={{
                       padding: theme.spacing(4),
                       borderRadius: theme.spacing(3),
-                      backdropFilter: "blur(10px)",
+                      backdropFilter: 'blur(10px)',
                       backgroundColor: theme.palette.background.paper,
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
                     }}
                   >
                     <Box sx={{ mb: 4 }}>
@@ -229,9 +229,9 @@ const AuthLayout = ({
                         sx={{
                           fontWeight: 800,
                           background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                          backgroundClip: "text",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
+                          backgroundClip: 'text',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
                         }}
                       >
                         MIA Logistics
@@ -263,8 +263,8 @@ const AuthLayout = ({
                           >
                             <Box
                               sx={{
-                                display: "flex",
-                                alignItems: "center",
+                                display: 'flex',
+                                alignItems: 'center',
                                 gap: 2,
                                 mb: 2,
                               }}
@@ -291,17 +291,17 @@ const AuthLayout = ({
                     </Box>
 
                     {/* Feature indicators */}
-                    <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+                    <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
                       {features.map((_, index) => (
                         <Box
                           key={index}
                           sx={{
                             width: 8,
                             height: 8,
-                            borderRadius: "50%",
+                            borderRadius: '50%',
                             bgcolor:
-                              index === currentFeatureIndex ? "primary.main" : "action.disabled",
-                            transition: "all 0.3s",
+                              index === currentFeatureIndex ? 'primary.main' : 'action.disabled',
+                            transition: 'all 0.3s',
                           }}
                         />
                       ))}
@@ -319,32 +319,32 @@ const AuthLayout = ({
                   sx={{
                     padding: theme.spacing(4),
                     borderRadius: theme.spacing(3),
-                    backdropFilter: "blur(10px)",
+                    backdropFilter: 'blur(10px)',
                     backgroundColor: theme.palette.background.paper,
                   }}
                 >
                   {/* Header controls */}
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                       mb: 3,
                     }}
                   >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Box
                         sx={{
                           width: 48,
                           height: 48,
-                          bgcolor: "primary.main",
+                          bgcolor: 'primary.main',
                           borderRadius: 2,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          color: "white",
-                          fontSize: "20px",
-                          fontWeight: "bold",
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: 'white',
+                          fontSize: '20px',
+                          fontWeight: 'bold',
                         }}
                       >
                         MIA
@@ -355,26 +355,26 @@ const AuthLayout = ({
                           component="h1"
                           sx={{ fontWeight: 700, lineHeight: 1.2 }}
                         >
-                          {title || "MIA Logistics Manager"}
+                          {title || 'MIA Logistics Manager'}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {subtitle || "Hệ thống quản lý vận chuyển chuyên nghiệp"}
+                          {subtitle || 'Hệ thống quản lý vận chuyển chuyên nghiệp'}
                         </Typography>
                       </Box>
                     </Box>
 
-                    <Box sx={{ display: "flex", gap: 1 }}>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
                       {/* Language selector */}
                       <Tooltip title="Ngôn ngữ">
                         <IconButton
-                          onClick={() => handleLanguageChange(language === "vi" ? "en" : "vi")}
+                          onClick={() => handleLanguageChange(language === 'vi' ? 'en' : 'vi')}
                         >
                           <LanguageIcon />
                         </IconButton>
                       </Tooltip>
 
                       {/* Theme toggle */}
-                      <Tooltip title={isDarkMode ? "Sáng" : "Tối"}>
+                      <Tooltip title={isDarkMode ? 'Sáng' : 'Tối'}>
                         <IconButton onClick={toggleTheme}>
                           {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
                         </IconButton>
@@ -414,16 +414,16 @@ const AuthLayout = ({
 
                   {/* Footer */}
                   <Divider sx={{ my: 3 }} />
-                  <Box sx={{ textAlign: "center" }}>
+                  <Box sx={{ textAlign: 'center' }}>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                       Được phát triển bởi MIA Logistics Team
                     </Typography>
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "center",
+                        display: 'flex',
+                        justifyContent: 'center',
                         gap: 2,
-                        flexWrap: "wrap",
+                        flexWrap: 'wrap',
                       }}
                     >
                       <Chip

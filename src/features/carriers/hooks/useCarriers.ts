@@ -1,8 +1,5 @@
 // src/features/carriers/hooks/useCarriers.ts
-import {
-  Carrier,
-  CarriersService,
-} from '../../../services/googleSheets/carriersService';
+import { Carrier, CarriersService } from '../../../services/googleSheets/carriersService';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const carriersService = new CarriersService();
@@ -35,9 +32,8 @@ export function useAddCarrier() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (
-      carrierData: Omit<Carrier, 'carrierId' | 'createdAt' | 'updatedAt'>
-    ) => carriersService.addCarrier(carrierData),
+    mutationFn: (carrierData: Omit<Carrier, 'carrierId' | 'createdAt' | 'updatedAt'>) =>
+      carriersService.addCarrier(carrierData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['carriers'] });
     },
@@ -48,26 +44,16 @@ export function useUpdateCarrier() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      carrierId,
-      updates,
-    }: {
-      carrierId: string;
-      updates: Partial<Carrier>;
-    }) => carriersService.updateCarrier(carrierId, updates),
+    mutationFn: ({ carrierId, updates }: { carrierId: string; updates: Partial<Carrier> }) =>
+      carriersService.updateCarrier(carrierId, updates),
     onSuccess: (updatedCarrier, variables) => {
       // Optimistically update only the changed fields, but prefer server payload when available
-      queryClient.setQueryData(
-        ['carriers'],
-        (oldData: Carrier[] | undefined) => {
-          if (!oldData) return oldData;
-          return oldData.map((carrier) =>
-            carrier.carrierId === variables.carrierId
-              ? { ...carrier, ...updatedCarrier }
-              : carrier
-          );
-        }
-      );
+      queryClient.setQueryData(['carriers'], (oldData: Carrier[] | undefined) => {
+        if (!oldData) return oldData;
+        return oldData.map((carrier) =>
+          carrier.carrierId === variables.carrierId ? { ...carrier, ...updatedCarrier } : carrier
+        );
+      });
 
       // Ensure active list is synced
       queryClient.invalidateQueries({ queryKey: ['carriers'] });
@@ -104,12 +90,7 @@ export function useCalculateShippingCost() {
       if (!carrier) {
         throw new Error('Carrier not found');
       }
-      return carriersService.calculateShippingCost(
-        carrier,
-        distance,
-        volume,
-        weight
-      );
+      return carriersService.calculateShippingCost(carrier, distance, volume, weight);
     },
   });
 }

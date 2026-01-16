@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Container, Paper, Tab, Tabs, Typography } from "@mui/material";
+import React, { useState } from 'react';
+import { Box, Container, Paper, Tab, Tabs, Typography } from '@mui/material';
 import {
   Settings as SettingsIcon,
   Security as SecurityIcon,
@@ -8,16 +8,16 @@ import {
   BugReport as BugReportIcon,
   IntegrationInstructions as IntegrationIcon,
   Google as GoogleIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 // Import settings components
-import GeneralSettings from "./GeneralSettings";
-import SecuritySettings from "./SecuritySettings";
-import SystemSettings from "./SystemSettings";
-import ApiIntegration from "./ApiIntegration";
-import ApiDiagnostics from "./ApiDiagnostics";
-import ApiIntegrationManager from "./ApiIntegrationManager";
-import GoogleApiStatusContent from "./GoogleApiStatusContent";
+import GeneralSettings from './GeneralSettings';
+import SecuritySettings from './SecuritySettings';
+import SystemSettings from './SystemSettings';
+import ApiIntegration from './ApiIntegration';
+import ApiDiagnostics from './ApiDiagnostics';
+import ApiIntegrationManager from './ApiIntegrationManager';
+import GoogleApiStatusContent from './GoogleApiStatusContent';
 
 function TabPanel({ children, value, index }) {
   return (
@@ -30,22 +30,22 @@ const Settings = () => {
 
   const tabs = [
     {
-      label: "Cài đặt chung",
+      label: 'Cài đặt chung',
       icon: <SettingsIcon />,
       component: <GeneralSettings />,
     },
     {
-      label: "Bảo mật",
+      label: 'Bảo mật',
       icon: <SecurityIcon />,
       component: <SecuritySettings />,
     },
     {
-      label: "Hệ thống",
+      label: 'Hệ thống',
       icon: <ComputerIcon />,
       component: <SystemSettings />,
     },
     {
-      label: "Google API",
+      label: 'Google API',
       icon: <GoogleIcon />,
       component: (
         <Box>
@@ -54,17 +54,17 @@ const Settings = () => {
       ),
     },
     {
-      label: "Tích hợp API",
+      label: 'Tích hợp API',
       icon: <ApiIcon />,
       component: <ApiIntegration />,
     },
     {
-      label: "Quản lý API",
+      label: 'Quản lý API',
       icon: <IntegrationIcon />,
       component: <ApiIntegrationManager />,
     },
     {
-      label: "Chẩn đoán",
+      label: 'Chẩn đoán',
       icon: <BugReportIcon />,
       component: <ApiDiagnostics />,
     },
@@ -92,9 +92,9 @@ const Settings = () => {
             scrollButtons="auto"
             sx={{
               borderBottom: 1,
-              borderColor: "divider",
-              "& .MuiTab-root": {
-                textTransform: "none",
+              borderColor: 'divider',
+              '& .MuiTab-root': {
+                textTransform: 'none',
                 fontWeight: 500,
                 minHeight: 72,
               },
@@ -107,7 +107,7 @@ const Settings = () => {
                 iconPosition="start"
                 label={tab.label}
                 sx={{
-                  "& .MuiTab-iconWrapper": {
+                  '& .MuiTab-iconWrapper': {
                     marginRight: 1,
                   },
                 }}

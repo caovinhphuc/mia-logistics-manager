@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import { googleSheetsService } from "./googleSheetsService";
+import { googleSheetsService } from './googleSheetsService';
 
 class LogService {
   constructor() {
-    this.logLevel = process.env.REACT_APP_LOG_LEVEL || "info";
-    this.logToConsole = process.env.REACT_APP_LOG_TO_CONSOLE === "true";
-    this.logToGoogleSheets = process.env.REACT_APP_LOG_TO_GOOGLE_SHEETS === "true";
-    this.localLogKey = "mia-logs";
+    this.logLevel = process.env.REACT_APP_LOG_LEVEL || 'info';
+    this.logToConsole = process.env.REACT_APP_LOG_TO_CONSOLE === 'true';
+    this.logToGoogleSheets = process.env.REACT_APP_LOG_TO_GOOGLE_SHEETS === 'true';
+    this.localLogKey = 'mia-logs';
     this.maxLocalLogs = 1000;
 
     // Log levels
@@ -18,7 +18,7 @@ class LogService {
     };
   }
 
-  log(category, message, data = {}, level = "info") {
+  log(category, message, data = {}, level = 'info') {
     try {
       // Check if we should log this level
       if (this.levels[level] > this.levels[this.logLevel]) {
@@ -53,24 +53,24 @@ class LogService {
 
       return logEntry;
     } catch (error) {
-      console.error("Logging failed:", error);
+      console.error('Logging failed:', error);
     }
   }
 
   error(category, message, data = {}) {
-    return this.log(category, message, data, "error");
+    return this.log(category, message, data, 'error');
   }
 
   warn(category, message, data = {}) {
-    return this.log(category, message, data, "warn");
+    return this.log(category, message, data, 'warn');
   }
 
   info(category, message, data = {}) {
-    return this.log(category, message, data, "info");
+    return this.log(category, message, data, 'info');
   }
 
   debug(category, message, data = {}) {
-    return this.log(category, message, data, "debug");
+    return this.log(category, message, data, 'debug');
   }
 
   logToConsoleOutput(logEntry) {
@@ -80,17 +80,17 @@ class LogService {
     const consoleMessage = `[${timestamp}] ${level} [${category}] ${message}`;
 
     switch (level) {
-      case "ERROR":
-        console.error(consoleMessage, data ? JSON.parse(data) : "");
+      case 'ERROR':
+        console.error(consoleMessage, data ? JSON.parse(data) : '');
         break;
-      case "WARN":
-        console.warn(consoleMessage, data ? JSON.parse(data) : "");
+      case 'WARN':
+        console.warn(consoleMessage, data ? JSON.parse(data) : '');
         break;
-      case "DEBUG":
-        console.debug(consoleMessage, data ? JSON.parse(data) : "");
+      case 'DEBUG':
+        console.debug(consoleMessage, data ? JSON.parse(data) : '');
         break;
       default:
-        console.log(consoleMessage, data ? JSON.parse(data) : "");
+        console.log(consoleMessage, data ? JSON.parse(data) : '');
     }
   }
 
@@ -104,7 +104,7 @@ class LogService {
 
       localStorage.setItem(this.localLogKey, JSON.stringify(recentLogs));
     } catch (error) {
-      console.error("Failed to store log locally:", error);
+      console.error('Failed to store log locally:', error);
     }
   }
 
@@ -113,7 +113,7 @@ class LogService {
       const logs = localStorage.getItem(this.localLogKey);
       return logs ? JSON.parse(logs) : [];
     } catch (error) {
-      console.error("Failed to get local logs:", error);
+      console.error('Failed to get local logs:', error);
       return [];
     }
   }
@@ -129,11 +129,11 @@ class LogService {
         try {
           await this.logToGoogleSheets(logEntry);
         } catch (error) {
-          console.error("Failed to log to Google Sheets:", error);
+          console.error('Failed to log to Google Sheets:', error);
         }
       }, 100);
     } catch (error) {
-      console.error("Failed to queue Google Sheets log:", error);
+      console.error('Failed to queue Google Sheets log:', error);
     }
   }
 
@@ -149,26 +149,26 @@ class LogService {
         logEntry.category,
         logEntry.message,
         logEntry.data,
-        logEntry.userId || "",
-        logEntry.sessionId || "",
+        logEntry.userId || '',
+        logEntry.sessionId || '',
         logEntry.url,
         logEntry.userAgent,
       ];
 
-      await googleSheetsService.appendValues("System_Logs", [rowData]);
+      await googleSheetsService.appendValues('System_Logs', [rowData]);
     } catch (error) {
-      console.error("Failed to log to Google Sheets:", error);
+      console.error('Failed to log to Google Sheets:', error);
       // Don't throw here to avoid recursive logging
     }
   }
 
   generateLogId() {
-    return "log_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6);
+    return 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
   }
 
   getCurrentUserId() {
     try {
-      const session = JSON.parse(localStorage.getItem("mia-session") || "{}");
+      const session = JSON.parse(localStorage.getItem('mia-session') || '{}');
       return session.user?.id || null;
     } catch {
       return null;
@@ -177,7 +177,7 @@ class LogService {
 
   getCurrentSessionId() {
     try {
-      return sessionStorage.getItem("mia-session-id") || null;
+      return sessionStorage.getItem('mia-session-id') || null;
     } catch {
       return null;
     }
@@ -203,7 +203,7 @@ class LogService {
   }
 
   getErrorLogs(hours = 24) {
-    return this.getLogsByLevel("error", hours);
+    return this.getLogsByLevel('error', hours);
   }
 
   getLogStats(hours = 24) {
@@ -227,8 +227,8 @@ class LogService {
       stats.byCategory[log.category] = (stats.byCategory[log.category] || 0) + 1;
 
       // Count errors and warnings
-      if (log.level === "ERROR") stats.errors++;
-      if (log.level === "WARN") stats.warnings++;
+      if (log.level === 'ERROR') stats.errors++;
+      if (log.level === 'WARN') stats.warnings++;
     });
 
     return stats;
@@ -236,27 +236,27 @@ class LogService {
 
   // Specific logging methods for MIA Logistics
   logUserAction(action, details = {}) {
-    this.info("USER_ACTION", `User performed: ${action}`, details);
+    this.info('USER_ACTION', `User performed: ${action}`, details);
   }
 
   logTransportEvent(event, transportId, details = {}) {
-    this.info("TRANSPORT", `Transport ${transportId}: ${event}`, details);
+    this.info('TRANSPORT', `Transport ${transportId}: ${event}`, details);
   }
 
   logWarehouseEvent(event, itemCode, details = {}) {
-    this.info("WAREHOUSE", `Warehouse item ${itemCode}: ${event}`, details);
+    this.info('WAREHOUSE', `Warehouse item ${itemCode}: ${event}`, details);
   }
 
   logSystemEvent(event, details = {}) {
-    this.info("SYSTEM", event, details);
+    this.info('SYSTEM', event, details);
   }
 
   logSecurityEvent(event, details = {}) {
-    this.warn("SECURITY", event, details);
+    this.warn('SECURITY', event, details);
   }
 
   logGoogleApiEvent(service, action, details = {}) {
-    this.info("GOOGLE_API", `${service}: ${action}`, details);
+    this.info('GOOGLE_API', `${service}: ${action}`, details);
   }
 
   logError(category, error, context = {}) {
@@ -271,12 +271,12 @@ class LogService {
   }
 
   // Export logs
-  exportLogs(format = "json", hours = 24) {
+  exportLogs(format = 'json', hours = 24) {
     const logs = this.getLocalLogs();
     const cutoff = new Date(Date.now() - hours * 60 * 60 * 1000);
     const recentLogs = logs.filter((log) => new Date(log.timestamp) > cutoff);
 
-    if (format === "csv") {
+    if (format === 'csv') {
       return this.exportLogsAsCSV(recentLogs);
     }
 
@@ -285,16 +285,16 @@ class LogService {
 
   exportLogsAsCSV(logs) {
     const headers = [
-      "Timestamp",
-      "Level",
-      "Category",
-      "Message",
-      "Data",
-      "User ID",
-      "Session ID",
-      "URL",
+      'Timestamp',
+      'Level',
+      'Category',
+      'Message',
+      'Data',
+      'User ID',
+      'Session ID',
+      'URL',
     ];
-    const csvRows = [headers.join(",")];
+    const csvRows = [headers.join(',')];
 
     logs.forEach((log) => {
       const row = [
@@ -303,34 +303,34 @@ class LogService {
         log.category,
         `"${log.message.replace(/"/g, '""')}"`,
         `"${log.data.replace(/"/g, '""')}"`,
-        log.userId || "",
-        log.sessionId || "",
+        log.userId || '',
+        log.sessionId || '',
         `"${log.url.replace(/"/g, '""')}"`,
       ];
-      csvRows.push(row.join(","));
+      csvRows.push(row.join(','));
     });
 
-    return csvRows.join("\\n");
+    return csvRows.join('\\n');
   }
 
   // Real-time logging for development
   startRealTimeLogging() {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       // Override console methods to capture all logs
       const originalConsole = { ...console };
 
       console.log = (...args) => {
-        this.debug("CONSOLE", args.join(" "));
+        this.debug('CONSOLE', args.join(' '));
         originalConsole.log(...args);
       };
 
       console.error = (...args) => {
-        this.error("CONSOLE", args.join(" "));
+        this.error('CONSOLE', args.join(' '));
         originalConsole.error(...args);
       };
 
       console.warn = (...args) => {
-        this.warn("CONSOLE", args.join(" "));
+        this.warn('CONSOLE', args.join(' '));
         originalConsole.warn(...args);
       };
     }

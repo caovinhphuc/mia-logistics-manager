@@ -1,11 +1,11 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-import App from "./App";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import App from './App';
 
-jest.mock("./contexts/ThemeContext", () => {
-  const React = require("react");
-  const { createTheme } = require("@mui/material/styles");
+jest.mock('./contexts/ThemeContext', () => {
+  const React = require('react');
+  const { createTheme } = require('@mui/material/styles');
   return {
     ThemeContextProvider: ({ children }) => <>{children}</>,
     useTheme: () => ({
@@ -20,7 +20,7 @@ jest.mock("./contexts/ThemeContext", () => {
   };
 });
 
-jest.mock("./contexts/AuthContext", () => ({
+jest.mock('./contexts/AuthContext', () => ({
   useAuth: () => ({
     user: null,
     isAuthenticated: false,
@@ -31,34 +31,34 @@ jest.mock("./contexts/AuthContext", () => ({
   AuthProvider: ({ children }) => <>{children}</>,
 }));
 
-jest.mock("./contexts/LanguageContext", () => ({
+jest.mock('./contexts/LanguageContext', () => ({
   useLanguage: () => ({
-    language: "vi",
+    language: 'vi',
     setLanguage: jest.fn(),
   }),
   LanguageProvider: ({ children }) => <>{children}</>,
 }));
 
-jest.mock("./hooks/useActivityMonitor", () => jest.fn());
-jest.mock("./components/auth/SessionTimeoutWarning", () => () => null);
-jest.mock("./components/layout/MainLayout", () => ({ children }) => (
+jest.mock('./hooks/useActivityMonitor', () => jest.fn());
+jest.mock('./components/auth/SessionTimeoutWarning', () => () => null);
+jest.mock('./components/layout/MainLayout', () => ({ children }) => (
   <div data-testid="main-layout">{children}</div>
 ));
-jest.mock("./components/layout/AuthLayout", () => ({ children }) => (
+jest.mock('./components/layout/AuthLayout', () => ({ children }) => (
   <div data-testid="auth-layout">{children}</div>
 ));
-jest.mock("./components/auth/Login", () => () => <div>Trang đăng nhập</div>);
-jest.mock("react-helmet-async", () => ({
+jest.mock('./components/auth/Login', () => () => <div>Trang đăng nhập</div>);
+jest.mock('react-helmet-async', () => ({
   HelmetProvider: ({ children }) => <>{children}</>,
   Helmet: () => null,
 }));
 
-test("hiển thị trang đăng nhập khi chưa xác thực", async () => {
+test('hiển thị trang đăng nhập khi chưa xác thực', async () => {
   render(
-    <MemoryRouter initialEntries={["/login"]}>
+    <MemoryRouter initialEntries={['/login']}>
       <App />
     </MemoryRouter>
   );
 
-  expect(await screen.findByText("Trang đăng nhập")).toBeInTheDocument();
+  expect(await screen.findByText('Trang đăng nhập')).toBeInTheDocument();
 });

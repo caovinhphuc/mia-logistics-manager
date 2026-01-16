@@ -3,10 +3,10 @@
  * Bảo vệ routes và components dựa trên permissions
  */
 
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { Box, Typography, Alert } from "@mui/material";
-import { hasPermission, hasAnyPermission, hasAllPermissions, hasAccess } from "./rbac";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { Box, Typography, Alert } from '@mui/material';
+import { hasPermission, hasAnyPermission, hasAllPermissions, hasAccess } from './rbac';
 
 /**
  * HOC: withPermission

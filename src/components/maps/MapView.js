@@ -1,8 +1,8 @@
-import { Map, Route, Timeline, Traffic } from "@mui/icons-material";
-import { Box, Button, Card, CardContent, Grid, Paper, Typography, useTheme } from "@mui/material";
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import InteractiveMap from "../maps/InteractiveMap";
+import { Map, Route, Timeline, Traffic } from '@mui/icons-material';
+import { Box, Button, Card, CardContent, Grid, Paper, Typography, useTheme } from '@mui/material';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import InteractiveMap from '../maps/InteractiveMap';
 
 const Maps = () => {
   const { t } = useTranslation();
@@ -11,32 +11,32 @@ const Maps = () => {
 
   const mapFeatures = [
     {
-      id: "interactive_map",
-      title: t("maps.title"),
+      id: 'interactive_map',
+      title: t('maps.title'),
       icon: Map,
-      color: "#2196f3",
-      description: "Bản đồ tương tác với các địa điểm logistics",
+      color: '#2196f3',
+      description: 'Bản đồ tương tác với các địa điểm logistics',
     },
     {
-      id: "route_optimization",
-      title: t("maps.route_optimization"),
+      id: 'route_optimization',
+      title: t('maps.route_optimization'),
       icon: Route,
-      color: "#4caf50",
-      description: "Tối ưu hóa tuyến đường vận chuyển",
+      color: '#4caf50',
+      description: 'Tối ưu hóa tuyến đường vận chuyển',
     },
     {
-      id: "real_time_tracking",
-      title: t("maps.real_time_tracking"),
+      id: 'real_time_tracking',
+      title: t('maps.real_time_tracking'),
       icon: Timeline,
-      color: "#ff9800",
-      description: "Theo dõi vận chuyển thời gian thực",
+      color: '#ff9800',
+      description: 'Theo dõi vận chuyển thời gian thực',
     },
     {
-      id: "traffic_info",
-      title: t("maps.traffic_info"),
+      id: 'traffic_info',
+      title: t('maps.traffic_info'),
       icon: Traffic,
-      color: "#9c27b0",
-      description: "Thông tin giao thông và tắc đường",
+      color: '#9c27b0',
+      description: 'Thông tin giao thông và tắc đường',
     },
   ];
 
@@ -45,7 +45,7 @@ const Maps = () => {
       {/* Header */}
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" gutterBottom sx={{ fontWeight: 600 }}>
-          {t("maps.title")}
+          {t('maps.title')}
         </Typography>
         <Typography variant="body1" color="text.secondary">
           Quản lý tuyến đường và theo dõi vận chuyển
@@ -63,17 +63,17 @@ const Maps = () => {
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card
                   sx={{
-                    textAlign: "center",
+                    textAlign: 'center',
                     p: 2,
-                    height: "100%",
-                    cursor: "pointer",
+                    height: '100%',
+                    cursor: 'pointer',
                     border: isActive
                       ? `2px solid ${feature.color}`
                       : `1px solid ${theme.palette.divider}`,
-                    "&:hover": {
+                    '&:hover': {
                       boxShadow: 3,
-                      transform: "translateY(-2px)",
-                      transition: "all 0.2s ease-in-out",
+                      transform: 'translateY(-2px)',
+                      transition: 'all 0.2s ease-in-out',
                     },
                   }}
                   onClick={() => setActiveFeature(isActive ? null : feature.id)}
@@ -87,17 +87,17 @@ const Maps = () => {
                       {feature.description}
                     </Typography>
                     <Button
-                      variant={isActive ? "contained" : "outlined"}
+                      variant={isActive ? 'contained' : 'outlined'}
                       size="small"
                       fullWidth
                       sx={{
-                        backgroundColor: isActive ? feature.color : "transparent",
-                        "&:hover": {
-                          backgroundColor: isActive ? feature.color : feature.color + "20",
+                        backgroundColor: isActive ? feature.color : 'transparent',
+                        '&:hover': {
+                          backgroundColor: isActive ? feature.color : feature.color + '20',
                         },
                       }}
                     >
-                      {isActive ? "Đang hiển thị" : "Khám phá"}
+                      {isActive ? 'Đang hiển thị' : 'Khám phá'}
                     </Button>
                   </CardContent>
                 </Card>
@@ -107,7 +107,7 @@ const Maps = () => {
         </Grid>
 
         {/* Interactive Map */}
-        {activeFeature === "interactive_map" && (
+        {activeFeature === 'interactive_map' && (
           <Paper sx={{ p: 2, mb: 4 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
               Bản đồ tương tác - Địa điểm Logistics
@@ -117,14 +117,14 @@ const Maps = () => {
         )}
 
         {/* Other Features Placeholder */}
-        {activeFeature && activeFeature !== "interactive_map" && (
+        {activeFeature && activeFeature !== 'interactive_map' && (
           <Paper sx={{ p: 3, height: 500 }}>
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
               {mapFeatures.find((f) => f.id === activeFeature)?.title}
             </Typography>
-            <Box sx={{ textAlign: "center", py: 8 }}>
+            <Box sx={{ textAlign: 'center', py: 8 }}>
               {React.createElement(mapFeatures.find((f) => f.id === activeFeature)?.icon, {
-                sx: { fontSize: 80, color: "text.secondary", mb: 2 },
+                sx: { fontSize: 80, color: 'text.secondary', mb: 2 },
               })}
               <Typography variant="h6" color="text.secondary" gutterBottom>
                 Tính năng đang phát triển
@@ -142,8 +142,8 @@ const Maps = () => {
             <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
               Chọn tính năng bản đồ
             </Typography>
-            <Box sx={{ textAlign: "center", py: 8 }}>
-              <Map sx={{ fontSize: 80, color: "text.secondary", mb: 2 }} />
+            <Box sx={{ textAlign: 'center', py: 8 }}>
+              <Map sx={{ fontSize: 80, color: 'text.secondary', mb: 2 }} />
               <Typography variant="h6" color="text.secondary" gutterBottom>
                 Chọn một tính năng từ menu trên
               </Typography>

@@ -2,7 +2,7 @@
 export const CONSTANTS = {
   // API Endpoints
   API: {
-    BASE_URL: process.env.REACT_APP_API_URL || "http://localhost:5000/api",
+    BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
     TIMEOUT: 30000,
     RETRY_ATTEMPTS: 3,
   },
@@ -13,10 +13,10 @@ export const CONSTANTS = {
     API_KEY: process.env.REACT_APP_GOOGLE_SHEETS_API_KEY,
     SPREADSHEET_ID: process.env.REACT_APP_GOOGLE_SPREADSHEET_ID,
     SCOPES: [
-      "https://www.googleapis.com/auth/spreadsheets",
-      "https://www.googleapis.com/auth/drive.file",
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email",
+      'https://www.googleapis.com/auth/spreadsheets',
+      'https://www.googleapis.com/auth/drive.file',
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email',
     ],
   },
 
@@ -40,63 +40,63 @@ export const CONSTANTS = {
   // File Upload
   UPLOAD: {
     MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
-    ALLOWED_TYPES: ["image/jpeg", "image/png", "application/pdf", "text/csv"],
+    ALLOWED_TYPES: ['image/jpeg', 'image/png', 'application/pdf', 'text/csv'],
     CHUNK_SIZE: 1024 * 1024, // 1MB chunks
   },
 
   // Local Storage Keys
   STORAGE_KEYS: {
-    AUTH_TOKEN: "mia_auth_token",
-    USER_PREFERENCES: "mia_user_preferences",
-    THEME_SETTINGS: "mia-theme",
-    LANGUAGE: "mia_language",
-    SIDEBAR_STATE: "mia_sidebar_collapsed",
+    AUTH_TOKEN: 'mia_auth_token',
+    USER_PREFERENCES: 'mia_user_preferences',
+    THEME_SETTINGS: 'mia-theme',
+    LANGUAGE: 'mia_language',
+    SIDEBAR_STATE: 'mia_sidebar_collapsed',
   },
 
   // User Roles
   ROLES: {
-    ADMIN: "admin",
-    MANAGER: "manager",
-    OPERATOR: "operator",
-    DRIVER: "driver",
-    WAREHOUSE_STAFF: "warehouse_staff",
+    ADMIN: 'admin',
+    MANAGER: 'manager',
+    OPERATOR: 'operator',
+    DRIVER: 'driver',
+    WAREHOUSE_STAFF: 'warehouse_staff',
   },
 
   // Status Types
   STATUS: {
-    ACTIVE: "active",
-    INACTIVE: "inactive",
-    PENDING: "pending",
-    COMPLETED: "completed",
-    CANCELLED: "cancelled",
-    IN_PROGRESS: "in-progress",
-    DELETED: "deleted",
+    ACTIVE: 'active',
+    INACTIVE: 'inactive',
+    PENDING: 'pending',
+    COMPLETED: 'completed',
+    CANCELLED: 'cancelled',
+    IN_PROGRESS: 'in-progress',
+    DELETED: 'deleted',
   },
 
   // Transport Status
   TRANSPORT_STATUS: {
-    PENDING: "pending",
-    ASSIGNED: "assigned",
-    IN_TRANSIT: "in-transit",
-    DELIVERED: "delivered",
-    CANCELLED: "cancelled",
-    DELAYED: "delayed",
+    PENDING: 'pending',
+    ASSIGNED: 'assigned',
+    IN_TRANSIT: 'in-transit',
+    DELIVERED: 'delivered',
+    CANCELLED: 'cancelled',
+    DELAYED: 'delayed',
   },
 
   // Warehouse Status
   WAREHOUSE_STATUS: {
-    IN_STOCK: "in-stock",
-    OUT_OF_STOCK: "out-of-stock",
-    LOW_STOCK: "low-stock",
-    RESERVED: "reserved",
+    IN_STOCK: 'in-stock',
+    OUT_OF_STOCK: 'out-of-stock',
+    LOW_STOCK: 'low-stock',
+    RESERVED: 'reserved',
   },
 
   // Date Formats
   DATE_FORMATS: {
-    DISPLAY: "DD/MM/YYYY",
-    DATETIME: "DD/MM/YYYY HH:mm",
-    API: "YYYY-MM-DD",
-    TIME: "HH:mm",
+    DISPLAY: 'DD/MM/YYYY',
+    DATETIME: 'DD/MM/YYYY HH:mm',
+    API: 'YYYY-MM-DD',
+    TIME: 'HH:mm',
   },
 
   // Validation Rules
@@ -110,41 +110,41 @@ export const CONSTANTS = {
 
   // Colors (matching theme)
   COLORS: {
-    PRIMARY: "#1976d2",
-    SECONDARY: "#FFCD00",
-    SUCCESS: "#4caf50",
-    ERROR: "#f44336",
-    WARNING: "#ff9800",
-    INFO: "#2196f3",
+    PRIMARY: '#1976d2',
+    SECONDARY: '#FFCD00',
+    SUCCESS: '#4caf50',
+    ERROR: '#f44336',
+    WARNING: '#ff9800',
+    INFO: '#2196f3',
     GREY: {
-      50: "#f9fafb",
-      100: "#f3f4f6",
-      200: "#e5e7eb",
-      300: "#d1d5db",
-      400: "#9ca3af",
-      500: "#6b7280",
-      600: "#4b5563",
-      700: "#374151",
-      800: "#1f2937",
-      900: "#111827",
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
     },
   },
 
   // Messages
   MESSAGES: {
     SUCCESS: {
-      SAVE: "Dữ liệu đã được lưu thành công",
-      DELETE: "Đã xóa thành công",
-      UPDATE: "Cập nhật thành công",
-      UPLOAD: "Tải lên thành công",
+      SAVE: 'Dữ liệu đã được lưu thành công',
+      DELETE: 'Đã xóa thành công',
+      UPDATE: 'Cập nhật thành công',
+      UPLOAD: 'Tải lên thành công',
     },
     ERROR: {
-      NETWORK: "Lỗi kết nối mạng",
-      UNAUTHORIZED: "Bạn không có quyền thực hiện thao tác này",
-      NOT_FOUND: "Không tìm thấy dữ liệu",
-      SERVER: "Lỗi server, vui lòng thử lại sau",
-      VALIDATION: "Dữ liệu không hợp lệ",
-      GENERIC: "Đã xảy ra lỗi, vui lòng thử lại",
+      NETWORK: 'Lỗi kết nối mạng',
+      UNAUTHORIZED: 'Bạn không có quyền thực hiện thao tác này',
+      NOT_FOUND: 'Không tìm thấy dữ liệu',
+      SERVER: 'Lỗi server, vui lòng thử lại sau',
+      VALIDATION: 'Dữ liệu không hợp lệ',
+      GENERIC: 'Đã xảy ra lỗi, vui lòng thử lại',
     },
   },
 
@@ -166,30 +166,30 @@ export const CONSTANTS = {
 export const UTILS = {
   // Format currency
   formatCurrency: (amount) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
     }).format(amount);
   },
 
   // Format date
   formatDate: (date, _format = CONSTANTS.DATE_FORMATS.DISPLAY) => {
-    if (!date) return "";
+    if (!date) return '';
     try {
       const dateObj = new Date(date);
-      if (isNaN(dateObj.getTime())) return "";
-      return dateObj.toLocaleDateString("vi-VN");
+      if (isNaN(dateObj.getTime())) return '';
+      return dateObj.toLocaleDateString('vi-VN');
     } catch (error) {
-      console.warn("Error formatting date:", error);
-      return "";
+      console.warn('Error formatting date:', error);
+      return '';
     }
   },
 
   // Generate UUID
   generateUUID: () => {
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = (Math.random() * 16) | 0,
-        v = c === "x" ? r : (r & 0x3) | 0x8;
+        v = c === 'x' ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
   },
@@ -241,12 +241,12 @@ export const UTILS = {
   // Get status label
   getStatusLabel: (status) => {
     const labelMap = {
-      [CONSTANTS.STATUS.ACTIVE]: "Hoạt động",
-      [CONSTANTS.STATUS.INACTIVE]: "Không hoạt động",
-      [CONSTANTS.STATUS.PENDING]: "Chờ xử lý",
-      [CONSTANTS.STATUS.COMPLETED]: "Hoàn thành",
-      [CONSTANTS.STATUS.CANCELLED]: "Đã hủy",
-      [CONSTANTS.STATUS.IN_PROGRESS]: "Đang xử lý",
+      [CONSTANTS.STATUS.ACTIVE]: 'Hoạt động',
+      [CONSTANTS.STATUS.INACTIVE]: 'Không hoạt động',
+      [CONSTANTS.STATUS.PENDING]: 'Chờ xử lý',
+      [CONSTANTS.STATUS.COMPLETED]: 'Hoàn thành',
+      [CONSTANTS.STATUS.CANCELLED]: 'Đã hủy',
+      [CONSTANTS.STATUS.IN_PROGRESS]: 'Đang xử lý',
     };
     return labelMap[status] || status;
   },

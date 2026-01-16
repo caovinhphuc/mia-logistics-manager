@@ -1,1 +1,1 @@
-export * from "../../shared/components/ui/ActionIcons";
+export * from '../../shared/components/ui/ActionIcons';

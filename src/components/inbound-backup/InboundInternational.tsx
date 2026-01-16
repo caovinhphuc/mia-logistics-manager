@@ -100,12 +100,7 @@ interface InboundItem {
   destination: string;
   product: string;
   quantity: number;
-  status:
-    | 'pending'
-    | 'confirmed'
-    | 'waiting-notification'
-    | 'notified'
-    | 'received';
+  status: 'pending' | 'confirmed' | 'waiting-notification' | 'notified' | 'received';
   estimatedArrival: string;
   actualArrival?: string;
   notes?: string;
@@ -130,11 +125,8 @@ const InboundInternational: React.FC = () => {
   const [viewMode, setViewMode] = useState<'calendar' | 'table'>('calendar');
 
   // Action menu state
-  const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(
-    null
-  );
-  const [selectedItemForAction, setSelectedItemForAction] =
-    useState<InboundItem | null>(null);
+  const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(null);
+  const [selectedItemForAction, setSelectedItemForAction] = useState<InboundItem | null>(null);
 
   // Calendar view states
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -143,17 +135,12 @@ const InboundInternational: React.FC = () => {
   const [addFromCalendar, setAddFromCalendar] = useState<Date | null>(null);
 
   // Calendar dropdown menu states
-  const [calendarMenuAnchor, setCalendarMenuAnchor] =
-    useState<null | HTMLElement>(null);
+  const [calendarMenuAnchor, setCalendarMenuAnchor] = useState<null | HTMLElement>(null);
   const [calendarMenuDate, setCalendarMenuDate] = useState<Date | null>(null);
 
   // Card menu states
-  const [cardMenuAnchor, setCardMenuAnchor] = useState<null | HTMLElement>(
-    null
-  );
-  const [selectedCardItem, setSelectedCardItem] = useState<InboundItem | null>(
-    null
-  );
+  const [cardMenuAnchor, setCardMenuAnchor] = useState<null | HTMLElement>(null);
+  const [selectedCardItem, setSelectedCardItem] = useState<InboundItem | null>(null);
 
   // Edit item states
   const [editItemDialog, setEditItemDialog] = useState<{
@@ -194,18 +181,15 @@ const InboundInternational: React.FC = () => {
   });
 
   // Document status form states
-  const [documentStatusItems, setDocumentStatusItems] = useState<
-    DocumentStatusItem[]
-  >([]);
-  const [newDocumentStatusItem, setNewDocumentStatusItem] =
-    useState<DocumentStatusItem>({
-      id: '',
-      name: 'Check bill',
-      date: '',
-      estimatedDate: '',
-      status: 'pending',
-      description: '',
-    });
+  const [documentStatusItems, setDocumentStatusItems] = useState<DocumentStatusItem[]>([]);
+  const [newDocumentStatusItem, setNewDocumentStatusItem] = useState<DocumentStatusItem>({
+    id: '',
+    name: 'Check bill',
+    date: '',
+    estimatedDate: '',
+    status: 'pending',
+    description: '',
+  });
 
   // Product categories
   const [productCategories] = useState<string[]>([
@@ -252,18 +236,13 @@ const InboundInternational: React.FC = () => {
     carrier: '',
   });
 
-  const setField = <K extends keyof typeof formFields>(
-    key: K,
-    value: (typeof formFields)[K]
-  ) => {
+  const setField = <K extends keyof typeof formFields>(key: K, value: (typeof formFields)[K]) => {
     setFormFields((prev) => ({ ...prev, [key]: value }));
   };
 
   // Filter UI states
   const [filterExpanded, setFilterExpanded] = useState(false);
-  const [activeFilterSection, setActiveFilterSection] = useState<string | null>(
-    null
-  );
+  const [activeFilterSection, setActiveFilterSection] = useState<string | null>(null);
 
   // Async states & notifications
   const [saving, setSaving] = useState(false);
@@ -364,12 +343,8 @@ const InboundInternational: React.FC = () => {
               .map((t, idx) => ({
                 id: `${r.id}-pkg-${idx}`,
                 type: t.trim(),
-                quantity: Number(
-                  (r.packagingQuantities || '').split(';')[idx] || 0
-                ),
-                description: (
-                  (r.packagingDescriptions || '').split(';')[idx] || ''
-                ).trim(),
+                quantity: Number((r.packagingQuantities || '').split(';')[idx] || 0),
+                description: ((r.packagingDescriptions || '').split(';')[idx] || '').trim(),
               }))
               .filter((p) => p.type)
           : [],
@@ -404,11 +379,8 @@ const InboundInternational: React.FC = () => {
           estimatedDate: r.timeline_etd_est || '',
           date: r.timeline_etd_act || '',
           status:
-            (r.timeline_etd_status as
-              | 'pending'
-              | 'in-progress'
-              | 'completed'
-              | 'confirmed') || 'pending',
+            (r.timeline_etd_status as 'pending' | 'in-progress' | 'completed' | 'confirmed') ||
+            'pending',
           description: '',
         },
         {
@@ -417,11 +389,8 @@ const InboundInternational: React.FC = () => {
           estimatedDate: r.timeline_eta_est || '',
           date: r.timeline_eta_act || '',
           status:
-            (r.timeline_eta_status as
-              | 'pending'
-              | 'in-progress'
-              | 'completed'
-              | 'confirmed') || 'pending',
+            (r.timeline_eta_status as 'pending' | 'in-progress' | 'completed' | 'confirmed') ||
+            'pending',
           description: '',
         },
         {
@@ -430,11 +399,8 @@ const InboundInternational: React.FC = () => {
           estimatedDate: r.timeline_depart_est || '',
           date: r.timeline_depart_act || '',
           status:
-            (r.timeline_depart_status as
-              | 'pending'
-              | 'in-progress'
-              | 'completed'
-              | 'confirmed') || 'pending',
+            (r.timeline_depart_status as 'pending' | 'in-progress' | 'completed' | 'confirmed') ||
+            'pending',
           description: '',
         },
         {
@@ -456,11 +422,8 @@ const InboundInternational: React.FC = () => {
           estimatedDate: r.timeline_receive_est || '',
           date: r.timeline_receive_act || '',
           status:
-            (r.timeline_receive_status as
-              | 'pending'
-              | 'in-progress'
-              | 'completed'
-              | 'confirmed') || 'pending',
+            (r.timeline_receive_status as 'pending' | 'in-progress' | 'completed' | 'confirmed') ||
+            'pending',
           description: '',
         },
       ].filter((t) => t.estimatedDate || t.date) as InboundItem['timeline'],
@@ -471,11 +434,7 @@ const InboundInternational: React.FC = () => {
           name: 'Check bill',
           estimatedDate: r.doc_checkBill_est || '',
           date: r.doc_checkBill_act || '',
-          status:
-            (r.doc_checkBill_status as
-              | 'pending'
-              | 'in-progress'
-              | 'completed') || 'pending',
+          status: (r.doc_checkBill_status as 'pending' | 'in-progress' | 'completed') || 'pending',
           description: '',
         },
         {
@@ -483,9 +442,7 @@ const InboundInternational: React.FC = () => {
           name: 'Check CO',
           estimatedDate: r.doc_checkCO_est || '',
           date: r.doc_checkCO_act || '',
-          status:
-            (r.doc_checkCO_status as 'pending' | 'in-progress' | 'completed') ||
-            'pending',
+          status: (r.doc_checkCO_status as 'pending' | 'in-progress' | 'completed') || 'pending',
           description: '',
         },
         {
@@ -493,11 +450,7 @@ const InboundInternational: React.FC = () => {
           name: 'TQ gửi chứng từ đi',
           estimatedDate: r.doc_sendDocs_est || '',
           date: r.doc_sendDocs_act || '',
-          status:
-            (r.doc_sendDocs_status as
-              | 'pending'
-              | 'in-progress'
-              | 'completed') || 'pending',
+          status: (r.doc_sendDocs_status as 'pending' | 'in-progress' | 'completed') || 'pending',
           description: '',
         },
         {
@@ -505,9 +458,7 @@ const InboundInternational: React.FC = () => {
           name: 'Lên Tờ Khai Hải Quan',
           estimatedDate: r.doc_customs_est || '',
           date: r.doc_customs_act || '',
-          status:
-            (r.doc_customs_status as 'pending' | 'in-progress' | 'completed') ||
-            'pending',
+          status: (r.doc_customs_status as 'pending' | 'in-progress' | 'completed') || 'pending',
           description: '',
         },
         {
@@ -515,9 +466,7 @@ const InboundInternational: React.FC = () => {
           name: 'Đóng thuế',
           estimatedDate: r.doc_tax_est || '',
           date: r.doc_tax_act || '',
-          status:
-            (r.doc_tax_status as 'pending' | 'in-progress' | 'completed') ||
-            'pending',
+          status: (r.doc_tax_status as 'pending' | 'in-progress' | 'completed') || 'pending',
           description: '',
         },
       ].filter((d) => d.estimatedDate || d.date),
@@ -545,102 +494,63 @@ const InboundInternational: React.FC = () => {
     poNumbers: (it.poNumbers || []).join(';'),
     // Flattened packaging only
     packagingTypes: (it.packaging || []).map((p) => p.type).join(';'),
-    packagingQuantities: (it.packaging || [])
-      .map((p) => String(p.quantity))
-      .join(';'),
-    packagingDescriptions: (it.packaging || [])
-      .map((p) => p.description || '')
-      .join(';'),
+    packagingQuantities: (it.packaging || []).map((p) => String(p.quantity)).join(';'),
+    packagingDescriptions: (it.packaging || []).map((p) => p.description || '').join(';'),
     // Flattened timeline only
     timeline_cargoReady_est:
-      (it.timeline || []).find((t) => t.name === 'Cargo Ready')
-        ?.estimatedDate || '',
-    timeline_cargoReady_act:
-      (it.timeline || []).find((t) => t.name === 'Cargo Ready')?.date || '',
+      (it.timeline || []).find((t) => t.name === 'Cargo Ready')?.estimatedDate || '',
+    timeline_cargoReady_act: (it.timeline || []).find((t) => t.name === 'Cargo Ready')?.date || '',
     timeline_cargoReady_status:
-      (it.timeline || []).find((t) => t.name === 'Cargo Ready')?.status ||
-      'pending',
-    timeline_etd_est:
-      (it.timeline || []).find((t) => t.name === 'ETD')?.estimatedDate || '',
-    timeline_etd_act:
-      (it.timeline || []).find((t) => t.name === 'ETD')?.date || '',
-    timeline_etd_status:
-      (it.timeline || []).find((t) => t.name === 'ETD')?.status || 'pending',
-    timeline_eta_est:
-      (it.timeline || []).find((t) => t.name === 'ETA')?.estimatedDate || '',
-    timeline_eta_act:
-      (it.timeline || []).find((t) => t.name === 'ETA')?.date || '',
-    timeline_eta_status:
-      (it.timeline || []).find((t) => t.name === 'ETA')?.status || 'pending',
+      (it.timeline || []).find((t) => t.name === 'Cargo Ready')?.status || 'pending',
+    timeline_etd_est: (it.timeline || []).find((t) => t.name === 'ETD')?.estimatedDate || '',
+    timeline_etd_act: (it.timeline || []).find((t) => t.name === 'ETD')?.date || '',
+    timeline_etd_status: (it.timeline || []).find((t) => t.name === 'ETD')?.status || 'pending',
+    timeline_eta_est: (it.timeline || []).find((t) => t.name === 'ETA')?.estimatedDate || '',
+    timeline_eta_act: (it.timeline || []).find((t) => t.name === 'ETA')?.date || '',
+    timeline_eta_status: (it.timeline || []).find((t) => t.name === 'ETA')?.status || 'pending',
     timeline_depart_est:
-      (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')
-        ?.estimatedDate || '',
-    timeline_depart_act:
-      (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')?.date || '',
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')?.estimatedDate || '',
+    timeline_depart_act: (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')?.date || '',
     timeline_depart_status:
-      (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')?.status ||
-      'pending',
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')?.status || 'pending',
     timeline_arrivalPort_est:
-      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')
-        ?.estimatedDate || '',
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')?.estimatedDate || '',
     timeline_arrivalPort_act:
-      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')?.date ||
-      '',
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')?.date || '',
     timeline_arrivalPort_status:
-      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')?.status ||
-      'pending',
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')?.status || 'pending',
     timeline_receive_est:
-      (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')
-        ?.estimatedDate || '',
-    timeline_receive_act:
-      (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')?.date || '',
+      (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')?.estimatedDate || '',
+    timeline_receive_act: (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')?.date || '',
     timeline_receive_status:
-      (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')?.status ||
-      'pending',
+      (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')?.status || 'pending',
     // Flattened docs only
     doc_checkBill_est:
-      (it.documentStatus || []).find((d) => d.name === 'Check bill')
-        ?.estimatedDate || '',
-    doc_checkBill_act:
-      (it.documentStatus || []).find((d) => d.name === 'Check bill')?.date ||
-      '',
+      (it.documentStatus || []).find((d) => d.name === 'Check bill')?.estimatedDate || '',
+    doc_checkBill_act: (it.documentStatus || []).find((d) => d.name === 'Check bill')?.date || '',
     doc_checkBill_status:
-      (it.documentStatus || []).find((d) => d.name === 'Check bill')?.status ||
-      'pending',
+      (it.documentStatus || []).find((d) => d.name === 'Check bill')?.status || 'pending',
     doc_checkCO_est:
-      (it.documentStatus || []).find((d) => d.name === 'Check CO')
-        ?.estimatedDate || '',
-    doc_checkCO_act:
-      (it.documentStatus || []).find((d) => d.name === 'Check CO')?.date || '',
+      (it.documentStatus || []).find((d) => d.name === 'Check CO')?.estimatedDate || '',
+    doc_checkCO_act: (it.documentStatus || []).find((d) => d.name === 'Check CO')?.date || '',
     doc_checkCO_status:
-      (it.documentStatus || []).find((d) => d.name === 'Check CO')?.status ||
-      'pending',
+      (it.documentStatus || []).find((d) => d.name === 'Check CO')?.status || 'pending',
     doc_sendDocs_est:
-      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')
-        ?.estimatedDate || '',
+      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')?.estimatedDate || '',
     doc_sendDocs_act:
-      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')
-        ?.date || '',
+      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')?.date || '',
     doc_sendDocs_status:
-      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')
-        ?.status || 'pending',
+      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')?.status || 'pending',
     doc_customs_est:
-      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')
-        ?.estimatedDate || '',
+      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')?.estimatedDate || '',
     doc_customs_act:
-      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')
-        ?.date || '',
+      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')?.date || '',
     doc_customs_status:
-      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')
-        ?.status || 'pending',
-    doc_tax_est:
-      (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')
-        ?.estimatedDate || '',
-    doc_tax_act:
-      (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')?.date || '',
+      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')?.status || 'pending',
+    doc_tax_est: (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')?.estimatedDate || '',
+    doc_tax_act: (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')?.date || '',
     doc_tax_status:
-      (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')?.status ||
-      'pending',
+      (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')?.status || 'pending',
     notes: it.notes || '',
   });
 
@@ -653,9 +563,7 @@ const InboundInternational: React.FC = () => {
 
   // Load from Google Sheets on mount
   useEffect(() => {
-    reload().catch((err) =>
-      console.error('Load InboundInternational failed', err)
-    );
+    reload().catch((err) => console.error('Load InboundInternational failed', err));
   }, [reload]);
 
   // Function to calculate total products from packaging items
@@ -739,34 +647,22 @@ const InboundInternational: React.FC = () => {
       }
 
       // Carrier filter
-      if (
-        filters.carriers.length > 0 &&
-        !filters.carriers.includes(item.carrier)
-      ) {
+      if (filters.carriers.length > 0 && !filters.carriers.includes(item.carrier)) {
         return false;
       }
 
       // Destination filter
-      if (
-        filters.destinations.length > 0 &&
-        !filters.destinations.includes(item.destination)
-      ) {
+      if (filters.destinations.length > 0 && !filters.destinations.includes(item.destination)) {
         return false;
       }
 
       // Product filter
-      if (
-        filters.products.length > 0 &&
-        !filters.products.includes(item.product)
-      ) {
+      if (filters.products.length > 0 && !filters.products.includes(item.product)) {
         return false;
       }
 
       // Category filter
-      if (
-        filters.categories.length > 0 &&
-        !filters.categories.includes(item.category)
-      ) {
+      if (filters.categories.length > 0 && !filters.categories.includes(item.category)) {
         return false;
       }
 
@@ -803,27 +699,19 @@ const InboundInternational: React.FC = () => {
 
   // Get unique values for filter options
   const getUniqueCarriers = (): string[] => {
-    return [
-      ...new Set(inboundItems.map((item) => item.carrier).filter(Boolean)),
-    ];
+    return [...new Set(inboundItems.map((item) => item.carrier).filter(Boolean))];
   };
 
   const getUniqueDestinations = (): string[] => {
-    return [
-      ...new Set(inboundItems.map((item) => item.destination).filter(Boolean)),
-    ];
+    return [...new Set(inboundItems.map((item) => item.destination).filter(Boolean))];
   };
 
   const getUniqueProducts = (): string[] => {
-    return [
-      ...new Set(inboundItems.map((item) => item.product).filter(Boolean)),
-    ];
+    return [...new Set(inboundItems.map((item) => item.product).filter(Boolean))];
   };
 
   const getUniqueCategories = (): string[] => {
-    return [
-      ...new Set(inboundItems.map((item) => item.category).filter(Boolean)),
-    ];
+    return [...new Set(inboundItems.map((item) => item.category).filter(Boolean))];
   };
 
   const getUniqueDocumentStatuses = () => {
@@ -844,27 +732,21 @@ const InboundInternational: React.FC = () => {
 
   // Get active filter count
   const getActiveFilterCount = () => {
-    return Object.values(filters).reduce(
-      (total, filterArray) => total + filterArray.length,
-      0
-    );
+    return Object.values(filters).reduce((total, filterArray) => total + filterArray.length, 0);
   };
 
   // Get filter summary
   const getFilterSummary = () => {
     const activeFilters = [];
-    if (filters.status.length > 0)
-      activeFilters.push(`Trạng thái: ${filters.status.length}`);
+    if (filters.status.length > 0) activeFilters.push(`Trạng thái: ${filters.status.length}`);
     if (filters.documentStatus.length > 0)
       activeFilters.push(`Chứng từ: ${filters.documentStatus.length}`);
     if (filters.timelineStatus.length > 0)
       activeFilters.push(`Timeline: ${filters.timelineStatus.length}`);
-    if (filters.carriers.length > 0)
-      activeFilters.push(`Vận chuyển: ${filters.carriers.length}`);
+    if (filters.carriers.length > 0) activeFilters.push(`Vận chuyển: ${filters.carriers.length}`);
     if (filters.destinations.length > 0)
       activeFilters.push(`Đích đến: ${filters.destinations.length}`);
-    if (filters.products.length > 0)
-      activeFilters.push(`Sản phẩm: ${filters.products.length}`);
+    if (filters.products.length > 0) activeFilters.push(`Sản phẩm: ${filters.products.length}`);
     if (filters.categories.length > 0)
       activeFilters.push(`Phân loại: ${filters.categories.length}`);
     return activeFilters.join(', ');
@@ -909,15 +791,11 @@ const InboundInternational: React.FC = () => {
   };
 
   const handlePrevMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
   const handleAddFromCalendar = (date: Date) => {
@@ -953,10 +831,7 @@ const InboundInternational: React.FC = () => {
   };
 
   // Calendar dropdown menu handlers
-  const handleCalendarMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    date: Date
-  ) => {
+  const handleCalendarMenuOpen = (event: React.MouseEvent<HTMLElement>, date: Date) => {
     event.stopPropagation();
     setCalendarMenuAnchor(event.currentTarget);
     setCalendarMenuDate(date);
@@ -968,10 +843,7 @@ const InboundInternational: React.FC = () => {
   };
 
   // Card menu handlers
-  const handleCardMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    item: InboundItem
-  ) => {
+  const handleCardMenuOpen = (event: React.MouseEvent<HTMLElement>, item: InboundItem) => {
     event.stopPropagation();
     setCardMenuAnchor(event.currentTarget);
     setSelectedCardItem(item);
@@ -1275,10 +1147,7 @@ const InboundInternational: React.FC = () => {
   };
 
   // Action menu handlers
-  const handleActionMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    item: InboundItem
-  ) => {
+  const handleActionMenuOpen = (event: React.MouseEvent<HTMLElement>, item: InboundItem) => {
     setActionMenuAnchor(event.currentTarget);
     setSelectedItemForAction(item);
   };
@@ -1362,10 +1231,7 @@ const InboundInternational: React.FC = () => {
                 <FlightIcon color="info" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {
-                      inboundItems.filter((item) => item.status === 'confirmed')
-                        .length
-                    }
+                    {inboundItems.filter((item) => item.status === 'confirmed').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Đã xác nhận
@@ -1382,10 +1248,7 @@ const InboundInternational: React.FC = () => {
                 <LocationIcon color="success" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {
-                      inboundItems.filter((item) => item.status === 'received')
-                        .length
-                    }
+                    {inboundItems.filter((item) => item.status === 'received').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Đã nhận
@@ -1402,10 +1265,7 @@ const InboundInternational: React.FC = () => {
                 <BusinessIcon color="warning" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {
-                      inboundItems.filter((item) => item.status === 'pending')
-                        .length
-                    }
+                    {inboundItems.filter((item) => item.status === 'pending').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Chờ xác nhận
@@ -1551,9 +1411,7 @@ const InboundInternational: React.FC = () => {
                     <TableCell>
                       {(() => {
                         const d = new Date(item.date);
-                        return isNaN(d.getTime())
-                          ? 'Chưa có'
-                          : d.toLocaleDateString('vi-VN');
+                        return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                       })()}
                     </TableCell>
                     <TableCell>
@@ -1577,12 +1435,8 @@ const InboundInternational: React.FC = () => {
                     {/* Ẩn cell Xuất xứ */}
                     <TableCell className="address-cell">
                       <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ fontSize: '0.65rem', fontWeight: 500 }}
-                        >
-                          {item.destination?.split(' - ')[0] ||
-                            item.destination}
+                        <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
+                          {item.destination?.split(' - ')[0] || item.destination}
                         </Typography>
                         {item.destination?.includes(' - ') && (
                           <Typography
@@ -1730,10 +1584,7 @@ const InboundInternational: React.FC = () => {
                         }}
                       >
                         {item.packaging.map((pkg) => (
-                          <Tooltip
-                            key={pkg.id}
-                            title={`${pkg.type}: ${pkg.quantity} SET`}
-                          >
+                          <Tooltip key={pkg.id} title={`${pkg.type}: ${pkg.quantity} SET`}>
                             <Typography
                               variant="caption"
                               noWrap
@@ -1751,13 +1602,9 @@ const InboundInternational: React.FC = () => {
                     <TableCell>
                       {(() => {
                         const isOnline = item.purpose === 'online';
-                        const color = isOnline
-                          ? 'success.main'
-                          : 'warning.main';
+                        const color = isOnline ? 'success.main' : 'warning.main';
                         const bgColor = isOnline ? 'success.50' : 'warning.50';
-                        const borderColor = isOnline
-                          ? 'success.main'
-                          : 'warning.main';
+                        const borderColor = isOnline ? 'success.main' : 'warning.main';
 
                         return (
                           <Typography
@@ -1828,10 +1675,7 @@ const InboundInternational: React.FC = () => {
               onClick={() => setFilterExpanded(!filterExpanded)}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontSize: '0.9rem', fontWeight: 600 }}
-                >
+                <Typography variant="subtitle1" sx={{ fontSize: '0.9rem', fontWeight: 600 }}>
                   🔍 Bộ lọc
                 </Typography>
                 {getActiveFilterCount() > 0 && (
@@ -1889,35 +1733,20 @@ const InboundInternational: React.FC = () => {
                       sx={{
                         p: 1.5,
                         border: '1px solid',
-                        borderColor:
-                          activeFilterSection === 'status'
-                            ? 'primary.main'
-                            : 'grey.200',
+                        borderColor: activeFilterSection === 'status' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
                         cursor: 'pointer',
-                        bgcolor:
-                          activeFilterSection === 'status'
-                            ? 'primary.50'
-                            : 'white',
+                        bgcolor: activeFilterSection === 'status' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
-                        setActiveFilterSection(
-                          activeFilterSection === 'status' ? null : 'status'
-                        )
+                        setActiveFilterSection(activeFilterSection === 'status' ? null : 'status')
                       }
                     >
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: '0.8rem', mb: 1 }}
-                      >
-                        Trạng thái{' '}
-                        {filters.status.length > 0 &&
-                          `(${filters.status.length})`}
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
+                        Trạng thái {filters.status.length > 0 && `(${filters.status.length})`}
                       </Typography>
                       {activeFilterSection === 'status' && (
-                        <Box
-                          sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}
-                        >
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {[
                             'pending',
                             'confirmed',
@@ -1930,11 +1759,7 @@ const InboundInternational: React.FC = () => {
                               label={getStatusLabel(status)}
                               size="small"
                               clickable
-                              color={
-                                filters.status.includes(status)
-                                  ? 'primary'
-                                  : 'default'
-                              }
+                              color={filters.status.includes(status) ? 'primary' : 'default'}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 toggleFilter('status', status);
@@ -1954,36 +1779,23 @@ const InboundInternational: React.FC = () => {
                         p: 1.5,
                         border: '1px solid',
                         borderColor:
-                          activeFilterSection === 'documentStatus'
-                            ? 'primary.main'
-                            : 'grey.200',
+                          activeFilterSection === 'documentStatus' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
                         cursor: 'pointer',
-                        bgcolor:
-                          activeFilterSection === 'documentStatus'
-                            ? 'primary.50'
-                            : 'white',
+                        bgcolor: activeFilterSection === 'documentStatus' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === 'documentStatus'
-                            ? null
-                            : 'documentStatus'
+                          activeFilterSection === 'documentStatus' ? null : 'documentStatus'
                         )
                       }
                     >
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: '0.8rem', mb: 1 }}
-                      >
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
                         Chứng từ{' '}
-                        {filters.documentStatus.length > 0 &&
-                          `(${filters.documentStatus.length})`}
+                        {filters.documentStatus.length > 0 && `(${filters.documentStatus.length})`}
                       </Typography>
                       {activeFilterSection === 'documentStatus' && (
-                        <Box
-                          sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}
-                        >
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueDocumentStatuses().map((status) => (
                             <Chip
                               key={status}
@@ -1999,9 +1811,7 @@ const InboundInternational: React.FC = () => {
                               size="small"
                               clickable
                               color={
-                                filters.documentStatus.includes(status)
-                                  ? 'primary'
-                                  : 'default'
+                                filters.documentStatus.includes(status) ? 'primary' : 'default'
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -2022,36 +1832,23 @@ const InboundInternational: React.FC = () => {
                         p: 1.5,
                         border: '1px solid',
                         borderColor:
-                          activeFilterSection === 'timelineStatus'
-                            ? 'primary.main'
-                            : 'grey.200',
+                          activeFilterSection === 'timelineStatus' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
                         cursor: 'pointer',
-                        bgcolor:
-                          activeFilterSection === 'timelineStatus'
-                            ? 'primary.50'
-                            : 'white',
+                        bgcolor: activeFilterSection === 'timelineStatus' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === 'timelineStatus'
-                            ? null
-                            : 'timelineStatus'
+                          activeFilterSection === 'timelineStatus' ? null : 'timelineStatus'
                         )
                       }
                     >
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: '0.8rem', mb: 1 }}
-                      >
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
                         Timeline{' '}
-                        {filters.timelineStatus.length > 0 &&
-                          `(${filters.timelineStatus.length})`}
+                        {filters.timelineStatus.length > 0 && `(${filters.timelineStatus.length})`}
                       </Typography>
                       {activeFilterSection === 'timelineStatus' && (
-                        <Box
-                          sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}
-                        >
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueTimelineStatuses().map((status) => (
                             <Chip
                               key={status}
@@ -2067,9 +1864,7 @@ const InboundInternational: React.FC = () => {
                               size="small"
                               clickable
                               color={
-                                filters.timelineStatus.includes(status)
-                                  ? 'primary'
-                                  : 'default'
+                                filters.timelineStatus.includes(status) ? 'primary' : 'default'
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -2090,15 +1885,10 @@ const InboundInternational: React.FC = () => {
                         p: 1.5,
                         border: '1px solid',
                         borderColor:
-                          activeFilterSection === 'carriers'
-                            ? 'primary.main'
-                            : 'grey.200',
+                          activeFilterSection === 'carriers' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
                         cursor: 'pointer',
-                        bgcolor:
-                          activeFilterSection === 'carriers'
-                            ? 'primary.50'
-                            : 'white',
+                        bgcolor: activeFilterSection === 'carriers' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
@@ -2106,29 +1896,18 @@ const InboundInternational: React.FC = () => {
                         )
                       }
                     >
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: '0.8rem', mb: 1 }}
-                      >
-                        Vận chuyển{' '}
-                        {filters.carriers.length > 0 &&
-                          `(${filters.carriers.length})`}
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
+                        Vận chuyển {filters.carriers.length > 0 && `(${filters.carriers.length})`}
                       </Typography>
                       {activeFilterSection === 'carriers' && (
-                        <Box
-                          sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}
-                        >
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueCarriers().map((carrier) => (
                             <Chip
                               key={carrier}
                               label={carrier}
                               size="small"
                               clickable
-                              color={
-                                filters.carriers.includes(carrier)
-                                  ? 'primary'
-                                  : 'default'
-                              }
+                              color={filters.carriers.includes(carrier) ? 'primary' : 'default'}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 toggleFilter('carriers', carrier);
@@ -2148,36 +1927,23 @@ const InboundInternational: React.FC = () => {
                         p: 1.5,
                         border: '1px solid',
                         borderColor:
-                          activeFilterSection === 'destinations'
-                            ? 'primary.main'
-                            : 'grey.200',
+                          activeFilterSection === 'destinations' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
                         cursor: 'pointer',
-                        bgcolor:
-                          activeFilterSection === 'destinations'
-                            ? 'primary.50'
-                            : 'white',
+                        bgcolor: activeFilterSection === 'destinations' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === 'destinations'
-                            ? null
-                            : 'destinations'
+                          activeFilterSection === 'destinations' ? null : 'destinations'
                         )
                       }
                     >
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: '0.8rem', mb: 1 }}
-                      >
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
                         Đích đến{' '}
-                        {filters.destinations.length > 0 &&
-                          `(${filters.destinations.length})`}
+                        {filters.destinations.length > 0 && `(${filters.destinations.length})`}
                       </Typography>
                       {activeFilterSection === 'destinations' && (
-                        <Box
-                          sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}
-                        >
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueDestinations().map((destination) => (
                             <Chip
                               key={destination}
@@ -2185,9 +1951,7 @@ const InboundInternational: React.FC = () => {
                               size="small"
                               clickable
                               color={
-                                filters.destinations.includes(destination)
-                                  ? 'primary'
-                                  : 'default'
+                                filters.destinations.includes(destination) ? 'primary' : 'default'
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -2208,15 +1972,10 @@ const InboundInternational: React.FC = () => {
                         p: 1.5,
                         border: '1px solid',
                         borderColor:
-                          activeFilterSection === 'products'
-                            ? 'primary.main'
-                            : 'grey.200',
+                          activeFilterSection === 'products' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
                         cursor: 'pointer',
-                        bgcolor:
-                          activeFilterSection === 'products'
-                            ? 'primary.50'
-                            : 'white',
+                        bgcolor: activeFilterSection === 'products' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
@@ -2224,29 +1983,18 @@ const InboundInternational: React.FC = () => {
                         )
                       }
                     >
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: '0.8rem', mb: 1 }}
-                      >
-                        Sản phẩm{' '}
-                        {filters.products.length > 0 &&
-                          `(${filters.products.length})`}
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
+                        Sản phẩm {filters.products.length > 0 && `(${filters.products.length})`}
                       </Typography>
                       {activeFilterSection === 'products' && (
-                        <Box
-                          sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}
-                        >
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueProducts().map((product) => (
                             <Chip
                               key={product}
                               label={product}
                               size="small"
                               clickable
-                              color={
-                                filters.products.includes(product)
-                                  ? 'primary'
-                                  : 'default'
-                              }
+                              color={filters.products.includes(product) ? 'primary' : 'default'}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 toggleFilter('products', product);
@@ -2266,47 +2014,30 @@ const InboundInternational: React.FC = () => {
                         p: 1.5,
                         border: '1px solid',
                         borderColor:
-                          activeFilterSection === 'categories'
-                            ? 'primary.main'
-                            : 'grey.200',
+                          activeFilterSection === 'categories' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
                         cursor: 'pointer',
-                        bgcolor:
-                          activeFilterSection === 'categories'
-                            ? 'primary.50'
-                            : 'white',
+                        bgcolor: activeFilterSection === 'categories' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === 'categories'
-                            ? null
-                            : 'categories'
+                          activeFilterSection === 'categories' ? null : 'categories'
                         )
                       }
                     >
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: '0.8rem', mb: 1 }}
-                      >
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
                         Phân loại{' '}
-                        {filters.categories.length > 0 &&
-                          `(${filters.categories.length})`}
+                        {filters.categories.length > 0 && `(${filters.categories.length})`}
                       </Typography>
                       {activeFilterSection === 'categories' && (
-                        <Box
-                          sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}
-                        >
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueCategories().map((category) => (
                             <Chip
                               key={category}
                               label={category}
                               size="small"
                               clickable
-                              color={
-                                filters.categories.includes(category)
-                                  ? 'primary'
-                                  : 'default'
-                              }
+                              color={filters.categories.includes(category) ? 'primary' : 'default'}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 toggleFilter('categories', category);
@@ -2332,10 +2063,7 @@ const InboundInternational: React.FC = () => {
               mb: 3,
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-            >
+            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <CalendarIcon color="primary" />
               Lịch nhập hàng -{' '}
               {currentDate.toLocaleDateString('vi-VN', {
@@ -2390,8 +2118,7 @@ const InboundInternational: React.FC = () => {
                   for (let col = 0; col < 7; col++) {
                     const cellIndex = row * 7 + col;
                     const dayNumber = cellIndex - firstDay + 1;
-                    const isValidDay =
-                      dayNumber > 0 && dayNumber <= daysInMonth;
+                    const isValidDay = dayNumber > 0 && dayNumber <= daysInMonth;
                     if (isValidDay) {
                       const cellDate = new Date(
                         currentDate.getFullYear(),
@@ -2413,13 +2140,10 @@ const InboundInternational: React.FC = () => {
                     currentDate.getMonth(),
                     dayNumber
                   );
-                  const dayItems = isValidDay
-                    ? getFilteredItemsForDate(cellDate)
-                    : [];
+                  const dayItems = isValidDay ? getFilteredItemsForDate(cellDate) : [];
                   const hasItems = dayItems.length > 0;
                   const isToday =
-                    isValidDay &&
-                    cellDate.toDateString() === new Date().toDateString();
+                    isValidDay && cellDate.toDateString() === new Date().toDateString();
                   const isSelected =
                     selectedDate &&
                     isValidDay &&
@@ -2456,11 +2180,7 @@ const InboundInternational: React.FC = () => {
                             border: '1px solid',
                             borderColor: 'grey.300',
                             cursor: isValidDay ? 'pointer' : 'default',
-                            bgcolor: isSelected
-                              ? 'primary.50'
-                              : isToday
-                                ? 'warning.50'
-                                : 'white',
+                            bgcolor: isSelected ? 'primary.50' : isToday ? 'warning.50' : 'white',
                             '&:hover': isValidDay
                               ? {
                                   bgcolor: 'grey.50',
@@ -2477,9 +2197,7 @@ const InboundInternational: React.FC = () => {
                                 variant="body2"
                                 sx={{
                                   fontWeight: isToday ? 'bold' : 'normal',
-                                  color: isToday
-                                    ? 'warning.main'
-                                    : 'text.primary',
+                                  color: isToday ? 'warning.main' : 'text.primary',
                                 }}
                               >
                                 {dayNumber}
@@ -2561,8 +2279,7 @@ const InboundInternational: React.FC = () => {
                                         bgcolor: 'rgba(25, 118, 210, 0.1)',
                                         borderRadius: 0.5,
                                         textAlign: 'center',
-                                        border:
-                                          '1px solid rgba(25, 118, 210, 0.2)',
+                                        border: '1px solid rgba(25, 118, 210, 0.2)',
                                       }}
                                     >
                                       <Typography
@@ -2596,9 +2313,7 @@ const InboundInternational: React.FC = () => {
                                     bgcolor: 'grey.200',
                                   },
                                 }}
-                                onClick={(e) =>
-                                  handleCalendarMenuOpen(e, cellDate)
-                                }
+                                onClick={(e) => handleCalendarMenuOpen(e, cellDate)}
                               >
                                 <MoreVertIcon
                                   sx={{
@@ -2622,8 +2337,8 @@ const InboundInternational: React.FC = () => {
           {selectedDate && selectedDateItems.length > 0 && (
             <Box>
               <Typography variant="h6" gutterBottom>
-                Chi tiết ngày {selectedDate.toLocaleDateString('vi-VN')} (
-                {selectedDateItems.length} lô hàng)
+                Chi tiết ngày {selectedDate.toLocaleDateString('vi-VN')} ({selectedDateItems.length}{' '}
+                lô hàng)
               </Typography>
 
               <Grid container spacing={2}>
@@ -2658,11 +2373,7 @@ const InboundInternational: React.FC = () => {
                             }}
                           >
                             {getStatusIcon(item.status)}
-                            <Typography
-                              variant="subtitle2"
-                              component="div"
-                              fontWeight="bold"
-                            >
+                            <Typography variant="subtitle2" component="div" fontWeight="bold">
                               {item.supplier}
                             </Typography>
                           </Box>
@@ -2708,8 +2419,7 @@ const InboundInternational: React.FC = () => {
                           color="text.secondary"
                           sx={{ fontSize: '0.8rem' }}
                         >
-                          <strong>Số lượng:</strong>{' '}
-                          {item.quantity.toLocaleString()}
+                          <strong>Số lượng:</strong> {item.quantity.toLocaleString()}
                         </Typography>
                         <Typography
                           variant="body2"
@@ -2749,10 +2459,7 @@ const InboundInternational: React.FC = () => {
                           sx={{ fontSize: '0.8rem', fontWeight: 600, mt: 1 }}
                         >
                           <strong>📦 Tổng sản phẩm:</strong>{' '}
-                          {calculateTotalProducts(
-                            item.packaging
-                          ).toLocaleString()}{' '}
-                          PCS
+                          {calculateTotalProducts(item.packaging).toLocaleString()} PCS
                         </Typography>
                         <Typography
                           variant="body2"
@@ -2767,8 +2474,7 @@ const InboundInternational: React.FC = () => {
                           color="text.secondary"
                           sx={{ fontSize: '0.8rem' }}
                         >
-                          <strong>Thời gian nhận:</strong>{' '}
-                          {item.receiveTime || 'Chưa có'}
+                          <strong>Thời gian nhận:</strong> {item.receiveTime || 'Chưa có'}
                         </Typography>
 
                         {/* Phân loại hàng hóa */}
@@ -2777,8 +2483,7 @@ const InboundInternational: React.FC = () => {
                           color="text.secondary"
                           sx={{ fontSize: '0.8rem' }}
                         >
-                          <strong>Phân loại:</strong>{' '}
-                          {item.category || 'Chưa có'}
+                          <strong>Phân loại:</strong> {item.category || 'Chưa có'}
                         </Typography>
 
                         {/* Đích đến */}
@@ -2787,8 +2492,7 @@ const InboundInternational: React.FC = () => {
                           color="text.secondary"
                           sx={{ fontSize: '0.8rem' }}
                         >
-                          <strong>Đích đến:</strong>{' '}
-                          {item.destination || 'Chưa có'}
+                          <strong>Đích đến:</strong> {item.destination || 'Chưa có'}
                         </Typography>
 
                         {/* Phiếu PO */}
@@ -2798,8 +2502,7 @@ const InboundInternational: React.FC = () => {
                             color="text.secondary"
                             sx={{ fontSize: '0.8rem' }}
                           >
-                            <strong>Phiếu PO:</strong>{' '}
-                            {item.poNumbers.join(', ')}
+                            <strong>Phiếu PO:</strong> {item.poNumbers.join(', ')}
                           </Typography>
                         )}
 
@@ -2825,49 +2528,42 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem', ml: 2 }}
                               >
                                 • {timeline.name}:
-                                {timeline.estimatedDate &&
-                                  ` Dự kiến: ${timeline.estimatedDate}`}
-                                {timeline.date &&
-                                  ` | Thực tế: ${timeline.date}`}
-                                {timeline.status &&
-                                  ` (${getStatusLabel(timeline.status)})`}
+                                {timeline.estimatedDate && ` Dự kiến: ${timeline.estimatedDate}`}
+                                {timeline.date && ` | Thực tế: ${timeline.date}`}
+                                {timeline.status && ` (${getStatusLabel(timeline.status)})`}
                               </Typography>
                             ))}
                           </>
                         )}
 
                         {/* Trạng thái chứng từ */}
-                        {item.documentStatus &&
-                          item.documentStatus.length > 0 && (
-                            <>
+                        {item.documentStatus && item.documentStatus.length > 0 && (
+                          <>
+                            <Typography
+                              variant="body2"
+                              color="primary.main"
+                              sx={{
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                                mt: 1,
+                              }}
+                            >
+                              <strong>📋 Trạng thái chứng từ:</strong>
+                            </Typography>
+                            {item.documentStatus.map((doc) => (
                               <Typography
+                                key={doc.id}
                                 variant="body2"
-                                color="primary.main"
-                                sx={{
-                                  fontSize: '0.8rem',
-                                  fontWeight: 600,
-                                  mt: 1,
-                                }}
+                                color="text.secondary"
+                                sx={{ fontSize: '0.75rem', ml: 2 }}
                               >
-                                <strong>📋 Trạng thái chứng từ:</strong>
+                                • {doc.name}:{doc.estimatedDate && ` Dự kiến: ${doc.estimatedDate}`}
+                                {doc.date && ` | Thực tế: ${doc.date}`}
+                                {doc.status && ` (${getStatusLabel(doc.status)})`}
                               </Typography>
-                              {item.documentStatus.map((doc) => (
-                                <Typography
-                                  key={doc.id}
-                                  variant="body2"
-                                  color="text.secondary"
-                                  sx={{ fontSize: '0.75rem', ml: 2 }}
-                                >
-                                  • {doc.name}:
-                                  {doc.estimatedDate &&
-                                    ` Dự kiến: ${doc.estimatedDate}`}
-                                  {doc.date && ` | Thực tế: ${doc.date}`}
-                                  {doc.status &&
-                                    ` (${getStatusLabel(doc.status)})`}
-                                </Typography>
-                              ))}
-                            </>
-                          )}
+                            ))}
+                          </>
+                        )}
 
                         {/* Ghi chú */}
                         <Typography
@@ -2895,9 +2591,7 @@ const InboundInternational: React.FC = () => {
                               cursor: 'pointer',
                               mb: showTechnicalDetails ? 1 : 0,
                             }}
-                            onClick={() =>
-                              setShowTechnicalDetails(!showTechnicalDetails)
-                            }
+                            onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
                           >
                             <Typography
                               variant="body2"
@@ -2911,9 +2605,7 @@ const InboundInternational: React.FC = () => {
                               color="primary.main"
                               sx={{ fontSize: '0.7rem' }}
                             >
-                              {showTechnicalDetails
-                                ? 'Thu gọn ▲'
-                                : 'Xem thêm ▼'}
+                              {showTechnicalDetails ? 'Thu gọn ▲' : 'Xem thêm ▼'}
                             </Typography>
                           </Box>
 
@@ -2926,9 +2618,7 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>Loại quy cách đóng gói:</strong>{' '}
-                                {item.packaging
-                                  ?.map((p) => p.type)
-                                  .join(', ') || 'Chưa có'}
+                                {item.packaging?.map((p) => p.type).join(', ') || 'Chưa có'}
                               </Typography>
                               <Typography
                                 variant="body2"
@@ -2936,9 +2626,7 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>Số lượng đóng gói:</strong>{' '}
-                                {item.packaging
-                                  ?.map((p) => p.quantity)
-                                  .join(', ') || 'Chưa có'}
+                                {item.packaging?.map((p) => p.quantity).join(', ') || 'Chưa có'}
                               </Typography>
                               <Typography
                                 variant="body2"
@@ -2965,9 +2653,8 @@ const InboundInternational: React.FC = () => {
                                     color="text.secondary"
                                     sx={{ fontSize: '0.75rem', mt: 0.5 }}
                                   >
-                                    <strong>Cargo Ready:</strong> Dự kiến:{' '}
-                                    {cargo.estimated} | Thực tế: {cargo.actual}{' '}
-                                    | Trạng thái: {cargo.status}
+                                    <strong>Cargo Ready:</strong> Dự kiến: {cargo.estimated} | Thực
+                                    tế: {cargo.actual} | Trạng thái: {cargo.status}
                                   </Typography>
                                 );
                               })()}
@@ -2979,14 +2666,12 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>ETD:</strong> Dự kiến:{' '}
-                                {item.timeline?.find((t) => t.name === 'ETD')
-                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                {item.timeline?.find((t) => t.name === 'ETD')?.estimatedDate ||
+                                  'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.timeline?.find((t) => t.name === 'ETD')
-                                  ?.date || 'Chưa có'}{' '}
-                                | Trạng thái:{' '}
-                                {item.timeline?.find((t) => t.name === 'ETD')
-                                  ?.status || 'Chưa có'}
+                                {item.timeline?.find((t) => t.name === 'ETD')?.date || 'Chưa có'} |
+                                Trạng thái:{' '}
+                                {item.timeline?.find((t) => t.name === 'ETD')?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - ETA */}
@@ -2996,14 +2681,12 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>ETA:</strong> Dự kiến:{' '}
-                                {item.timeline?.find((t) => t.name === 'ETA')
-                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                {item.timeline?.find((t) => t.name === 'ETA')?.estimatedDate ||
+                                  'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.timeline?.find((t) => t.name === 'ETA')
-                                  ?.date || 'Chưa có'}{' '}
-                                | Trạng thái:{' '}
-                                {item.timeline?.find((t) => t.name === 'ETA')
-                                  ?.status || 'Chưa có'}
+                                {item.timeline?.find((t) => t.name === 'ETA')?.date || 'Chưa có'} |
+                                Trạng thái:{' '}
+                                {item.timeline?.find((t) => t.name === 'ETA')?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - Depart */}
@@ -3013,17 +2696,14 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>Ngày hàng đi:</strong> Dự kiến:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày hàng đi'
-                                )?.estimatedDate || 'Chưa có'}{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng đi')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày hàng đi'
-                                )?.date || 'Chưa có'}{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng đi')?.date ||
+                                  'Chưa có'}{' '}
                                 | Trạng thái:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày hàng đi'
-                                )?.status || 'Chưa có'}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng đi')?.status ||
+                                  'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - Arrival Port */}
@@ -3033,17 +2713,14 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>Ngày hàng về cảng:</strong> Dự kiến:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày hàng về cảng'
-                                )?.estimatedDate || 'Chưa có'}{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng về cảng')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày hàng về cảng'
-                                )?.date || 'Chưa có'}{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng về cảng')?.date ||
+                                  'Chưa có'}{' '}
                                 | Trạng thái:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày hàng về cảng'
-                                )?.status || 'Chưa có'}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng về cảng')
+                                  ?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - Receive */}
@@ -3053,17 +2730,14 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>Ngày nhận hàng:</strong> Dự kiến:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày nhận hàng'
-                                )?.estimatedDate || 'Chưa có'}{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày nhận hàng')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày nhận hàng'
-                                )?.date || 'Chưa có'}{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày nhận hàng')?.date ||
+                                  'Chưa có'}{' '}
                                 | Trạng thái:{' '}
-                                {item.timeline?.find(
-                                  (t) => t.name === 'Ngày nhận hàng'
-                                )?.status || 'Chưa có'}
+                                {item.timeline?.find((t) => t.name === 'Ngày nhận hàng')?.status ||
+                                  'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Check Bill */}
@@ -3073,17 +2747,14 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem', mt: 0.5 }}
                               >
                                 <strong>Check Bill:</strong> Dự kiến:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Check bill'
-                                )?.estimatedDate || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check bill')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Check bill'
-                                )?.date || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check bill')?.date ||
+                                  'Chưa có'}{' '}
                                 | Trạng thái:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Check bill'
-                                )?.status || 'Chưa có'}
+                                {item.documentStatus?.find((d) => d.name === 'Check bill')
+                                  ?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Check CO */}
@@ -3093,17 +2764,14 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>Check CO:</strong> Dự kiến:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Check CO'
-                                )?.estimatedDate || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check CO')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Check CO'
-                                )?.date || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check CO')?.date ||
+                                  'Chưa có'}{' '}
                                 | Trạng thái:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Check CO'
-                                )?.status || 'Chưa có'}
+                                {item.documentStatus?.find((d) => d.name === 'Check CO')?.status ||
+                                  'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Send Docs */}
@@ -3113,17 +2781,14 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>TQ gửi chứng từ đi:</strong> Dự kiến:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'TQ gửi chứng từ đi'
-                                )?.estimatedDate || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'TQ gửi chứng từ đi')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'TQ gửi chứng từ đi'
-                                )?.date || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'TQ gửi chứng từ đi')
+                                  ?.date || 'Chưa có'}{' '}
                                 | Trạng thái:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'TQ gửi chứng từ đi'
-                                )?.status || 'Chưa có'}
+                                {item.documentStatus?.find((d) => d.name === 'TQ gửi chứng từ đi')
+                                  ?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Customs */}
@@ -3133,17 +2798,14 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>Lên Tờ Khai Hải Quan:</strong> Dự kiến:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Lên Tờ Khai Hải Quan'
-                                )?.estimatedDate || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Lên Tờ Khai Hải Quan')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Lên Tờ Khai Hải Quan'
-                                )?.date || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Lên Tờ Khai Hải Quan')
+                                  ?.date || 'Chưa có'}{' '}
                                 | Trạng thái:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Lên Tờ Khai Hải Quan'
-                                )?.status || 'Chưa có'}
+                                {item.documentStatus?.find((d) => d.name === 'Lên Tờ Khai Hải Quan')
+                                  ?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Tax */}
@@ -3153,17 +2815,14 @@ const InboundInternational: React.FC = () => {
                                 sx={{ fontSize: '0.75rem' }}
                               >
                                 <strong>Đóng thuế:</strong> Dự kiến:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Đóng thuế'
-                                )?.estimatedDate || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Đóng thuế')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
                                 | Thực tế:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Đóng thuế'
-                                )?.date || 'Chưa có'}{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Đóng thuế')?.date ||
+                                  'Chưa có'}{' '}
                                 | Trạng thái:{' '}
-                                {item.documentStatus?.find(
-                                  (d) => d.name === 'Đóng thuế'
-                                )?.status || 'Chưa có'}
+                                {item.documentStatus?.find((d) => d.name === 'Đóng thuế')?.status ||
+                                  'Chưa có'}
                               </Typography>
                             </Box>
                           )}
@@ -3190,16 +2849,14 @@ const InboundInternational: React.FC = () => {
                             color="text.disabled"
                             sx={{ fontSize: '0.7rem' }}
                           >
-                            <strong>Tạo lúc:</strong>{' '}
-                            {item.createdAt || 'Chưa có'}
+                            <strong>Tạo lúc:</strong> {item.createdAt || 'Chưa có'}
                           </Typography>
                           <Typography
                             variant="body2"
                             color="text.disabled"
                             sx={{ fontSize: '0.7rem' }}
                           >
-                            <strong>Cập nhật:</strong>{' '}
-                            {item.updatedAt || 'Chưa có'}
+                            <strong>Cập nhật:</strong> {item.updatedAt || 'Chưa có'}
                           </Typography>
                         </Box>
 
@@ -3241,8 +2898,7 @@ const InboundInternational: React.FC = () => {
           {selectedDate && selectedDateItems.length === 0 && (
             <Box sx={{ textAlign: 'center', py: 3 }}>
               <Typography variant="body1" color="text.secondary">
-                Không có lô hàng nào trong ngày{' '}
-                {selectedDate.toLocaleDateString('vi-VN')}
+                Không có lô hàng nào trong ngày {selectedDate.toLocaleDateString('vi-VN')}
               </Typography>
             </Box>
           )}
@@ -3260,12 +2916,7 @@ const InboundInternational: React.FC = () => {
       </Fab>
 
       {/* Add/Edit Dialog */}
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>
           {editingItem
             ? 'Sửa lịch nhập hàng'
@@ -3322,12 +2973,7 @@ const InboundInternational: React.FC = () => {
                   </Box>
                 )}
                 renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Phân loại hàng hóa"
-                    variant="outlined"
-                    required
-                  />
+                  <TextField {...params} label="Phân loại hàng hóa" variant="outlined" required />
                 )}
               />
             </Grid>
@@ -3348,12 +2994,7 @@ const InboundInternational: React.FC = () => {
                 value={formFields.destination}
                 onInputChange={(_, v) => setField('destination', v)}
                 renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Đích đến"
-                    variant="outlined"
-                    required
-                  />
+                  <TextField {...params} label="Đích đến" variant="outlined" required />
                 )}
               />
             </Grid>
@@ -3395,16 +3036,12 @@ const InboundInternational: React.FC = () => {
                 <InputLabel>Trạng thái</InputLabel>
                 <Select
                   value={formFields.status}
-                  onChange={(e) =>
-                    setField('status', e.target.value as InboundItem['status'])
-                  }
+                  onChange={(e) => setField('status', e.target.value as InboundItem['status'])}
                   label="Trạng thái"
                 >
                   <MenuItem value="pending">Chờ xác nhận</MenuItem>
                   <MenuItem value="confirmed">Đã xác nhận</MenuItem>
-                  <MenuItem value="waiting-notification">
-                    Chờ thông báo
-                  </MenuItem>
+                  <MenuItem value="waiting-notification">Chờ thông báo</MenuItem>
                   <MenuItem value="notified">Đã thông báo</MenuItem>
                   <MenuItem value="received">Đã nhận</MenuItem>
                 </Select>
@@ -3440,19 +3077,13 @@ const InboundInternational: React.FC = () => {
                     backgroundColor: '#f5f5f5',
                   }}
                 >
-                  <Typography
-                    variant="body2"
-                    sx={{ minWidth: '80px', fontWeight: 500 }}
-                  >
+                  <Typography variant="body2" sx={{ minWidth: '80px', fontWeight: 500 }}>
                     {item.type}
                   </Typography>
                   <Typography variant="body2" sx={{ minWidth: '60px' }}>
                     {item.quantity} SET
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ flex: 1, color: 'text.secondary' }}
-                  >
+                  <Typography variant="body2" sx={{ flex: 1, color: 'text.secondary' }}>
                     {item.description}
                   </Typography>
                   <Box sx={{ display: 'flex', gap: 0.5 }}>
@@ -3541,9 +3172,7 @@ const InboundInternational: React.FC = () => {
                 <Button
                   variant="contained"
                   onClick={handleAddPackagingItem}
-                  disabled={
-                    !newPackagingItem.type || newPackagingItem.quantity <= 0
-                  }
+                  disabled={!newPackagingItem.type || newPackagingItem.quantity <= 0}
                   startIcon={<AddIcon />}
                 >
                   Thêm
@@ -3571,8 +3200,7 @@ const InboundInternational: React.FC = () => {
                       gap: 1,
                     }}
                   >
-                    📦 Tổng số sản phẩm:{' '}
-                    {calculateTotalProducts(packagingItems).toLocaleString()}{' '}
+                    📦 Tổng số sản phẩm: {calculateTotalProducts(packagingItems).toLocaleString()}{' '}
                     PCS
                   </Typography>
                   <Typography
@@ -3590,10 +3218,7 @@ const InboundInternational: React.FC = () => {
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth required>
                 <InputLabel>Mục đích</InputLabel>
-                <Select
-                  defaultValue={editingItem?.purpose || 'online'}
-                  label="Mục đích"
-                >
+                <Select defaultValue={editingItem?.purpose || 'online'} label="Mục đích">
                   <MenuItem value="online">Online</MenuItem>
                   <MenuItem value="offline">Offline</MenuItem>
                 </Select>
@@ -3670,9 +3295,7 @@ const InboundInternational: React.FC = () => {
                       {item.estimatedDate
                         ? (() => {
                             const d = new Date(item.estimatedDate);
-                            return isNaN(d.getTime())
-                              ? 'Chưa có'
-                              : d.toLocaleDateString('vi-VN');
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()
                         : 'Chưa có'}
                     </Typography>
@@ -3689,18 +3312,13 @@ const InboundInternational: React.FC = () => {
                       {item.date
                         ? (() => {
                             const d = new Date(item.date);
-                            return isNaN(d.getTime())
-                              ? 'Chưa có'
-                              : d.toLocaleDateString('vi-VN');
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()
                         : 'Chưa có'}
                     </Typography>
                   </Box>
 
-                  <Typography
-                    variant="body2"
-                    sx={{ flex: 1, color: 'text.secondary' }}
-                  >
+                  <Typography variant="body2" sx={{ flex: 1, color: 'text.secondary' }}>
                     {item.description}
                   </Typography>
 
@@ -3758,9 +3376,7 @@ const InboundInternational: React.FC = () => {
                     <MenuItem value="ETD">ETD</MenuItem>
                     <MenuItem value="ETA">ETA</MenuItem>
                     <MenuItem value="Ngày hàng đi">Ngày hàng đi</MenuItem>
-                    <MenuItem value="Ngày hàng về cảng">
-                      Ngày hàng về cảng
-                    </MenuItem>
+                    <MenuItem value="Ngày hàng về cảng">Ngày hàng về cảng</MenuItem>
                     <MenuItem value="Ngày nhận hàng">Ngày nhận hàng</MenuItem>
                   </Select>
                 </FormControl>
@@ -3899,9 +3515,7 @@ const InboundInternational: React.FC = () => {
                       {item.estimatedDate
                         ? (() => {
                             const d = new Date(item.estimatedDate);
-                            return isNaN(d.getTime())
-                              ? 'Chưa có'
-                              : d.toLocaleDateString('vi-VN');
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()
                         : 'Chưa có'}
                     </Typography>
@@ -3918,18 +3532,13 @@ const InboundInternational: React.FC = () => {
                       {item.date
                         ? (() => {
                             const d = new Date(item.date);
-                            return isNaN(d.getTime())
-                              ? 'Chưa có'
-                              : d.toLocaleDateString('vi-VN');
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()
                         : 'Chưa có'}
                     </Typography>
                   </Box>
 
-                  <Typography
-                    variant="body2"
-                    sx={{ flex: 1, color: 'text.secondary' }}
-                  >
+                  <Typography variant="body2" sx={{ flex: 1, color: 'text.secondary' }}>
                     {item.description}
                   </Typography>
 
@@ -3937,9 +3546,7 @@ const InboundInternational: React.FC = () => {
                     <Tooltip title="Sửa mô tả">
                       <IconButton
                         size="small"
-                        onClick={() =>
-                          handleEditItem('documentStatus', item, index)
-                        }
+                        onClick={() => handleEditItem('documentStatus', item, index)}
                         color="primary"
                       >
                         <EditIcon />
@@ -3986,12 +3593,8 @@ const InboundInternational: React.FC = () => {
                   >
                     <MenuItem value="Check bill">Check bill</MenuItem>
                     <MenuItem value="Check CO">Check CO</MenuItem>
-                    <MenuItem value="TQ gửi chứng từ đi">
-                      TQ gửi chứng từ đi
-                    </MenuItem>
-                    <MenuItem value="Lên Tờ Khai Hải Quan">
-                      Lên Tờ Khai Hải Quan
-                    </MenuItem>
+                    <MenuItem value="TQ gửi chứng từ đi">TQ gửi chứng từ đi</MenuItem>
+                    <MenuItem value="Lên Tờ Khai Hải Quan">Lên Tờ Khai Hải Quan</MenuItem>
                     <MenuItem value="Đóng thuế">Đóng thuế</MenuItem>
                   </Select>
                 </FormControl>
@@ -4031,10 +3634,7 @@ const InboundInternational: React.FC = () => {
                     onChange={(e) =>
                       setNewDocumentStatusItem((prev) => ({
                         ...prev,
-                        status: e.target.value as
-                          | 'completed'
-                          | 'pending'
-                          | 'in-progress',
+                        status: e.target.value as 'completed' | 'pending' | 'in-progress',
                       }))
                     }
                     label="Trạng thái"
@@ -4061,9 +3661,7 @@ const InboundInternational: React.FC = () => {
                 <Button
                   variant="contained"
                   onClick={handleAddDocumentStatusItem}
-                  disabled={
-                    !newDocumentStatusItem.name || !newDocumentStatusItem.date
-                  }
+                  disabled={!newDocumentStatusItem.name || !newDocumentStatusItem.date}
                   startIcon={<AddIcon />}
                 >
                   Thêm
@@ -4084,11 +3682,7 @@ const InboundInternational: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Hủy</Button>
-          <Button
-            onClick={() => handleSave({})}
-            variant="contained"
-            disabled={saving}
-          >
+          <Button onClick={() => handleSave({})} variant="contained" disabled={saving}>
             {editingItem ? 'Cập nhật' : 'Thêm mới'}
           </Button>
         </DialogActions>
@@ -4195,12 +3789,7 @@ const InboundInternational: React.FC = () => {
       </Menu>
 
       {/* Edit Item Dialog */}
-      <Dialog
-        open={editItemDialog.open}
-        onClose={handleEditItemClose}
-        maxWidth="sm"
-        fullWidth
-      >
+      <Dialog open={editItemDialog.open} onClose={handleEditItemClose} maxWidth="sm" fullWidth>
         <DialogTitle>
           Sửa mô tả -{' '}
           {editItemDialog.type === 'packaging'
@@ -4220,8 +3809,7 @@ const InboundInternational: React.FC = () => {
                   : 'N/A'}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              <strong>Mô tả cũ:</strong>{' '}
-              {editItemDialog.item?.description || 'Chưa có'}
+              <strong>Mô tả cũ:</strong> {editItemDialog.item?.description || 'Chưa có'}
             </Typography>
 
             <TextField
@@ -4241,11 +3829,7 @@ const InboundInternational: React.FC = () => {
               sx={{ mt: 2 }}
             />
 
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ mt: 1, display: 'block' }}
-            >
+            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
               * Mô tả mới sẽ thay thế mô tả cũ và không thể sửa lại
             </Typography>
           </Box>

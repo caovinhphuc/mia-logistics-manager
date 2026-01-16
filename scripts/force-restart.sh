@@ -8,13 +8,13 @@ echo "Killing all processes..."
 pkill -f "react-scripts" || true
 pkill -f "npm start" || true
 pkill -f "node.*server.js" || true
-lsof -ti:3000,5050,8000 | xargs kill -9 2>/dev/null || true
+lsof -ti:3000,3100,8000 | xargs kill -9 2>/dev/null || true
 
 # Clear all caches
 echo "Clearing all caches..."
 rm -rf node_modules/.cache
 rm -rf build
-rm -rf temp
+rm -rf temp 
 npm cache clean --force
 
 # Wait
@@ -40,6 +40,6 @@ echo "Frontend PID: $FRONTEND_PID"
 echo ""
 echo "Services starting... Please wait 30 seconds for full startup"
 echo "Frontend: http://localhost:3000"
-echo "Backend: http://localhost:5050"
+echo "Backend: http://localhost:3100"
 echo ""
 echo "To stop: kill $BACKEND_PID $FRONTEND_PID"

@@ -42,13 +42,7 @@ export interface InboundItem {
   destination: string;
   product: string;
   quantity: number;
-  status:
-    | 'pending'
-    | 'confirmed'
-    | 'in-transit'
-    | 'arrived'
-    | 'completed'
-    | 'cancelled';
+  status: 'pending' | 'confirmed' | 'in-transit' | 'arrived' | 'completed' | 'cancelled';
   estimatedArrival: string;
   actualArrival?: string;
   type: 'international' | 'domestic';
@@ -130,11 +124,7 @@ export type ItemStatus =
   | 'completed'
   | 'cancelled';
 
-export type TimelineStatus =
-  | 'completed'
-  | 'pending'
-  | 'in-progress'
-  | 'confirmed';
+export type TimelineStatus = 'completed' | 'pending' | 'in-progress' | 'confirmed';
 
 export type Purpose = 'online' | 'offline';
 

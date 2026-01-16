@@ -1,29 +1,29 @@
-import React from "react";
-import { Button, ButtonProps } from "@mui/material";
+import React from 'react';
+import { Button, ButtonProps } from '@mui/material';
 
-interface ActionButtonProps extends Omit<ButtonProps, "variant"> {
-  variant?: "primary" | "secondary" | "outlined" | "text";
+interface ActionButtonProps extends Omit<ButtonProps, 'variant'> {
+  variant?: 'primary' | 'secondary' | 'outlined' | 'text';
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
 }
 
 export const ActionButton: React.FC<ActionButtonProps> = ({
-  variant = "primary",
+  variant = 'primary',
   children,
   ...props
 }) => {
   const getVariant = () => {
     switch (variant) {
-      case "primary":
-        return "contained";
-      case "secondary":
-        return "outlined";
-      case "outlined":
-        return "outlined";
-      case "text":
-        return "text";
+      case 'primary':
+        return 'contained';
+      case 'secondary':
+        return 'outlined';
+      case 'outlined':
+        return 'outlined';
+      case 'text':
+        return 'text';
       default:
-        return "contained";
+        return 'contained';
     }
   };
 

@@ -1,58 +1,58 @@
-import ForgotPasswordPage from "@/components/ForgotPasswordPage";
-import LoginPage from "@/components/LoginPage";
-import RegisterPage from "@/components/RegisterPage";
-import { SecurityGuard } from "@/components/security/SecurityGuard";
-import CarriersList from "@/features/carriers/components/CarriersList";
-import Dashboard from "@/features/dashboard/Dashboard";
-import AuthorizationGuide from "@/features/docs/AuthorizationGuide";
-import { Employees } from "@/features/employees/Employees";
-import EmployeesMigrated from "@/features/employees/EmployeesMigrated";
-import EmployeesMigratedSimple from "@/features/employees/EmployeesMigratedSimple";
-import InboundDomestic from "@/features/inbound/InboundDomestic";
-import InboundInternational from "@/features/inbound/InboundInternational";
-import InboundReports from "@/features/inbound/InboundReports";
-import InboundSchedule from "@/features/inbound/InboundSchedule";
-import InventoryManager from "@/features/inventory/components/InventoryManager";
-import LocationsList from "@/features/locations/components/LocationsList";
-import Logs from "@/features/logs/Logs";
-import AuthorizationPermissions from "@/features/settings/AuthorizationPermissions";
-import AuthorizationRoles from "@/features/settings/AuthorizationRoles";
-import AuthorizationUsers from "@/features/settings/AuthorizationUsers";
-import Settings from "@/features/settings/Settings";
-import PendingTransfer from "@/features/shipments/components/PendingTransfer";
-import TransportRequests from "@/features/shipments/components/TransportRequests";
-import TransportRequestsSheet from "@/features/shipments/components/TransportRequestsSheet";
-import VolumeCalculator from "@/features/shipments/components/VolumeCalculator";
-import TrackingDashboard from "@/features/tracking/components/TrackingDashboard";
-import TransferList from "@/features/transfers/components/TransferList";
-import AdminPage from "@/pages/AdminPage";
-import Layout from "@/shared/components/layout/Layout";
-import { requirePermission } from "@/shared/utils/auth";
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import ForgotPasswordPage from '@/components/ForgotPasswordPage';
+import LoginPage from '@/components/LoginPage';
+import RegisterPage from '@/components/RegisterPage';
+import { SecurityGuard } from '@/components/security/SecurityGuard';
+import CarriersList from '@/features/carriers/components/CarriersList';
+import Dashboard from '@/features/dashboard/Dashboard';
+import AuthorizationGuide from '@/features/docs/AuthorizationGuide';
+import { Employees } from '@/features/employees/Employees';
+import EmployeesMigrated from '@/features/employees/EmployeesMigrated';
+import EmployeesMigratedSimple from '@/features/employees/EmployeesMigratedSimple';
+import InboundDomestic from '@/features/inbound/InboundDomestic';
+import InboundInternational from '@/features/inbound/InboundInternational';
+import InboundReports from '@/features/inbound/InboundReports';
+import InboundSchedule from '@/features/inbound/InboundSchedule';
+import InventoryManager from '@/features/inventory/components/InventoryManager';
+import LocationsList from '@/features/locations/components/LocationsList';
+import Logs from '@/features/logs/Logs';
+import AuthorizationPermissions from '@/features/settings/AuthorizationPermissions';
+import AuthorizationRoles from '@/features/settings/AuthorizationRoles';
+import AuthorizationUsers from '@/features/settings/AuthorizationUsers';
+import Settings from '@/features/settings/Settings';
+import PendingTransfer from '@/features/shipments/components/PendingTransfer';
+import TransportRequests from '@/features/shipments/components/TransportRequests';
+import TransportRequestsSheet from '@/features/shipments/components/TransportRequestsSheet';
+import VolumeCalculator from '@/features/shipments/components/VolumeCalculator';
+import TrackingDashboard from '@/features/tracking/components/TrackingDashboard';
+import TransferList from '@/features/transfers/components/TransferList';
+import AdminPage from '@/pages/AdminPage';
+import Layout from '@/shared/components/layout/Layout';
+import { requirePermission } from '@/shared/utils/auth';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {
-    path: "/login",
+    path: '/login',
     element: <LoginPage />,
   },
   {
-    path: "/register",
+    path: '/register',
     element: <RegisterPage />,
   },
   {
-    path: "/forgot-password",
+    path: '/forgot-password',
     element: <ForgotPasswordPage />,
   },
   {
-    path: "/employees-migrated",
+    path: '/employees-migrated',
     element: <EmployeesMigrated />,
   },
   {
-    path: "/employees-migrated-simple",
+    path: '/employees-migrated-simple',
     element: <EmployeesMigratedSimple />,
   },
   {
-    path: "/",
+    path: '/',
     element: <Layout />,
     errorElement: (
       <div className="error-page">
@@ -65,7 +65,7 @@ export const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "admin",
+        path: 'admin',
         element: (
           <SecurityGuard requireAuth={true}>
             <AdminPage />
@@ -73,8 +73,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "shipments",
-        element: requirePermission("transportRequests", "view") ? (
+        path: 'shipments',
+        element: requirePermission('transportRequests', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <TransportRequestsSheet />
           </SecurityGuard>
@@ -83,7 +83,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "shipments/pending-transfer",
+        path: 'shipments/pending-transfer',
         element: (
           <SecurityGuard requireAuth={true}>
             <PendingTransfer />
@@ -91,8 +91,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "shipments/transport-requests",
-        element: requirePermission("transportRequests", "view") ? (
+        path: 'shipments/transport-requests',
+        element: requirePermission('transportRequests', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <TransportRequests />
           </SecurityGuard>
@@ -101,7 +101,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "shipments/transport-sheet",
+        path: 'shipments/transport-sheet',
         element: (
           <SecurityGuard requireAuth={true}>
             <Navigate to="/shipments" replace />
@@ -109,8 +109,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "locations",
-        element: requirePermission("locations", "view") ? (
+        path: 'locations',
+        element: requirePermission('locations', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <LocationsList />
           </SecurityGuard>
@@ -119,7 +119,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "inventory",
+        path: 'inventory',
         element: (
           <SecurityGuard requireAuth={true}>
             <InventoryManager />
@@ -127,8 +127,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "transfers",
-        element: requirePermission("transfers", "view") ? (
+        path: 'transfers',
+        element: requirePermission('transfers', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <TransferList />
           </SecurityGuard>
@@ -137,8 +137,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "carriers",
-        element: requirePermission("carriers", "view") ? (
+        path: 'carriers',
+        element: requirePermission('carriers', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <CarriersList />
           </SecurityGuard>
@@ -147,11 +147,11 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "employees",
+        path: 'employees',
         element: <Employees />,
       },
       {
-        path: "tracking",
+        path: 'tracking',
         element: (
           <SecurityGuard requireAuth={true}>
             <TrackingDashboard />
@@ -159,7 +159,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "settings",
+        path: 'settings',
         element: (
           <SecurityGuard requireAuth={true}>
             <Settings />
@@ -167,7 +167,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "shipments/volume-calculator",
+        path: 'shipments/volume-calculator',
         element: (
           <SecurityGuard requireAuth={true}>
             <VolumeCalculator />
@@ -175,8 +175,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "authorization/roles",
-        element: requirePermission("settings", "view") ? (
+        path: 'authorization/roles',
+        element: requirePermission('settings', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <AuthorizationRoles />
           </SecurityGuard>
@@ -185,8 +185,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "authorization/permissions",
-        element: requirePermission("settings", "view") ? (
+        path: 'authorization/permissions',
+        element: requirePermission('settings', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <AuthorizationPermissions />
           </SecurityGuard>
@@ -195,8 +195,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "authorization/users",
-        element: requirePermission("settings", "view") ? (
+        path: 'authorization/users',
+        element: requirePermission('settings', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <AuthorizationUsers />
           </SecurityGuard>
@@ -205,12 +205,12 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "authorization",
+        path: 'authorization',
         element: <Navigate to="/authorization/roles" replace />,
       },
       {
-        path: "logs",
-        element: requirePermission("settings", "view") ? (
+        path: 'logs',
+        element: requirePermission('settings', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <Logs />
           </SecurityGuard>
@@ -219,7 +219,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "guide/authorization",
+        path: 'guide/authorization',
         element: (
           <SecurityGuard requireAuth={true}>
             <AuthorizationGuide />
@@ -227,12 +227,12 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "inbound",
+        path: 'inbound',
         element: <Navigate to="/inbound/schedule" replace />,
       },
       {
-        path: "inbound/international",
-        element: requirePermission("inbound-international", "view") ? (
+        path: 'inbound/international',
+        element: requirePermission('inbound-international', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <InboundInternational />
           </SecurityGuard>
@@ -241,8 +241,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "inbound/domestic",
-        element: requirePermission("inbound-domestic", "view") ? (
+        path: 'inbound/domestic',
+        element: requirePermission('inbound-domestic', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <InboundDomestic />
           </SecurityGuard>
@@ -251,7 +251,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "inbound/schedule",
+        path: 'inbound/schedule',
         element: (
           <SecurityGuard requireAuth={true}>
             <InboundSchedule />
@@ -259,8 +259,8 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "inbound/reports",
-        element: requirePermission("inbound-schedule", "view") ? (
+        path: 'inbound/reports',
+        element: requirePermission('inbound-schedule', 'view') ? (
           <SecurityGuard requireAuth={true}>
             <InboundReports />
           </SecurityGuard>

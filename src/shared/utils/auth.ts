@@ -10,10 +10,10 @@ export const getSession = () => {
   // Mock session data
   return {
     user: {
-      id: "1",
-      name: "Admin User",
-      email: "admin@example.com",
-      role: "admin",
+      id: '1',
+      name: 'Admin User',
+      email: 'admin@example.com',
+      role: 'admin',
     },
     isAuthenticated: true,
   };

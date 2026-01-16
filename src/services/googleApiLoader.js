@@ -2,15 +2,15 @@
 // ========================
 // Proper client-side Google API loading service
 
-import { CONSTANTS } from "../utils/constants";
-import { logService } from "./logService";
+import { CONSTANTS } from '../utils/constants';
+import { logService } from './logService';
 
 const apiLogger = {
-  debug: (message, data) => logService.debug("GoogleApiLoader", message, data),
-  info: (message, data) => logService.info("GoogleApiLoader", message, data),
-  warn: (message, data) => logService.warn("GoogleApiLoader", message, data),
+  debug: (message, data) => logService.debug('GoogleApiLoader', message, data),
+  info: (message, data) => logService.info('GoogleApiLoader', message, data),
+  warn: (message, data) => logService.warn('GoogleApiLoader', message, data),
   error: (message, error) =>
-    logService.error("GoogleApiLoader", message, {
+    logService.error('GoogleApiLoader', message, {
       error: error instanceof Error ? { message: error.message, stack: error.stack } : error,
     }),
 };
@@ -39,11 +39,11 @@ class GoogleApiLoader {
       await this.loadPromise;
       this.isLoaded = true;
       this.isLoading = false;
-      apiLogger.info("Google API script loaded successfully");
+      apiLogger.info('Google API script loaded successfully');
       return Promise.resolve();
     } catch (error) {
       this.isLoading = false;
-      apiLogger.error("Failed to load Google API script", error);
+      apiLogger.error('Failed to load Google API script', error);
       throw error;
     }
   }
@@ -61,8 +61,8 @@ class GoogleApiLoader {
       }
 
       // Create script element
-      const script = document.createElement("script");
-      script.src = "https://apis.google.com/js/api.js";
+      const script = document.createElement('script');
+      script.src = 'https://apis.google.com/js/api.js';
       script.async = true;
       script.defer = true;
 
@@ -70,12 +70,12 @@ class GoogleApiLoader {
         if (window.gapi) {
           resolve();
         } else {
-          reject(new Error("Google API (gapi) not available after script load"));
+          reject(new Error('Google API (gapi) not available after script load'));
         }
       };
 
       script.onerror = () => {
-        reject(new Error("Failed to load Google API script"));
+        reject(new Error('Failed to load Google API script'));
       };
 
       document.head.appendChild(script);
@@ -88,12 +88,12 @@ class GoogleApiLoader {
       await this.loadGoogleApi();
 
       if (!window.gapi) {
-        throw new Error("Google API (gapi) not available");
+        throw new Error('Google API (gapi) not available');
       }
 
       // Load the client
       await new Promise((resolve, reject) => {
-        window.gapi.load("client:auth2", {
+        window.gapi.load('client:auth2', {
           callback: resolve,
           onerror: reject,
         });
@@ -104,17 +104,17 @@ class GoogleApiLoader {
         apiKey: CONSTANTS.GOOGLE.API_KEY,
         clientId: CONSTANTS.GOOGLE.CLIENT_ID,
         discoveryDocs: [
-          "https://sheets.googleapis.com/$discovery/rest?version=v4",
-          "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
-          "https://script.googleapis.com/$discovery/rest?version=v1",
+          'https://sheets.googleapis.com/$discovery/rest?version=v4',
+          'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+          'https://script.googleapis.com/$discovery/rest?version=v1',
         ],
-        scope: CONSTANTS.GOOGLE.SCOPES.join(" "),
+        scope: CONSTANTS.GOOGLE.SCOPES.join(' '),
       });
 
-      apiLogger.info("Google API client initialized successfully");
+      apiLogger.info('Google API client initialized successfully');
       return true;
     } catch (error) {
-      apiLogger.error("Failed to initialize Google API client", error);
+      apiLogger.error('Failed to initialize Google API client', error);
       throw error;
     }
   }
@@ -122,7 +122,7 @@ class GoogleApiLoader {
   // Get authentication instance
   getAuthInstance() {
     if (!window.gapi || !window.gapi.auth2) {
-      throw new Error("Google Auth not available");
+      throw new Error('Google Auth not available');
     }
     return window.gapi.auth2.getAuthInstance();
   }
@@ -146,7 +146,7 @@ class GoogleApiLoader {
       }
       return authInstance.currentUser.get();
     } catch (error) {
-      apiLogger.error("Failed to get current user", error);
+      apiLogger.error('Failed to get current user', error);
       return null;
     }
   }
@@ -156,10 +156,10 @@ class GoogleApiLoader {
     try {
       const authInstance = this.getAuthInstance();
       const user = await authInstance.signIn();
-      apiLogger.info("User signed in successfully");
+      apiLogger.info('User signed in successfully');
       return user;
     } catch (error) {
-      apiLogger.error("Sign in failed", error);
+      apiLogger.error('Sign in failed', error);
       throw error;
     }
   }
@@ -169,9 +169,9 @@ class GoogleApiLoader {
     try {
       const authInstance = this.getAuthInstance();
       await authInstance.signOut();
-      apiLogger.info("User signed out successfully");
+      apiLogger.info('User signed out successfully');
     } catch (error) {
-      apiLogger.error("Sign out failed", error);
+      apiLogger.error('Sign out failed', error);
       throw error;
     }
   }
@@ -185,7 +185,7 @@ class GoogleApiLoader {
       }
       return user.getAuthResponse().access_token;
     } catch (error) {
-      apiLogger.error("Failed to get access token", error);
+      apiLogger.error('Failed to get access token', error);
       return null;
     }
   }
@@ -194,12 +194,12 @@ class GoogleApiLoader {
   getAuthHeaders() {
     const accessToken = this.getAccessToken();
     if (!accessToken) {
-      throw new Error("No access token available");
+      throw new Error('No access token available');
     }
 
     return {
       Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     };
   }
 

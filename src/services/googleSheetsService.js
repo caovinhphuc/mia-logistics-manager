@@ -1,13 +1,13 @@
-import { CONSTANTS } from "../utils/constants";
-import { googleApiLoader } from "./googleApiLoader";
-import { logService } from "./logService";
+import { CONSTANTS } from '../utils/constants';
+import { googleApiLoader } from './googleApiLoader';
+import { logService } from './logService';
 
 const sheetsLogger = {
-  debug: (message, data) => logService.debug("GoogleSheetsService", message, data),
-  info: (message, data) => logService.info("GoogleSheetsService", message, data),
-  warn: (message, data) => logService.warn("GoogleSheetsService", message, data),
+  debug: (message, data) => logService.debug('GoogleSheetsService', message, data),
+  info: (message, data) => logService.info('GoogleSheetsService', message, data),
+  warn: (message, data) => logService.warn('GoogleSheetsService', message, data),
   error: (message, error, data) =>
-    logService.error("GoogleSheetsService", message, {
+    logService.error('GoogleSheetsService', message, {
       ...data,
       error: error instanceof Error ? { message: error.message, stack: error.stack } : error,
     }),
@@ -17,16 +17,16 @@ class GoogleSheetsService {
   constructor() {
     this.isConnected = false;
     this.spreadsheetId = null;
-    this.apiUrl = "https://sheets.googleapis.com/v4/spreadsheets";
+    this.apiUrl = 'https://sheets.googleapis.com/v4/spreadsheets';
   }
 
   async initialize() {
     try {
-      sheetsLogger.debug("Initializing Google Sheets Service");
+      sheetsLogger.debug('Initializing Google Sheets Service');
       await googleApiLoader.initializeClient();
-      sheetsLogger.info("Google Sheets Service initialized");
+      sheetsLogger.info('Google Sheets Service initialized');
     } catch (error) {
-      sheetsLogger.error("Google Sheets initialization failed", error);
+      sheetsLogger.error('Google Sheets initialization failed', error);
       throw error;
     }
   }
@@ -36,7 +36,7 @@ class GoogleSheetsService {
       this.spreadsheetId = spreadsheetId || CONSTANTS.GOOGLE.SPREADSHEET_ID;
 
       if (!this.spreadsheetId) {
-        throw new Error("Spreadsheet ID not provided");
+        throw new Error('Spreadsheet ID not provided');
       }
 
       // Test connection by getting spreadsheet metadata
@@ -47,7 +47,7 @@ class GoogleSheetsService {
       this.isConnected = true;
       const spreadsheet = response.result;
 
-      sheetsLogger.info("Connected to spreadsheet", {
+      sheetsLogger.info('Connected to spreadsheet', {
         spreadsheetTitle: spreadsheet.properties.title,
         spreadsheetId: this.spreadsheetId,
       });
@@ -58,7 +58,7 @@ class GoogleSheetsService {
         sheets: spreadsheet.sheets.map((sheet) => sheet.properties.title),
       };
     } catch (error) {
-      sheetsLogger.error("Failed to connect to Google Sheets", error, {
+      sheetsLogger.error('Failed to connect to Google Sheets', error, {
         spreadsheetId,
       });
       throw error;
@@ -68,13 +68,13 @@ class GoogleSheetsService {
   async disconnect() {
     this.isConnected = false;
     this.spreadsheetId = null;
-    sheetsLogger.info("Disconnected from Google Sheets");
+    sheetsLogger.info('Disconnected from Google Sheets');
   }
 
   async getValues(sheetName, range = null) {
     try {
       if (!this.isConnected) {
-        throw new Error("Not connected to Google Sheets");
+        throw new Error('Not connected to Google Sheets');
       }
 
       const fullRange = range ? `${sheetName}!${range}` : `${sheetName}!A:Z`;
@@ -94,7 +94,7 @@ class GoogleSheetsService {
   async updateValues(sheetName, range, values) {
     try {
       if (!this.isConnected) {
-        throw new Error("Not connected to Google Sheets");
+        throw new Error('Not connected to Google Sheets');
       }
 
       const fullRange = `${sheetName}!${range}`;
@@ -102,13 +102,13 @@ class GoogleSheetsService {
       const response = await window.gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: this.spreadsheetId,
         range: fullRange,
-        valueInputOption: "RAW",
+        valueInputOption: 'RAW',
         resource: {
           values: values,
         },
       });
 
-      sheetsLogger.info("Updated cells", {
+      sheetsLogger.info('Updated cells', {
         sheetName,
         updatedCells: response.result.updatedCells,
         range: fullRange,
@@ -123,7 +123,7 @@ class GoogleSheetsService {
   async appendValues(sheetName, values) {
     try {
       if (!this.isConnected) {
-        throw new Error("Not connected to Google Sheets");
+        throw new Error('Not connected to Google Sheets');
       }
 
       const fullRange = `${sheetName}!A:Z`;
@@ -131,13 +131,13 @@ class GoogleSheetsService {
       const response = await window.gapi.client.sheets.spreadsheets.values.append({
         spreadsheetId: this.spreadsheetId,
         range: fullRange,
-        valueInputOption: "RAW",
+        valueInputOption: 'RAW',
         resource: {
           values: values,
         },
       });
 
-      sheetsLogger.info("Appended rows", {
+      sheetsLogger.info('Appended rows', {
         sheetName,
         updatedRows: response.result.updates.updatedRows,
       });
@@ -151,13 +151,13 @@ class GoogleSheetsService {
   async getHeaders(sheetName) {
     try {
       if (!this.isConnected) {
-        throw new Error("Not connected to Google Sheets");
+        throw new Error('Not connected to Google Sheets');
       }
 
       // Get first row as headers
-      const values = await this.getValues(sheetName, "A1:Z1");
+      const values = await this.getValues(sheetName, 'A1:Z1');
       const headers = values[0] || [];
-      sheetsLogger.debug("Fetched headers", { sheetName, headers });
+      sheetsLogger.debug('Fetched headers', { sheetName, headers });
       return headers;
     } catch (error) {
       sheetsLogger.error(`Failed to get headers from ${sheetName}`, error);
@@ -168,7 +168,7 @@ class GoogleSheetsService {
   async createSheet(title, headers = []) {
     try {
       if (!this.isConnected) {
-        throw new Error("Not connected to spreadsheet");
+        throw new Error('Not connected to spreadsheet');
       }
 
       const sheet = await this.doc.addSheet({ title, headerValues: headers });
@@ -200,7 +200,7 @@ class GoogleSheetsService {
   async syncData() {
     try {
       if (!this.isConnected) {
-        throw new Error("Not connected to spreadsheet");
+        throw new Error('Not connected to spreadsheet');
       }
 
       // Reload document info to get latest changes
@@ -213,10 +213,10 @@ class GoogleSheetsService {
       });
 
       const result = { success: true, lastSync: new Date().toISOString() };
-      sheetsLogger.info("Spreadsheet synced", result);
+      sheetsLogger.info('Spreadsheet synced', result);
       return result;
     } catch (error) {
-      sheetsLogger.error("Failed to sync data", error);
+      sheetsLogger.error('Failed to sync data', error);
       throw error;
     }
   }
@@ -224,11 +224,11 @@ class GoogleSheetsService {
   // Helper methods
   parseRange(range) {
     // Parse A1 notation like "A1:C10"
-    const [start, end] = range.split(":");
-    const startCol = this.columnToIndex(start.replace(/\\d+/, ""));
-    const startRow = parseInt(start.replace(/[A-Z]+/, "")) - 1;
-    const endCol = this.columnToIndex(end.replace(/\\d+/, ""));
-    const endRow = parseInt(end.replace(/[A-Z]+/, "")) - 1;
+    const [start, end] = range.split(':');
+    const startCol = this.columnToIndex(start.replace(/\\d+/, ''));
+    const startRow = parseInt(start.replace(/[A-Z]+/, '')) - 1;
+    const endCol = this.columnToIndex(end.replace(/\\d+/, ''));
+    const endRow = parseInt(end.replace(/[A-Z]+/, '')) - 1;
 
     return { startRow, startCol, endRow, endCol };
   }
@@ -236,7 +236,7 @@ class GoogleSheetsService {
   columnToIndex(column) {
     let result = 0;
     for (let i = 0; i < column.length; i++) {
-      result = result * 26 + (column.charCodeAt(i) - "A".charCodeAt(0) + 1);
+      result = result * 26 + (column.charCodeAt(i) - 'A'.charCodeAt(0) + 1);
     }
     return result - 1;
   }
@@ -259,11 +259,11 @@ class GoogleSheetsService {
 
   // Predefined sheet operations for MIA Logistics
   async getTransportRequests() {
-    return await this.getValues("Transport_Requests");
+    return await this.getValues('Transport_Requests');
   }
 
   async addTransportRequest(requestData) {
-    return await this.appendValues("Transport_Requests", [requestData]);
+    return await this.appendValues('Transport_Requests', [requestData]);
   }
 
   async updateTransportRequest(_requestId, _updates) {
@@ -272,7 +272,7 @@ class GoogleSheetsService {
   }
 
   async getWarehouseInventory() {
-    return await this.getValues("Warehouse_Inventory");
+    return await this.getValues('Warehouse_Inventory');
   }
 
   async updateInventory(_itemCode, _quantity) {
@@ -280,11 +280,11 @@ class GoogleSheetsService {
   }
 
   async getStaffList() {
-    return await this.getValues("Staff_Management");
+    return await this.getValues('Staff_Management');
   }
 
   async getPartnersList() {
-    return await this.getValues("Partners_Data");
+    return await this.getValues('Partners_Data');
   }
 }
 

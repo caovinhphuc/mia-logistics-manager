@@ -63,7 +63,7 @@
         align-items: center;
         z-index: 9999;
         color: white;
-        font-family: "Roboto", sans-serif;
+        font-family: 'Roboto', sans-serif;
       }
 
       .loading-logo {
@@ -123,17 +123,17 @@
       body {
         margin: 0;
         font-family:
-          "Roboto",
-          "Inter",
+          'Roboto',
+          'Inter',
           -apple-system,
           BlinkMacSystemFont,
-          "Segoe UI",
-          "Oxygen",
-          "Ubuntu",
-          "Cantarell",
-          "Fira Sans",
-          "Droid Sans",
-          "Helvetica Neue",
+          'Segoe UI',
+          'Oxygen',
+          'Ubuntu',
+          'Cantarell',
+          'Fira Sans',
+          'Droid Sans',
+          'Helvetica Neue',
           sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -141,7 +141,7 @@
       }
 
       code {
-        font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+        font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
       }
 
       /* Responsive design helpers */
@@ -159,11 +159,53 @@
         }
       }
     </style>
+    <!-- Content Security Policy -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' *.googleapis.com *.google.com *.gstatic.com www.googletagmanager.com;
+      style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
+      font-src 'self' fonts.gstatic.com data:;
+      img-src 'self' data: *.googleapis.com *.google.com *.gstatic.com;
+      connect-src 'self' http://localhost:3100 http://localhost:3000 *.googleapis.com *.google.com *.gstatic.com;
+      frame-src 'self' *.google.com;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+    "
+    />
+
+    <!-- Google Analytics (commented out - uncomment and set REACT_APP_GA_MEASUREMENT_ID to enable) -->
+    <!--
+     <script>
+       // Only load Google Analytics if measurement ID is configured via environment variable
+       const gaMeasurementId = process?.env?.REACT_APP_GA_MEASUREMENT_ID || window.REACT_APP_GA_MEASUREMENT_ID;
+       if (gaMeasurementId && gaMeasurementId !== 'GA_MEASUREMENT_ID') {
+         // Load gtag script
+         const script = document.createElement('script');
+         script.async = true;
+         script.src = `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`;
+         document.head.appendChild(script);
+         
+         // Initialize gtag
+         window.dataLayer = window.dataLayer || [];
+         function gtag() {
+           dataLayer.push(arguments);
+         }
+         gtag('js', new Date());
+         gtag('config', gaMeasurementId, {
+           page_title: document.title,
+           page_location: window.location.href,
+         });
+       }
+     </script>
+     -->
   </head>
 
   <body>
     <noscript>
-      <div style="text-align: center; padding: 50px; font-family: &quot;Roboto&quot;, sans-serif">
+      <div style="text-align: center; padding: 50px; font-family: 'Roboto', sans-serif">
         <h2>Vui lòng bật JavaScript</h2>
         <p>Ứng dụng MIA Logistics Manager cần JavaScript để hoạt động.</p>
         <p>Please enable JavaScript to run MIA Logistics Manager.</p>

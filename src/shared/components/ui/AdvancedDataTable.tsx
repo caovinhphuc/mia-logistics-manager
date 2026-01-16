@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -9,16 +9,16 @@ import {
   Paper,
   Typography,
   Box,
-} from "@mui/material";
+} from '@mui/material';
 
 export interface AdvancedTableColumn<T> {
   id: keyof T | string;
   label: string;
   minWidth?: number;
-  align?: "left" | "center" | "right";
+  align?: 'left' | 'center' | 'right';
   sortable?: boolean;
   searchable?: boolean;
-  format?: "date" | "number" | "status";
+  format?: 'date' | 'number' | 'status';
   render?: (value: any, row: T) => React.ReactNode;
 }
 
@@ -44,7 +44,7 @@ export function AdvancedDataTable<T>({
   showRowNumbers = false,
   alternateRowColors = false,
   hoverEffects = true,
-  emptyMessage = "Không có dữ liệu",
+  emptyMessage = 'Không có dữ liệu',
   actions,
 }: AdvancedDataTableProps<T>) {
   return (
@@ -64,20 +64,20 @@ export function AdvancedDataTable<T>({
         </Box>
       )}
 
-      {actions && <Box sx={{ mb: 2, display: "flex", justifyContent: "flex-end" }}>{actions}</Box>}
+      {actions && <Box sx={{ mb: 2, display: 'flex', justifyContent: 'flex-end' }}>{actions}</Box>}
 
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              {showRowNumbers && <TableCell sx={{ fontWeight: "bold" }}>#</TableCell>}
+              {showRowNumbers && <TableCell sx={{ fontWeight: 'bold' }}>#</TableCell>}
               {columns.map((column) => (
                 <TableCell
                   key={String(column.id)}
-                  align={column.align || "left"}
+                  align={column.align || 'left'}
                   sx={{
                     minWidth: column.minWidth,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                   }}
                 >
                   {column.label}
@@ -102,15 +102,15 @@ export function AdvancedDataTable<T>({
                   key={index}
                   hover={hoverEffects}
                   sx={{
-                    backgroundColor: alternateRowColors && index % 2 === 1 ? "grey.50" : "white",
+                    backgroundColor: alternateRowColors && index % 2 === 1 ? 'grey.50' : 'white',
                   }}
                 >
                   {showRowNumbers && <TableCell>{index + 1}</TableCell>}
                   {columns.map((column) => {
                     const value = (row as any)[column.id];
                     return (
-                      <TableCell key={String(column.id)} align={column.align || "left"}>
-                        {column.render ? column.render(value, row) : String(value || "")}
+                      <TableCell key={String(column.id)} align={column.align || 'left'}>
+                        {column.render ? column.render(value, row) : String(value || '')}
                       </TableCell>
                     );
                   })}

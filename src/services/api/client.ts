@@ -1,14 +1,14 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance } from 'axios';
 
 class APIClient {
   private client: AxiosInstance;
 
   constructor() {
     this.client = axios.create({
-      baseURL: process.env.REACT_APP_API_BASE_URL || "http://localhost:3000",
+      baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000',
       timeout: 30000,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -19,7 +19,7 @@ class APIClient {
     this.client.interceptors.response.use(
       (response) => response,
       (error) => {
-        console.error("API Error:", error);
+        console.error('API Error:', error);
         return Promise.reject(error);
       }
     );

@@ -1,5 +1,5 @@
-import InboundDetailCard from "./components/InboundDetailCard";
-import React, { useState, useEffect } from "react";
+import InboundDetailCard from './components/InboundDetailCard';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -20,7 +20,7 @@ import {
   Chip,
   Tooltip,
   TextField,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -37,31 +37,31 @@ import {
   Timeline as TimelineIcon,
   Description as DocumentIcon,
   Category as ProductIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 // Import shared components
-import { TableView } from "./components/table";
-import { CalendarView } from "./components/calendar";
-import { AddEditDialog } from "./components/dialogs";
-import { InboundItem } from "./types/inbound";
+import { TableView } from './components/table';
+import { CalendarView } from './components/calendar';
+import { AddEditDialog } from './components/dialogs';
+import { InboundItem } from './types/inbound';
 // Use function-based service API and correct relative path to src/services
 import {
   getInboundScheduleItems,
   addInboundScheduleItem,
   updateInboundScheduleItem,
   deleteInboundScheduleItem,
-} from "../../services/googleSheets/inboundScheduleService";
+} from '../../services/googleSheets/inboundScheduleService';
 import {
   addTimelineDescription,
   addDocumentStatusDescription,
   getCurrentUser,
-} from "./utils/descriptionUtils";
-import { useFormFields, useItemManagement, useDialogs, useCalendar } from "./hooks";
+} from './utils/descriptionUtils';
+import { useFormFields, useItemManagement, useDialogs, useCalendar } from './hooks';
 // Removed MUI X Date Pickers to avoid extra dependency
 
 const InboundSchedule: React.FC = () => {
   const [editingItem, setEditingItem] = useState<InboundItem | null>(null);
-  const [viewMode, setViewMode] = useState<"calendar" | "table">("calendar");
+  const [viewMode, setViewMode] = useState<'calendar' | 'table'>('calendar');
 
   // Use extracted hooks
   const { formFields, setField, resetForm } = useFormFields();
@@ -103,14 +103,14 @@ const InboundSchedule: React.FC = () => {
     handlePrevMonth,
     handleNextMonth,
   } = useCalendar();
-  const [activeTab, setActiveTab] = useState<"all" | "international" | "domestic">("all");
+  const [activeTab, setActiveTab] = useState<'all' | 'international' | 'domestic'>('all');
 
   // Filter states
-  const [selectedDestination, setSelectedDestination] = useState<string>("all");
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
-  const [quickDateFilter, setQuickDateFilter] = useState<string>("all");
-  const [customDateFrom, setCustomDateFrom] = useState<string>("");
-  const [customDateTo, setCustomDateTo] = useState<string>("");
+  const [selectedDestination, setSelectedDestination] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [quickDateFilter, setQuickDateFilter] = useState<string>('all');
+  const [customDateFrom, setCustomDateFrom] = useState<string>('');
+  const [customDateTo, setCustomDateTo] = useState<string>('');
 
   // Action menu state
   const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(null);
@@ -135,8 +135,8 @@ const InboundSchedule: React.FC = () => {
 
       setInboundItems(items);
     } catch (err) {
-      setError("Không thể tải dữ liệu");
-      console.error("Error loading data:", err);
+      setError('Không thể tải dữ liệu');
+      // console.error("Error loading data:", err);
     } finally {
       setLoading(false);
     }
@@ -145,34 +145,34 @@ const InboundSchedule: React.FC = () => {
   const handleActionMenuAction = async (action: string, item: InboundItem) => {
     try {
       switch (action) {
-        case "edit":
+        case 'edit':
           setEditingItem(item);
           // Load item data into form - this should preserve existing data
           loadItemData(item);
           openAddDialog();
           break;
-        case "delete":
-          if (window.confirm("Bạn có chắc chắn muốn xóa item này?")) {
-            if (item.type === "international") {
+        case 'delete':
+          if (window.confirm('Bạn có chắc chắn muốn xóa item này?')) {
+            if (item.type === 'international') {
               await deleteInboundScheduleItem(item.id);
               await reloadData();
             } else {
               // Domestic items - gọi deleteInboundDomesticItem
               const { deleteInboundDomesticItem } = await import(
-                "../../services/googleSheets/inboundDomesticService"
+                '../../services/googleSheets/inboundDomesticService'
               );
               await deleteInboundDomesticItem(item.id);
               await reloadData();
             }
           }
           break;
-        case "add-calendar":
+        case 'add-calendar':
           // Handle add to calendar
-          console.log("Add to calendar:", item);
+          // console.log("Add to calendar:", item);
           break;
       }
     } catch (error) {
-      console.error("Error handling action:", error);
+      // console.error("Error handling action:", error);
     } finally {
       setActionMenuAnchor(null);
       setSelectedItemForAction(null);
@@ -181,16 +181,16 @@ const InboundSchedule: React.FC = () => {
 
   const filteredItems = inboundItems.filter((item) => {
     // Filter by tab
-    if (activeTab !== "all" && item.type !== activeTab) return false;
+    if (activeTab !== 'all' && item.type !== activeTab) return false;
 
     // Filter by destination
-    if (selectedDestination !== "all" && item.destination !== selectedDestination) return false;
+    if (selectedDestination !== 'all' && item.destination !== selectedDestination) return false;
 
     // Filter by status
-    if (selectedStatus !== "all" && item.status !== selectedStatus) return false;
+    if (selectedStatus !== 'all' && item.status !== selectedStatus) return false;
 
     // Filter by date (quick filter)
-    if (quickDateFilter !== "all") {
+    if (quickDateFilter !== 'all') {
       const dateRange = getDateRange(quickDateFilter);
       if (!isDateInRange(item.date, dateRange)) return false;
     }
@@ -201,8 +201,8 @@ const InboundSchedule: React.FC = () => {
       const toDate = new Date(customDateTo);
 
       const parseDate = (dateStr: string): Date => {
-        if (dateStr.includes("/")) {
-          const [day, month, year] = dateStr.split("/");
+        if (dateStr.includes('/')) {
+          const [day, month, year] = dateStr.split('/');
           return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
         }
         return new Date(dateStr);
@@ -219,8 +219,8 @@ const InboundSchedule: React.FC = () => {
   const destinations = [...new Set(inboundItems.map((item) => item.destination).filter(Boolean))];
 
   // Helper: Auto-detect type dựa vào origin
-  const detectItemType = (origin: string): "international" | "domestic" => {
-    return origin && origin.trim() ? "international" : "domestic";
+  const detectItemType = (origin: string): 'international' | 'domestic' => {
+    return origin && origin.trim() ? 'international' : 'domestic';
   };
 
   const handleAddInternational = () => {
@@ -228,7 +228,7 @@ const InboundSchedule: React.FC = () => {
     resetAllItems();
     resetForm();
     // Pre-fill để auto-detect thành international (origin không trống)
-    setField("origin", "NINGBO"); // Default international origin
+    setField('origin', 'NINGBO'); // Default international origin
     openAddDialog();
   };
 
@@ -237,7 +237,7 @@ const InboundSchedule: React.FC = () => {
     resetAllItems();
     resetForm();
     // Pre-fill để auto-detect thành domestic (origin trống)
-    setField("origin", ""); // Empty origin = domestic
+    setField('origin', ''); // Empty origin = domestic
     openAddDialog();
   };
 
@@ -245,8 +245,8 @@ const InboundSchedule: React.FC = () => {
     try {
       if (editingItem) {
         // Update existing item: merge form fields and current lists
-        const poNumbers = (formFields.poNumbersInput || "")
-          .split(",")
+        const poNumbers = (formFields.poNumbersInput || '')
+          .split(',')
           .map((s: string) => s.trim())
           .filter(Boolean);
 
@@ -261,25 +261,25 @@ const InboundSchedule: React.FC = () => {
         const est =
           formFields.estimatedArrival ||
           (selectedDate
-            ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, "0")}-${String(
+            ? `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(
                 selectedDate.getDate()
-              ).padStart(2, "0")}`
-            : "");
-        const act = formFields.actualArrival || "";
+              ).padStart(2, '0')}`
+            : '');
+        const act = formFields.actualArrival || '';
 
         // Note: timelineItems from hook already contains the updated timeline data
 
         const updated: InboundItem = {
           ...editingItem,
           // date là ngày tạo lịch (không phụ thuộc receive)
-          date: formFields.date || new Date().toLocaleDateString("vi-VN"),
+          date: formFields.date || new Date().toLocaleDateString('vi-VN'),
           supplier: formFields.supplier,
           origin: formFields.origin,
           destination: formFields.destination,
           type: detectItemType(formFields.origin), // Auto-update type theo origin
           product: formFields.product,
           quantity: formFields.quantity,
-          status: formFields.status as InboundItem["status"],
+          status: formFields.status as InboundItem['status'],
           estimatedArrival: est,
           actualArrival: act,
           carrier: formFields.carrier,
@@ -308,7 +308,7 @@ const InboundSchedule: React.FC = () => {
         } as InboundItem;
 
         // Handle update theo type
-        if (updated.type === "international") {
+        if (updated.type === 'international') {
           await updateInboundScheduleItem(updated);
           await reloadData();
           // Reset data sau khi update thành công để chuẩn bị cho lần thêm tiếp theo
@@ -316,9 +316,9 @@ const InboundSchedule: React.FC = () => {
           resetForm();
         } else {
           // Domestic items - gọi updateInboundDomesticItem
-          console.log("Updating domestic item:", updated);
+          // console.log("Updating domestic item:", updated);
           const { updateInboundDomesticItem } = await import(
-            "../../services/googleSheets/inboundDomesticService"
+            '../../services/googleSheets/inboundDomesticService'
           );
           await updateInboundDomesticItem(updated.id, {
             date: updated.date,
@@ -333,7 +333,7 @@ const InboundSchedule: React.FC = () => {
             purpose: updated.purpose,
             receiveTime: updated.receiveTime,
             estimatedArrival: updated.estimatedArrival,
-            actualArrival: updated.actualArrival || "",
+            actualArrival: updated.actualArrival || '',
             notes: updated.notes,
           });
           await reloadData();
@@ -342,8 +342,8 @@ const InboundSchedule: React.FC = () => {
         }
       } else {
         // Add new item → persist to Google Sheets via service
-        const poNumbers = (formFields.poNumbersInput || "")
-          .split(",")
+        const poNumbers = (formFields.poNumbersInput || '')
+          .split(',')
           .map((s: string) => s.trim())
           .filter(Boolean);
 
@@ -351,34 +351,34 @@ const InboundSchedule: React.FC = () => {
 
         // date = ngày tạo lịch (thời điểm thao tác), độc lập với ngày nhập hàng
         const createdDate = new Date();
-        const createdIso = createdDate.toLocaleDateString("vi-VN");
+        const createdIso = createdDate.toLocaleDateString('vi-VN');
 
         const est =
           formFields.estimatedArrival ||
-          (selectedDate ? selectedDate.toLocaleDateString("vi-VN") : "");
-        const act = formFields.actualArrival || "";
+          (selectedDate ? selectedDate.toLocaleDateString('vi-VN') : '');
+        const act = formFields.actualArrival || '';
         // scheduleDate chỉ dùng để đảm bảo milestone receive, không dùng set cột date
         // removed unused scheduleDate; only used within timeline ensure below
 
         // ensure Ngày nhập hàng milestone exists and filled
         const ensuredTimeline = (() => {
           const cloned = [...timelineItems];
-          const idx = cloned.findIndex((t) => t.name === "Ngày nhập hàng");
+          const idx = cloned.findIndex((t) => t.name === 'Ngày nhập hàng');
           if (idx >= 0) {
             cloned[idx] = {
               ...cloned[idx],
               estimatedDate: cloned[idx].estimatedDate || est,
               date: cloned[idx].date || act,
-              status: cloned[idx].status || "pending",
+              status: cloned[idx].status || 'pending',
             } as (typeof cloned)[number];
           } else {
             cloned.push({
               id: `timeline_${Date.now()}`,
-              name: "Ngày nhập hàng",
+              name: 'Ngày nhập hàng',
               estimatedDate: est,
               date: act,
-              status: "pending",
-              description: "",
+              status: 'pending',
+              description: '',
             });
           }
           return cloned;
@@ -392,7 +392,7 @@ const InboundSchedule: React.FC = () => {
           destination: formFields.destination,
           product: formFields.product,
           quantity: formFields.quantity,
-          status: formFields.status as InboundItem["status"],
+          status: formFields.status as InboundItem['status'],
           estimatedArrival: est,
           actualArrival: act,
           type: detectItemType(formFields.origin), // Auto-detect dựa vào origin
@@ -423,7 +423,7 @@ const InboundSchedule: React.FC = () => {
         } as unknown as InboundItem;
 
         // Handle add theo type
-        if (payload.type === "international") {
+        if (payload.type === 'international') {
           await addInboundScheduleItem(payload);
           await reloadData();
           // Reset data sau khi save thành công để chuẩn bị cho lần thêm tiếp theo
@@ -431,9 +431,9 @@ const InboundSchedule: React.FC = () => {
           resetForm();
         } else {
           // Domestic items - gọi addInboundDomesticItem
-          console.log("Adding domestic item:", payload);
+          // console.log("Adding domestic item:", payload);
           const { addInboundDomesticItem } = await import(
-            "../../services/googleSheets/inboundDomesticService"
+            '../../services/googleSheets/inboundDomesticService'
           );
           await addInboundDomesticItem({
             date: payload.date,
@@ -448,7 +448,7 @@ const InboundSchedule: React.FC = () => {
             purpose: payload.purpose,
             receiveTime: payload.receiveTime,
             estimatedArrival: payload.estimatedArrival,
-            actualArrival: payload.actualArrival || "",
+            actualArrival: payload.actualArrival || '',
             notes: payload.notes,
           });
           await reloadData();
@@ -457,7 +457,7 @@ const InboundSchedule: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error("Error saving item:", error);
+      // console.error("Error saving item:", error);
     }
     closeDialog();
   };
@@ -475,7 +475,7 @@ const InboundSchedule: React.FC = () => {
       }
 
       // Fallback về quantity field (ensure integer)
-      const qty = parseInt(item.quantity?.toString() || "0") || 0;
+      const qty = parseInt(item.quantity?.toString() || '0') || 0;
       return sum + qty;
     }, 0);
   };
@@ -487,7 +487,7 @@ const InboundSchedule: React.FC = () => {
     filteredItems.forEach((item) => {
       if (item.documentStatus && item.documentStatus.length > 0) {
         item.documentStatus.forEach((doc) => {
-          const status = doc.status || "pending";
+          const status = doc.status || 'pending';
           statusMap[status] = (statusMap[status] || 0) + 1;
         });
       }
@@ -505,28 +505,28 @@ const InboundSchedule: React.FC = () => {
     filteredItems.forEach((item) => {
       if (item.documentStatus && item.documentStatus.length > 0) {
         item.documentStatus.forEach((doc) => {
-          const docName = doc.name || "Không xác định";
+          const docName = doc.name || 'Không xác định';
 
           // Initialize document type if not exists
           if (!docTypeMap[docName]) {
             docTypeMap[docName] = {
-              "Đúng hạn": 0,
-              "Trước hạn": 0,
-              "Trễ hạn": 0,
-              "Chưa xác định": 0,
+              'Đúng hạn': 0,
+              'Trước hạn': 0,
+              'Trễ hạn': 0,
+              'Chưa xác định': 0,
             };
           }
 
           // Calculate delay status
           if (!doc.estimatedDate || !doc.date) {
-            docTypeMap[docName]["Chưa xác định"] += 1;
+            docTypeMap[docName]['Chưa xác định'] += 1;
             return;
           }
 
           // Parse dates
           const parseDate = (dateStr: string): Date => {
-            if (dateStr.includes("/")) {
-              const [day, month, year] = dateStr.split("/");
+            if (dateStr.includes('/')) {
+              const [day, month, year] = dateStr.split('/');
               return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
             }
             return new Date(dateStr);
@@ -536,13 +536,13 @@ const InboundSchedule: React.FC = () => {
           const actual = parseDate(doc.date);
 
           if (estimated.getTime() === actual.getTime()) {
-            docTypeMap[docName]["Đúng hạn"] += 1;
+            docTypeMap[docName]['Đúng hạn'] += 1;
           } else if (actual < estimated) {
-            docTypeMap[docName]["Trước hạn"] += 1;
+            docTypeMap[docName]['Trước hạn'] += 1;
           } else if (actual > estimated) {
-            docTypeMap[docName]["Trễ hạn"] += 1;
+            docTypeMap[docName]['Trễ hạn'] += 1;
           } else {
-            docTypeMap[docName]["Chưa xác định"] += 1;
+            docTypeMap[docName]['Chưa xác định'] += 1;
           }
         });
       }
@@ -566,28 +566,28 @@ const InboundSchedule: React.FC = () => {
     filteredItems.forEach((item) => {
       if (item.timeline && item.timeline.length > 0) {
         item.timeline.forEach((timeline) => {
-          const timelineName = timeline.name || "Không xác định";
+          const timelineName = timeline.name || 'Không xác định';
 
           // Initialize timeline type if not exists
           if (!timelineTypeMap[timelineName]) {
             timelineTypeMap[timelineName] = {
-              "Đúng hạn": 0,
-              "Trước hạn": 0,
-              "Trễ hạn": 0,
-              "Chưa xác định": 0,
+              'Đúng hạn': 0,
+              'Trước hạn': 0,
+              'Trễ hạn': 0,
+              'Chưa xác định': 0,
             };
           }
 
           // Calculate delay status
           if (!timeline.estimatedDate || !timeline.date) {
-            timelineTypeMap[timelineName]["Chưa xác định"] += 1;
+            timelineTypeMap[timelineName]['Chưa xác định'] += 1;
             return;
           }
 
           // Parse dates
           const parseDate = (dateStr: string): Date => {
-            if (dateStr.includes("/")) {
-              const [day, month, year] = dateStr.split("/");
+            if (dateStr.includes('/')) {
+              const [day, month, year] = dateStr.split('/');
               return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
             }
             return new Date(dateStr);
@@ -597,11 +597,11 @@ const InboundSchedule: React.FC = () => {
           const actual = parseDate(timeline.date);
 
           if (estimated.getTime() === actual.getTime()) {
-            timelineTypeMap[timelineName]["Đúng hạn"] += 1;
+            timelineTypeMap[timelineName]['Đúng hạn'] += 1;
           } else if (actual.getTime() < estimated.getTime()) {
-            timelineTypeMap[timelineName]["Trước hạn"] += 1;
+            timelineTypeMap[timelineName]['Trước hạn'] += 1;
           } else {
-            timelineTypeMap[timelineName]["Trễ hạn"] += 1;
+            timelineTypeMap[timelineName]['Trễ hạn'] += 1;
           }
         });
       }
@@ -609,12 +609,12 @@ const InboundSchedule: React.FC = () => {
 
     // Thứ tự cố định cho 6 mốc thời gian (bỏ "Ngày tạo phiếu")
     const timelineOrder = [
-      "Cargo Ready",
-      "ETD",
-      "ETA",
-      "Ngày hàng đi",
-      "Ngày hàng về cảng",
-      "Ngày nhận hàng",
+      'Cargo Ready',
+      'ETD',
+      'ETA',
+      'Ngày hàng đi',
+      'Ngày hàng về cảng',
+      'Ngày nhận hàng',
     ];
 
     // Convert to entries và sắp xếp theo thứ tự cố định
@@ -622,10 +622,10 @@ const InboundSchedule: React.FC = () => {
       .map((timelineName) => ({
         timelineName,
         delays: timelineTypeMap[timelineName] || {
-          "Đúng hạn": 0,
-          "Trước hạn": 0,
-          "Trễ hạn": 0,
-          "Chưa xác định": 0,
+          'Đúng hạn': 0,
+          'Trước hạn': 0,
+          'Trễ hạn': 0,
+          'Chưa xác định': 0,
         },
         totalCount: timelineTypeMap[timelineName]
           ? Object.values(timelineTypeMap[timelineName]).reduce((sum, count) => sum + count, 0)
@@ -654,22 +654,22 @@ const InboundSchedule: React.FC = () => {
       new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
 
     switch (filterType) {
-      case "today":
+      case 'today':
         return { start: startOfDay(today), end: endOfDay(today) };
 
-      case "yesterday": {
+      case 'yesterday': {
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
         return { start: startOfDay(yesterday), end: endOfDay(yesterday) };
       }
 
-      case "thisWeek": {
+      case 'thisWeek': {
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay());
         return { start: startOfDay(startOfWeek), end: endOfDay(today) };
       }
 
-      case "lastWeek": {
+      case 'lastWeek': {
         const startOfLastWeek = new Date(today);
         startOfLastWeek.setDate(today.getDate() - today.getDay() - 7);
         const endOfLastWeek = new Date(startOfLastWeek);
@@ -680,23 +680,23 @@ const InboundSchedule: React.FC = () => {
         };
       }
 
-      case "thisMonth": {
+      case 'thisMonth': {
         const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
         return { start: startOfMonth, end: endOfDay(today) };
       }
 
-      case "lastMonth": {
+      case 'lastMonth': {
         const startOfLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
         const endOfLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
         return { start: startOfLastMonth, end: endOfDay(endOfLastMonth) };
       }
 
-      case "thisYear": {
+      case 'thisYear': {
         const startOfYear = new Date(today.getFullYear(), 0, 1);
         return { start: startOfYear, end: endOfDay(today) };
       }
 
-      case "lastYear": {
+      case 'lastYear': {
         const startOfLastYear = new Date(today.getFullYear() - 1, 0, 1);
         const endOfLastYear = new Date(today.getFullYear() - 1, 11, 31);
         return { start: startOfLastYear, end: endOfDay(endOfLastYear) };
@@ -715,8 +715,8 @@ const InboundSchedule: React.FC = () => {
 
     // Parse item date
     const parseDate = (dateStr: string): Date => {
-      if (dateStr.includes("/")) {
-        const [day, month, year] = dateStr.split("/");
+      if (dateStr.includes('/')) {
+        const [day, month, year] = dateStr.split('/');
         return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       }
       return new Date(dateStr);
@@ -728,8 +728,8 @@ const InboundSchedule: React.FC = () => {
 
   // Helper: Đếm online/offline với tổng sản phẩm
   const getOnlineOfflineCount = () => {
-    const onlineItems = filteredItems.filter((item) => item.purpose === "online");
-    const offlineItems = filteredItems.filter((item) => item.purpose === "offline");
+    const onlineItems = filteredItems.filter((item) => item.purpose === 'online');
+    const offlineItems = filteredItems.filter((item) => item.purpose === 'offline');
 
     const onlineCount = onlineItems.length;
     const offlineCount = offlineItems.length;
@@ -744,7 +744,7 @@ const InboundSchedule: React.FC = () => {
         return sum + packagingTotal;
       }
       // Fallback to item quantity nếu không có packaging
-      return sum + (parseInt(item.quantity?.toString() || "0") || 0);
+      return sum + (parseInt(item.quantity?.toString() || '0') || 0);
     }, 0);
 
     const offlineQuantity = offlineItems.reduce((sum, item) => {
@@ -757,7 +757,7 @@ const InboundSchedule: React.FC = () => {
         return sum + packagingTotal;
       }
       // Fallback to item quantity nếu không có packaging
-      return sum + (parseInt(item.quantity?.toString() || "0") || 0);
+      return sum + (parseInt(item.quantity?.toString() || '0') || 0);
     }, 0);
 
     return {
@@ -775,7 +775,7 @@ const InboundSchedule: React.FC = () => {
     filteredItems.forEach((item) => {
       if (item.packaging && item.packaging.length > 0) {
         item.packaging.forEach((pack) => {
-          const packType = pack.type || "N/A";
+          const packType = pack.type || 'N/A';
           const quantity = parseInt(pack.quantity.toString()) || 0;
           packagingMap[packType] = (packagingMap[packType] || 0) + quantity;
         });
@@ -808,7 +808,7 @@ const InboundSchedule: React.FC = () => {
 
     filteredItems.forEach((item) => {
       // Ưu tiên category trước, không dùng product name cụ thể
-      const category = item.category || "Khác";
+      const category = item.category || 'Khác';
 
       // Tính tổng quantity của item này
       if (item.packaging && item.packaging.length > 0) {
@@ -817,7 +817,7 @@ const InboundSchedule: React.FC = () => {
         }, 0);
         categoryMap[category] = (categoryMap[category] || 0) + totalPackagingQty;
       } else {
-        const qty = parseInt(item.quantity?.toString() || "0") || 0;
+        const qty = parseInt(item.quantity?.toString() || '0') || 0;
         categoryMap[category] = (categoryMap[category] || 0) + qty;
       }
     });
@@ -833,29 +833,29 @@ const InboundSchedule: React.FC = () => {
       {/* Header */}
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           mb: 3,
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
           Lịch nhập hàng Tổng hợp
         </Typography>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
           <Button variant="outlined" startIcon={<ScheduleIcon />} onClick={reloadData}>
             Làm mới
           </Button>
           <Button
-            variant={viewMode === "calendar" ? "contained" : "outlined"}
-            onClick={() => setViewMode("calendar")}
+            variant={viewMode === 'calendar' ? 'contained' : 'outlined'}
+            onClick={() => setViewMode('calendar')}
             startIcon={<ScheduleIcon />}
           >
             Lịch
           </Button>
           <Button
-            variant={viewMode === "table" ? "contained" : "outlined"}
-            onClick={() => setViewMode("table")}
+            variant={viewMode === 'table' ? 'contained' : 'outlined'}
+            onClick={() => setViewMode('table')}
           >
             Bảng
           </Button>
@@ -865,12 +865,12 @@ const InboundSchedule: React.FC = () => {
       {/* Tabs - Centered */}
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
+          display: 'flex',
+          justifyContent: 'center',
           mb: 3,
         }}
       >
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
             value={activeTab}
             onChange={(_, newValue) => setActiveTab(newValue)}
@@ -884,13 +884,13 @@ const InboundSchedule: React.FC = () => {
               iconPosition="start"
             />
             <Tab
-              label={`Quốc tế (${inboundItems.filter((item) => item.type === "international").length})`}
+              label={`Quốc tế (${inboundItems.filter((item) => item.type === 'international').length})`}
               value="international"
               icon={<FlightIcon />}
               iconPosition="start"
             />
             <Tab
-              label={`Quốc nội (${inboundItems.filter((item) => item.type === "domestic").length})`}
+              label={`Quốc nội (${inboundItems.filter((item) => item.type === 'domestic').length})`}
               value="domestic"
               icon={<HomeIcon />}
               iconPosition="start"
@@ -902,22 +902,22 @@ const InboundSchedule: React.FC = () => {
       {/* Bộ lọc */}
       <Box
         sx={{
-          display: "flex",
+          display: 'flex',
           gap: 2,
           mb: 3,
           p: 2,
-          bgcolor: "background.paper",
+          bgcolor: 'background.paper',
           borderRadius: 2,
-          border: "1px solid",
-          borderColor: "divider",
+          border: '1px solid',
+          borderColor: 'divider',
         }}
       >
         <Typography
           variant="subtitle2"
           sx={{
-            color: "text.primary",
+            color: 'text.primary',
             fontWeight: 600,
-            alignSelf: "center",
+            alignSelf: 'center',
             minWidth: 60,
           }}
         >
@@ -934,7 +934,7 @@ const InboundSchedule: React.FC = () => {
             <MenuItem value="all">Tất cả kho</MenuItem>
             {destinations.map((dest) => (
               <MenuItem key={dest} value={dest}>
-                {dest.length > 50 ? dest.substring(0, 50) + "..." : dest}
+                {dest.length > 50 ? dest.substring(0, 50) + '...' : dest}
               </MenuItem>
             ))}
           </Select>
@@ -964,9 +964,9 @@ const InboundSchedule: React.FC = () => {
             onChange={(e) => {
               setQuickDateFilter(e.target.value);
               // Reset custom date khi chọn quick filter
-              if (e.target.value !== "all") {
-                setCustomDateFrom("");
-                setCustomDateTo("");
+              if (e.target.value !== 'all') {
+                setCustomDateFrom('');
+                setCustomDateTo('');
               }
             }}
             label="Lọc nhanh"
@@ -992,7 +992,7 @@ const InboundSchedule: React.FC = () => {
             setCustomDateFrom(e.target.value);
             // Reset quick filter khi chọn custom date
             if (e.target.value) {
-              setQuickDateFilter("all");
+              setQuickDateFilter('all');
             }
           }}
           InputLabelProps={{
@@ -1010,7 +1010,7 @@ const InboundSchedule: React.FC = () => {
             setCustomDateTo(e.target.value);
             // Reset quick filter khi chọn custom date
             if (e.target.value) {
-              setQuickDateFilter("all");
+              setQuickDateFilter('all');
             }
           }}
           InputLabelProps={{
@@ -1023,11 +1023,11 @@ const InboundSchedule: React.FC = () => {
           variant="outlined"
           size="small"
           onClick={() => {
-            setSelectedDestination("all");
-            setSelectedStatus("all");
-            setQuickDateFilter("all");
-            setCustomDateFrom("");
-            setCustomDateTo("");
+            setSelectedDestination('all');
+            setSelectedStatus('all');
+            setQuickDateFilter('all');
+            setCustomDateFrom('');
+            setCustomDateTo('');
           }}
           sx={{ minWidth: 100 }}
         >
@@ -1037,52 +1037,52 @@ const InboundSchedule: React.FC = () => {
         {/* Filter indicators */}
         <Box
           sx={{
-            display: "flex",
+            display: 'flex',
             gap: 1,
-            flexWrap: "wrap",
-            alignItems: "center",
+            flexWrap: 'wrap',
+            alignItems: 'center',
           }}
         >
-          {selectedDestination !== "all" && (
+          {selectedDestination !== 'all' && (
             <Chip
-              label={`📍 ${selectedDestination.substring(0, 30)}${selectedDestination.length > 30 ? "..." : ""}`}
+              label={`📍 ${selectedDestination.substring(0, 30)}${selectedDestination.length > 30 ? '...' : ''}`}
               size="small"
               color="primary"
               variant="outlined"
-              onDelete={() => setSelectedDestination("all")}
-              sx={{ fontSize: "0.7rem" }}
+              onDelete={() => setSelectedDestination('all')}
+              sx={{ fontSize: '0.7rem' }}
             />
           )}
-          {selectedStatus !== "all" && (
+          {selectedStatus !== 'all' && (
             <Chip
               label={`🔄 ${selectedStatus}`}
               size="small"
               color="secondary"
               variant="outlined"
-              onDelete={() => setSelectedStatus("all")}
-              sx={{ fontSize: "0.7rem" }}
+              onDelete={() => setSelectedStatus('all')}
+              sx={{ fontSize: '0.7rem' }}
             />
           )}
-          {quickDateFilter !== "all" && (
+          {quickDateFilter !== 'all' && (
             <Chip
               label={`📅 ${(() => {
                 switch (quickDateFilter) {
-                  case "today":
-                    return "Hôm nay";
-                  case "yesterday":
-                    return "Hôm qua";
-                  case "thisWeek":
-                    return "Tuần này";
-                  case "lastWeek":
-                    return "Tuần trước";
-                  case "thisMonth":
-                    return "Tháng này";
-                  case "lastMonth":
-                    return "Tháng trước";
-                  case "thisYear":
-                    return "Năm này";
-                  case "lastYear":
-                    return "Năm trước";
+                  case 'today':
+                    return 'Hôm nay';
+                  case 'yesterday':
+                    return 'Hôm qua';
+                  case 'thisWeek':
+                    return 'Tuần này';
+                  case 'lastWeek':
+                    return 'Tuần trước';
+                  case 'thisMonth':
+                    return 'Tháng này';
+                  case 'lastMonth':
+                    return 'Tháng trước';
+                  case 'thisYear':
+                    return 'Năm này';
+                  case 'lastYear':
+                    return 'Năm trước';
                   default:
                     return quickDateFilter;
                 }
@@ -1090,8 +1090,8 @@ const InboundSchedule: React.FC = () => {
               size="small"
               color="info"
               variant="outlined"
-              onDelete={() => setQuickDateFilter("all")}
-              sx={{ fontSize: "0.7rem" }}
+              onDelete={() => setQuickDateFilter('all')}
+              sx={{ fontSize: '0.7rem' }}
             />
           )}
           {customDateFrom && customDateTo && (
@@ -1101,17 +1101,17 @@ const InboundSchedule: React.FC = () => {
               color="info"
               variant="outlined"
               onDelete={() => {
-                setCustomDateFrom("");
-                setCustomDateTo("");
+                setCustomDateFrom('');
+                setCustomDateTo('');
               }}
-              sx={{ fontSize: "0.7rem" }}
+              sx={{ fontSize: '0.7rem' }}
             />
           )}
-          {(selectedDestination !== "all" ||
-            selectedStatus !== "all" ||
-            quickDateFilter !== "all" ||
+          {(selectedDestination !== 'all' ||
+            selectedStatus !== 'all' ||
+            quickDateFilter !== 'all' ||
             (customDateFrom && customDateTo)) && (
-            <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.7rem" }}>
+            <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem' }}>
               Lọc: {filteredItems.length}/{inboundItems.length} items
             </Typography>
           )}
@@ -1121,27 +1121,27 @@ const InboundSchedule: React.FC = () => {
       {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 3, minHeight: 200 }}>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ position: "relative", overflow: "visible", height: "100%" }}>
+          <Card sx={{ position: 'relative', overflow: 'visible', height: '100%' }}>
             <CardContent
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
                 minHeight: 180,
                 p: 2,
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <InventoryIcon sx={{ fontSize: 42, color: "primary.main", mr: 2 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <InventoryIcon sx={{ fontSize: 42, color: 'primary.main', mr: 2 }} />
                 <Box>
                   <Typography
                     variant="h4"
                     component="div"
                     sx={{
-                      color: "primary.main",
+                      color: 'primary.main',
                       fontWeight: 700,
-                      fontSize: "1.8rem",
+                      fontSize: '1.8rem',
                     }}
                   >
                     {filteredItems.length}
@@ -1149,7 +1149,7 @@ const InboundSchedule: React.FC = () => {
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    sx={{ fontWeight: 600, fontSize: "0.8rem" }}
+                    sx={{ fontWeight: 600, fontSize: '0.8rem' }}
                   >
                     Tổng lô hàng
                   </Typography>
@@ -1159,36 +1159,36 @@ const InboundSchedule: React.FC = () => {
               {/* Breakdown International vs Domestic + Logistics */}
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
+                  display: 'flex',
+                  flexDirection: 'column',
                   gap: 1,
                   minHeight: 100,
                 }}
               >
                 {/* Type breakdown */}
-                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                   <Chip
-                    label={`🌍 ${inboundItems.filter((item) => item.type === "international").length} Quốc tế`}
+                    label={`🌍 ${inboundItems.filter((item) => item.type === 'international').length} Quốc tế`}
                     size="small"
                     color="primary"
                     variant="outlined"
                     sx={{
-                      fontSize: "0.6rem",
+                      fontSize: '0.6rem',
                       fontWeight: 600,
                       height: 20,
-                      "& .MuiChip-label": { px: 0.75, fontSize: "0.6rem" },
+                      '& .MuiChip-label': { px: 0.75, fontSize: '0.6rem' },
                     }}
                   />
                   <Chip
-                    label={`🏠 ${inboundItems.filter((item) => item.type === "domestic").length} Quốc nội`}
+                    label={`🏠 ${inboundItems.filter((item) => item.type === 'domestic').length} Quốc nội`}
                     size="small"
                     color="secondary"
                     variant="outlined"
                     sx={{
-                      fontSize: "0.6rem",
+                      fontSize: '0.6rem',
                       fontWeight: 600,
                       height: 20,
-                      "& .MuiChip-label": { px: 0.75, fontSize: "0.6rem" },
+                      '& .MuiChip-label': { px: 0.75, fontSize: '0.6rem' },
                     }}
                   />
                 </Box>
@@ -1196,11 +1196,11 @@ const InboundSchedule: React.FC = () => {
                 {/* Logistics summary */}
                 <Box
                   sx={{
-                    display: "flex",
+                    display: 'flex',
                     gap: 0.5,
                     py: 0.5,
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
                   {/* Standardized metrics for all tabs */}
@@ -1208,33 +1208,33 @@ const InboundSchedule: React.FC = () => {
                     variant="caption"
                     color="text.secondary"
                     sx={{
-                      fontSize: "0.55rem",
+                      fontSize: '0.55rem',
                       fontWeight: 500,
-                      textAlign: "center",
+                      textAlign: 'center',
                       flex: 1,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                     }}
                   >
-                    🚢{" "}
+                    🚢{' '}
                     {filteredItems.reduce(
-                      (sum, item) => sum + (parseInt(item.container?.toString() || "0") || 0),
+                      (sum, item) => sum + (parseInt(item.container?.toString() || '0') || 0),
                       0
-                    )}{" "}
+                    )}{' '}
                     Containers
                   </Typography>
                   <Typography
                     variant="caption"
                     color="text.secondary"
                     sx={{
-                      fontSize: "0.55rem",
+                      fontSize: '0.55rem',
                       fontWeight: 500,
-                      textAlign: "center",
+                      textAlign: 'center',
                       flex: 1,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                     }}
                   >
                     📦 {getTotalSets().toLocaleString()} SET
@@ -1243,13 +1243,13 @@ const InboundSchedule: React.FC = () => {
                     variant="caption"
                     color="text.secondary"
                     sx={{
-                      fontSize: "0.55rem",
+                      fontSize: '0.55rem',
                       fontWeight: 500,
-                      textAlign: "center",
+                      textAlign: 'center',
                       flex: 1,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                     }}
                   >
                     🏢 {getUniqueSuppliers()} NCC
@@ -1262,28 +1262,28 @@ const InboundSchedule: React.FC = () => {
                     sx={{
                       mt: 1,
                       p: 1,
-                      bgcolor: "primary.50",
+                      bgcolor: 'primary.50',
                       borderRadius: 1,
-                      border: "1px solid",
-                      borderColor: "primary.200",
-                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                      border: '1px solid',
+                      borderColor: 'primary.200',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                       minHeight: 60,
                     }}
                   >
                     <Typography
                       variant="caption"
                       sx={{
-                        fontSize: "0.6rem",
+                        fontSize: '0.6rem',
                         fontWeight: 600,
-                        color: "primary.main",
+                        color: 'primary.main',
                       }}
                     >
                       📋 Quy cách đóng gói:
                     </Typography>
                     <Box
                       sx={{
-                        display: "flex",
-                        flexDirection: "column",
+                        display: 'flex',
+                        flexDirection: 'column',
                         gap: 0.3,
                         mt: 0.5,
                       }}
@@ -1294,16 +1294,16 @@ const InboundSchedule: React.FC = () => {
                           <Box
                             key={packType}
                             sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
                             }}
                           >
                             <Typography
                               variant="caption"
                               sx={{
-                                fontSize: "0.55rem",
-                                color: "text.secondary",
+                                fontSize: '0.55rem',
+                                color: 'text.secondary',
                                 fontWeight: 500,
                               }}
                             >
@@ -1312,9 +1312,9 @@ const InboundSchedule: React.FC = () => {
                             <Typography
                               variant="caption"
                               sx={{
-                                fontSize: "0.55rem",
+                                fontSize: '0.55rem',
                                 fontWeight: 700,
-                                color: "primary.main",
+                                color: 'primary.main',
                               }}
                             >
                               {quantity.toLocaleString()} SET
@@ -1326,9 +1326,9 @@ const InboundSchedule: React.FC = () => {
                         <Typography
                           variant="caption"
                           sx={{
-                            fontSize: "0.55rem",
-                            color: "text.secondary",
-                            textAlign: "center",
+                            fontSize: '0.55rem',
+                            color: 'text.secondary',
+                            textAlign: 'center',
                             mt: 0.5,
                           }}
                         >
@@ -1342,21 +1342,21 @@ const InboundSchedule: React.FC = () => {
                     sx={{
                       mt: 1,
                       p: 1,
-                      bgcolor: "grey.100",
+                      bgcolor: 'grey.100',
                       borderRadius: 1,
                       minHeight: 60,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Typography
                       variant="caption"
                       color="text.secondary"
                       sx={{
-                        fontSize: "0.6rem",
-                        fontStyle: "italic",
-                        textAlign: "center",
+                        fontSize: '0.6rem',
+                        fontStyle: 'italic',
+                        textAlign: 'center',
                       }}
                     >
                       Chưa có thông tin quy cách đóng gói
@@ -1368,27 +1368,27 @@ const InboundSchedule: React.FC = () => {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: "100%" }}>
+          <Card sx={{ height: '100%' }}>
             <CardContent
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
                 minHeight: 180,
                 p: 2,
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <TimelineIcon sx={{ fontSize: 42, color: "info.main", mr: 2 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <TimelineIcon sx={{ fontSize: 42, color: 'info.main', mr: 2 }} />
                 <Box>
                   <Typography
                     variant="h4"
                     component="div"
                     sx={{
-                      color: "info.main",
+                      color: 'info.main',
                       fontWeight: 700,
-                      fontSize: "1.8rem",
+                      fontSize: '1.8rem',
                     }}
                   >
                     {filteredItems.reduce((sum, item) => sum + (item.timeline?.length || 0), 0)}
@@ -1396,7 +1396,7 @@ const InboundSchedule: React.FC = () => {
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    sx={{ fontWeight: 600, fontSize: "0.8rem" }}
+                    sx={{ fontWeight: 600, fontSize: '0.8rem' }}
                   >
                     Timeline vận chuyển
                   </Typography>
@@ -1406,8 +1406,8 @@ const InboundSchedule: React.FC = () => {
               {/* Clean Timeline Analytics */}
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
+                  display: 'flex',
+                  flexDirection: 'column',
                   gap: 1,
                   minHeight: 100,
                 }}
@@ -1421,27 +1421,27 @@ const InboundSchedule: React.FC = () => {
                         variant="caption"
                         color="text.secondary"
                         sx={{
-                          fontSize: "0.7rem",
-                          textAlign: "center",
-                          fontStyle: "italic",
-                          display: "block",
+                          fontSize: '0.7rem',
+                          textAlign: 'center',
+                          fontStyle: 'italic',
+                          display: 'block',
                           mb: 2,
                         }}
                       >
-                        {activeTab === "domestic"
-                          ? "Quốc nội có timeline đơn giản"
-                          : "Chưa có timeline"}
+                        {activeTab === 'domestic'
+                          ? 'Quốc nội có timeline đơn giản'
+                          : 'Chưa có timeline'}
                       </Typography>
 
                       {/* Placeholder content để giữ kích thước card */}
-                      {activeTab === "domestic" && (
+                      {activeTab === 'domestic' && (
                         <Box sx={{ mt: 1 }}>
                           <Typography
                             variant="caption"
                             color="text.secondary"
                             sx={{
-                              fontSize: "0.65rem",
-                              display: "block",
+                              fontSize: '0.65rem',
+                              display: 'block',
                               mb: 0.5,
                             }}
                           >
@@ -1451,8 +1451,8 @@ const InboundSchedule: React.FC = () => {
                             variant="caption"
                             color="text.secondary"
                             sx={{
-                              fontSize: "0.65rem",
-                              display: "block",
+                              fontSize: '0.65rem',
+                              display: 'block',
                               mb: 0.5,
                             }}
                           >
@@ -1461,7 +1461,7 @@ const InboundSchedule: React.FC = () => {
                           <Typography
                             variant="caption"
                             color="text.secondary"
-                            sx={{ fontSize: "0.65rem", display: "block" }}
+                            sx={{ fontSize: '0.65rem', display: 'block' }}
                           >
                             ✅ Nhận hàng tại kho đích
                           </Typography>
@@ -1473,8 +1473,8 @@ const InboundSchedule: React.FC = () => {
                       {/* Overall Summary */}
                       <Box
                         sx={{
-                          display: "grid",
-                          gridTemplateColumns: "1fr 1fr 1fr",
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr 1fr',
                           gap: 0.3,
                           py: 0.5,
                         }}
@@ -1482,37 +1482,37 @@ const InboundSchedule: React.FC = () => {
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ fontSize: "0.55rem", textAlign: "center" }}
+                          sx={{ fontSize: '0.55rem', textAlign: 'center' }}
                         >
-                          ✅{" "}
+                          ✅{' '}
                           {timelineDelayBreakdown.reduce(
-                            (sum, t) => sum + (t.delays["Đúng hạn"] || 0),
+                            (sum, t) => sum + (t.delays['Đúng hạn'] || 0),
                             0
-                          )}{" "}
+                          )}{' '}
                           Hoàn thành
                         </Typography>
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ fontSize: "0.55rem", textAlign: "center" }}
+                          sx={{ fontSize: '0.55rem', textAlign: 'center' }}
                         >
-                          🔄{" "}
+                          🔄{' '}
                           {timelineDelayBreakdown.reduce(
-                            (sum, t) => sum + (t.delays["Trước hạn"] || 0),
+                            (sum, t) => sum + (t.delays['Trước hạn'] || 0),
                             0
-                          )}{" "}
+                          )}{' '}
                           Đang xử lý
                         </Typography>
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ fontSize: "0.55rem", textAlign: "center" }}
+                          sx={{ fontSize: '0.55rem', textAlign: 'center' }}
                         >
-                          ⏳{" "}
+                          ⏳{' '}
                           {timelineDelayBreakdown.reduce(
-                            (sum, t) => sum + (t.delays["Chưa xác định"] || 0),
+                            (sum, t) => sum + (t.delays['Chưa xác định'] || 0),
                             0
-                          )}{" "}
+                          )}{' '}
                           Đang chờ
                         </Typography>
                       </Box>
@@ -1523,20 +1523,20 @@ const InboundSchedule: React.FC = () => {
                           sx={{
                             mt: 0.5,
                             p: 1,
-                            bgcolor: "grey.50",
+                            bgcolor: 'grey.50',
                             borderRadius: 1,
-                            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                             minHeight: 60,
                           }}
                         >
                           <Typography
                             variant="caption"
                             sx={{
-                              fontSize: "0.6rem",
+                              fontSize: '0.6rem',
                               fontWeight: 600,
-                              color: "text.primary",
+                              color: 'text.primary',
                               mb: 0.3,
-                              display: "block",
+                              display: 'block',
                             }}
                           >
                             📊 Tiến độ timeline
@@ -1545,8 +1545,8 @@ const InboundSchedule: React.FC = () => {
                           {/* Clean Grid Layout */}
                           <Box
                             sx={{
-                              display: "flex",
-                              flexDirection: "column",
+                              display: 'flex',
+                              flexDirection: 'column',
                               gap: 0.3,
                             }}
                           >
@@ -1554,55 +1554,55 @@ const InboundSchedule: React.FC = () => {
                               <Box
                                 key={timelineName}
                                 sx={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
                                   py: 0.1,
                                   px: 0.3,
                                   borderRadius: 0.5,
-                                  bgcolor: "white",
-                                  border: "1px solid #e0e0e0",
-                                  minHeight: "18px",
+                                  bgcolor: 'white',
+                                  border: '1px solid #e0e0e0',
+                                  minHeight: '18px',
                                 }}
                               >
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.6rem",
+                                    fontSize: '0.6rem',
                                     fontWeight: 500,
-                                    color: "text.secondary",
+                                    color: 'text.secondary',
                                     flex: 1,
                                     lineHeight: 1.2,
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
                                   }}
                                 >
                                   {(() => {
                                     // Hiển thị đúng 6 mốc thời gian theo thứ tự
                                     switch (timelineName) {
-                                      case "Cargo Ready":
-                                        return "Cargo Ready";
-                                      case "ETD":
-                                        return "ETD";
-                                      case "ETA":
-                                        return "ETA";
-                                      case "Ngày hàng đi":
-                                        return "Ngày hàng đi";
-                                      case "Ngày hàng về cảng":
-                                        return "Ngày hàng về cảng";
-                                      case "Ngày nhận hàng":
-                                        return "Ngày nhận hàng";
+                                      case 'Cargo Ready':
+                                        return 'Cargo Ready';
+                                      case 'ETD':
+                                        return 'ETD';
+                                      case 'ETA':
+                                        return 'ETA';
+                                      case 'Ngày hàng đi':
+                                        return 'Ngày hàng đi';
+                                      case 'Ngày hàng về cảng':
+                                        return 'Ngày hàng về cảng';
+                                      case 'Ngày nhận hàng':
+                                        return 'Ngày nhận hàng';
                                       default:
                                         return timelineName.length > 12
-                                          ? timelineName.substring(0, 12) + "..."
+                                          ? timelineName.substring(0, 12) + '...'
                                           : timelineName;
                                     }
                                   })()}
                                 </Typography>
 
-                                <Box sx={{ display: "flex", gap: 0.3 }}>
-                                  {["Đúng hạn", "Trước hạn", "Trễ hạn", "Chưa xác định"].map(
+                                <Box sx={{ display: 'flex', gap: 0.3 }}>
+                                  {['Đúng hạn', 'Trước hạn', 'Trễ hạn', 'Chưa xác định'].map(
                                     (delayType) => {
                                       const count = delays[delayType] || 0;
                                       if (count === 0) return null;
@@ -1612,14 +1612,14 @@ const InboundSchedule: React.FC = () => {
                                           key={delayType}
                                           title={(() => {
                                             switch (delayType) {
-                                              case "Đúng hạn":
-                                                return "Hoàn thành đúng ngày dự kiến";
-                                              case "Trước hạn":
-                                                return "Hoàn thành sớm hơn dự kiến";
-                                              case "Trễ hạn":
-                                                return "Hoàn thành trễ hơn dự kiến";
-                                              case "Chưa xác định":
-                                                return "Thiếu thông tin ngày dự kiến hoặc thực tế";
+                                              case 'Đúng hạn':
+                                                return 'Hoàn thành đúng ngày dự kiến';
+                                              case 'Trước hạn':
+                                                return 'Hoàn thành sớm hơn dự kiến';
+                                              case 'Trễ hạn':
+                                                return 'Hoàn thành trễ hơn dự kiến';
+                                              case 'Chưa xác định':
+                                                return 'Thiếu thông tin ngày dự kiến hoặc thực tế';
                                               default:
                                                 return delayType;
                                             }
@@ -1629,56 +1629,56 @@ const InboundSchedule: React.FC = () => {
                                         >
                                           <Box
                                             sx={{
-                                              display: "flex",
-                                              alignItems: "center",
+                                              display: 'flex',
+                                              alignItems: 'center',
                                               gap: 0.1,
                                               px: 0.3,
                                               py: 0.1,
                                               bgcolor: (() => {
                                                 switch (delayType) {
-                                                  case "Đúng hạn":
-                                                    return "success.100";
-                                                  case "Trước hạn":
-                                                    return "info.100";
-                                                  case "Trễ hạn":
-                                                    return "error.100";
-                                                  case "Chưa xác định":
-                                                    return "warning.100";
+                                                  case 'Đúng hạn':
+                                                    return 'success.100';
+                                                  case 'Trước hạn':
+                                                    return 'info.100';
+                                                  case 'Trễ hạn':
+                                                    return 'error.100';
+                                                  case 'Chưa xác định':
+                                                    return 'warning.100';
                                                   default:
-                                                    return "grey.200";
+                                                    return 'grey.200';
                                                 }
                                               })(),
                                               borderRadius: 0.5,
-                                              cursor: "help",
+                                              cursor: 'help',
                                             }}
                                           >
                                             <Typography
                                               sx={{
-                                                fontSize: "0.6rem",
-                                                textAlign: "center",
+                                                fontSize: '0.6rem',
+                                                textAlign: 'center',
                                               }}
                                             >
                                               {(() => {
                                                 switch (delayType) {
-                                                  case "Đúng hạn":
-                                                    return "✅";
-                                                  case "Trước hạn":
-                                                    return "⚡";
-                                                  case "Trễ hạn":
-                                                    return "🚨";
-                                                  case "Chưa xác định":
-                                                    return "❓";
+                                                  case 'Đúng hạn':
+                                                    return '✅';
+                                                  case 'Trước hạn':
+                                                    return '⚡';
+                                                  case 'Trễ hạn':
+                                                    return '🚨';
+                                                  case 'Chưa xác định':
+                                                    return '❓';
                                                   default:
-                                                    return "?";
+                                                    return '?';
                                                 }
                                               })()}
                                             </Typography>
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.55rem",
+                                                fontSize: '0.55rem',
                                                 fontWeight: 700,
-                                                color: "text.primary",
+                                                color: 'text.primary',
                                               }}
                                             >
                                               {count}
@@ -1702,27 +1702,27 @@ const InboundSchedule: React.FC = () => {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: "100%" }}>
+          <Card sx={{ height: '100%' }}>
             <CardContent
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
                 minHeight: 180,
                 p: 2,
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <DocumentIcon sx={{ fontSize: 42, color: "success.main", mr: 2 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <DocumentIcon sx={{ fontSize: 42, color: 'success.main', mr: 2 }} />
                 <Box>
                   <Typography
                     variant="h4"
                     component="div"
                     sx={{
-                      color: "success.main",
+                      color: 'success.main',
                       fontWeight: 700,
-                      fontSize: "1.8rem",
+                      fontSize: '1.8rem',
                     }}
                   >
                     {filteredItems.reduce(
@@ -1733,7 +1733,7 @@ const InboundSchedule: React.FC = () => {
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    sx={{ fontWeight: 600, fontSize: "0.8rem" }}
+                    sx={{ fontWeight: 600, fontSize: '0.8rem' }}
                   >
                     Chứng từ
                   </Typography>
@@ -1743,8 +1743,8 @@ const InboundSchedule: React.FC = () => {
               {/* Clean Document Analytics */}
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
+                  display: 'flex',
+                  flexDirection: 'column',
                   gap: 1,
                   minHeight: 100,
                 }}
@@ -1755,27 +1755,27 @@ const InboundSchedule: React.FC = () => {
                       variant="caption"
                       color="text.secondary"
                       sx={{
-                        fontSize: "0.7rem",
-                        textAlign: "center",
-                        fontStyle: "italic",
-                        display: "block",
+                        fontSize: '0.7rem',
+                        textAlign: 'center',
+                        fontStyle: 'italic',
+                        display: 'block',
                         mb: 2,
                       }}
                     >
-                      {activeTab === "domestic"
-                        ? "Quốc nội không cần chứng từ"
-                        : "Chưa có chứng từ"}
+                      {activeTab === 'domestic'
+                        ? 'Quốc nội không cần chứng từ'
+                        : 'Chưa có chứng từ'}
                     </Typography>
 
                     {/* Placeholder content để giữ kích thước card */}
-                    {activeTab === "domestic" && (
+                    {activeTab === 'domestic' && (
                       <Box sx={{ mt: 1 }}>
                         <Typography
                           variant="caption"
                           color="text.secondary"
                           sx={{
-                            fontSize: "0.65rem",
-                            display: "block",
+                            fontSize: '0.65rem',
+                            display: 'block',
                             mb: 0.5,
                           }}
                         >
@@ -1785,8 +1785,8 @@ const InboundSchedule: React.FC = () => {
                           variant="caption"
                           color="text.secondary"
                           sx={{
-                            fontSize: "0.65rem",
-                            display: "block",
+                            fontSize: '0.65rem',
+                            display: 'block',
                             mb: 0.5,
                           }}
                         >
@@ -1795,7 +1795,7 @@ const InboundSchedule: React.FC = () => {
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ fontSize: "0.65rem", display: "block" }}
+                          sx={{ fontSize: '0.65rem', display: 'block' }}
                         >
                           ✅ Quy trình nhanh chóng và thuận tiện
                         </Typography>
@@ -1807,8 +1807,8 @@ const InboundSchedule: React.FC = () => {
                     {/* Overall Summary */}
                     <Box
                       sx={{
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr 1fr",
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr 1fr',
                         gap: 0.5,
                         py: 0.5,
                       }}
@@ -1816,34 +1816,34 @@ const InboundSchedule: React.FC = () => {
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ fontSize: "0.55rem", textAlign: "center" }}
+                        sx={{ fontSize: '0.55rem', textAlign: 'center' }}
                       >
-                        ✅{" "}
+                        ✅{' '}
                         {getDocumentStatusBreakdown().find(
-                          ([status]) => status === "completed"
-                        )?.[1] || 0}{" "}
+                          ([status]) => status === 'completed'
+                        )?.[1] || 0}{' '}
                         Hoàn thành
                       </Typography>
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ fontSize: "0.55rem", textAlign: "center" }}
+                        sx={{ fontSize: '0.55rem', textAlign: 'center' }}
                       >
-                        🔄{" "}
+                        🔄{' '}
                         {getDocumentStatusBreakdown().find(
-                          ([status]) => status === "in_progress"
-                        )?.[1] || 0}{" "}
+                          ([status]) => status === 'in_progress'
+                        )?.[1] || 0}{' '}
                         Đang xử lý
                       </Typography>
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ fontSize: "0.55rem", textAlign: "center" }}
+                        sx={{ fontSize: '0.55rem', textAlign: 'center' }}
                       >
-                        ⏳{" "}
+                        ⏳{' '}
                         {getDocumentStatusBreakdown().find(
-                          ([status]) => status === "pending"
-                        )?.[1] || 0}{" "}
+                          ([status]) => status === 'pending'
+                        )?.[1] || 0}{' '}
                         Đang chờ
                       </Typography>
                     </Box>
@@ -1854,20 +1854,20 @@ const InboundSchedule: React.FC = () => {
                         sx={{
                           mt: 0.5,
                           p: 1,
-                          bgcolor: "grey.50",
+                          bgcolor: 'grey.50',
                           borderRadius: 1,
-                          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                           minHeight: 60,
                         }}
                       >
                         <Typography
                           variant="caption"
                           sx={{
-                            fontSize: "0.6rem",
+                            fontSize: '0.6rem',
                             fontWeight: 600,
-                            color: "text.primary",
+                            color: 'text.primary',
                             mb: 0.3,
-                            display: "block",
+                            display: 'block',
                           }}
                         >
                           📊 Tiến độ chứng từ
@@ -1876,8 +1876,8 @@ const InboundSchedule: React.FC = () => {
                         {/* Clean Grid Layout */}
                         <Box
                           sx={{
-                            display: "flex",
-                            flexDirection: "column",
+                            display: 'flex',
+                            flexDirection: 'column',
                             gap: 0.3,
                           }}
                         >
@@ -1887,53 +1887,53 @@ const InboundSchedule: React.FC = () => {
                               <Box
                                 key={docName}
                                 sx={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
                                   py: 0.1,
                                   px: 0.3,
                                   borderRadius: 0.5,
-                                  bgcolor: "white",
-                                  border: "1px solid #e0e0e0",
-                                  minHeight: "18px",
+                                  bgcolor: 'white',
+                                  border: '1px solid #e0e0e0',
+                                  minHeight: '18px',
                                 }}
                               >
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.6rem",
+                                    fontSize: '0.6rem',
                                     fontWeight: 500,
-                                    color: "text.secondary",
+                                    color: 'text.secondary',
                                     flex: 1,
                                     lineHeight: 1.2,
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    whiteSpace: "nowrap",
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
                                   }}
                                 >
                                   {(() => {
                                     // Viết tắt document names cho gọn
                                     switch (docName) {
-                                      case "TQ Gửi chứng từ đi":
-                                        return "Gửi chứng từ";
-                                      case "Lên tờ khai hải quan":
-                                        return "Tờ khai HQ";
-                                      case "Đóng thuế":
-                                        return "Đóng thuế";
-                                      case "Check bill":
-                                        return "Check bill";
-                                      case "Check CO":
-                                        return "Check CO";
+                                      case 'TQ Gửi chứng từ đi':
+                                        return 'Gửi chứng từ';
+                                      case 'Lên tờ khai hải quan':
+                                        return 'Tờ khai HQ';
+                                      case 'Đóng thuế':
+                                        return 'Đóng thuế';
+                                      case 'Check bill':
+                                        return 'Check bill';
+                                      case 'Check CO':
+                                        return 'Check CO';
                                       default:
                                         return docName.length > 12
-                                          ? docName.substring(0, 12) + "..."
+                                          ? docName.substring(0, 12) + '...'
                                           : docName;
                                     }
                                   })()}
                                 </Typography>
 
-                                <Box sx={{ display: "flex", gap: 0.3 }}>
-                                  {["Đúng hạn", "Trước hạn", "Trễ hạn", "Chưa xác định"].map(
+                                <Box sx={{ display: 'flex', gap: 0.3 }}>
+                                  {['Đúng hạn', 'Trước hạn', 'Trễ hạn', 'Chưa xác định'].map(
                                     (delayType) => {
                                       const count = delays[delayType] || 0;
                                       if (count === 0) return null;
@@ -1943,14 +1943,14 @@ const InboundSchedule: React.FC = () => {
                                           key={delayType}
                                           title={(() => {
                                             switch (delayType) {
-                                              case "Đúng hạn":
-                                                return "Hoàn thành đúng ngày dự kiến";
-                                              case "Trước hạn":
-                                                return "Hoàn thành sớm hơn dự kiến";
-                                              case "Trễ hạn":
-                                                return "Hoàn thành trễ hơn dự kiến";
+                                              case 'Đúng hạn':
+                                                return 'Hoàn thành đúng ngày dự kiến';
+                                              case 'Trước hạn':
+                                                return 'Hoàn thành sớm hơn dự kiến';
+                                              case 'Trễ hạn':
+                                                return 'Hoàn thành trễ hơn dự kiến';
                                               default:
-                                                return "Thiếu thông tin ngày dự kiến hoặc thực tế";
+                                                return 'Thiếu thông tin ngày dự kiến hoặc thực tế';
                                             }
                                           })()}
                                           placement="top"
@@ -1958,52 +1958,52 @@ const InboundSchedule: React.FC = () => {
                                         >
                                           <Box
                                             sx={{
-                                              display: "flex",
-                                              alignItems: "center",
+                                              display: 'flex',
+                                              alignItems: 'center',
                                               gap: 0.1,
                                               px: 0.3,
                                               py: 0.1,
                                               bgcolor: (() => {
                                                 switch (delayType) {
-                                                  case "Đúng hạn":
-                                                    return "success.100";
-                                                  case "Trước hạn":
-                                                    return "info.100";
-                                                  case "Trễ hạn":
-                                                    return "error.100";
+                                                  case 'Đúng hạn':
+                                                    return 'success.100';
+                                                  case 'Trước hạn':
+                                                    return 'info.100';
+                                                  case 'Trễ hạn':
+                                                    return 'error.100';
                                                   default:
-                                                    return "grey.200";
+                                                    return 'grey.200';
                                                 }
                                               })(),
                                               borderRadius: 0.5,
-                                              cursor: "help",
+                                              cursor: 'help',
                                             }}
                                           >
                                             <Typography
                                               sx={{
-                                                fontSize: "0.6rem",
-                                                textAlign: "center",
+                                                fontSize: '0.6rem',
+                                                textAlign: 'center',
                                               }}
                                             >
                                               {(() => {
                                                 switch (delayType) {
-                                                  case "Đúng hạn":
-                                                    return "✅";
-                                                  case "Trước hạn":
-                                                    return "⚡";
-                                                  case "Trễ hạn":
-                                                    return "🚨";
+                                                  case 'Đúng hạn':
+                                                    return '✅';
+                                                  case 'Trước hạn':
+                                                    return '⚡';
+                                                  case 'Trễ hạn':
+                                                    return '🚨';
                                                   default:
-                                                    return "❓";
+                                                    return '❓';
                                                 }
                                               })()}
                                             </Typography>
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.55rem",
+                                                fontSize: '0.55rem',
                                                 fontWeight: 700,
-                                                color: "text.primary",
+                                                color: 'text.primary',
                                               }}
                                             >
                                               {count}
@@ -2026,27 +2026,27 @@ const InboundSchedule: React.FC = () => {
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: "100%" }}>
+          <Card sx={{ height: '100%' }}>
             <CardContent
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
                 minHeight: 180,
                 p: 2,
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <ProductIcon sx={{ fontSize: 42, color: "warning.main", mr: 2 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <ProductIcon sx={{ fontSize: 42, color: 'warning.main', mr: 2 }} />
                 <Box>
                   <Typography
                     variant="h4"
                     component="div"
                     sx={{
-                      color: "warning.main",
+                      color: 'warning.main',
                       fontWeight: 700,
-                      fontSize: "1.8rem",
+                      fontSize: '1.8rem',
                     }}
                   >
                     {getTotalQuantity().toLocaleString()}
@@ -2054,7 +2054,7 @@ const InboundSchedule: React.FC = () => {
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    sx={{ fontWeight: 600, fontSize: "0.8rem" }}
+                    sx={{ fontWeight: 600, fontSize: '0.8rem' }}
                   >
                     Tổng sản phẩm
                   </Typography>
@@ -2064,11 +2064,11 @@ const InboundSchedule: React.FC = () => {
               {/* Online/Offline Summary */}
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   gap: 0.5,
                   py: 0.5,
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
                 {(() => {
@@ -2076,19 +2076,19 @@ const InboundSchedule: React.FC = () => {
                     getOnlineOfflineCount();
 
                   // Debug: Log để kiểm tra dữ liệu
-                  console.log(
-                    "Purpose values:",
-                    filteredItems.map((item) => ({
-                      id: item.id,
-                      purpose: item.purpose,
-                    }))
-                  );
-                  console.log("Online/Offline counts:", {
-                    online,
-                    offline,
-                    onlineQuantity,
-                    offlineQuantity,
-                  });
+                  // console.log(
+                  //   "Purpose values:",
+                  //   filteredItems.map((item) => ({
+                  //     id: item.id,
+                  //     purpose: item.purpose,
+                  //   }))
+                  // );
+                  // console.log("Online/Offline counts:", {
+                  //   online,
+                  //   offline,
+                  //   onlineQuantity,
+                  //   offlineQuantity,
+                  // });
 
                   return (
                     <>
@@ -2096,13 +2096,13 @@ const InboundSchedule: React.FC = () => {
                         variant="caption"
                         color="text.secondary"
                         sx={{
-                          fontSize: "0.55rem",
+                          fontSize: '0.55rem',
                           fontWeight: 500,
-                          textAlign: "center",
+                          textAlign: 'center',
                           flex: 1,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
                         }}
                       >
                         🌐 {online} Online ({onlineQuantity.toLocaleString()})
@@ -2111,13 +2111,13 @@ const InboundSchedule: React.FC = () => {
                         variant="caption"
                         color="text.secondary"
                         sx={{
-                          fontSize: "0.55rem",
+                          fontSize: '0.55rem',
                           fontWeight: 500,
-                          textAlign: "center",
+                          textAlign: 'center',
                           flex: 1,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
                         }}
                       >
                         📱 {offline} Offline ({offlineQuantity.toLocaleString()})
@@ -2130,8 +2130,8 @@ const InboundSchedule: React.FC = () => {
               {/* Product Categories Breakdown */}
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
+                  display: 'flex',
+                  flexDirection: 'column',
                   gap: 1,
                   minHeight: 100,
                 }}
@@ -2141,9 +2141,9 @@ const InboundSchedule: React.FC = () => {
                     variant="caption"
                     color="text.secondary"
                     sx={{
-                      fontSize: "0.7rem",
-                      textAlign: "center",
-                      fontStyle: "italic",
+                      fontSize: '0.7rem',
+                      textAlign: 'center',
+                      fontStyle: 'italic',
                       py: 1,
                     }}
                   >
@@ -2152,59 +2152,59 @@ const InboundSchedule: React.FC = () => {
                 ) : (
                   <Box
                     sx={{
-                      display: "flex",
-                      flexWrap: "wrap",
+                      display: 'flex',
+                      flexWrap: 'wrap',
                       gap: 1,
-                      justifyContent: "center",
+                      justifyContent: 'center',
                     }}
                   >
                     {getProductBreakdown().map(([category, quantity]) => (
                       <Box
                         key={category}
                         sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
                           p: 1,
-                          bgcolor: "warning.50",
+                          bgcolor: 'warning.50',
                           borderRadius: 1,
                           minWidth: 60,
-                          border: "1px solid",
-                          borderColor: "warning.200",
+                          border: '1px solid',
+                          borderColor: 'warning.200',
                         }}
                       >
-                        <Typography sx={{ fontSize: "1.2rem", mb: 0.5 }}>
+                        <Typography sx={{ fontSize: '1.2rem', mb: 0.5 }}>
                           {(() => {
                             // Map theo phân loại chuẩn từ hệ thống
                             switch (category) {
-                              case "Balo":
-                                return "🎒";
-                              case "Vali":
-                                return "🧳";
-                              case "Quà tặng":
-                                return "🎁";
-                              case "Phụ kiện":
-                                return "🔧";
-                              case "Phụ kiện sửa chữa":
-                                return "⚙️";
-                              case "Nguyên vật liệu":
-                                return "🧱";
-                              case "Thùng giấy":
-                                return "📦";
-                              case "Văn phòng phẩm":
-                                return "📝";
+                              case 'Balo':
+                                return '🎒';
+                              case 'Vali':
+                                return '🧳';
+                              case 'Quà tặng':
+                                return '🎁';
+                              case 'Phụ kiện':
+                                return '🔧';
+                              case 'Phụ kiện sửa chữa':
+                                return '⚙️';
+                              case 'Nguyên vật liệu':
+                                return '🧱';
+                              case 'Thùng giấy':
+                                return '📦';
+                              case 'Văn phòng phẩm':
+                                return '📝';
                               default:
-                                return "📋"; // Default cho categories khác
+                                return '📋'; // Default cho categories khác
                             }
                           })()}
                         </Typography>
                         <Typography
                           variant="caption"
                           sx={{
-                            fontSize: "0.65rem",
+                            fontSize: '0.65rem',
                             fontWeight: 600,
-                            color: "warning.main",
-                            textAlign: "center",
+                            color: 'warning.main',
+                            textAlign: 'center',
                             lineHeight: 1,
                           }}
                         >
@@ -2214,8 +2214,8 @@ const InboundSchedule: React.FC = () => {
                           variant="caption"
                           color="text.secondary"
                           sx={{
-                            fontSize: "0.6rem",
-                            textAlign: "center",
+                            fontSize: '0.6rem',
+                            textAlign: 'center',
                             mt: 0.3,
                             lineHeight: 1,
                           }}
@@ -2233,27 +2233,27 @@ const InboundSchedule: React.FC = () => {
 
         {/* Card 5 - Warehouse Breakdown */}
         <Grid item xs={12}>
-          <Card sx={{ height: "100%" }}>
+          <Card sx={{ height: '100%' }}>
             <CardContent
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
                 minHeight: 180,
                 p: 2,
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                <LocationIcon sx={{ fontSize: 42, color: "info.main", mr: 2 }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <LocationIcon sx={{ fontSize: 42, color: 'info.main', mr: 2 }} />
                 <Box>
                   <Typography
                     variant="h4"
                     component="div"
                     sx={{
-                      color: "info.main",
+                      color: 'info.main',
                       fontWeight: 700,
-                      fontSize: "1.8rem",
+                      fontSize: '1.8rem',
                     }}
                   >
                     {destinations.length}
@@ -2261,7 +2261,7 @@ const InboundSchedule: React.FC = () => {
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    sx={{ fontWeight: 600, fontSize: "0.8rem" }}
+                    sx={{ fontWeight: 600, fontSize: '0.8rem' }}
                   >
                     Kho nhận hàng
                   </Typography>
@@ -2271,24 +2271,24 @@ const InboundSchedule: React.FC = () => {
               {/* Summary Metrics */}
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   gap: 0.5,
                   py: 0.5,
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
                 <Typography
                   variant="caption"
                   color="text.secondary"
                   sx={{
-                    fontSize: "0.55rem",
+                    fontSize: '0.55rem',
                     fontWeight: 500,
-                    textAlign: "center",
+                    textAlign: 'center',
                     flex: 1,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                   }}
                 >
                   🚚 {filteredItems.length} Lô giao
@@ -2297,13 +2297,13 @@ const InboundSchedule: React.FC = () => {
                   variant="caption"
                   color="text.secondary"
                   sx={{
-                    fontSize: "0.55rem",
+                    fontSize: '0.55rem',
                     fontWeight: 500,
-                    textAlign: "center",
+                    textAlign: 'center',
                     flex: 1,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                   }}
                 >
                   📦 {getTotalSets().toLocaleString()} SET
@@ -2312,20 +2312,20 @@ const InboundSchedule: React.FC = () => {
                   variant="caption"
                   color="text.secondary"
                   sx={{
-                    fontSize: "0.55rem",
+                    fontSize: '0.55rem',
                     fontWeight: 500,
-                    textAlign: "center",
+                    textAlign: 'center',
                     flex: 1,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                   }}
                 >
-                  🚢{" "}
+                  🚢{' '}
                   {filteredItems.reduce(
-                    (sum, item) => sum + (parseInt(item.container?.toString() || "0") || 0),
+                    (sum, item) => sum + (parseInt(item.container?.toString() || '0') || 0),
                     0
-                  )}{" "}
+                  )}{' '}
                   Containers
                 </Typography>
               </Box>
@@ -2333,8 +2333,8 @@ const InboundSchedule: React.FC = () => {
               {/* Warehouse Details */}
               <Box
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
+                  display: 'flex',
+                  flexDirection: 'column',
                   gap: 1,
                   minHeight: 100,
                 }}
@@ -2344,20 +2344,20 @@ const InboundSchedule: React.FC = () => {
                     sx={{
                       mt: 0.5,
                       p: 1,
-                      bgcolor: "grey.50",
+                      bgcolor: 'grey.50',
                       borderRadius: 1,
-                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                       minHeight: 60,
                     }}
                   >
                     <Typography
                       variant="caption"
                       sx={{
-                        fontSize: "0.6rem",
+                        fontSize: '0.6rem',
                         fontWeight: 600,
-                        color: "text.primary",
+                        color: 'text.primary',
                         mb: 0.3,
-                        display: "block",
+                        display: 'block',
                       }}
                     >
                       📊 Top kho nhận hàng
@@ -2365,8 +2365,8 @@ const InboundSchedule: React.FC = () => {
 
                     <Box
                       sx={{
-                        display: "flex",
-                        flexDirection: "column",
+                        display: 'flex',
+                        flexDirection: 'column',
                         gap: 0.3,
                       }}
                     >
@@ -2383,44 +2383,44 @@ const InboundSchedule: React.FC = () => {
                           <Box
                             key={dest}
                             sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
                               py: 0.1,
                               px: 0.3,
                               borderRadius: 0.5,
-                              bgcolor: "white",
-                              border: "1px solid #e0e0e0",
-                              minHeight: "18px",
+                              bgcolor: 'white',
+                              border: '1px solid #e0e0e0',
+                              minHeight: '18px',
                             }}
                           >
                             <Typography
                               variant="caption"
                               sx={{
-                                fontSize: "0.6rem",
+                                fontSize: '0.6rem',
                                 fontWeight: 500,
-                                color: "text.secondary",
+                                color: 'text.secondary',
                                 flex: 1,
                                 lineHeight: 1.2,
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
                               }}
                             >
-                              📍 {dest.length > 25 ? dest.substring(0, 25) + "..." : dest}
+                              📍 {dest.length > 25 ? dest.substring(0, 25) + '...' : dest}
                             </Typography>
                             <Box
                               sx={{
-                                display: "flex",
+                                display: 'flex',
                                 gap: 0.3,
-                                alignItems: "center",
+                                alignItems: 'center',
                               }}
                             >
                               <Typography
                                 variant="caption"
                                 sx={{
-                                  fontSize: "0.55rem",
-                                  color: "text.secondary",
+                                  fontSize: '0.55rem',
+                                  color: 'text.secondary',
                                   fontWeight: 500,
                                 }}
                               >
@@ -2432,10 +2432,10 @@ const InboundSchedule: React.FC = () => {
                                 color="info"
                                 variant="filled"
                                 sx={{
-                                  fontSize: "0.55rem",
+                                  fontSize: '0.55rem',
                                   height: 16,
                                   minWidth: 30,
-                                  "& .MuiChip-label": {
+                                  '& .MuiChip-label': {
                                     px: 0.4,
                                     fontWeight: 700,
                                   },
@@ -2451,10 +2451,10 @@ const InboundSchedule: React.FC = () => {
                           variant="caption"
                           color="text.secondary"
                           sx={{
-                            textAlign: "center",
+                            textAlign: 'center',
                             mt: 0.5,
-                            fontSize: "0.55rem",
-                            fontStyle: "italic",
+                            fontSize: '0.55rem',
+                            fontStyle: 'italic',
                           }}
                         >
                           +{destinations.length - 3} kho khác
@@ -2467,21 +2467,21 @@ const InboundSchedule: React.FC = () => {
                     sx={{
                       mt: 1,
                       p: 1,
-                      bgcolor: "grey.100",
+                      bgcolor: 'grey.100',
                       borderRadius: 1,
                       minHeight: 60,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
                     <Typography
                       variant="caption"
                       color="text.secondary"
                       sx={{
-                        fontSize: "0.6rem",
-                        fontStyle: "italic",
-                        textAlign: "center",
+                        fontSize: '0.6rem',
+                        fontStyle: 'italic',
+                        textAlign: 'center',
                       }}
                     >
                       Chưa có thông tin kho nhận hàng
@@ -2496,13 +2496,13 @@ const InboundSchedule: React.FC = () => {
 
       {/* Content */}
       {loading ? (
-        <Paper sx={{ p: 4, textAlign: "center" }}>
+        <Paper sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h6" gutterBottom>
             Đang tải dữ liệu...
           </Typography>
         </Paper>
       ) : error ? (
-        <Paper sx={{ p: 4, textAlign: "center" }}>
+        <Paper sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h6" color="error" gutterBottom>
             {error}
           </Typography>
@@ -2510,7 +2510,7 @@ const InboundSchedule: React.FC = () => {
             Vui lòng kiểm tra kết nối và thử lại
           </Typography>
         </Paper>
-      ) : viewMode === "table" ? (
+      ) : viewMode === 'table' ? (
         <TableView
           items={filteredItems}
           onAction={handleActionMenuAction}
@@ -2551,10 +2551,10 @@ const InboundSchedule: React.FC = () => {
         />
       )}
 
-      {viewMode === "calendar" && selectedDate && (
+      {viewMode === 'calendar' && selectedDate && (
         <Paper sx={{ p: 2, mt: 2 }}>
           <Typography variant="subtitle1" sx={{ mb: 1 }}>
-            Chi tiết ngày {selectedDate.toLocaleDateString("vi-VN")}
+            Chi tiết ngày {selectedDate.toLocaleDateString('vi-VN')}
           </Typography>
           <Grid container spacing={1}>
             {filteredItems
@@ -2563,9 +2563,9 @@ const InboundSchedule: React.FC = () => {
                 const receiveDate = item.actualArrival || item.estimatedArrival || item.date;
 
                 let parsedDate: Date;
-                if (receiveDate.includes("/")) {
+                if (receiveDate.includes('/')) {
                   // Handle dd/MM/yyyy format
-                  const [day, month, year] = receiveDate.split("/");
+                  const [day, month, year] = receiveDate.split('/');
                   parsedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
                 } else {
                   // Handle yyyy-MM-dd format
@@ -2590,7 +2590,7 @@ const InboundSchedule: React.FC = () => {
       {/* Speed Dial - Thêm lịch với dropdown */}
       <SpeedDial
         ariaLabel="SpeedDial thêm lịch"
-        sx={{ position: "fixed", bottom: 16, right: 16 }}
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
         icon={<AddIcon />}
         direction="up"
       >
@@ -2633,19 +2633,19 @@ const InboundSchedule: React.FC = () => {
         onNewTimelineItemChange={setNewTimelineItemField}
         onNewDocumentStatusItemChange={setNewDocumentStatusItemField}
         productCategories={[
-          "Vali",
-          "Balo",
-          "Quà tặng",
-          "Phụ kiện",
-          "Phụ kiện sửa chữa",
-          "Nguyên vật liệu",
-          "Thùng giấy",
-          "Văn phòng phẩm",
-          "Thiết bị văn phòng",
+          'Vali',
+          'Balo',
+          'Quà tặng',
+          'Phụ kiện',
+          'Phụ kiện sửa chữa',
+          'Nguyên vật liệu',
+          'Thùng giấy',
+          'Văn phòng phẩm',
+          'Thiết bị văn phòng',
         ]}
         destinations={[
-          "Kho trung tâm - lô2-5, Đường CN1, Phường Tây Thạnh, Quận Tân Phú, Thành phố Hồ Chí Minh",
-          "Kho Hà Nội - 18 Xóm Núi Tiên Hùng, Nguyên Khê, Đông Anh, Hà Nội",
+          'Kho trung tâm - lô2-5, Đường CN1, Phường Tây Thạnh, Quận Tân Phú, Thành phố Hồ Chí Minh',
+          'Kho Hà Nội - 18 Xóm Núi Tiên Hùng, Nguyên Khê, Đông Anh, Hà Nội',
         ]}
       />
 
@@ -2655,27 +2655,27 @@ const InboundSchedule: React.FC = () => {
         anchorEl={actionMenuAnchor}
         onClose={() => setActionMenuAnchor(null)}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <Box sx={{ p: 1 }}>
           <MenuItem
-            onClick={() => handleActionMenuAction("edit", selectedItemForAction!)}
-            sx={{ fontSize: { xs: "0.6rem", sm: "0.65rem" } }}
+            onClick={() => handleActionMenuAction('edit', selectedItemForAction!)}
+            sx={{ fontSize: { xs: '0.6rem', sm: '0.65rem' } }}
           >
-            <EditIcon sx={{ mr: 1, fontSize: "1rem" }} />
+            <EditIcon sx={{ mr: 1, fontSize: '1rem' }} />
             Sửa
           </MenuItem>
           <MenuItem
-            onClick={() => handleActionMenuAction("delete", selectedItemForAction!)}
-            sx={{ fontSize: { xs: "0.6rem", sm: "0.65rem" } }}
+            onClick={() => handleActionMenuAction('delete', selectedItemForAction!)}
+            sx={{ fontSize: { xs: '0.6rem', sm: '0.65rem' } }}
           >
-            <DeleteIcon sx={{ mr: 1, fontSize: "1rem" }} />
+            <DeleteIcon sx={{ mr: 1, fontSize: '1rem' }} />
             Xóa
           </MenuItem>
         </Box>
@@ -2687,12 +2687,12 @@ const InboundSchedule: React.FC = () => {
         anchorEl={dayMenuAnchor}
         onClose={() => setDayMenuAnchor(null)}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <Box sx={{ p: 1 }}>
@@ -2702,11 +2702,11 @@ const InboundSchedule: React.FC = () => {
               if (selectedDate) {
                 const d = new Date(selectedDate);
                 // format dd/MM/yyyy for display and storage
-                const iso = d.toLocaleDateString("vi-VN");
+                const iso = d.toLocaleDateString('vi-VN');
                 addTimelineItemWith({
-                  name: "Ngày nhập hàng",
+                  name: 'Ngày nhập hàng',
                   estimatedDate: iso,
-                  status: "pending",
+                  status: 'pending',
                 });
               }
 
@@ -2718,26 +2718,26 @@ const InboundSchedule: React.FC = () => {
               // Sau reset, set lại date và timeline cho calendar context
               if (selectedDate) {
                 const d = new Date(selectedDate);
-                const iso = d.toLocaleDateString("vi-VN");
+                const iso = d.toLocaleDateString('vi-VN');
 
                 // Set form fields
-                setField("date", iso as unknown as string);
-                setField("estimatedArrival", iso as unknown as string);
+                setField('date', iso as unknown as string);
+                setField('estimatedArrival', iso as unknown as string);
 
                 // Seed default timeline item: Ngày nhận hàng = selectedDate (sau reset)
                 addTimelineItemWith({
-                  name: "Ngày nhận hàng",
+                  name: 'Ngày nhận hàng',
                   estimatedDate: iso,
-                  status: "pending",
+                  status: 'pending',
                 });
               }
 
               openAddDialog();
               setDayMenuAnchor(null);
             }}
-            sx={{ fontSize: { xs: "0.6rem", sm: "0.65rem" } }}
+            sx={{ fontSize: { xs: '0.6rem', sm: '0.65rem' } }}
           >
-            <CalendarIcon sx={{ mr: 1, fontSize: "1rem" }} />
+            <CalendarIcon sx={{ mr: 1, fontSize: '1rem' }} />
             Thêm lịch
           </MenuItem>
         </Box>

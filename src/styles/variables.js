@@ -1,5 +1,5 @@
 // Theme Variables and Utilities
-import { CONSTANTS } from "../utils/constants";
+import { CONSTANTS } from '../utils/constants';
 
 // Breakpoints
 export const BREAKPOINTS = {
@@ -34,25 +34,25 @@ export const SPACING = {
 
 // Shadow levels
 export const SHADOWS = {
-  0: "none",
-  1: "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
-  2: "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
-  3: "0px 3px 3px -2px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 1px 8px 0px rgba(0,0,0,0.12)",
-  4: "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
+  0: 'none',
+  1: '0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
+  2: '0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)',
+  3: '0px 3px 3px -2px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 1px 8px 0px rgba(0,0,0,0.12)',
+  4: '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)',
 };
 
 // Typography scales
 export const TYPOGRAPHY = {
   fontFamily: '"Roboto", "Inter", "Helvetica", "Arial", sans-serif',
   fontSizes: {
-    xs: "0.75rem", // 12px
-    sm: "0.875rem", // 14px
-    md: "1rem", // 16px
-    lg: "1.125rem", // 18px
-    xl: "1.25rem", // 20px
-    "2xl": "1.5rem", // 24px
-    "3xl": "1.875rem", // 30px
-    "4xl": "2.25rem", // 36px
+    xs: '0.75rem', // 12px
+    sm: '0.875rem', // 14px
+    md: '1rem', // 16px
+    lg: '1.125rem', // 18px
+    xl: '1.25rem', // 20px
+    '2xl': '1.5rem', // 24px
+    '3xl': '1.875rem', // 30px
+    '4xl': '2.25rem', // 36px
   },
   fontWeights: {
     light: 300,
@@ -80,14 +80,14 @@ export const BORDER_RADIUS = {
 
 // Transition durations
 export const TRANSITIONS = {
-  fast: "150ms",
-  normal: "300ms",
-  slow: "500ms",
+  fast: '150ms',
+  normal: '300ms',
+  slow: '500ms',
   easing: {
-    easeInOut: "cubic-bezier(0.4, 0, 0.2, 1)",
-    easeOut: "cubic-bezier(0.0, 0, 0.2, 1)",
-    easeIn: "cubic-bezier(0.4, 0, 1, 1)",
-    sharp: "cubic-bezier(0.4, 0, 0.6, 1)",
+    easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
+    easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+    sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
   },
 };
 
@@ -95,58 +95,58 @@ export const TRANSITIONS = {
 export const MIXINS = {
   // Flexbox utilities
   flexCenter: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   flexBetween: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   flexColumn: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
   },
 
   // Text utilities
   textEllipsis: {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   textClamp: (lines) => ({
-    display: "-webkit-box",
+    display: '-webkit-box',
     WebkitLineClamp: lines,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
   }),
 
   // Layout utilities
   fullHeight: {
-    height: "100vh",
+    height: '100vh',
   },
   fullWidth: {
-    width: "100%",
+    width: '100%',
   },
   absoluteCenter: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
   },
 
   // Card styles
   card: {
     borderRadius: BORDER_RADIUS.md,
     boxShadow: SHADOWS[2],
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
   },
 
   // Button styles
   button: {
     borderRadius: BORDER_RADIUS.md,
-    textTransform: "none",
+    textTransform: 'none',
     fontWeight: TYPOGRAPHY.fontWeights.medium,
     transition: `all ${TRANSITIONS.normal} ${TRANSITIONS.easing.easeInOut}`,
   },
@@ -154,25 +154,25 @@ export const MIXINS = {
   // Input styles
   input: {
     borderRadius: BORDER_RADIUS.md,
-    "& .MuiOutlinedInput-root": {
+    '& .MuiOutlinedInput-root': {
       borderRadius: BORDER_RADIUS.md,
     },
   },
 
   // Scrollbar styles
   scrollbar: {
-    "&::-webkit-scrollbar": {
+    '&::-webkit-scrollbar': {
       width: 8,
       height: 8,
     },
-    "&::-webkit-scrollbar-track": {
+    '&::-webkit-scrollbar-track': {
       backgroundColor: CONSTANTS.COLORS.GREY[100],
       borderRadius: BORDER_RADIUS.sm,
     },
-    "&::-webkit-scrollbar-thumb": {
+    '&::-webkit-scrollbar-thumb': {
       backgroundColor: CONSTANTS.COLORS.GREY[400],
       borderRadius: BORDER_RADIUS.sm,
-      "&:hover": {
+      '&:hover': {
         backgroundColor: CONSTANTS.COLORS.GREY[500],
       },
     },

@@ -1,16 +1,16 @@
-const express = require("express");
-const cors = require("cors");
-const nodemailer = require("nodemailer");
-const cron = require("node-cron");
-const { google } = require("googleapis");
-const axios = require("axios");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const path = require("path");
-require("dotenv").config();
+const express = require('express');
+const cors = require('cors');
+const nodemailer = require('nodemailer');
+const cron = require('node-cron');
+const { google } = require('googleapis');
+const axios = require('axios');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const path = require('path');
+require('dotenv').config();
 
 const app = express();
-const PORT = process.env.BACKEND_PORT || process.env.PORT || 5050;
+const PORT = process.env.BACKEND_PORT || process.env.PORT || 3100;
 
 // Middleware
 app.use(cors());
@@ -20,92 +20,92 @@ app.use(express.urlencoded({ extended: true }));
 const SERVICE_ACCOUNT_KEY_PATH =
   process.env.GOOGLE_APPLICATION_CREDENTIALS ||
   process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ||
-  path.resolve(__dirname, "../backend/mia-logistics-469406-eec521c603c0.json");
+  path.resolve(__dirname, '../backend/mia-logistics-469406-eec521c603c0.json');
 
 // Google API Setup - Sử dụng service account key
 const auth = new google.auth.GoogleAuth({
   keyFile: SERVICE_ACCOUNT_KEY_PATH,
   scopes: [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
-    "https://www.googleapis.com/auth/drive.file",
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/drive.file',
   ],
 });
 
 // Default spreadsheet ID
-const DEFAULT_SPREADSHEET_ID = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+const DEFAULT_SPREADSHEET_ID = '18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As';
 
-const sheets = google.sheets({ version: "v4", auth });
-const drive = google.drive({ version: "v3", auth });
+const sheets = google.sheets({ version: 'v4', auth });
+const drive = google.drive({ version: 'v3', auth });
 
-const TRANSFERS_SHEET = "Transfers";
+const TRANSFERS_SHEET = 'Transfers';
 const TRANSFERS_HEADERS = [
-  "transfer_id",
-  "orderCode",
-  "hasVali",
-  "date",
-  "source",
-  "dest",
-  "quantity",
-  "state",
-  "transportStatus",
-  "note",
-  "pkgS",
-  "pkgM",
-  "pkgL",
-  "pkgBagSmall",
-  "pkgBagMedium",
-  "pkgBagLarge",
-  "pkgOther",
-  "totalPackages",
-  "volS",
-  "volM",
-  "volL",
-  "volBagSmall",
-  "volBagMedium",
-  "volBagLarge",
-  "volOther",
-  "totalVolume",
-  "dest_id",
-  "source_id",
-  "employee",
-  "address",
-  "ward",
-  "district",
-  "province",
+  'transfer_id',
+  'orderCode',
+  'hasVali',
+  'date',
+  'source',
+  'dest',
+  'quantity',
+  'state',
+  'transportStatus',
+  'note',
+  'pkgS',
+  'pkgM',
+  'pkgL',
+  'pkgBagSmall',
+  'pkgBagMedium',
+  'pkgBagLarge',
+  'pkgOther',
+  'totalPackages',
+  'volS',
+  'volM',
+  'volL',
+  'volBagSmall',
+  'volBagMedium',
+  'volBagLarge',
+  'volOther',
+  'totalVolume',
+  'dest_id',
+  'source_id',
+  'employee',
+  'address',
+  'ward',
+  'district',
+  'province',
 ];
 
-const CARRIERS_SHEET = "Carriers";
+const CARRIERS_SHEET = 'Carriers';
 const CARRIERS_HEADERS = [
-  "carrierId",
-  "name",
-  "avatarUrl",
-  "contactPerson",
-  "email",
-  "phone",
-  "address",
-  "serviceAreas",
-  "pricingMethod",
-  "baseRate",
-  "perKmRate",
-  "perM3Rate",
-  "perTripRate",
-  "fuelSurcharge",
-  "remoteAreaFee",
-  "insuranceRate",
-  "vehicleTypes",
-  "maxWeight",
-  "maxVolume",
-  "operatingHours",
-  "rating",
-  "isActive",
-  "createdAt",
-  "updatedAt",
+  'carrierId',
+  'name',
+  'avatarUrl',
+  'contactPerson',
+  'email',
+  'phone',
+  'address',
+  'serviceAreas',
+  'pricingMethod',
+  'baseRate',
+  'perKmRate',
+  'perM3Rate',
+  'perTripRate',
+  'fuelSurcharge',
+  'remoteAreaFee',
+  'insuranceRate',
+  'vehicleTypes',
+  'maxWeight',
+  'maxVolume',
+  'operatingHours',
+  'rating',
+  'isActive',
+  'createdAt',
+  'updatedAt',
 ];
 
 // JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET || "mia-logistics-secret-key-2025";
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "24h";
+const JWT_SECRET = process.env.JWT_SECRET || 'mia-logistics-secret-key-2025';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
 // Login attempts tracking (in-memory for demo)
 const loginAttempts = new Map();
@@ -115,7 +115,7 @@ async function getUserFromSheets(email) {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: DEFAULT_SPREADSHEET_ID,
-      range: "Users!A:H",
+      range: 'Users!A:H',
     });
 
     const rows = response.data.values || [];
@@ -123,12 +123,12 @@ async function getUserFromSheets(email) {
 
     // Parse headers
     const headers = rows[0];
-    const idIndex = headers.indexOf("id");
-    const emailIndex = headers.indexOf("email");
-    const passwordHashIndex = headers.indexOf("passwordHash");
-    const fullNameIndex = headers.indexOf("fullName");
-    const roleIndex = headers.indexOf("roleId");
-    const statusIndex = headers.indexOf("status");
+    const idIndex = headers.indexOf('id');
+    const emailIndex = headers.indexOf('email');
+    const passwordHashIndex = headers.indexOf('passwordHash');
+    const fullNameIndex = headers.indexOf('fullName');
+    const roleIndex = headers.indexOf('roleId');
+    const statusIndex = headers.indexOf('status');
 
     // Find user by email
     for (let i = 1; i < rows.length; i++) {
@@ -147,7 +147,7 @@ async function getUserFromSheets(email) {
 
     return null;
   } catch (error) {
-    console.error("Error reading user from Google Sheets:", error);
+    console.error('Error reading user from Google Sheets:', error);
     return null;
   }
 }
@@ -163,35 +163,35 @@ const smtpPass = process.env.SMTP_PASS;
 if (sendGridApiKey) {
   // Use SendGrid
   transporter = nodemailer.createTransport({
-    service: "SendGrid",
+    service: 'SendGrid',
     auth: {
-      user: "apikey",
+      user: 'apikey',
       pass: sendGridApiKey,
     },
   });
-  console.log("📧 Email: Using SendGrid");
+  console.log('📧 Email: Using SendGrid');
 } else if (smtpHost && smtpUser && smtpPass) {
   // Use SMTP
   transporter = nodemailer.createTransport({
     host: smtpHost,
-    port: parseInt(process.env.SMTP_PORT || "587"),
-    secure: process.env.SMTP_SECURE === "true",
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true',
     auth: {
       user: smtpUser,
       pass: smtpPass,
     },
   });
-  console.log("📧 Email: Using SMTP");
+  console.log('📧 Email: Using SMTP');
 } else if (process.env.REACT_APP_EMAIL_USER && process.env.REACT_APP_EMAIL_PASS) {
   // Legacy Gmail config
   transporter = nodemailer.createTransport({
-    service: process.env.REACT_APP_EMAIL_SERVICE || "gmail",
+    service: process.env.REACT_APP_EMAIL_SERVICE || 'gmail',
     auth: {
       user: process.env.REACT_APP_EMAIL_USER,
       pass: process.env.REACT_APP_EMAIL_PASS,
     },
   });
-  console.log("📧 Email: Using legacy Gmail config");
+  console.log('📧 Email: Using legacy Gmail config');
 }
 
 // Alert history storage (in-memory for demo)
@@ -213,7 +213,7 @@ const addToAlertHistory = (type, subject, message) => {
 };
 
 const colNumToLetter = (num) => {
-  let result = "";
+  let result = '';
   let n = num;
   while (n > 0) {
     n -= 1;
@@ -223,14 +223,14 @@ const colNumToLetter = (num) => {
   return result;
 };
 
-const toStringSafe = (value, defaultValue = "") => {
+const toStringSafe = (value, defaultValue = '') => {
   if (value === null || value === undefined) return defaultValue;
-  if (typeof value === "string") return value.trim();
+  if (typeof value === 'string') return value.trim();
   return String(value).trim();
 };
 
 const toNumberSafe = (value, decimals = 0) => {
-  if (value === null || value === undefined || value === "") return 0;
+  if (value === null || value === undefined || value === '') return 0;
   const num = Number(value);
   if (Number.isNaN(num)) return 0;
   if (decimals <= 0) return Math.round(num);
@@ -240,12 +240,12 @@ const toNumberSafe = (value, decimals = 0) => {
 
 const formatDateForSheet = (input) => {
   const s = toStringSafe(input);
-  if (!s) return "";
+  if (!s) return '';
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) return s;
   const d = new Date(s);
   if (!Number.isNaN(d.getTime())) {
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
     const year = String(d.getFullYear());
     return `${day}/${month}/${year}`;
   }
@@ -261,8 +261,8 @@ const normalizeTransferRecord = (record) => {
   normalized.source = toStringSafe(normalized.source);
   normalized.dest = toStringSafe(normalized.dest);
   normalized.quantity = toNumberSafe(normalized.quantity, 0);
-  normalized.state = toStringSafe(normalized.state || "Đề nghị chuyển kho");
-  normalized.transportStatus = toStringSafe(normalized.transportStatus || "Chờ báo kiện");
+  normalized.state = toStringSafe(normalized.state || 'Đề nghị chuyển kho');
+  normalized.transportStatus = toStringSafe(normalized.transportStatus || 'Chờ báo kiện');
   normalized.note = toStringSafe(normalized.note);
 
   normalized.pkgS = toNumberSafe(normalized.pkgS, 0);
@@ -323,7 +323,7 @@ const ensureTransfersHeaders = async (spreadsheetId) => {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `${TRANSFERS_SHEET}!A1`,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       resource: { values: [TRANSFERS_HEADERS] },
     });
   }
@@ -340,11 +340,11 @@ const getExistingTransferIds = async (spreadsheetId) => {
     return new Set();
   }
   const headers = rows[0];
-  const idIndex = headers.indexOf("transfer_id");
-  const altIndex = headers.indexOf("id");
+  const idIndex = headers.indexOf('transfer_id');
+  const altIndex = headers.indexOf('id');
   const ids = new Set();
   rows.slice(1).forEach((row) => {
-    const id = toStringSafe(row[idIndex >= 0 ? idIndex : altIndex] || "");
+    const id = toStringSafe(row[idIndex >= 0 ? idIndex : altIndex] || '');
     if (id) ids.add(id);
   });
   return ids;
@@ -362,7 +362,7 @@ const ensureCarriersHeaders = async (spreadsheetId) => {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `${CARRIERS_SHEET}!A1`,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       resource: { values: [CARRIERS_HEADERS] },
     });
   }
@@ -380,7 +380,7 @@ const ensureTransportRequestHeaders = async (spreadsheetId) => {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `${TRANSPORT_REQUESTS_SHEET}!A1`,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       resource: { values: [TRANSPORT_REQUESTS_HEADERS] },
     });
   }
@@ -401,7 +401,7 @@ const getTransportRequestRecords = async (spreadsheetId) => {
     if (!hasValue) return acc;
     const record = {};
     headers.forEach((header, index) => {
-      record[header] = row[index] ?? "";
+      record[header] = row[index] ?? '';
     });
     acc.push(record);
     return acc;
@@ -421,7 +421,7 @@ const findTransportRequestRowIndex = async (spreadsheetId, requestId) => {
   const idx = dataRows.findIndex((row) => {
     const record = {};
     headers.forEach((header, index) => {
-      record[header] = row[index] ?? "";
+      record[header] = row[index] ?? '';
     });
     return toStringSafe(record.requestId) === requestId;
   });
@@ -434,27 +434,27 @@ const generateTransportRequestId = async (spreadsheetId) => {
     range: `${TRANSPORT_REQUESTS_SHEET}!A:A`,
   });
   const rows = response.data.values || [];
-  const ids = rows.slice(1).map((row) => String(row[0] || "").trim());
+  const ids = rows.slice(1).map((row) => String(row[0] || '').trim());
   let maxNumber = 0;
   ids.forEach((id) => {
-    if (id.startsWith("MSC-")) {
+    if (id.startsWith('MSC-')) {
       const num = parseInt(id.slice(4), 10);
       if (!Number.isNaN(num) && num > maxNumber) {
         maxNumber = num;
       }
     }
   });
-  const nextNumber = (maxNumber + 1).toString().padStart(8, "0");
+  const nextNumber = (maxNumber + 1).toString().padStart(8, '0');
   return `MSC-${nextNumber}`;
 };
 
 const appendTransportRequestRow = async (spreadsheetId, record) => {
-  const values = TRANSPORT_REQUESTS_HEADERS.map((header) => record[header] ?? "");
+  const values = TRANSPORT_REQUESTS_HEADERS.map((header) => record[header] ?? '');
   await sheets.spreadsheets.values.append({
     spreadsheetId,
     range: `${TRANSPORT_REQUESTS_SHEET}!A:Z`,
-    valueInputOption: "RAW",
-    insertDataOption: "INSERT_ROWS",
+    valueInputOption: 'RAW',
+    insertDataOption: 'INSERT_ROWS',
     resource: { values: [values] },
   });
 };
@@ -474,7 +474,7 @@ const getCarrierRecords = async (spreadsheetId) => {
     if (!hasValue) return acc;
     const record = {};
     headers.forEach((header, index) => {
-      record[header] = row[index] ?? "";
+      record[header] = row[index] ?? '';
     });
     acc.push(record);
     return acc;
@@ -494,14 +494,14 @@ const findCarrierRowIndex = async (spreadsheetId, carrierId) => {
   const idx = dataRows.findIndex((row) => {
     const record = {};
     headers.forEach((header, index) => {
-      record[header] = row[index] ?? "";
+      record[header] = row[index] ?? '';
     });
     return toStringSafe(record.carrierId) === carrierId;
   });
   return idx === -1 ? -1 : idx + 2;
 };
 
-const ACTIVE_LOCATION_STATUSES = new Set(["active", "true", "1", "yes"]);
+const ACTIVE_LOCATION_STATUSES = new Set(['active', 'true', '1', 'yes']);
 
 const isLocationActive = (statusValue) => {
   if (!statusValue) return false;
@@ -513,7 +513,7 @@ const loadLocationsMap = async (spreadsheetId = DEFAULT_SPREADSHEET_ID) => {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: "Locations!A1:Z",
+      range: 'Locations!A1:Z',
     });
     const rows = response.data.values || [];
     if (rows.length === 0) return new Map();
@@ -522,7 +522,7 @@ const loadLocationsMap = async (spreadsheetId = DEFAULT_SPREADSHEET_ID) => {
     rows.slice(1).forEach((row) => {
       const record = {};
       headers.forEach((header, index) => {
-        record[header] = row[index] ?? "";
+        record[header] = row[index] ?? '';
       });
       const id = toStringSafe(record.id || record.ID);
       if (!id) return;
@@ -537,7 +537,7 @@ const loadLocationsMap = async (spreadsheetId = DEFAULT_SPREADSHEET_ID) => {
     });
     return map;
   } catch (error) {
-    console.error("Error loading locations map:", error);
+    console.error('Error loading locations map:', error);
     return new Map();
   }
 };
@@ -545,7 +545,7 @@ const loadLocationsMap = async (spreadsheetId = DEFAULT_SPREADSHEET_ID) => {
 const getLocationsList = async (spreadsheetId = DEFAULT_SPREADSHEET_ID) => {
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: "Locations!A1:Z",
+    range: 'Locations!A1:Z',
   });
   const rows = response.data.values || [];
   if (rows.length === 0) return [];
@@ -553,12 +553,12 @@ const getLocationsList = async (spreadsheetId = DEFAULT_SPREADSHEET_ID) => {
   const headers = rows[0];
 
   return rows.slice(1).reduce((acc, row) => {
-    const hasValue = row.some((cell) => (cell ?? "").toString().trim().length > 0);
+    const hasValue = row.some((cell) => (cell ?? '').toString().trim().length > 0);
     if (!hasValue) return acc;
 
     const record = {};
     headers.forEach((header, index) => {
-      record[header] = row[index] ?? "";
+      record[header] = row[index] ?? '';
     });
 
     const idCandidate =
@@ -566,7 +566,7 @@ const getLocationsList = async (spreadsheetId = DEFAULT_SPREADSHEET_ID) => {
 
     record.id = toStringSafe(idCandidate);
     record.status = toStringSafe(
-      record.status || record.Status || record.active || record.Active || "active"
+      record.status || record.Status || record.active || record.Active || 'active'
     );
 
     acc.push(record);
@@ -587,133 +587,133 @@ const applyLocationToTransfer = (transfer, locationsMap) => {
 };
 
 // Volume rules helpers
-const VOLUME_RULES_SHEET = "VolumeRules";
-const VOLUME_RULES_HEADERS = ["id", "name", "unitVolume", "description", "createdAt", "updatedAt"];
+const VOLUME_RULES_SHEET = 'VolumeRules';
+const VOLUME_RULES_HEADERS = ['id', 'name', 'unitVolume', 'description', 'createdAt', 'updatedAt'];
 const VOLUME_RULES_DEFAULTS = [
-  { id: "S", name: "Size S", unitVolume: "0.04", description: "" },
-  { id: "M", name: "Size M", unitVolume: "0.09", description: "" },
-  { id: "L", name: "Size L", unitVolume: "0.14", description: "" },
-  { id: "BAG_S", name: "Bao nhỏ", unitVolume: "0.01", description: "" },
-  { id: "BAG_M", name: "Bao trung", unitVolume: "0.05", description: "" },
-  { id: "BAG_L", name: "Bao lớn", unitVolume: "0.10", description: "" },
-  { id: "OTHER", name: "Khác", unitVolume: "0.00", description: "" },
+  { id: 'S', name: 'Size S', unitVolume: '0.04', description: '' },
+  { id: 'M', name: 'Size M', unitVolume: '0.09', description: '' },
+  { id: 'L', name: 'Size L', unitVolume: '0.14', description: '' },
+  { id: 'BAG_S', name: 'Bao nhỏ', unitVolume: '0.01', description: '' },
+  { id: 'BAG_M', name: 'Bao trung', unitVolume: '0.05', description: '' },
+  { id: 'BAG_L', name: 'Bao lớn', unitVolume: '0.10', description: '' },
+  { id: 'OTHER', name: 'Khác', unitVolume: '0.00', description: '' },
 ];
 
-const TRANSPORT_REQUESTS_SHEET = "TransportRequests";
+const TRANSPORT_REQUESTS_SHEET = 'TransportRequests';
 const TRANSPORT_REQUESTS_HEADERS = [
-  "requestId",
-  "createdAt",
-  "updatedAt",
-  "pickupAddress",
-  "stop1Address",
-  "stop2Address",
-  "stop3Address",
-  "stop4Address",
-  "stop5Address",
-  "stop6Address",
-  "stop7Address",
-  "stop8Address",
-  "stop9Address",
-  "stop10Address",
-  "stop1MN",
-  "stop2MN",
-  "stop3MN",
-  "stop4MN",
-  "stop5MN",
-  "stop6MN",
-  "stop7MN",
-  "stop8MN",
-  "stop9MN",
-  "stop10MN",
-  "stop1Products",
-  "stop2Products",
-  "stop3Products",
-  "stop4Products",
-  "stop5Products",
-  "stop6Products",
-  "stop7Products",
-  "stop8Products",
-  "stop9Products",
-  "stop10Products",
-  "stop1VolumeM3",
-  "stop2VolumeM3",
-  "stop3VolumeM3",
-  "stop4VolumeM3",
-  "stop5VolumeM3",
-  "stop6VolumeM3",
-  "stop7VolumeM3",
-  "stop8VolumeM3",
-  "stop9VolumeM3",
-  "stop10VolumeM3",
-  "stop1Packages",
-  "stop2Packages",
-  "stop3Packages",
-  "stop4Packages",
-  "stop5Packages",
-  "stop6Packages",
-  "stop7Packages",
-  "stop8Packages",
-  "stop9Packages",
-  "stop10Packages",
-  "totalProducts",
-  "totalVolumeM3",
-  "totalPackages",
-  "pricingMethod",
-  "carrierId",
-  "carrierName",
-  "carrierContact",
-  "carrierPhone",
-  "carrierEmail",
-  "estimatedCost",
-  "status",
-  "note",
-  "vehicleType",
-  "distance1",
-  "distance2",
-  "distance3",
-  "distance4",
-  "distance5",
-  "distance6",
-  "distance7",
-  "distance8",
-  "distance9",
-  "distance10",
-  "totalDistance",
-  "stop1OrderCount",
-  "stop2OrderCount",
-  "stop3OrderCount",
-  "stop4OrderCount",
-  "stop5OrderCount",
-  "stop6OrderCount",
-  "stop7OrderCount",
-  "stop8OrderCount",
-  "stop9OrderCount",
-  "stop10OrderCount",
-  "totalOrderCount",
-  "stop1TransferIds",
-  "stop2TransferIds",
-  "stop3TransferIds",
-  "stop4TransferIds",
-  "stop5TransferIds",
-  "stop6TransferIds",
-  "stop7TransferIds",
-  "stop8TransferIds",
-  "stop9TransferIds",
-  "stop10TransferIds",
-  "driverId",
-  "driverName",
-  "driverPhone",
-  "driverLicense",
-  "loadingImages",
-  "department",
-  "serviceArea",
-  "pricePerKm",
-  "pricePerM3",
-  "pricePerTrip",
-  "fuelSurcharge",
-  "tollFee",
-  "insuranceFee",
-  "baseRate",
+  'requestId',
+  'createdAt',
+  'updatedAt',
+  'pickupAddress',
+  'stop1Address',
+  'stop2Address',
+  'stop3Address',
+  'stop4Address',
+  'stop5Address',
+  'stop6Address',
+  'stop7Address',
+  'stop8Address',
+  'stop9Address',
+  'stop10Address',
+  'stop1MN',
+  'stop2MN',
+  'stop3MN',
+  'stop4MN',
+  'stop5MN',
+  'stop6MN',
+  'stop7MN',
+  'stop8MN',
+  'stop9MN',
+  'stop10MN',
+  'stop1Products',
+  'stop2Products',
+  'stop3Products',
+  'stop4Products',
+  'stop5Products',
+  'stop6Products',
+  'stop7Products',
+  'stop8Products',
+  'stop9Products',
+  'stop10Products',
+  'stop1VolumeM3',
+  'stop2VolumeM3',
+  'stop3VolumeM3',
+  'stop4VolumeM3',
+  'stop5VolumeM3',
+  'stop6VolumeM3',
+  'stop7VolumeM3',
+  'stop8VolumeM3',
+  'stop9VolumeM3',
+  'stop10VolumeM3',
+  'stop1Packages',
+  'stop2Packages',
+  'stop3Packages',
+  'stop4Packages',
+  'stop5Packages',
+  'stop6Packages',
+  'stop7Packages',
+  'stop8Packages',
+  'stop9Packages',
+  'stop10Packages',
+  'totalProducts',
+  'totalVolumeM3',
+  'totalPackages',
+  'pricingMethod',
+  'carrierId',
+  'carrierName',
+  'carrierContact',
+  'carrierPhone',
+  'carrierEmail',
+  'estimatedCost',
+  'status',
+  'note',
+  'vehicleType',
+  'distance1',
+  'distance2',
+  'distance3',
+  'distance4',
+  'distance5',
+  'distance6',
+  'distance7',
+  'distance8',
+  'distance9',
+  'distance10',
+  'totalDistance',
+  'stop1OrderCount',
+  'stop2OrderCount',
+  'stop3OrderCount',
+  'stop4OrderCount',
+  'stop5OrderCount',
+  'stop6OrderCount',
+  'stop7OrderCount',
+  'stop8OrderCount',
+  'stop9OrderCount',
+  'stop10OrderCount',
+  'totalOrderCount',
+  'stop1TransferIds',
+  'stop2TransferIds',
+  'stop3TransferIds',
+  'stop4TransferIds',
+  'stop5TransferIds',
+  'stop6TransferIds',
+  'stop7TransferIds',
+  'stop8TransferIds',
+  'stop9TransferIds',
+  'stop10TransferIds',
+  'driverId',
+  'driverName',
+  'driverPhone',
+  'driverLicense',
+  'loadingImages',
+  'department',
+  'serviceArea',
+  'pricePerKm',
+  'pricePerM3',
+  'pricePerTrip',
+  'fuelSurcharge',
+  'tollFee',
+  'insuranceFee',
+  'baseRate',
 ];
 
 const APPS_SCRIPT_SCRIPT_ID =
@@ -721,13 +721,13 @@ const APPS_SCRIPT_SCRIPT_ID =
   process.env.REMOTE_APPS_SCRIPT_ID ||
   process.env.REACT_APP_GOOGLE_APPS_SCRIPT_ID ||
   process.env.GOOGLE_APPS_SCRIPT_ID ||
-  "";
+  '';
 
 const APPS_SCRIPT_DISTANCE_URL =
   process.env.APPS_SCRIPT_DISTANCE_URL ||
   (APPS_SCRIPT_SCRIPT_ID
     ? `https://script.google.com/macros/s/${APPS_SCRIPT_SCRIPT_ID}/exec`
-    : "https://script.google.com/macros/s/AKfycbw8xo0xm576l67BXb2fVcEg4cOE4rQD7MgUKxAWZmTVK7-b2k5ZR303EEmOyvbd3nTQfQ/exec");
+    : 'https://script.google.com/macros/s/AKfycbw8xo0xm576l67BXb2fVcEg4cOE4rQD7MgUKxAWZmTVK7-b2k5ZR303EEmOyvbd3nTQfQ/exec');
 
 if (!process.env.APPS_SCRIPT_DISTANCE_URL && APPS_SCRIPT_SCRIPT_ID) {
   console.log(
@@ -749,7 +749,7 @@ const ensureVolumeRulesHeaders = async (spreadsheetId) => {
     await sheets.spreadsheets.values.update({
       spreadsheetId: effectiveId,
       range: `${VOLUME_RULES_SHEET}!A1`,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       resource: { values: [VOLUME_RULES_HEADERS] },
     });
   }
@@ -758,12 +758,12 @@ const ensureVolumeRulesHeaders = async (spreadsheetId) => {
 const appendVolumeRule = async (spreadsheetId, record) => {
   const effectiveId = spreadsheetId || DEFAULT_SPREADSHEET_ID;
   if (!effectiveId) return;
-  const values = VOLUME_RULES_HEADERS.map((header) => record[header] ?? "");
+  const values = VOLUME_RULES_HEADERS.map((header) => record[header] ?? '');
   await sheets.spreadsheets.values.append({
     spreadsheetId: effectiveId,
     range: `${VOLUME_RULES_SHEET}!A:Z`,
-    valueInputOption: "RAW",
-    insertDataOption: "INSERT_ROWS",
+    valueInputOption: 'RAW',
+    insertDataOption: 'INSERT_ROWS',
     resource: { values: [values] },
   });
 };
@@ -785,7 +785,7 @@ const seedVolumeRulesIfEmpty = async (spreadsheetId) => {
       id: rule.id,
       name: rule.name,
       unitVolume: String(Number(rule.unitVolume || 0)),
-      description: rule.description || "",
+      description: rule.description || '',
       createdAt: now,
       updatedAt: now,
     };
@@ -814,7 +814,7 @@ const fetchVolumeRules = async (spreadsheetId) => {
   const list = rows.map((row) => {
     const record = {};
     VOLUME_RULES_HEADERS.forEach((header, index) => {
-      record[header] = row[index] ?? "";
+      record[header] = row[index] ?? '';
     });
     return record;
   });
@@ -824,14 +824,14 @@ const fetchVolumeRules = async (spreadsheetId) => {
 // Routes
 
 // Authentication endpoint with Google Sheets + bcrypt + JWT
-app.post("/api/auth/login", async (req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({
         success: false,
-        error: "Email và mật khẩu là bắt buộc",
+        error: 'Email và mật khẩu là bắt buộc',
       });
     }
 
@@ -859,15 +859,15 @@ app.post("/api/auth/login", async (req, res) => {
 
       return res.status(401).json({
         success: false,
-        error: "Email không tồn tại trong hệ thống",
+        error: 'Email không tồn tại trong hệ thống',
       });
     }
 
     // Check if user is active
-    if (user.status !== "active") {
+    if (user.status !== 'active') {
       return res.status(403).json({
         success: false,
-        error: "Tài khoản đã bị vô hiệu hóa",
+        error: 'Tài khoản đã bị vô hiệu hóa',
       });
     }
 
@@ -876,7 +876,7 @@ app.post("/api/auth/login", async (req, res) => {
     try {
       isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     } catch (bcryptError) {
-      console.error("bcrypt error:", bcryptError);
+      console.error('bcrypt error:', bcryptError);
       // Fallback to simple comparison for legacy hashes
       isPasswordValid = password === user.passwordHash;
     }
@@ -890,7 +890,7 @@ app.post("/api/auth/login", async (req, res) => {
 
       return res.status(401).json({
         success: false,
-        error: "Mật khẩu không chính xác",
+        error: 'Mật khẩu không chính xác',
       });
     }
 
@@ -925,20 +925,20 @@ app.post("/api/auth/login", async (req, res) => {
     res.json({
       success: true,
       user: userObj,
-      message: "Đăng nhập thành công",
+      message: 'Đăng nhập thành công',
       token: token,
     });
   } catch (error) {
-    console.error("Login error:", error);
+    console.error('Login error:', error);
     res.status(500).json({
       success: false,
-      error: "Lỗi server khi xử lý đăng nhập",
+      error: 'Lỗi server khi xử lý đăng nhập',
       details: error.message,
     });
   }
 });
 
-app.get("/api/transfers", async (req, res) => {
+app.get('/api/transfers', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     await ensureTransfersHeaders(spreadsheetId);
@@ -958,7 +958,7 @@ app.get("/api/transfers", async (req, res) => {
       if (!hasValue) return acc;
       const record = {};
       headers.forEach((header, index) => {
-        record[header] = row[index] ?? "";
+        record[header] = row[index] ?? '';
       });
       applyLocationToTransfer(record, locationsMap);
       acc.push(record);
@@ -966,23 +966,23 @@ app.get("/api/transfers", async (req, res) => {
     }, []);
     res.json(records);
   } catch (error) {
-    console.error("Error fetching transfers:", error);
+    console.error('Error fetching transfers:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch transfers",
+      error: 'Failed to fetch transfers',
       details: error.message,
     });
   }
 });
 
-app.put("/api/transfers/:id", async (req, res) => {
+app.put('/api/transfers/:id', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
-    const transferId = String(req.params.id || "").trim();
+    const transferId = String(req.params.id || '').trim();
     if (!transferId) {
       return res.status(400).json({
         success: false,
-        error: "transfer_id is required",
+        error: 'transfer_id is required',
       });
     }
 
@@ -997,7 +997,7 @@ app.put("/api/transfers/:id", async (req, res) => {
     if (rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: "Transfers sheet is empty",
+        error: 'Transfers sheet is empty',
       });
     }
 
@@ -1006,7 +1006,7 @@ app.put("/api/transfers/:id", async (req, res) => {
     const rowIndex = dataRows.findIndex((row) => {
       const rowObj = {};
       headers.forEach((header, index) => {
-        rowObj[header] = row[index] ?? "";
+        rowObj[header] = row[index] ?? '';
       });
       const currentId = toStringSafe(rowObj.transfer_id || rowObj.id);
       return currentId === transferId;
@@ -1015,13 +1015,13 @@ app.put("/api/transfers/:id", async (req, res) => {
     if (rowIndex === -1) {
       return res.status(404).json({
         success: false,
-        error: "Transfer not found",
+        error: 'Transfer not found',
       });
     }
 
     const existingRecord = {};
     headers.forEach((header, index) => {
-      existingRecord[header] = dataRows[rowIndex][index] ?? "";
+      existingRecord[header] = dataRows[rowIndex][index] ?? '';
     });
 
     const merged = {
@@ -1035,13 +1035,13 @@ app.put("/api/transfers/:id", async (req, res) => {
     const locationsMap = await loadLocationsMap(spreadsheetId);
     applyLocationToTransfer(normalized, locationsMap);
 
-    const updatedValues = TRANSFERS_HEADERS.map((header) => normalized[header] ?? "");
+    const updatedValues = TRANSFERS_HEADERS.map((header) => normalized[header] ?? '');
     const targetRange = `${TRANSFERS_SHEET}!A${rowIndex + 2}:${endColumn}${rowIndex + 2}`;
 
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: targetRange,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       resource: { values: [updatedValues] },
     });
 
@@ -1050,16 +1050,16 @@ app.put("/api/transfers/:id", async (req, res) => {
       transfer: normalized,
     });
   } catch (error) {
-    console.error("Error updating transfer:", error);
+    console.error('Error updating transfer:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to update transfer",
+      error: 'Failed to update transfer',
       details: error.message,
     });
   }
 });
 
-app.post("/api/transport-requests/generate-id", async (req, res) => {
+app.post('/api/transport-requests/generate-id', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     if (!spreadsheetId) {
@@ -1087,16 +1087,16 @@ app.post("/api/transport-requests/generate-id", async (req, res) => {
     const rowIndex = requestIds.length + 2;
     res.json({ requestId, rowIndex });
   } catch (error) {
-    console.error("Error generating transport request ID:", error);
+    console.error('Error generating transport request ID:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to generate request ID",
+      error: 'Failed to generate request ID',
       details: error.message,
     });
   }
 });
 
-app.get("/api/locations", async (req, res) => {
+app.get('/api/locations', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     if (!spreadsheetId) {
@@ -1105,16 +1105,16 @@ app.get("/api/locations", async (req, res) => {
     const locations = await getLocationsList(spreadsheetId);
     res.json(locations);
   } catch (error) {
-    console.error("Error fetching locations:", error);
+    console.error('Error fetching locations:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch locations",
+      error: 'Failed to fetch locations',
       details: error.message,
     });
   }
 });
 
-app.get("/api/carriers", async (req, res) => {
+app.get('/api/carriers', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     if (!spreadsheetId) {
@@ -1123,16 +1123,16 @@ app.get("/api/carriers", async (req, res) => {
     const carriers = await getCarrierRecords(spreadsheetId);
     res.json(carriers);
   } catch (error) {
-    console.error("Error fetching carriers:", error);
+    console.error('Error fetching carriers:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch carriers",
+      error: 'Failed to fetch carriers',
       details: error.message,
     });
   }
 });
 
-app.get("/api/transport-requests", async (req, res) => {
+app.get('/api/transport-requests', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     if (!spreadsheetId) {
@@ -1141,21 +1141,21 @@ app.get("/api/transport-requests", async (req, res) => {
     const records = await getTransportRequestRecords(spreadsheetId);
     res.json(records);
   } catch (error) {
-    console.error("Error fetching transport requests:", error);
+    console.error('Error fetching transport requests:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch transport requests",
+      error: 'Failed to fetch transport requests',
       details: error.message,
     });
   }
 });
 
-app.put("/api/transport-requests/:id", async (req, res) => {
+app.put('/api/transport-requests/:id', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     const requestId = toStringSafe(req.params.id);
     if (!spreadsheetId || !requestId) {
-      return res.status(400).json({ success: false, error: "Invalid request" });
+      return res.status(400).json({ success: false, error: 'Invalid request' });
     }
 
     await ensureTransportRequestHeaders(spreadsheetId);
@@ -1164,7 +1164,7 @@ app.put("/api/transport-requests/:id", async (req, res) => {
 
     const rowIndex = await findTransportRequestRowIndex(spreadsheetId, requestId);
     if (rowIndex === -1) {
-      return res.status(404).json({ success: false, error: "Transport request not found" });
+      return res.status(404).json({ success: false, error: 'Transport request not found' });
     }
 
     const now = new Date().toISOString();
@@ -1174,37 +1174,37 @@ app.put("/api/transport-requests/:id", async (req, res) => {
     }
     merged.updatedAt = now;
 
-    const values = TRANSPORT_REQUESTS_HEADERS.map((header) => merged[header] ?? "");
+    const values = TRANSPORT_REQUESTS_HEADERS.map((header) => merged[header] ?? '');
     const endColumn = colNumToLetter(TRANSPORT_REQUESTS_HEADERS.length);
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `${TRANSPORT_REQUESTS_SHEET}!A${rowIndex}:${endColumn}${rowIndex}`,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       resource: { values: [values] },
     });
 
     res.json(merged);
   } catch (error) {
-    console.error("Error updating transport request:", error);
+    console.error('Error updating transport request:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to update transport request",
+      error: 'Failed to update transport request',
       details: error.message,
     });
   }
 });
 
-app.delete("/api/transport-requests/:id", async (req, res) => {
+app.delete('/api/transport-requests/:id', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     const requestId = toStringSafe(req.params.id);
     if (!spreadsheetId || !requestId) {
-      return res.status(400).json({ success: false, error: "Invalid request" });
+      return res.status(400).json({ success: false, error: 'Invalid request' });
     }
 
     const rowIndex = await findTransportRequestRowIndex(spreadsheetId, requestId);
     if (rowIndex === -1) {
-      return res.status(404).json({ success: false, error: "Transport request not found" });
+      return res.status(404).json({ success: false, error: 'Transport request not found' });
     }
 
     const endColumn = colNumToLetter(TRANSPORT_REQUESTS_HEADERS.length);
@@ -1215,16 +1215,16 @@ app.delete("/api/transport-requests/:id", async (req, res) => {
 
     res.json({ success: true });
   } catch (error) {
-    console.error("Error deleting transport request:", error);
+    console.error('Error deleting transport request:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to delete transport request",
+      error: 'Failed to delete transport request',
       details: error.message,
     });
   }
 });
 
-app.post("/api/transport-requests/calculate-distance", async (req, res) => {
+app.post('/api/transport-requests/calculate-distance', async (req, res) => {
   try {
     const pickupAddress = toStringSafe(req.body?.pickupAddress);
     const stops = Array.isArray(req.body?.stops) ? req.body.stops : [];
@@ -1237,7 +1237,7 @@ app.post("/api/transport-requests/calculate-distance", async (req, res) => {
         const key = toStringSafe(stop.key);
         const address = toStringSafe(stop.address);
         if (!key || !address) {
-          return { key, distance: 0, error: "Invalid stop address" };
+          return { key, distance: 0, error: 'Invalid stop address' };
         }
         try {
           const response = await axios.get(APPS_SCRIPT_DISTANCE_URL, {
@@ -1249,9 +1249,9 @@ app.post("/api/transport-requests/calculate-distance", async (req, res) => {
           const data = response.data || {};
           let distanceKm = 0;
           if (data.success && data.distance) {
-            if (typeof data.distance === "number") {
+            if (typeof data.distance === 'number') {
               distanceKm = data.distance;
-            } else if (typeof data.distance.value === "number") {
+            } else if (typeof data.distance.value === 'number') {
               distanceKm = data.distance.value / 1000;
             }
           }
@@ -1276,20 +1276,20 @@ app.post("/api/transport-requests/calculate-distance", async (req, res) => {
 
     res.json({ success: true, distances, errors });
   } catch (error) {
-    console.error("Error calculating distances:", error);
+    console.error('Error calculating distances:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to calculate distances",
+      error: 'Failed to calculate distances',
       details: error.message,
     });
   }
 });
 
-app.post("/api/carriers", async (req, res) => {
+app.post('/api/carriers', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     if (!spreadsheetId) {
-      return res.status(400).json({ success: false, error: "spreadsheetId is required" });
+      return res.status(400).json({ success: false, error: 'spreadsheetId is required' });
     }
     await ensureCarriersHeaders(spreadsheetId);
     const now = new Date().toISOString();
@@ -1299,50 +1299,50 @@ app.post("/api/carriers", async (req, res) => {
     const record = {};
     CARRIERS_HEADERS.forEach((header) => {
       switch (header) {
-        case "carrierId":
+        case 'carrierId':
           record[header] = carrierId;
           break;
-        case "createdAt":
-        case "updatedAt":
+        case 'createdAt':
+        case 'updatedAt':
           record[header] = now;
           break;
         default:
-          record[header] = payload[header] ?? "";
+          record[header] = payload[header] ?? '';
           break;
       }
     });
 
-    const values = CARRIERS_HEADERS.map((header) => record[header] ?? "");
+    const values = CARRIERS_HEADERS.map((header) => record[header] ?? '');
     await sheets.spreadsheets.values.append({
       spreadsheetId,
       range: `${CARRIERS_SHEET}!A:Z`,
-      valueInputOption: "RAW",
-      insertDataOption: "INSERT_ROWS",
+      valueInputOption: 'RAW',
+      insertDataOption: 'INSERT_ROWS',
       resource: { values: [values] },
     });
 
     res.json(record);
   } catch (error) {
-    console.error("Error creating carrier:", error);
+    console.error('Error creating carrier:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to create carrier",
+      error: 'Failed to create carrier',
       details: error.message,
     });
   }
 });
 
-app.put("/api/carriers/:id", async (req, res) => {
+app.put('/api/carriers/:id', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     const carrierId = toStringSafe(req.params.id);
     if (!spreadsheetId || !carrierId) {
-      return res.status(400).json({ success: false, error: "Invalid request" });
+      return res.status(400).json({ success: false, error: 'Invalid request' });
     }
 
     const rowIndex = await findCarrierRowIndex(spreadsheetId, carrierId);
     if (rowIndex === -1) {
-      return res.status(404).json({ success: false, error: "Carrier not found" });
+      return res.status(404).json({ success: false, error: 'Carrier not found' });
     }
 
     const existingRecords = await getCarrierRecords(spreadsheetId);
@@ -1356,37 +1356,37 @@ app.put("/api/carriers/:id", async (req, res) => {
       updatedAt: new Date().toISOString(),
     };
 
-    const values = CARRIERS_HEADERS.map((header) => merged[header] ?? "");
+    const values = CARRIERS_HEADERS.map((header) => merged[header] ?? '');
     const endColumn = colNumToLetter(CARRIERS_HEADERS.length);
     await sheets.spreadsheets.values.update({
       spreadsheetId,
       range: `${CARRIERS_SHEET}!A${rowIndex}:${endColumn}${rowIndex}`,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       resource: { values: [values] },
     });
 
     res.json(merged);
   } catch (error) {
-    console.error("Error updating carrier:", error);
+    console.error('Error updating carrier:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to update carrier",
+      error: 'Failed to update carrier',
       details: error.message,
     });
   }
 });
 
-app.delete("/api/carriers/:id", async (req, res) => {
+app.delete('/api/carriers/:id', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     const carrierId = toStringSafe(req.params.id);
     if (!spreadsheetId || !carrierId) {
-      return res.status(400).json({ success: false, error: "Invalid request" });
+      return res.status(400).json({ success: false, error: 'Invalid request' });
     }
 
     const rowIndex = await findCarrierRowIndex(spreadsheetId, carrierId);
     if (rowIndex === -1) {
-      return res.status(404).json({ success: false, error: "Carrier not found" });
+      return res.status(404).json({ success: false, error: 'Carrier not found' });
     }
 
     const endColumn = colNumToLetter(CARRIERS_HEADERS.length);
@@ -1397,22 +1397,22 @@ app.delete("/api/carriers/:id", async (req, res) => {
 
     res.json({ success: true });
   } catch (error) {
-    console.error("Error deleting carrier:", error);
+    console.error('Error deleting carrier:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to delete carrier",
+      error: 'Failed to delete carrier',
       details: error.message,
     });
   }
 });
 
-app.post("/api/transfers/import", async (req, res) => {
+app.post('/api/transfers/import', async (req, res) => {
   try {
     const rows = Array.isArray(req.body?.rows) ? req.body.rows : [];
     if (rows.length === 0) {
       return res.status(400).json({
         success: false,
-        error: "rows is required",
+        error: 'rows is required',
       });
     }
 
@@ -1438,7 +1438,7 @@ app.post("/api/transfers/import", async (req, res) => {
       }
       existingIds.add(id);
       applyLocationToTransfer(record, locationsMap);
-      valuesToAppend.push(TRANSFERS_HEADERS.map((header) => record[header] ?? ""));
+      valuesToAppend.push(TRANSFERS_HEADERS.map((header) => record[header] ?? ''));
       imported += 1;
     });
 
@@ -1446,8 +1446,8 @@ app.post("/api/transfers/import", async (req, res) => {
       await sheets.spreadsheets.values.append({
         spreadsheetId,
         range: `${TRANSFERS_SHEET}!A:Z`,
-        valueInputOption: "RAW",
-        insertDataOption: "INSERT_ROWS",
+        valueInputOption: 'RAW',
+        insertDataOption: 'INSERT_ROWS',
         resource: { values: valuesToAppend },
       });
     }
@@ -1459,38 +1459,38 @@ app.post("/api/transfers/import", async (req, res) => {
       total: cleaned.length,
     });
   } catch (error) {
-    console.error("Error importing transfers:", error);
+    console.error('Error importing transfers:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to import transfers",
+      error: 'Failed to import transfers',
       details: error.message,
     });
   }
 });
 
-app.get("/api/settings/volume-rules", async (req, res) => {
+app.get('/api/settings/volume-rules', async (req, res) => {
   try {
     const spreadsheetId = req.query.spreadsheetId || DEFAULT_SPREADSHEET_ID;
     const rules = await fetchVolumeRules(spreadsheetId);
     res.json(rules);
   } catch (error) {
-    console.error("Error fetching volume rules:", error);
+    console.error('Error fetching volume rules:', error);
     res.json(VOLUME_RULES_DEFAULTS);
   }
 });
 
 // JWT Token verification middleware
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ success: false, error: "Access token required" });
+    return res.status(401).json({ success: false, error: 'Access token required' });
   }
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ success: false, error: "Invalid or expired token" });
+      return res.status(403).json({ success: false, error: 'Invalid or expired token' });
     }
     req.user = user;
     next();
@@ -1498,7 +1498,7 @@ function authenticateToken(req, res, next) {
 }
 
 // Protected route example
-app.get("/api/auth/me", authenticateToken, (req, res) => {
+app.get('/api/auth/me', authenticateToken, (req, res) => {
   res.json({
     success: true,
     user: req.user,
@@ -1506,14 +1506,14 @@ app.get("/api/auth/me", authenticateToken, (req, res) => {
 });
 
 // Password verification endpoint
-app.post("/api/auth/verify-password", async (req, res) => {
+app.post('/api/auth/verify-password', async (req, res) => {
   try {
     const { password, hash } = req.body;
 
     if (!password || !hash) {
       return res.status(400).json({
         success: false,
-        error: "Password and hash are required",
+        error: 'Password and hash are required',
       });
     }
 
@@ -1524,10 +1524,10 @@ app.post("/api/auth/verify-password", async (req, res) => {
       isValid: isValid,
     });
   } catch (error) {
-    console.error("Password verification error:", error);
+    console.error('Password verification error:', error);
     res.status(500).json({
       success: false,
-      error: "Error verifying password",
+      error: 'Error verifying password',
       details: error.message,
     });
   }
@@ -1537,14 +1537,14 @@ app.post("/api/auth/verify-password", async (req, res) => {
 const passwordResetTokens = new Map();
 
 // Forgot password endpoint
-app.post("/api/auth/forgot-password", async (req, res) => {
+app.post('/api/auth/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
 
     if (!email) {
       return res.status(400).json({
         success: false,
-        error: "Email is required",
+        error: 'Email is required',
       });
     }
 
@@ -1555,13 +1555,13 @@ app.post("/api/auth/forgot-password", async (req, res) => {
       // Don't reveal if user exists or not (security best practice)
       return res.json({
         success: true,
-        message: "If the email exists, a reset link will be sent",
+        message: 'If the email exists, a reset link will be sent',
       });
     }
 
     // Generate reset token
     const resetToken = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: '1h',
     });
 
     // Store token
@@ -1576,21 +1576,21 @@ app.post("/api/auth/forgot-password", async (req, res) => {
     if (transporter) {
       try {
         await transporter.sendMail({
-          from: process.env.EMAIL_FROM || "noreply@mia.vn",
+          from: process.env.EMAIL_FROM || 'noreply@mia.vn',
           to: user.email,
-          subject: "Đặt lại mật khẩu - MIA Logistics",
+          subject: 'Đặt lại mật khẩu - MIA Logistics',
           html: `
             <h2>Đặt lại mật khẩu</h2>
             <p>Xin chào ${user.fullName},</p>
             <p>Bạn đã yêu cầu đặt lại mật khẩu. Vui lòng click vào link dưới đây:</p>
-            <p><a href="${process.env.REACT_APP_API_BASE_URL || "http://localhost:3000"}/reset-password?token=${resetToken}">Đặt lại mật khẩu</a></p>
+            <p><a href="${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}">Đặt lại mật khẩu</a></p>
             <p>Link này sẽ hết hạn sau 1 giờ.</p>
             <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
           `,
         });
         console.log(`✅ Password reset email sent to ${email}`);
       } catch (emailError) {
-        console.error("Error sending email:", emailError);
+        console.error('Error sending email:', emailError);
       }
     } else {
       console.log(`⚠️ Email not configured. Reset token for ${email}: ${resetToken}`);
@@ -1598,27 +1598,27 @@ app.post("/api/auth/forgot-password", async (req, res) => {
 
     res.json({
       success: true,
-      message: "If the email exists, a reset link will be sent",
+      message: 'If the email exists, a reset link will be sent',
     });
   } catch (error) {
-    console.error("Forgot password error:", error);
+    console.error('Forgot password error:', error);
     res.status(500).json({
       success: false,
-      error: "Error processing password reset request",
+      error: 'Error processing password reset request',
       details: error.message,
     });
   }
 });
 
 // Reset password endpoint
-app.post("/api/auth/reset-password", async (req, res) => {
+app.post('/api/auth/reset-password', async (req, res) => {
   try {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword) {
       return res.status(400).json({
         success: false,
-        error: "Token and new password are required",
+        error: 'Token and new password are required',
       });
     }
 
@@ -1629,7 +1629,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
     } catch (error) {
       return res.status(400).json({
         success: false,
-        error: "Invalid or expired reset token",
+        error: 'Invalid or expired reset token',
       });
     }
 
@@ -1638,7 +1638,7 @@ app.post("/api/auth/reset-password", async (req, res) => {
     if (!storedToken || storedToken.expiresAt < Date.now()) {
       return res.status(400).json({
         success: false,
-        error: "Invalid or expired reset token",
+        error: 'Invalid or expired reset token',
       });
     }
 
@@ -1654,24 +1654,24 @@ app.post("/api/auth/reset-password", async (req, res) => {
 
     res.json({
       success: true,
-      message: "Password has been reset successfully",
+      message: 'Password has been reset successfully',
     });
   } catch (error) {
-    console.error("Reset password error:", error);
+    console.error('Reset password error:', error);
     res.status(500).json({
       success: false,
-      error: "Error resetting password",
+      error: 'Error resetting password',
       details: error.message,
     });
   }
 });
 
 // Health check (updated to include authentication status)
-app.get("/api/health", (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({
-    status: "healthy",
+    status: 'healthy',
     timestamp: new Date().toISOString(),
-    version: "2.0-auth",
+    version: '2.0-auth',
     services: {
       sheets: !!process.env.REACT_APP_GOOGLE_CLIENT_EMAIL,
       email: !!transporter,
@@ -1686,7 +1686,7 @@ app.get("/api/health", (req, res) => {
 // Google Sheets Routes
 
 // Get spreadsheet info and list all sheets
-app.get("/api/sheets/info", async (req, res) => {
+app.get('/api/sheets/info', async (req, res) => {
   try {
     const { spreadsheetId } = req.query;
     const targetSpreadsheetId = spreadsheetId || DEFAULT_SPREADSHEET_ID;
@@ -1716,21 +1716,21 @@ app.get("/api/sheets/info", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error getting spreadsheet info:", error);
+    console.error('Error getting spreadsheet info:', error);
     res.status(500).json({
-      error: "Failed to get spreadsheet info",
+      error: 'Failed to get spreadsheet info',
       details: error.message,
     });
   }
 });
 
 // Read sheet
-app.post("/api/sheets/read", async (req, res) => {
+app.post('/api/sheets/read', async (req, res) => {
   try {
     const { spreadsheetId, range, sheetName } = req.body;
 
     if (!spreadsheetId || !range) {
-      return res.status(400).json({ error: "spreadsheetId and range are required" });
+      return res.status(400).json({ error: 'spreadsheetId and range are required' });
     }
 
     // Use sheetName if provided, otherwise use range as-is
@@ -1747,27 +1747,27 @@ app.post("/api/sheets/read", async (req, res) => {
       range: response.data.range,
     });
   } catch (error) {
-    console.error("Error reading sheet:", error);
+    console.error('Error reading sheet:', error);
     res.status(500).json({
-      error: "Failed to read sheet",
+      error: 'Failed to read sheet',
       details: error.message,
     });
   }
 });
 
 // Write to sheet
-app.post("/api/sheets/write", async (req, res) => {
+app.post('/api/sheets/write', async (req, res) => {
   try {
     const { spreadsheetId, range, values } = req.body;
 
     if (!spreadsheetId || !range || !values) {
-      return res.status(400).json({ error: "spreadsheetId, range, and values are required" });
+      return res.status(400).json({ error: 'spreadsheetId, range, and values are required' });
     }
 
     const response = await sheets.spreadsheets.values.update({
       spreadsheetId,
       range,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       requestBody: {
         values,
       },
@@ -1779,27 +1779,27 @@ app.post("/api/sheets/write", async (req, res) => {
       updatedRange: response.data.updatedRange,
     });
   } catch (error) {
-    console.error("Error writing to sheet:", error);
+    console.error('Error writing to sheet:', error);
     res.status(500).json({
-      error: "Failed to write to sheet",
+      error: 'Failed to write to sheet',
       details: error.message,
     });
   }
 });
 
 // Append to sheet
-app.post("/api/sheets/append", async (req, res) => {
+app.post('/api/sheets/append', async (req, res) => {
   try {
     const { spreadsheetId, range, values } = req.body;
 
     if (!spreadsheetId || !range || !values) {
-      return res.status(400).json({ error: "spreadsheetId, range, and values are required" });
+      return res.status(400).json({ error: 'spreadsheetId, range, and values are required' });
     }
 
     const response = await sheets.spreadsheets.values.append({
       spreadsheetId,
       range,
-      valueInputOption: "RAW",
+      valueInputOption: 'RAW',
       requestBody: {
         values,
       },
@@ -1810,21 +1810,21 @@ app.post("/api/sheets/append", async (req, res) => {
       updates: response.data.updates,
     });
   } catch (error) {
-    console.error("Error appending to sheet:", error);
+    console.error('Error appending to sheet:', error);
     res.status(500).json({
-      error: "Failed to append to sheet",
+      error: 'Failed to append to sheet',
       details: error.message,
     });
   }
 });
 
 // Create new sheet
-app.post("/api/sheets/create", async (req, res) => {
+app.post('/api/sheets/create', async (req, res) => {
   try {
     const { spreadsheetId, sheetName } = req.body;
 
     if (!spreadsheetId || !sheetName) {
-      return res.status(400).json({ error: "spreadsheetId and sheetName are required" });
+      return res.status(400).json({ error: 'spreadsheetId and sheetName are required' });
     }
 
     const response = await sheets.spreadsheets.batchUpdate({
@@ -1848,21 +1848,21 @@ app.post("/api/sheets/create", async (req, res) => {
       sheetName: sheetName,
     });
   } catch (error) {
-    console.error("Error creating sheet:", error);
+    console.error('Error creating sheet:', error);
     res.status(500).json({
-      error: "Failed to create sheet",
+      error: 'Failed to create sheet',
       details: error.message,
     });
   }
 });
 
 // Get spreadsheet info
-app.post("/api/sheets/info", async (req, res) => {
+app.post('/api/sheets/info', async (req, res) => {
   try {
     const { spreadsheetId } = req.body;
 
     if (!spreadsheetId) {
-      return res.status(400).json({ error: "spreadsheetId is required" });
+      return res.status(400).json({ error: 'spreadsheetId is required' });
     }
 
     const response = await sheets.spreadsheets.get({
@@ -1877,9 +1877,9 @@ app.post("/api/sheets/info", async (req, res) => {
       })),
     });
   } catch (error) {
-    console.error("Error getting spreadsheet info:", error);
+    console.error('Error getting spreadsheet info:', error);
     res.status(500).json({
-      error: "Failed to get spreadsheet info",
+      error: 'Failed to get spreadsheet info',
       details: error.message,
     });
   }
@@ -1888,12 +1888,12 @@ app.post("/api/sheets/info", async (req, res) => {
 // Google Drive Routes
 
 // Upload file
-app.post("/api/drive/upload", async (req, res) => {
+app.post('/api/drive/upload', async (req, res) => {
   try {
     const { file, fileName, folderId } = req.body;
 
     if (!file) {
-      return res.status(400).json({ error: "File is required" });
+      return res.status(400).json({ error: 'File is required' });
     }
 
     const fileMetadata = {
@@ -1909,7 +1909,7 @@ app.post("/api/drive/upload", async (req, res) => {
     const response = await drive.files.create({
       resource: fileMetadata,
       media: media,
-      fields: "id,name,size,mimeType",
+      fields: 'id,name,size,mimeType',
     });
 
     res.json({
@@ -1917,28 +1917,28 @@ app.post("/api/drive/upload", async (req, res) => {
       file: response.data,
     });
   } catch (error) {
-    console.error("Error uploading file:", error);
+    console.error('Error uploading file:', error);
     res.status(500).json({
-      error: "Failed to upload file",
+      error: 'Failed to upload file',
       details: error.message,
     });
   }
 });
 
 // List files
-app.post("/api/drive/list", async (req, res) => {
+app.post('/api/drive/list', async (req, res) => {
   try {
     const { folderId } = req.body;
 
-    let query = "trashed=false";
+    let query = 'trashed=false';
     if (folderId) {
       query += ` and '${folderId}' in parents`;
     }
 
     const response = await drive.files.list({
       q: query,
-      fields: "files(id,name,size,mimeType,modifiedTime,webViewLink)",
-      orderBy: "modifiedTime desc",
+      fields: 'files(id,name,size,mimeType,modifiedTime,webViewLink)',
+      orderBy: 'modifiedTime desc',
     });
 
     res.json({
@@ -1946,32 +1946,32 @@ app.post("/api/drive/list", async (req, res) => {
       files: response.data.files,
     });
   } catch (error) {
-    console.error("Error listing files:", error);
+    console.error('Error listing files:', error);
     res.status(500).json({
-      error: "Failed to list files",
+      error: 'Failed to list files',
       details: error.message,
     });
   }
 });
 
 // Create folder
-app.post("/api/drive/create-folder", async (req, res) => {
+app.post('/api/drive/create-folder', async (req, res) => {
   try {
     const { folderName, parentFolderId } = req.body;
 
     if (!folderName) {
-      return res.status(400).json({ error: "folderName is required" });
+      return res.status(400).json({ error: 'folderName is required' });
     }
 
     const fileMetadata = {
       name: folderName,
-      mimeType: "application/vnd.google-apps.folder",
+      mimeType: 'application/vnd.google-apps.folder',
       parents: parentFolderId ? [parentFolderId] : undefined,
     };
 
     const response = await drive.files.create({
       resource: fileMetadata,
-      fields: "id,name",
+      fields: 'id,name',
     });
 
     res.json({
@@ -1979,21 +1979,21 @@ app.post("/api/drive/create-folder", async (req, res) => {
       folder: response.data,
     });
   } catch (error) {
-    console.error("Error creating folder:", error);
+    console.error('Error creating folder:', error);
     res.status(500).json({
-      error: "Failed to create folder",
+      error: 'Failed to create folder',
       details: error.message,
     });
   }
 });
 
 // Delete file
-app.post("/api/drive/delete", async (req, res) => {
+app.post('/api/drive/delete', async (req, res) => {
   try {
     const { fileId } = req.body;
 
     if (!fileId) {
-      return res.status(400).json({ error: "fileId is required" });
+      return res.status(400).json({ error: 'fileId is required' });
     }
 
     await drive.files.delete({
@@ -2002,31 +2002,31 @@ app.post("/api/drive/delete", async (req, res) => {
 
     res.json({
       success: true,
-      message: "File deleted successfully",
+      message: 'File deleted successfully',
     });
   } catch (error) {
-    console.error("Error deleting file:", error);
+    console.error('Error deleting file:', error);
     res.status(500).json({
-      error: "Failed to delete file",
+      error: 'Failed to delete file',
       details: error.message,
     });
   }
 });
 
 // Share file
-app.post("/api/drive/share", async (req, res) => {
+app.post('/api/drive/share', async (req, res) => {
   try {
-    const { fileId, email, role = "reader" } = req.body;
+    const { fileId, email, role = 'reader' } = req.body;
 
     if (!fileId || !email) {
-      return res.status(400).json({ error: "fileId and email are required" });
+      return res.status(400).json({ error: 'fileId and email are required' });
     }
 
     const response = await drive.permissions.create({
       fileId,
       requestBody: {
         role,
-        type: "user",
+        type: 'user',
         emailAddress: email,
       },
     });
@@ -2036,26 +2036,26 @@ app.post("/api/drive/share", async (req, res) => {
       permission: response.data,
     });
   } catch (error) {
-    console.error("Error sharing file:", error);
+    console.error('Error sharing file:', error);
     res.status(500).json({
-      error: "Failed to share file",
+      error: 'Failed to share file',
       details: error.message,
     });
   }
 });
 
 // Get file link
-app.post("/api/drive/link", async (req, res) => {
+app.post('/api/drive/link', async (req, res) => {
   try {
     const { fileId } = req.body;
 
     if (!fileId) {
-      return res.status(400).json({ error: "fileId is required" });
+      return res.status(400).json({ error: 'fileId is required' });
     }
 
     const response = await drive.files.get({
       fileId,
-      fields: "webViewLink,webContentLink",
+      fields: 'webViewLink,webContentLink',
     });
 
     res.json({
@@ -2064,9 +2064,9 @@ app.post("/api/drive/link", async (req, res) => {
       webContentLink: response.data.webContentLink,
     });
   } catch (error) {
-    console.error("Error getting file link:", error);
+    console.error('Error getting file link:', error);
     res.status(500).json({
-      error: "Failed to get file link",
+      error: 'Failed to get file link',
       details: error.message,
     });
   }
@@ -2075,16 +2075,16 @@ app.post("/api/drive/link", async (req, res) => {
 // Alert Routes
 
 // Send email alert
-app.post("/api/alerts/email", async (req, res) => {
+app.post('/api/alerts/email', async (req, res) => {
   try {
     if (!transporter) {
-      return res.status(500).json({ error: "Email service not configured" });
+      return res.status(500).json({ error: 'Email service not configured' });
     }
 
     const { to, subject, message } = req.body;
 
     if (!subject || !message) {
-      return res.status(400).json({ error: "subject and message are required" });
+      return res.status(400).json({ error: 'subject and message are required' });
     }
 
     const mailOptions = {
@@ -2092,69 +2092,69 @@ app.post("/api/alerts/email", async (req, res) => {
       to: to || process.env.REACT_APP_ALERT_EMAIL_TO,
       subject,
       text: message,
-      html: message.replace(/\n/g, "<br>"),
+      html: message.replace(/\n/g, '<br>'),
     };
 
     const info = await transporter.sendMail(mailOptions);
 
-    addToAlertHistory("EMAIL", subject, message);
+    addToAlertHistory('EMAIL', subject, message);
 
     res.json({
       success: true,
       messageId: info.messageId,
     });
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error('Error sending email:', error);
     res.status(500).json({
-      error: "Failed to send email",
+      error: 'Failed to send email',
       details: error.message,
     });
   }
 });
 
 // Send Telegram alert
-app.post("/api/alerts/telegram", async (req, res) => {
+app.post('/api/alerts/telegram', async (req, res) => {
   try {
     const { message } = req.body;
 
     if (!message) {
-      return res.status(400).json({ error: "message is required" });
+      return res.status(400).json({ error: 'message is required' });
     }
 
     const botToken = process.env.REACT_APP_TELEGRAM_BOT_TOKEN;
     const chatId = process.env.REACT_APP_TELEGRAM_CHAT_ID;
 
     if (!botToken || !chatId) {
-      return res.status(500).json({ error: "Telegram not configured" });
+      return res.status(500).json({ error: 'Telegram not configured' });
     }
 
     const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
     const response = await axios.post(url, {
       chat_id: chatId,
       text: message,
-      parse_mode: "HTML",
+      parse_mode: 'HTML',
     });
 
-    addToAlertHistory("TELEGRAM", "Telegram Alert", message);
+    addToAlertHistory('TELEGRAM', 'Telegram Alert', message);
 
     res.json({
       success: true,
       messageId: response.data.result.message_id,
     });
   } catch (error) {
-    console.error("Error sending Telegram message:", error);
+    console.error('Error sending Telegram message:', error);
     res.status(500).json({
-      error: "Failed to send Telegram message",
+      error: 'Failed to send Telegram message',
       details: error.message,
     });
   }
 });
 
 // Test email connection
-app.post("/api/alerts/test-email", async (req, res) => {
+app.post('/api/alerts/test-email', async (req, res) => {
   try {
     if (!transporter) {
-      return res.status(500).json({ error: "Email service not configured" });
+      return res.status(500).json({ error: 'Email service not configured' });
     }
 
     await transporter.verify();
@@ -2163,57 +2163,57 @@ app.post("/api/alerts/test-email", async (req, res) => {
     const testMailOptions = {
       from: process.env.REACT_APP_EMAIL_USER,
       to: process.env.REACT_APP_ALERT_EMAIL_TO,
-      subject: "✅ Email Test - React Google Integration",
-      text: "This is a test email from React Google Integration system.\n\nIf you receive this, your email configuration is working correctly!",
+      subject: '✅ Email Test - React Google Integration',
+      text: 'This is a test email from React Google Integration system.\n\nIf you receive this, your email configuration is working correctly!',
     };
 
     await transporter.sendMail(testMailOptions);
 
     res.json({
       success: true,
-      message: "Email connection test successful",
+      message: 'Email connection test successful',
     });
   } catch (error) {
-    console.error("Email test failed:", error);
+    console.error('Email test failed:', error);
     res.status(500).json({
-      error: "Email connection test failed",
+      error: 'Email connection test failed',
       details: error.message,
     });
   }
 });
 
 // Test Telegram connection
-app.post("/api/alerts/test-telegram", async (req, res) => {
+app.post('/api/alerts/test-telegram', async (req, res) => {
   try {
     const botToken = process.env.REACT_APP_TELEGRAM_BOT_TOKEN;
     const chatId = process.env.REACT_APP_TELEGRAM_CHAT_ID;
 
     if (!botToken || !chatId) {
-      return res.status(500).json({ error: "Telegram not configured" });
+      return res.status(500).json({ error: 'Telegram not configured' });
     }
 
     const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
     const response = await axios.post(url, {
       chat_id: chatId,
-      text: "✅ Telegram Test - React Google Integration\n\nIf you receive this, your Telegram configuration is working correctly!",
+      text: '✅ Telegram Test - React Google Integration\n\nIf you receive this, your Telegram configuration is working correctly!',
     });
 
     res.json({
       success: true,
-      message: "Telegram connection test successful",
+      message: 'Telegram connection test successful',
       messageId: response.data.result.message_id,
     });
   } catch (error) {
-    console.error("Telegram test failed:", error);
+    console.error('Telegram test failed:', error);
     res.status(500).json({
-      error: "Telegram connection test failed",
+      error: 'Telegram connection test failed',
       details: error.message,
     });
   }
 });
 
 // Get alert history
-app.get("/api/alerts/history", (req, res) => {
+app.get('/api/alerts/history', (req, res) => {
   res.json({
     success: true,
     alerts: alertHistory,
@@ -2223,7 +2223,7 @@ app.get("/api/alerts/history", (req, res) => {
 // Report Routes
 
 // Generate overview report
-app.get("/api/reports/overview", async (req, res) => {
+app.get('/api/reports/overview', async (req, res) => {
   try {
     const report = {
       timestamp: new Date().toISOString(),
@@ -2244,19 +2244,19 @@ app.get("/api/reports/overview", async (req, res) => {
       report,
     });
   } catch (error) {
-    console.error("Error generating overview report:", error);
+    console.error('Error generating overview report:', error);
     res.status(500).json({
-      error: "Failed to generate overview report",
+      error: 'Failed to generate overview report',
       details: error.message,
     });
   }
 });
 
 // Scheduled tasks
-if (process.env.NODE_ENV !== "development") {
+if (process.env.NODE_ENV !== 'development') {
   // Daily report at 9 AM
-  cron.schedule("0 9 * * *", async () => {
-    console.log("Running daily report...");
+  cron.schedule('0 9 * * *', async () => {
+    console.log('Running daily report...');
 
     if (transporter) {
       try {
@@ -2269,7 +2269,7 @@ if (process.env.NODE_ENV !== "development") {
         const mailOptions = {
           from: process.env.REACT_APP_EMAIL_USER,
           to: process.env.REACT_APP_ALERT_EMAIL_TO,
-          subject: "📊 Daily Report - React Google Integration",
+          subject: '📊 Daily Report - React Google Integration',
           text: `Daily System Report\n\nGenerated: ${reportData.timestamp}\nAlerts in last 24h: ${
             reportData.alertCount
           }\nSystem uptime: ${Math.floor(
@@ -2278,9 +2278,9 @@ if (process.env.NODE_ENV !== "development") {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log("Daily report sent successfully");
+        console.log('Daily report sent successfully');
       } catch (error) {
-        console.error("Failed to send daily report:", error);
+        console.error('Failed to send daily report:', error);
       }
     }
   });
@@ -2288,16 +2288,16 @@ if (process.env.NODE_ENV !== "development") {
 
 // Error handling middleware
 app.use((error, req, res, next) => {
-  console.error("Unhandled error:", error);
+  console.error('Unhandled error:', error);
   res.status(500).json({
-    error: "Internal server error",
+    error: 'Internal server error',
     details: error.message,
   });
 });
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
+  res.status(404).json({ error: 'Route not found' });
 });
 
 // Start server
@@ -2305,15 +2305,15 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(
     `📊 Google Sheets: ${
-      !!process.env.REACT_APP_GOOGLE_CLIENT_EMAIL ? "Configured" : "Not configured"
+      !!process.env.REACT_APP_GOOGLE_CLIENT_EMAIL ? 'Configured' : 'Not configured'
     }`
   );
-  console.log(`📧 Email: ${!!transporter ? "Configured" : "Not configured"}`);
+  console.log(`📧 Email: ${!!transporter ? 'Configured' : 'Not configured'}`);
   console.log(
     `📱 Telegram: ${
       !!(process.env.REACT_APP_TELEGRAM_BOT_TOKEN && process.env.REACT_APP_TELEGRAM_CHAT_ID)
-        ? "Configured"
-        : "Not configured"
+        ? 'Configured'
+        : 'Not configured'
     }`
   );
 });

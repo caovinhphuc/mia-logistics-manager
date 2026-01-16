@@ -1,2 +1,1 @@
-export * from "../../shared/components/ui/StatusChip";
-
+export * from '../../shared/components/ui/StatusChip';

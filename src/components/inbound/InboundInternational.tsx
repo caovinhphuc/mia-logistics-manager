@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -29,11 +29,11 @@ import {
   Tooltip,
   Autocomplete,
   Snackbar,
-} from "@mui/material";
+} from '@mui/material';
 import {
   InboundInternationalService,
   InboundInternationalRecord,
-} from "../../services/googleSheets/inboundInternationalService";
+} from '../../services/googleSheets/inboundInternationalService';
 // Removed unused import: InboundScheduleService
 import {
   Add as AddIcon,
@@ -61,7 +61,7 @@ import {
   BusinessCenter as BusinessCenterIcon,
   ExpandLess as ExpandLessIcon,
   ExpandMore as ExpandMoreIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -79,7 +79,7 @@ interface TimelineItem {
   name: string; // Tên mốc thời gian
   date: string; // Ngày thực tế
   estimatedDate?: string; // Ngày dự kiến (nếu có)
-  status: "completed" | "pending" | "in-progress" | "confirmed"; // Trạng thái
+  status: 'completed' | 'pending' | 'in-progress' | 'confirmed'; // Trạng thái
   description?: string; // Mô tả thêm
 }
 
@@ -88,7 +88,7 @@ interface DocumentStatusItem {
   name: string; // Tên trạng thái chứng từ
   date: string; // Ngày thực tế
   estimatedDate?: string; // Ngày dự kiến (nếu có)
-  status: "completed" | "pending" | "in-progress" | "confirmed"; // Trạng thái
+  status: 'completed' | 'pending' | 'in-progress' | 'confirmed'; // Trạng thái
   description?: string; // Mô tả thêm
 }
 
@@ -100,7 +100,7 @@ interface InboundItem {
   destination: string;
   product: string;
   quantity: number;
-  status: "pending" | "confirmed" | "waiting-notification" | "notified" | "received";
+  status: 'pending' | 'confirmed' | 'waiting-notification' | 'notified' | 'received';
   estimatedArrival: string;
   actualArrival?: string;
   notes?: string;
@@ -111,7 +111,7 @@ interface InboundItem {
   poNumbers: string[]; // Danh sách phiếu PO (có thể nhiều PO cho 1 lô hàng)
   carrier: string; // Nhà vận chuyển
   packaging: PackagingItem[]; // Danh sách quy cách đóng gói
-  purpose: "online" | "offline"; // Mục đích (Online, Offline)
+  purpose: 'online' | 'offline'; // Mục đích (Online, Offline)
   receiveTime: string; // Thời gian nhận
   timeline: TimelineItem[]; // Timeline các mốc thời gian
   documentStatus: DocumentStatusItem[]; // Trạng thái chứng từ
@@ -122,7 +122,7 @@ interface InboundItem {
 const InboundInternational: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [editingItem, setEditingItem] = useState<InboundItem | null>(null);
-  const [viewMode, setViewMode] = useState<"calendar" | "table">("calendar");
+  const [viewMode, setViewMode] = useState<'calendar' | 'table'>('calendar');
 
   // Action menu state
   const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(null);
@@ -145,69 +145,69 @@ const InboundInternational: React.FC = () => {
   // Edit item states
   const [editItemDialog, setEditItemDialog] = useState<{
     open: boolean;
-    type: "packaging" | "timeline" | "documentStatus";
+    type: 'packaging' | 'timeline' | 'documentStatus';
     item: PackagingItem | TimelineItem | DocumentStatusItem | null;
     index: number;
   }>({
     open: false,
-    type: "packaging",
+    type: 'packaging',
     item: null,
     index: -1,
   });
   const [editItemForm, setEditItemForm] = useState<{
     description: string;
   }>({
-    description: "",
+    description: '',
   });
 
   // Packaging form states
   const [packagingItems, setPackagingItems] = useState<PackagingItem[]>([]);
   const [newPackagingItem, setNewPackagingItem] = useState<PackagingItem>({
-    id: "",
-    type: "1PCS/SET",
+    id: '',
+    type: '1PCS/SET',
     quantity: 0,
-    description: "",
+    description: '',
   });
 
   // Timeline form states
   const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([]);
   const [newTimelineItem, setNewTimelineItem] = useState<TimelineItem>({
-    id: "",
-    name: "Ngày nhập hàng",
-    date: "",
-    estimatedDate: "",
-    status: "pending",
-    description: "",
+    id: '',
+    name: 'Ngày nhập hàng',
+    date: '',
+    estimatedDate: '',
+    status: 'pending',
+    description: '',
   });
 
   // Document status form states
   const [documentStatusItems, setDocumentStatusItems] = useState<DocumentStatusItem[]>([]);
   const [newDocumentStatusItem, setNewDocumentStatusItem] = useState<DocumentStatusItem>({
-    id: "",
-    name: "Check bill",
-    date: "",
-    estimatedDate: "",
-    status: "pending",
-    description: "",
+    id: '',
+    name: 'Check bill',
+    date: '',
+    estimatedDate: '',
+    status: 'pending',
+    description: '',
   });
 
   // Product categories
   const [productCategories] = useState<string[]>([
-    "Vali",
-    "Balo",
-    "Quà tặng",
-    "Phụ kiện",
-    "Phụ kiện sửa chữa",
-    "Nguyên vật liệu",
-    "Thùng giấy",
-    "Văn phòng phẩm",
-    "Thiết bị văn phòng",
+    'Vali',
+    'Balo',
+    'Quà tặng',
+    'Phụ kiện',
+    'Phụ kiện sửa chữa',
+    'Nguyên vật liệu',
+    'Thùng giấy',
+    'Văn phòng phẩm',
+    'Thiết bị văn phòng',
   ]);
 
   // Destination options
   const [destinations] = useState<string[]>([
-    "Kho trung tâm - lô2-5, Đường CN1, Phường Tây Thạnh, Quận Tân Phú, Thành phố Hồ Chí Minh",
-    "Kho Hà Nội - 18 Xóm Núi Tiên Hùng, Nguyên Khê, Đông Anh, Hà Nội",
+    'Kho trung tâm - lô2-5, Đường CN1, Phường Tây Thạnh, Quận Tân Phú, Thành phố Hồ Chí Minh',
+    'Kho Hà Nội - 18 Xóm Núi Tiên Hùng, Nguyên Khê, Đông Anh, Hà Nội',
   ]);
 
   // Filter states
@@ -223,17 +223,17 @@ const InboundInternational: React.FC = () => {
 
   // Controlled form fields for Add/Edit dialog
   const [formFields, setFormFields] = useState({
-    pi: "",
-    supplier: "",
-    product: "",
-    category: "",
-    origin: "",
-    destination: "",
+    pi: '',
+    supplier: '',
+    product: '',
+    category: '',
+    origin: '',
+    destination: '',
     quantity: 0,
     container: 0,
-    poNumbersInput: "",
-    status: "pending" as InboundItem["status"],
-    carrier: "",
+    poNumbersInput: '',
+    status: 'pending' as InboundItem['status'],
+    carrier: '',
   });
 
   const setField = <K extends keyof typeof formFields>(key: K, value: (typeof formFields)[K]) => {
@@ -249,48 +249,48 @@ const InboundInternational: React.FC = () => {
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
-    severity: "success" | "error";
-  }>({ open: false, message: "", severity: "success" });
+    severity: 'success' | 'error';
+  }>({ open: false, message: '', severity: 'success' });
   const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
 
   // Helper function to format timeline/document status display
   const formatTimelineDisplay = (
     name: string,
     timeline: TimelineItem[] | DocumentStatusItem[],
-    type: "timeline" | "document"
+    type: 'timeline' | 'document'
   ) => {
     const item =
-      type === "timeline"
+      type === 'timeline'
         ? timeline?.find((t) => t.name === name)
         : timeline?.find((d) => d.name === name);
 
     return {
-      estimated: item?.estimatedDate || "Chưa có",
-      actual: item?.date || "Chưa có",
-      status: item?.status || "Chưa có",
+      estimated: item?.estimatedDate || 'Chưa có',
+      actual: item?.date || 'Chưa có',
+      status: item?.status || 'Chưa có',
     };
   };
 
   // Category icons mapping
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "Vali":
+      case 'Vali':
         return <LuggageIcon />;
-      case "Balo":
+      case 'Balo':
         return <BackpackIcon />;
-      case "Quà tặng":
+      case 'Quà tặng':
         return <GiftIcon />;
-      case "Phụ kiện":
+      case 'Phụ kiện':
         return <TravelExploreIcon />;
-      case "Phụ kiện sửa chữa":
+      case 'Phụ kiện sửa chữa':
         return <HandymanIcon />;
-      case "Nguyên vật liệu":
+      case 'Nguyên vật liệu':
         return <InventoryIcon />;
-      case "Thùng giấy":
+      case 'Thùng giấy':
         return <Inventory2Icon />;
-      case "Văn phòng phẩm":
+      case 'Văn phòng phẩm':
         return <DescriptionIcon />;
-      case "Thiết bị văn phòng":
+      case 'Thiết bị văn phòng':
         return <BusinessCenterIcon />;
       default:
         return <InventoryIcon />;
@@ -304,170 +304,170 @@ const InboundInternational: React.FC = () => {
   const mapRecordToItem = (r: InboundInternationalRecord): InboundItem => {
     // Convert date to YYYY-MM-DD format
     let dateStr = r.date;
-    if (typeof dateStr === "number") {
+    if (typeof dateStr === 'number') {
       // Google Sheets serial number to date
       const date = new Date((dateStr - 25569) * 86400 * 1000);
-      dateStr = date.toISOString().split("T")[0];
-    } else if (dateStr && dateStr.includes("/")) {
+      dateStr = date.toISOString().split('T')[0];
+    } else if (dateStr && dateStr.includes('/')) {
       // Convert DD/MM/YYYY to YYYY-MM-DD
-      const parts = dateStr.split("/");
+      const parts = dateStr.split('/');
       if (parts.length === 3) {
-        dateStr = `${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}`;
+        dateStr = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
       }
     }
 
     return {
       id: r.id,
       date: dateStr,
-      supplier: r.supplier || "",
-      origin: r.origin || "",
-      destination: r.destination || "",
-      product: r.product || "",
+      supplier: r.supplier || '',
+      origin: r.origin || '',
+      destination: r.destination || '',
+      product: r.product || '',
       quantity: Number(r.quantity || 0),
-      status: r.status as InboundItem["status"],
-      estimatedArrival: "",
-      notes: r.notes || "",
-      pi: r.pi || "",
+      status: r.status as InboundItem['status'],
+      estimatedArrival: '',
+      notes: r.notes || '',
+      pi: r.pi || '',
       container: Number(r.container || 0),
-      category: r.category || "",
-      poNumbers: (r.poNumbers || "")
-        .split(";")
+      category: r.category || '',
+      poNumbers: (r.poNumbers || '')
+        .split(';')
         .map((s) => s.trim())
         .filter(Boolean),
-      carrier: r.carrier || "",
+      carrier: r.carrier || '',
       // Packaging: use flattened columns only
       packaging:
         r.packagingTypes || r.packagingQuantities || r.packagingDescriptions
-          ? (r.packagingTypes || "")
-              .split(";")
+          ? (r.packagingTypes || '')
+              .split(';')
               .map((t, idx) => ({
                 id: `${r.id}-pkg-${idx}`,
                 type: t.trim(),
-                quantity: Number((r.packagingQuantities || "").split(";")[idx] || 0),
-                description: ((r.packagingDescriptions || "").split(";")[idx] || "").trim(),
+                quantity: Number((r.packagingQuantities || '').split(';')[idx] || 0),
+                description: ((r.packagingDescriptions || '').split(';')[idx] || '').trim(),
               }))
               .filter((p) => p.type)
           : [],
-      purpose: (r.purpose as "online" | "offline") || "online",
-      receiveTime: r.receiveTime || "",
+      purpose: (r.purpose as 'online' | 'offline') || 'online',
+      receiveTime: r.receiveTime || '',
       // Timeline: flattened only
       timeline: [
         {
           id: `${r.id}-t0`,
-          name: "Ngày tạo phiếu",
-          estimatedDate: "",
-          date: r.date || "",
-          status: "completed",
-          description: "",
+          name: 'Ngày tạo phiếu',
+          estimatedDate: '',
+          date: r.date || '',
+          status: 'completed',
+          description: '',
         },
         {
           id: `${r.id}-t1`,
-          name: "Cargo Ready",
-          estimatedDate: r.timeline_cargoReady_est || "",
-          date: r.timeline_cargoReady_act || "",
+          name: 'Cargo Ready',
+          estimatedDate: r.timeline_cargoReady_est || '',
+          date: r.timeline_cargoReady_act || '',
           status:
             (r.timeline_cargoReady_status as
-              | "pending"
-              | "in-progress"
-              | "completed"
-              | "confirmed") || "pending",
-          description: "",
+              | 'pending'
+              | 'in-progress'
+              | 'completed'
+              | 'confirmed') || 'pending',
+          description: '',
         },
         {
           id: `${r.id}-t2`,
-          name: "ETD",
-          estimatedDate: r.timeline_etd_est || "",
-          date: r.timeline_etd_act || "",
+          name: 'ETD',
+          estimatedDate: r.timeline_etd_est || '',
+          date: r.timeline_etd_act || '',
           status:
-            (r.timeline_etd_status as "pending" | "in-progress" | "completed" | "confirmed") ||
-            "pending",
-          description: "",
+            (r.timeline_etd_status as 'pending' | 'in-progress' | 'completed' | 'confirmed') ||
+            'pending',
+          description: '',
         },
         {
           id: `${r.id}-t3`,
-          name: "ETA",
-          estimatedDate: r.timeline_eta_est || "",
-          date: r.timeline_eta_act || "",
+          name: 'ETA',
+          estimatedDate: r.timeline_eta_est || '',
+          date: r.timeline_eta_act || '',
           status:
-            (r.timeline_eta_status as "pending" | "in-progress" | "completed" | "confirmed") ||
-            "pending",
-          description: "",
+            (r.timeline_eta_status as 'pending' | 'in-progress' | 'completed' | 'confirmed') ||
+            'pending',
+          description: '',
         },
         {
           id: `${r.id}-t4`,
-          name: "Ngày hàng đi",
-          estimatedDate: r.timeline_depart_est || "",
-          date: r.timeline_depart_act || "",
+          name: 'Ngày hàng đi',
+          estimatedDate: r.timeline_depart_est || '',
+          date: r.timeline_depart_act || '',
           status:
-            (r.timeline_depart_status as "pending" | "in-progress" | "completed" | "confirmed") ||
-            "pending",
-          description: "",
+            (r.timeline_depart_status as 'pending' | 'in-progress' | 'completed' | 'confirmed') ||
+            'pending',
+          description: '',
         },
         {
           id: `${r.id}-t5`,
-          name: "Ngày hàng về cảng",
-          estimatedDate: r.timeline_arrivalPort_est || "",
-          date: r.timeline_arrivalPort_act || "",
+          name: 'Ngày hàng về cảng',
+          estimatedDate: r.timeline_arrivalPort_est || '',
+          date: r.timeline_arrivalPort_act || '',
           status:
             (r.timeline_arrivalPort_status as
-              | "pending"
-              | "in-progress"
-              | "completed"
-              | "confirmed") || "pending",
-          description: "",
+              | 'pending'
+              | 'in-progress'
+              | 'completed'
+              | 'confirmed') || 'pending',
+          description: '',
         },
         {
           id: `${r.id}-t6`,
-          name: "Ngày nhận hàng",
-          estimatedDate: r.timeline_receive_est || "",
-          date: r.timeline_receive_act || "",
+          name: 'Ngày nhận hàng',
+          estimatedDate: r.timeline_receive_est || '',
+          date: r.timeline_receive_act || '',
           status:
-            (r.timeline_receive_status as "pending" | "in-progress" | "completed" | "confirmed") ||
-            "pending",
-          description: "",
+            (r.timeline_receive_status as 'pending' | 'in-progress' | 'completed' | 'confirmed') ||
+            'pending',
+          description: '',
         },
-      ].filter((t) => t.estimatedDate || t.date) as InboundItem["timeline"],
+      ].filter((t) => t.estimatedDate || t.date) as InboundItem['timeline'],
       // Document statuses: flattened only
       documentStatus: [
         {
           id: `${r.id}-d0`,
-          name: "Check bill",
-          estimatedDate: r.doc_checkBill_est || "",
-          date: r.doc_checkBill_act || "",
-          status: (r.doc_checkBill_status as "pending" | "in-progress" | "completed") || "pending",
-          description: "",
+          name: 'Check bill',
+          estimatedDate: r.doc_checkBill_est || '',
+          date: r.doc_checkBill_act || '',
+          status: (r.doc_checkBill_status as 'pending' | 'in-progress' | 'completed') || 'pending',
+          description: '',
         },
         {
           id: `${r.id}-d1`,
-          name: "Check CO",
-          estimatedDate: r.doc_checkCO_est || "",
-          date: r.doc_checkCO_act || "",
-          status: (r.doc_checkCO_status as "pending" | "in-progress" | "completed") || "pending",
-          description: "",
+          name: 'Check CO',
+          estimatedDate: r.doc_checkCO_est || '',
+          date: r.doc_checkCO_act || '',
+          status: (r.doc_checkCO_status as 'pending' | 'in-progress' | 'completed') || 'pending',
+          description: '',
         },
         {
           id: `${r.id}-d2`,
-          name: "TQ gửi chứng từ đi",
-          estimatedDate: r.doc_sendDocs_est || "",
-          date: r.doc_sendDocs_act || "",
-          status: (r.doc_sendDocs_status as "pending" | "in-progress" | "completed") || "pending",
-          description: "",
+          name: 'TQ gửi chứng từ đi',
+          estimatedDate: r.doc_sendDocs_est || '',
+          date: r.doc_sendDocs_act || '',
+          status: (r.doc_sendDocs_status as 'pending' | 'in-progress' | 'completed') || 'pending',
+          description: '',
         },
         {
           id: `${r.id}-d3`,
-          name: "Lên Tờ Khai Hải Quan",
-          estimatedDate: r.doc_customs_est || "",
-          date: r.doc_customs_act || "",
-          status: (r.doc_customs_status as "pending" | "in-progress" | "completed") || "pending",
-          description: "",
+          name: 'Lên Tờ Khai Hải Quan',
+          estimatedDate: r.doc_customs_est || '',
+          date: r.doc_customs_act || '',
+          status: (r.doc_customs_status as 'pending' | 'in-progress' | 'completed') || 'pending',
+          description: '',
         },
         {
           id: `${r.id}-d4`,
-          name: "Đóng thuế",
-          estimatedDate: r.doc_tax_est || "",
-          date: r.doc_tax_act || "",
-          status: (r.doc_tax_status as "pending" | "in-progress" | "completed") || "pending",
-          description: "",
+          name: 'Đóng thuế',
+          estimatedDate: r.doc_tax_est || '',
+          date: r.doc_tax_act || '',
+          status: (r.doc_tax_status as 'pending' | 'in-progress' | 'completed') || 'pending',
+          description: '',
         },
       ].filter((d) => d.estimatedDate || d.date),
       createdAt: r.createdAt,
@@ -477,7 +477,7 @@ const InboundInternational: React.FC = () => {
 
   const mapItemToRecord = (
     it: InboundItem
-  ): Omit<InboundInternationalRecord, "id" | "createdAt" | "updatedAt"> => ({
+  ): Omit<InboundInternationalRecord, 'id' | 'createdAt' | 'updatedAt'> => ({
     date: it.date, // Keep as YYYY-MM-DD format
     pi: it.pi,
     supplier: it.supplier,
@@ -491,67 +491,67 @@ const InboundInternational: React.FC = () => {
     carrier: it.carrier,
     purpose: it.purpose,
     receiveTime: it.receiveTime,
-    poNumbers: (it.poNumbers || []).join(";"),
+    poNumbers: (it.poNumbers || []).join(';'),
     // Flattened packaging only
-    packagingTypes: (it.packaging || []).map((p) => p.type).join(";"),
-    packagingQuantities: (it.packaging || []).map((p) => String(p.quantity)).join(";"),
-    packagingDescriptions: (it.packaging || []).map((p) => p.description || "").join(";"),
+    packagingTypes: (it.packaging || []).map((p) => p.type).join(';'),
+    packagingQuantities: (it.packaging || []).map((p) => String(p.quantity)).join(';'),
+    packagingDescriptions: (it.packaging || []).map((p) => p.description || '').join(';'),
     // Flattened timeline only
     timeline_cargoReady_est:
-      (it.timeline || []).find((t) => t.name === "Cargo Ready")?.estimatedDate || "",
-    timeline_cargoReady_act: (it.timeline || []).find((t) => t.name === "Cargo Ready")?.date || "",
+      (it.timeline || []).find((t) => t.name === 'Cargo Ready')?.estimatedDate || '',
+    timeline_cargoReady_act: (it.timeline || []).find((t) => t.name === 'Cargo Ready')?.date || '',
     timeline_cargoReady_status:
-      (it.timeline || []).find((t) => t.name === "Cargo Ready")?.status || "pending",
-    timeline_etd_est: (it.timeline || []).find((t) => t.name === "ETD")?.estimatedDate || "",
-    timeline_etd_act: (it.timeline || []).find((t) => t.name === "ETD")?.date || "",
-    timeline_etd_status: (it.timeline || []).find((t) => t.name === "ETD")?.status || "pending",
-    timeline_eta_est: (it.timeline || []).find((t) => t.name === "ETA")?.estimatedDate || "",
-    timeline_eta_act: (it.timeline || []).find((t) => t.name === "ETA")?.date || "",
-    timeline_eta_status: (it.timeline || []).find((t) => t.name === "ETA")?.status || "pending",
+      (it.timeline || []).find((t) => t.name === 'Cargo Ready')?.status || 'pending',
+    timeline_etd_est: (it.timeline || []).find((t) => t.name === 'ETD')?.estimatedDate || '',
+    timeline_etd_act: (it.timeline || []).find((t) => t.name === 'ETD')?.date || '',
+    timeline_etd_status: (it.timeline || []).find((t) => t.name === 'ETD')?.status || 'pending',
+    timeline_eta_est: (it.timeline || []).find((t) => t.name === 'ETA')?.estimatedDate || '',
+    timeline_eta_act: (it.timeline || []).find((t) => t.name === 'ETA')?.date || '',
+    timeline_eta_status: (it.timeline || []).find((t) => t.name === 'ETA')?.status || 'pending',
     timeline_depart_est:
-      (it.timeline || []).find((t) => t.name === "Ngày hàng đi")?.estimatedDate || "",
-    timeline_depart_act: (it.timeline || []).find((t) => t.name === "Ngày hàng đi")?.date || "",
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')?.estimatedDate || '',
+    timeline_depart_act: (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')?.date || '',
     timeline_depart_status:
-      (it.timeline || []).find((t) => t.name === "Ngày hàng đi")?.status || "pending",
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng đi')?.status || 'pending',
     timeline_arrivalPort_est:
-      (it.timeline || []).find((t) => t.name === "Ngày hàng về cảng")?.estimatedDate || "",
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')?.estimatedDate || '',
     timeline_arrivalPort_act:
-      (it.timeline || []).find((t) => t.name === "Ngày hàng về cảng")?.date || "",
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')?.date || '',
     timeline_arrivalPort_status:
-      (it.timeline || []).find((t) => t.name === "Ngày hàng về cảng")?.status || "pending",
+      (it.timeline || []).find((t) => t.name === 'Ngày hàng về cảng')?.status || 'pending',
     timeline_receive_est:
-      (it.timeline || []).find((t) => t.name === "Ngày nhận hàng")?.estimatedDate || "",
-    timeline_receive_act: (it.timeline || []).find((t) => t.name === "Ngày nhận hàng")?.date || "",
+      (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')?.estimatedDate || '',
+    timeline_receive_act: (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')?.date || '',
     timeline_receive_status:
-      (it.timeline || []).find((t) => t.name === "Ngày nhận hàng")?.status || "pending",
+      (it.timeline || []).find((t) => t.name === 'Ngày nhận hàng')?.status || 'pending',
     // Flattened docs only
     doc_checkBill_est:
-      (it.documentStatus || []).find((d) => d.name === "Check bill")?.estimatedDate || "",
-    doc_checkBill_act: (it.documentStatus || []).find((d) => d.name === "Check bill")?.date || "",
+      (it.documentStatus || []).find((d) => d.name === 'Check bill')?.estimatedDate || '',
+    doc_checkBill_act: (it.documentStatus || []).find((d) => d.name === 'Check bill')?.date || '',
     doc_checkBill_status:
-      (it.documentStatus || []).find((d) => d.name === "Check bill")?.status || "pending",
+      (it.documentStatus || []).find((d) => d.name === 'Check bill')?.status || 'pending',
     doc_checkCO_est:
-      (it.documentStatus || []).find((d) => d.name === "Check CO")?.estimatedDate || "",
-    doc_checkCO_act: (it.documentStatus || []).find((d) => d.name === "Check CO")?.date || "",
+      (it.documentStatus || []).find((d) => d.name === 'Check CO')?.estimatedDate || '',
+    doc_checkCO_act: (it.documentStatus || []).find((d) => d.name === 'Check CO')?.date || '',
     doc_checkCO_status:
-      (it.documentStatus || []).find((d) => d.name === "Check CO")?.status || "pending",
+      (it.documentStatus || []).find((d) => d.name === 'Check CO')?.status || 'pending',
     doc_sendDocs_est:
-      (it.documentStatus || []).find((d) => d.name === "TQ gửi chứng từ đi")?.estimatedDate || "",
+      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')?.estimatedDate || '',
     doc_sendDocs_act:
-      (it.documentStatus || []).find((d) => d.name === "TQ gửi chứng từ đi")?.date || "",
+      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')?.date || '',
     doc_sendDocs_status:
-      (it.documentStatus || []).find((d) => d.name === "TQ gửi chứng từ đi")?.status || "pending",
+      (it.documentStatus || []).find((d) => d.name === 'TQ gửi chứng từ đi')?.status || 'pending',
     doc_customs_est:
-      (it.documentStatus || []).find((d) => d.name === "Lên Tờ Khai Hải Quan")?.estimatedDate || "",
+      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')?.estimatedDate || '',
     doc_customs_act:
-      (it.documentStatus || []).find((d) => d.name === "Lên Tờ Khai Hải Quan")?.date || "",
+      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')?.date || '',
     doc_customs_status:
-      (it.documentStatus || []).find((d) => d.name === "Lên Tờ Khai Hải Quan")?.status || "pending",
-    doc_tax_est: (it.documentStatus || []).find((d) => d.name === "Đóng thuế")?.estimatedDate || "",
-    doc_tax_act: (it.documentStatus || []).find((d) => d.name === "Đóng thuế")?.date || "",
+      (it.documentStatus || []).find((d) => d.name === 'Lên Tờ Khai Hải Quan')?.status || 'pending',
+    doc_tax_est: (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')?.estimatedDate || '',
+    doc_tax_act: (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')?.date || '',
     doc_tax_status:
-      (it.documentStatus || []).find((d) => d.name === "Đóng thuế")?.status || "pending",
-    notes: it.notes || "",
+      (it.documentStatus || []).find((d) => d.name === 'Đóng thuế')?.status || 'pending',
+    notes: it.notes || '',
   });
 
   const reload = useCallback(async () => {
@@ -563,29 +563,29 @@ const InboundInternational: React.FC = () => {
 
   // Load from Google Sheets on mount
   useEffect(() => {
-    reload().catch((err) => console.error("Load InboundInternational failed", err));
+    reload().catch((err) => console.error('Load InboundInternational failed', err));
   }, [reload]);
 
   // Function to calculate total products from packaging items
   const calculateTotalProducts = (packagingItems: PackagingItem[]): number => {
     return packagingItems.reduce((total, item) => {
-      const pcsPerSet = parseInt(item.type.split("PCS/SET")[0]);
+      const pcsPerSet = parseInt(item.type.split('PCS/SET')[0]);
       return total + item.quantity * pcsPerSet;
     }, 0);
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "pending":
-        return "Chờ xác nhận";
-      case "confirmed":
-        return "Đã xác nhận";
-      case "waiting-notification":
-        return "Chờ thông báo";
-      case "notified":
-        return "Đã thông báo";
-      case "received":
-        return "Đã nhận";
+      case 'pending':
+        return 'Chờ xác nhận';
+      case 'confirmed':
+        return 'Đã xác nhận';
+      case 'waiting-notification':
+        return 'Chờ thông báo';
+      case 'notified':
+        return 'Đã thông báo';
+      case 'received':
+        return 'Đã nhận';
       default:
         return status;
     }
@@ -593,18 +593,18 @@ const InboundInternational: React.FC = () => {
 
   const getStatusColorForChip = (status: string) => {
     switch (status) {
-      case "pending":
-        return "warning";
-      case "confirmed":
-        return "info";
-      case "waiting-notification":
-        return "secondary";
-      case "notified":
-        return "primary";
-      case "received":
-        return "success";
+      case 'pending':
+        return 'warning';
+      case 'confirmed':
+        return 'info';
+      case 'waiting-notification':
+        return 'secondary';
+      case 'notified':
+        return 'primary';
+      case 'received':
+        return 'success';
       default:
-        return "default";
+        return 'default';
     }
   };
 
@@ -618,7 +618,7 @@ const InboundInternational: React.FC = () => {
   };
 
   const getItemsForDate = (date: Date) => {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = date.toISOString().split('T')[0];
     return inboundItems.filter((item) => item.date === dateStr);
   };
 
@@ -671,7 +671,7 @@ const InboundInternational: React.FC = () => {
   };
 
   const getFilteredItemsForDate = (date: Date) => {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = date.toISOString().split('T')[0];
     return getFilteredItems().filter((item) => item.date === dateStr);
   };
 
@@ -749,18 +749,18 @@ const InboundInternational: React.FC = () => {
     if (filters.products.length > 0) activeFilters.push(`Sản phẩm: ${filters.products.length}`);
     if (filters.categories.length > 0)
       activeFilters.push(`Phân loại: ${filters.categories.length}`);
-    return activeFilters.join(", ");
+    return activeFilters.join(', ');
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "pending":
+      case 'pending':
         return <PendingIcon />;
-      case "in-transit":
+      case 'in-transit':
         return <ShippingIcon />;
-      case "arrived":
+      case 'arrived':
         return <CheckCircleIcon />;
-      case "completed":
+      case 'completed':
         return <CheckCircleIcon />;
       default:
         return <ScheduleIcon />;
@@ -769,18 +769,18 @@ const InboundInternational: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending":
-        return "#ff9800"; // Orange
-      case "confirmed":
-        return "#2196f3"; // Blue
-      case "waiting-notification":
-        return "#9c27b0"; // Purple
-      case "notified":
-        return "#3f51b5"; // Indigo
-      case "received":
-        return "#4caf50"; // Green
+      case 'pending':
+        return '#ff9800'; // Orange
+      case 'confirmed':
+        return '#2196f3'; // Blue
+      case 'waiting-notification':
+        return '#9c27b0'; // Purple
+      case 'notified':
+        return '#3f51b5'; // Indigo
+      case 'received':
+        return '#4caf50'; // Green
       default:
-        return "#757575"; // Default grey
+        return '#757575'; // Default grey
     }
   };
 
@@ -803,15 +803,15 @@ const InboundInternational: React.FC = () => {
     setEditingItem(null);
 
     // Tự động tạo timeline item với ngày nhập hàng
-    const importDate = date.toISOString().split("T")[0];
+    const importDate = date.toISOString().split('T')[0];
     setTimelineItems([
       {
         id: Date.now().toString(),
-        name: "Ngày nhập hàng",
+        name: 'Ngày nhập hàng',
         date: importDate,
         estimatedDate: importDate,
-        status: "confirmed",
-        description: "Ngày nhập hàng dự kiến",
+        status: 'confirmed',
+        description: 'Ngày nhập hàng dự kiến',
       },
     ]);
 
@@ -819,11 +819,11 @@ const InboundInternational: React.FC = () => {
     setDocumentStatusItems([
       {
         id: Date.now().toString(),
-        name: "Check bill",
-        date: "",
+        name: 'Check bill',
+        date: '',
         estimatedDate: importDate,
-        status: "confirmed",
-        description: "Kiểm tra bill lading",
+        status: 'confirmed',
+        description: 'Kiểm tra bill lading',
       },
     ]);
 
@@ -854,12 +854,12 @@ const InboundInternational: React.FC = () => {
     setSelectedCardItem(null);
   };
 
-  const handleCardMenuAction = (action: "edit" | "delete") => {
+  const handleCardMenuAction = (action: 'edit' | 'delete') => {
     if (!selectedCardItem) return;
 
-    if (action === "edit") {
+    if (action === 'edit') {
       handleEdit(selectedCardItem);
-    } else if (action === "delete") {
+    } else if (action === 'delete') {
       handleDelete(selectedCardItem.id);
     }
 
@@ -868,7 +868,7 @@ const InboundInternational: React.FC = () => {
 
   // Edit item handlers
   const handleEditItem = (
-    type: "packaging" | "timeline" | "documentStatus",
+    type: 'packaging' | 'timeline' | 'documentStatus',
     item: PackagingItem | TimelineItem | DocumentStatusItem,
     index: number
   ) => {
@@ -879,19 +879,19 @@ const InboundInternational: React.FC = () => {
       index,
     });
     setEditItemForm({
-      description: "",
+      description: '',
     });
   };
 
   const handleEditItemClose = () => {
     setEditItemDialog({
       open: false,
-      type: "packaging",
+      type: 'packaging',
       item: null,
       index: -1,
     });
     setEditItemForm({
-      description: "",
+      description: '',
     });
   };
 
@@ -899,29 +899,29 @@ const InboundInternational: React.FC = () => {
     if (!editItemForm.description.trim()) {
       setSnackbar({
         open: true,
-        message: "Vui lòng nhập mô tả khi sửa",
-        severity: "error",
+        message: 'Vui lòng nhập mô tả khi sửa',
+        severity: 'error',
       });
       return;
     }
 
     const { type, index } = editItemDialog;
 
-    if (type === "packaging") {
+    if (type === 'packaging') {
       const updatedItems = [...packagingItems];
       updatedItems[index] = {
         ...updatedItems[index],
         description: editItemForm.description,
       };
       setPackagingItems(updatedItems);
-    } else if (type === "timeline") {
+    } else if (type === 'timeline') {
       const updatedItems = [...timelineItems];
       updatedItems[index] = {
         ...updatedItems[index],
         description: editItemForm.description,
       };
       setTimelineItems(updatedItems);
-    } else if (type === "documentStatus") {
+    } else if (type === 'documentStatus') {
       const updatedItems = [...documentStatusItems];
       updatedItems[index] = {
         ...updatedItems[index],
@@ -932,8 +932,8 @@ const InboundInternational: React.FC = () => {
 
     setSnackbar({
       open: true,
-      message: "Cập nhật mô tả thành công",
-      severity: "success",
+      message: 'Cập nhật mô tả thành công',
+      severity: 'success',
     });
 
     handleEditItemClose();
@@ -943,10 +943,10 @@ const InboundInternational: React.FC = () => {
     if (!calendarMenuDate) return;
 
     switch (action) {
-      case "add":
+      case 'add':
         handleAddFromCalendar(calendarMenuDate);
         break;
-      case "view":
+      case 'view':
         handleDateClick(calendarMenuDate);
         break;
     }
@@ -959,17 +959,17 @@ const InboundInternational: React.FC = () => {
     setTimelineItems([]);
     setDocumentStatusItems([]);
     setFormFields({
-      pi: "",
-      supplier: "",
-      product: "",
-      category: "",
-      origin: "",
-      destination: "",
+      pi: '',
+      supplier: '',
+      product: '',
+      category: '',
+      origin: '',
+      destination: '',
       quantity: 0,
       container: 0,
-      poNumbersInput: "",
-      status: "pending",
-      carrier: "",
+      poNumbersInput: '',
+      status: 'pending',
+      carrier: '',
     });
     setOpenDialog(true);
   };
@@ -980,17 +980,17 @@ const InboundInternational: React.FC = () => {
     setTimelineItems(item.timeline || []);
     setDocumentStatusItems(item.documentStatus || []);
     setFormFields({
-      pi: item.pi || "",
-      supplier: item.supplier || "",
-      product: item.product || "",
-      category: item.category || "",
-      origin: item.origin || "",
-      destination: item.destination || "",
+      pi: item.pi || '',
+      supplier: item.supplier || '',
+      product: item.product || '',
+      category: item.category || '',
+      origin: item.origin || '',
+      destination: item.destination || '',
       quantity: Number(item.quantity || 0),
       container: Number(item.container || 0),
-      poNumbersInput: (item.poNumbers || []).join(", "),
+      poNumbersInput: (item.poNumbers || []).join(', '),
       status: item.status,
-      carrier: item.carrier || "",
+      carrier: item.carrier || '',
     });
     setOpenDialog(true);
   };
@@ -1016,8 +1016,8 @@ const InboundInternational: React.FC = () => {
           origin: formFields.origin,
           destination: formFields.destination,
           container: Number(formFields.container || 0),
-          poNumbers: (formFields.poNumbersInput || "")
-            .split(",")
+          poNumbers: (formFields.poNumbersInput || '')
+            .split(',')
             .map((s) => s.trim())
             .filter(Boolean),
           status: formFields.status,
@@ -1032,27 +1032,27 @@ const InboundInternational: React.FC = () => {
         const newItem: InboundItem = {
           id: Date.now().toString(),
           date: addFromCalendar
-            ? addFromCalendar.toLocaleDateString("vi-VN")
-            : new Date().toLocaleDateString("vi-VN"),
+            ? addFromCalendar.toLocaleDateString('vi-VN')
+            : new Date().toLocaleDateString('vi-VN'),
           supplier: formFields.supplier,
           origin: formFields.origin,
           destination: formFields.destination,
           product: formFields.product,
           quantity: calculateTotalProducts(packagingItems),
           status: formFields.status,
-          estimatedArrival: "",
-          notes: "",
+          estimatedArrival: '',
+          notes: '',
           pi: formFields.pi,
           container: Number(formFields.container || 0),
           category: formFields.category,
-          poNumbers: (formFields.poNumbersInput || "")
-            .split(",")
+          poNumbers: (formFields.poNumbersInput || '')
+            .split(',')
             .map((s) => s.trim())
             .filter(Boolean),
           carrier: formFields.carrier,
           packaging: packagingItems,
-          purpose: "online",
-          receiveTime: "",
+          purpose: 'online',
+          receiveTime: '',
           timeline: timelineItems,
           documentStatus: documentStatusItems,
           ...item,
@@ -1063,16 +1063,16 @@ const InboundInternational: React.FC = () => {
       setAddFromCalendar(null);
       setSnackbar({
         open: true,
-        message: editingItem ? "Cập nhật thành công" : "Thêm lịch thành công",
-        severity: "success",
+        message: editingItem ? 'Cập nhật thành công' : 'Thêm lịch thành công',
+        severity: 'success',
       });
       await reload();
     } catch (err) {
-      console.error("Save inbound failed", err);
+      console.error('Save inbound failed', err);
       setSnackbar({
         open: true,
-        message: "Có lỗi khi lưu. Vui lòng thử lại",
-        severity: "error",
+        message: 'Có lỗi khi lưu. Vui lòng thử lại',
+        severity: 'error',
       });
     } finally {
       setSaving(false);
@@ -1088,10 +1088,10 @@ const InboundInternational: React.FC = () => {
       };
       setPackagingItems((prev) => [...prev, item]);
       setNewPackagingItem({
-        id: "",
-        type: "1PCS/SET",
+        id: '',
+        type: '1PCS/SET',
         quantity: 0,
-        description: "",
+        description: '',
       });
     }
   };
@@ -1109,12 +1109,12 @@ const InboundInternational: React.FC = () => {
       };
       setTimelineItems((prev) => [...prev, item]);
       setNewTimelineItem({
-        id: "",
-        name: "Ngày nhập hàng",
-        date: "",
-        estimatedDate: "",
-        status: "confirmed",
-        description: "",
+        id: '',
+        name: 'Ngày nhập hàng',
+        date: '',
+        estimatedDate: '',
+        status: 'confirmed',
+        description: '',
       });
     }
   };
@@ -1132,12 +1132,12 @@ const InboundInternational: React.FC = () => {
       };
       setDocumentStatusItems((prev) => [...prev, item]);
       setNewDocumentStatusItem({
-        id: "",
-        name: "Check bill",
-        date: "",
-        estimatedDate: "",
-        status: "confirmed",
-        description: "",
+        id: '',
+        name: 'Check bill',
+        date: '',
+        estimatedDate: '',
+        status: 'confirmed',
+        description: '',
       });
     }
   };
@@ -1161,10 +1161,10 @@ const InboundInternational: React.FC = () => {
     if (!selectedItemForAction) return;
 
     switch (action) {
-      case "edit":
+      case 'edit':
         handleEdit(selectedItemForAction);
         break;
-      case "delete":
+      case 'delete':
         handleDelete(selectedItemForAction.id);
         break;
     }
@@ -1176,29 +1176,29 @@ const InboundInternational: React.FC = () => {
       {/* Header */}
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           mb: 3,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <FlightIcon sx={{ fontSize: 32, color: "primary.main" }} />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <FlightIcon sx={{ fontSize: 32, color: 'primary.main' }} />
           <Typography variant="h4" component="h1" fontWeight="bold">
             Lịch nhập hàng Quốc tế
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
           <Button
-            variant={viewMode === "calendar" ? "contained" : "outlined"}
-            onClick={() => setViewMode("calendar")}
+            variant={viewMode === 'calendar' ? 'contained' : 'outlined'}
+            onClick={() => setViewMode('calendar')}
             startIcon={<ScheduleIcon />}
           >
             Lịch
           </Button>
           <Button
-            variant={viewMode === "table" ? "contained" : "outlined"}
-            onClick={() => setViewMode("table")}
+            variant={viewMode === 'table' ? 'contained' : 'outlined'}
+            onClick={() => setViewMode('table')}
           >
             Bảng
           </Button>
@@ -1210,7 +1210,7 @@ const InboundInternational: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <ScheduleIcon color="primary" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
@@ -1227,11 +1227,11 @@ const InboundInternational: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <FlightIcon color="info" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {inboundItems.filter((item) => item.status === "confirmed").length}
+                    {inboundItems.filter((item) => item.status === 'confirmed').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Đã xác nhận
@@ -1244,11 +1244,11 @@ const InboundInternational: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <LocationIcon color="success" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {inboundItems.filter((item) => item.status === "received").length}
+                    {inboundItems.filter((item) => item.status === 'received').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Đã nhận
@@ -1261,11 +1261,11 @@ const InboundInternational: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <BusinessIcon color="warning" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {inboundItems.filter((item) => item.status === "pending").length}
+                    {inboundItems.filter((item) => item.status === 'pending').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Chờ xác nhận
@@ -1278,107 +1278,107 @@ const InboundInternational: React.FC = () => {
       </Grid>
 
       {/* Content */}
-      {viewMode === "table" ? (
-        <Paper sx={{ p: 2, overflow: "hidden", maxWidth: "100%" }}>
+      {viewMode === 'table' ? (
+        <Paper sx={{ p: 2, overflow: 'hidden', maxWidth: '100%' }}>
           <TableContainer
             sx={{
-              width: "100%",
-              overflowX: "auto",
-              overflowY: "hidden",
-              maxWidth: "100%",
+              width: '100%',
+              overflowX: 'auto',
+              overflowY: 'hidden',
+              maxWidth: '100%',
               minWidth: 0,
-              display: "block",
-              position: "relative",
+              display: 'block',
+              position: 'relative',
               zIndex: 1,
-              backgroundColor: "transparent",
-              boxSizing: "border-box",
+              backgroundColor: 'transparent',
+              boxSizing: 'border-box',
               margin: 0,
               padding: 0,
-              border: "none",
-              outline: "none",
-              boxShadow: "none",
+              border: 'none',
+              outline: 'none',
+              boxShadow: 'none',
               borderRadius: 0,
-              isolation: "isolate",
-              contain: "layout",
-              willChange: "scroll-position",
-              transform: "translateZ(0)",
-              backfaceVisibility: "hidden",
-              perspective: "1000px",
-              WebkitOverflowScrolling: "touch",
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0,0,0,0.2) transparent",
-              "&::-webkit-scrollbar": {
-                width: "8px",
-                height: "8px",
+              isolation: 'isolate',
+              contain: 'layout',
+              willChange: 'scroll-position',
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              perspective: '1000px',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(0,0,0,0.2) transparent',
+              '&::-webkit-scrollbar': {
+                width: '8px',
+                height: '8px',
               },
-              "&::-webkit-scrollbar-track": {
-                background: "transparent",
+              '&::-webkit-scrollbar-track': {
+                background: 'transparent',
               },
-              "&::-webkit-scrollbar-thumb": {
-                background: "rgba(0,0,0,0.2)",
-                borderRadius: "4px",
+              '&::-webkit-scrollbar-thumb': {
+                background: 'rgba(0,0,0,0.2)',
+                borderRadius: '4px',
               },
-              "&::-webkit-scrollbar-thumb:hover": {
-                background: "rgba(0,0,0,0.3)",
+              '&::-webkit-scrollbar-thumb:hover': {
+                background: 'rgba(0,0,0,0.3)',
               },
-              "&::-webkit-scrollbar-corner": {
-                background: "transparent",
+              '&::-webkit-scrollbar-corner': {
+                background: 'transparent',
               },
             }}
           >
             <Table
               size="small"
               sx={{
-                tableLayout: "auto",
-                width: "100%",
-                maxWidth: "100%",
+                tableLayout: 'auto',
+                width: '100%',
+                maxWidth: '100%',
                 minWidth: 0,
-                display: "table",
-                position: "relative",
+                display: 'table',
+                position: 'relative',
                 zIndex: 1,
-                backgroundColor: "transparent",
-                boxSizing: "border-box",
+                backgroundColor: 'transparent',
+                boxSizing: 'border-box',
                 margin: 0,
                 padding: 0,
-                border: "none",
-                outline: "none",
-                boxShadow: "none",
+                border: 'none',
+                outline: 'none',
+                boxShadow: 'none',
                 borderRadius: 0,
-                isolation: "isolate",
-                contain: "layout",
-                willChange: "scroll-position",
-                transform: "translateZ(0)",
-                backfaceVisibility: "hidden",
-                perspective: "1000px",
-                WebkitOverflowScrolling: "touch",
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0,0,0,0.2) transparent",
-                "&::-webkit-scrollbar": {
-                  width: "8px",
-                  height: "8px",
+                isolation: 'isolate',
+                contain: 'layout',
+                willChange: 'scroll-position',
+                transform: 'translateZ(0)',
+                backfaceVisibility: 'hidden',
+                perspective: '1000px',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(0,0,0,0.2) transparent',
+                '&::-webkit-scrollbar': {
+                  width: '8px',
+                  height: '8px',
                 },
-                "&::-webkit-scrollbar-track": {
-                  background: "transparent",
+                '&::-webkit-scrollbar-track': {
+                  background: 'transparent',
                 },
-                "&::-webkit-scrollbar-thumb": {
-                  background: "rgba(0,0,0,0.2)",
-                  borderRadius: "4px",
+                '&::-webkit-scrollbar-thumb': {
+                  background: 'rgba(0,0,0,0.2)',
+                  borderRadius: '4px',
                 },
-                "&::-webkit-scrollbar-thumb:hover": {
-                  background: "rgba(0,0,0,0.3)",
+                '&::-webkit-scrollbar-thumb:hover': {
+                  background: 'rgba(0,0,0,0.3)',
                 },
-                "&::-webkit-scrollbar-corner": {
-                  background: "transparent",
+                '&::-webkit-scrollbar-corner': {
+                  background: 'transparent',
                 },
-                "& th, & td": {
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
+                '& th, & td': {
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
                 },
-                "& .address-cell": {
-                  whiteSpace: "normal",
-                  textOverflow: "unset",
-                  overflow: "visible",
+                '& .address-cell': {
+                  whiteSpace: 'normal',
+                  textOverflow: 'unset',
+                  overflow: 'visible',
                   lineHeight: 1.2,
                 },
               }}
@@ -1400,7 +1400,7 @@ const InboundInternational: React.FC = () => {
                   <TableCell>Quy cách</TableCell>
                   <TableCell>Mục đích</TableCell>
                   {/* Ẩn cột Thời gian nhận */}
-                  <TableCell sx={{ textAlign: "center" }}>
+                  <TableCell sx={{ textAlign: 'center' }}>
                     {/* tiêu đề tác vụ để trống */}
                   </TableCell>
                 </TableRow>
@@ -1411,15 +1411,15 @@ const InboundInternational: React.FC = () => {
                     <TableCell>
                       {(() => {
                         const d = new Date(item.date);
-                        return isNaN(d.getTime()) ? "Chưa có" : d.toLocaleDateString("vi-VN");
+                        return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                       })()}
                     </TableCell>
                     <TableCell>
                       <Typography
                         sx={{
-                          fontSize: "0.65rem",
-                          fontWeight: "bold",
-                          color: "primary.main",
+                          fontSize: '0.65rem',
+                          fontWeight: 'bold',
+                          color: 'primary.main',
                         }}
                       >
                         {item.pi}
@@ -1427,7 +1427,7 @@ const InboundInternational: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       <Tooltip title={item.supplier}>
-                        <Typography noWrap sx={{ fontSize: "0.65rem" }}>
+                        <Typography noWrap sx={{ fontSize: '0.65rem' }}>
                           {item.supplier}
                         </Typography>
                       </Tooltip>
@@ -1435,23 +1435,23 @@ const InboundInternational: React.FC = () => {
                     {/* Ẩn cell Xuất xứ */}
                     <TableCell className="address-cell">
                       <Box>
-                        <Typography variant="body2" sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
-                          {item.destination?.split(" - ")[0] || item.destination}
+                        <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
+                          {item.destination?.split(' - ')[0] || item.destination}
                         </Typography>
-                        {item.destination?.includes(" - ") && (
+                        {item.destination?.includes(' - ') && (
                           <Typography
                             variant="caption"
                             color="text.secondary"
-                            sx={{ fontSize: "0.55rem" }}
+                            sx={{ fontSize: '0.55rem' }}
                           >
-                            {item.destination.split(" - ").slice(1).join(" - ")}
+                            {item.destination.split(' - ').slice(1).join(' - ')}
                           </Typography>
                         )}
                       </Box>
                     </TableCell>
                     <TableCell>
                       <Tooltip title={item.product}>
-                        <Typography noWrap sx={{ fontSize: "0.65rem" }}>
+                        <Typography noWrap sx={{ fontSize: '0.65rem' }}>
                           {item.product}
                         </Typography>
                       </Tooltip>
@@ -1459,43 +1459,43 @@ const InboundInternational: React.FC = () => {
                     <TableCell>
                       <Box
                         sx={{
-                          display: "flex",
-                          alignItems: "center",
+                          display: 'flex',
+                          alignItems: 'center',
                           gap: 0.5,
-                          fontSize: "0.65rem",
+                          fontSize: '0.65rem',
                           fontWeight: 500,
-                          color: "info.main",
-                          backgroundColor: "info.50",
-                          border: "1px solid",
-                          borderColor: "info.main",
+                          color: 'info.main',
+                          backgroundColor: 'info.50',
+                          border: '1px solid',
+                          borderColor: 'info.main',
                           borderRadius: 1,
                           px: 0.5,
                           py: 0.25,
-                          textAlign: "center",
-                          minWidth: "fit-content",
-                          maxWidth: "100%",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
+                          textAlign: 'center',
+                          minWidth: 'fit-content',
+                          maxWidth: '100%',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
                         }}
                       >
                         <Box
                           sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            fontSize: "0.6rem",
+                            display: 'flex',
+                            alignItems: 'center',
+                            fontSize: '0.6rem',
                           }}
                         >
                           {getCategoryIcon(item.category)}
                         </Box>
                         <Typography
                           sx={{
-                            fontSize: "0.65rem",
+                            fontSize: '0.65rem',
                             fontWeight: 500,
-                            color: "info.main",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
+                            color: 'info.main',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
                           }}
                         >
                           {item.category}
@@ -1506,8 +1506,8 @@ const InboundInternational: React.FC = () => {
                     <TableCell>
                       <Typography
                         sx={{
-                          fontSize: "0.65rem",
-                          fontWeight: "bold",
+                          fontSize: '0.65rem',
+                          fontWeight: 'bold',
                         }}
                       >
                         {item.container} cont
@@ -1519,47 +1519,47 @@ const InboundInternational: React.FC = () => {
                         const colorKey = getStatusColorForChip(item.status);
 
                         // Xác định màu sắc dựa trên trạng thái
-                        let color = "primary.main";
-                        let bgColor = "primary.50";
-                        let borderColor = "primary.main";
+                        let color = 'primary.main';
+                        let bgColor = 'primary.50';
+                        let borderColor = 'primary.main';
 
-                        if (colorKey === "warning") {
-                          color = "warning.main";
-                          bgColor = "warning.50";
-                          borderColor = "warning.main";
-                        } else if (colorKey === "success") {
-                          color = "success.main";
-                          bgColor = "success.50";
-                          borderColor = "success.main";
-                        } else if (colorKey === "error") {
-                          color = "error.main";
-                          bgColor = "error.50";
-                          borderColor = "error.main";
-                        } else if (colorKey === "info") {
-                          color = "info.main";
-                          bgColor = "info.50";
-                          borderColor = "info.main";
+                        if (colorKey === 'warning') {
+                          color = 'warning.main';
+                          bgColor = 'warning.50';
+                          borderColor = 'warning.main';
+                        } else if (colorKey === 'success') {
+                          color = 'success.main';
+                          bgColor = 'success.50';
+                          borderColor = 'success.main';
+                        } else if (colorKey === 'error') {
+                          color = 'error.main';
+                          bgColor = 'error.50';
+                          borderColor = 'error.main';
+                        } else if (colorKey === 'info') {
+                          color = 'info.main';
+                          bgColor = 'info.50';
+                          borderColor = 'info.main';
                         }
 
                         return (
                           <Typography
                             sx={{
-                              fontSize: "0.65rem",
+                              fontSize: '0.65rem',
                               fontWeight: 500,
                               color: color,
                               backgroundColor: bgColor,
-                              border: "1px solid",
+                              border: '1px solid',
                               borderColor: borderColor,
                               borderRadius: 1,
                               px: 0.5,
                               py: 0.25,
-                              textAlign: "center",
-                              display: "inline-block",
-                              minWidth: "fit-content",
-                              maxWidth: "100%",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
+                              textAlign: 'center',
+                              display: 'inline-block',
+                              minWidth: 'fit-content',
+                              maxWidth: '100%',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
                             }}
                           >
                             {status}
@@ -1570,7 +1570,7 @@ const InboundInternational: React.FC = () => {
                     {/* Ẩn cell ETA */}
                     <TableCell>
                       <Tooltip title={item.carrier}>
-                        <Typography noWrap sx={{ fontSize: "0.65rem" }}>
+                        <Typography noWrap sx={{ fontSize: '0.65rem' }}>
                           {item.carrier}
                         </Typography>
                       </Tooltip>
@@ -1578,8 +1578,8 @@ const InboundInternational: React.FC = () => {
                     <TableCell>
                       <Box
                         sx={{
-                          display: "flex",
-                          flexDirection: "column",
+                          display: 'flex',
+                          flexDirection: 'column',
                           gap: 0.25,
                         }}
                       >
@@ -1589,7 +1589,7 @@ const InboundInternational: React.FC = () => {
                               variant="caption"
                               noWrap
                               sx={{
-                                fontSize: "0.65rem",
+                                fontSize: '0.65rem',
                                 fontWeight: 500,
                               }}
                             >
@@ -1601,47 +1601,47 @@ const InboundInternational: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       {(() => {
-                        const isOnline = item.purpose === "online";
-                        const color = isOnline ? "success.main" : "warning.main";
-                        const bgColor = isOnline ? "success.50" : "warning.50";
-                        const borderColor = isOnline ? "success.main" : "warning.main";
+                        const isOnline = item.purpose === 'online';
+                        const color = isOnline ? 'success.main' : 'warning.main';
+                        const bgColor = isOnline ? 'success.50' : 'warning.50';
+                        const borderColor = isOnline ? 'success.main' : 'warning.main';
 
                         return (
                           <Typography
                             sx={{
-                              fontSize: "0.65rem",
+                              fontSize: '0.65rem',
                               fontWeight: 500,
                               color: color,
                               backgroundColor: bgColor,
-                              border: "1px solid",
+                              border: '1px solid',
                               borderColor: borderColor,
                               borderRadius: 1,
                               px: 0.5,
                               py: 0.25,
-                              textAlign: "center",
-                              display: "inline-block",
-                              minWidth: "fit-content",
-                              maxWidth: "100%",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
+                              textAlign: 'center',
+                              display: 'inline-block',
+                              minWidth: 'fit-content',
+                              maxWidth: '100%',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
                             }}
                           >
-                            {isOnline ? "Online" : "Offline"}
+                            {isOnline ? 'Online' : 'Offline'}
                           </Typography>
                         );
                       })()}
                     </TableCell>
                     {/* Ẩn cell Thời gian nhận */}
-                    <TableCell sx={{ textAlign: "center" }}>
+                    <TableCell sx={{ textAlign: 'center' }}>
                       <Tooltip title="Thao tác">
                         <IconButton
                           size="small"
                           onClick={(e) => handleActionMenuOpen(e, item)}
                           sx={{
-                            color: "primary.main",
-                            "&:hover": {
-                              backgroundColor: "primary.50",
+                            color: 'primary.main',
+                            '&:hover': {
+                              backgroundColor: 'primary.50',
                             },
                           }}
                         >
@@ -1662,20 +1662,20 @@ const InboundInternational: React.FC = () => {
             {/* Filter Header */}
             <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 p: 1.5,
-                bgcolor: "grey.50",
+                bgcolor: 'grey.50',
                 borderRadius: 1,
-                border: "1px solid",
-                borderColor: "grey.200",
-                cursor: "pointer",
+                border: '1px solid',
+                borderColor: 'grey.200',
+                cursor: 'pointer',
               }}
               onClick={() => setFilterExpanded(!filterExpanded)}
             >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontSize: "0.9rem", fontWeight: 600 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontSize: '0.9rem', fontWeight: 600 }}>
                   🔍 Bộ lọc
                 </Typography>
                 {getActiveFilterCount() > 0 && (
@@ -1683,19 +1683,19 @@ const InboundInternational: React.FC = () => {
                     label={getActiveFilterCount()}
                     size="small"
                     color="primary"
-                    sx={{ fontSize: "0.7rem", height: 20 }}
+                    sx={{ fontSize: '0.7rem', height: 20 }}
                   />
                 )}
                 {getActiveFilterCount() > 0 && (
                   <Typography
                     variant="caption"
-                    sx={{ fontSize: "0.7rem", color: "text.secondary" }}
+                    sx={{ fontSize: '0.7rem', color: 'text.secondary' }}
                   >
                     {getFilterSummary()}
                   </Typography>
                 )}
               </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 {getActiveFilterCount() > 0 && (
                   <Button
                     size="small"
@@ -1703,7 +1703,7 @@ const InboundInternational: React.FC = () => {
                       e.stopPropagation();
                       clearAllFilters();
                     }}
-                    sx={{ fontSize: "0.7rem", minWidth: "auto", px: 1 }}
+                    sx={{ fontSize: '0.7rem', minWidth: 'auto', px: 1 }}
                   >
                     Xóa tất cả
                   </Button>
@@ -1720,10 +1720,10 @@ const InboundInternational: React.FC = () => {
                 sx={{
                   mt: 1,
                   p: 2,
-                  bgcolor: "grey.25",
+                  bgcolor: 'grey.25',
                   borderRadius: 1,
-                  border: "1px solid",
-                  borderColor: "grey.100",
+                  border: '1px solid',
+                  borderColor: 'grey.100',
                 }}
               >
                 <Grid container spacing={2}>
@@ -1732,39 +1732,39 @@ const InboundInternational: React.FC = () => {
                     <Box
                       sx={{
                         p: 1.5,
-                        border: "1px solid",
-                        borderColor: activeFilterSection === "status" ? "primary.main" : "grey.200",
+                        border: '1px solid',
+                        borderColor: activeFilterSection === 'status' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
-                        cursor: "pointer",
-                        bgcolor: activeFilterSection === "status" ? "primary.50" : "white",
+                        cursor: 'pointer',
+                        bgcolor: activeFilterSection === 'status' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
-                        setActiveFilterSection(activeFilterSection === "status" ? null : "status")
+                        setActiveFilterSection(activeFilterSection === 'status' ? null : 'status')
                       }
                     >
-                      <Typography variant="subtitle2" sx={{ fontSize: "0.8rem", mb: 1 }}>
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
                         Trạng thái {filters.status.length > 0 && `(${filters.status.length})`}
                       </Typography>
-                      {activeFilterSection === "status" && (
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {activeFilterSection === 'status' && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {[
-                            "pending",
-                            "confirmed",
-                            "waiting-notification",
-                            "notified",
-                            "received",
+                            'pending',
+                            'confirmed',
+                            'waiting-notification',
+                            'notified',
+                            'received',
                           ].map((status) => (
                             <Chip
                               key={status}
                               label={getStatusLabel(status)}
                               size="small"
                               clickable
-                              color={filters.status.includes(status) ? "primary" : "default"}
+                              color={filters.status.includes(status) ? 'primary' : 'default'}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleFilter("status", status);
+                                toggleFilter('status', status);
                               }}
-                              sx={{ fontSize: "0.65rem", height: 24 }}
+                              sx={{ fontSize: '0.65rem', height: 24 }}
                             />
                           ))}
                         </Box>
@@ -1777,47 +1777,47 @@ const InboundInternational: React.FC = () => {
                     <Box
                       sx={{
                         p: 1.5,
-                        border: "1px solid",
+                        border: '1px solid',
                         borderColor:
-                          activeFilterSection === "documentStatus" ? "primary.main" : "grey.200",
+                          activeFilterSection === 'documentStatus' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
-                        cursor: "pointer",
-                        bgcolor: activeFilterSection === "documentStatus" ? "primary.50" : "white",
+                        cursor: 'pointer',
+                        bgcolor: activeFilterSection === 'documentStatus' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === "documentStatus" ? null : "documentStatus"
+                          activeFilterSection === 'documentStatus' ? null : 'documentStatus'
                         )
                       }
                     >
-                      <Typography variant="subtitle2" sx={{ fontSize: "0.8rem", mb: 1 }}>
-                        Chứng từ{" "}
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
+                        Chứng từ{' '}
                         {filters.documentStatus.length > 0 && `(${filters.documentStatus.length})`}
                       </Typography>
-                      {activeFilterSection === "documentStatus" && (
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {activeFilterSection === 'documentStatus' && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueDocumentStatuses().map((status) => (
                             <Chip
                               key={status}
                               label={
-                                status === "completed"
-                                  ? "Hoàn thành"
-                                  : status === "pending"
-                                    ? "Chờ xử lý"
-                                    : status === "in-progress"
-                                      ? "Đang xử lý"
-                                      : "Đã xác nhận"
+                                status === 'completed'
+                                  ? 'Hoàn thành'
+                                  : status === 'pending'
+                                    ? 'Chờ xử lý'
+                                    : status === 'in-progress'
+                                      ? 'Đang xử lý'
+                                      : 'Đã xác nhận'
                               }
                               size="small"
                               clickable
                               color={
-                                filters.documentStatus.includes(status) ? "primary" : "default"
+                                filters.documentStatus.includes(status) ? 'primary' : 'default'
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleFilter("documentStatus", status);
+                                toggleFilter('documentStatus', status);
                               }}
-                              sx={{ fontSize: "0.65rem", height: 24 }}
+                              sx={{ fontSize: '0.65rem', height: 24 }}
                             />
                           ))}
                         </Box>
@@ -1830,47 +1830,47 @@ const InboundInternational: React.FC = () => {
                     <Box
                       sx={{
                         p: 1.5,
-                        border: "1px solid",
+                        border: '1px solid',
                         borderColor:
-                          activeFilterSection === "timelineStatus" ? "primary.main" : "grey.200",
+                          activeFilterSection === 'timelineStatus' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
-                        cursor: "pointer",
-                        bgcolor: activeFilterSection === "timelineStatus" ? "primary.50" : "white",
+                        cursor: 'pointer',
+                        bgcolor: activeFilterSection === 'timelineStatus' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === "timelineStatus" ? null : "timelineStatus"
+                          activeFilterSection === 'timelineStatus' ? null : 'timelineStatus'
                         )
                       }
                     >
-                      <Typography variant="subtitle2" sx={{ fontSize: "0.8rem", mb: 1 }}>
-                        Timeline{" "}
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
+                        Timeline{' '}
                         {filters.timelineStatus.length > 0 && `(${filters.timelineStatus.length})`}
                       </Typography>
-                      {activeFilterSection === "timelineStatus" && (
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {activeFilterSection === 'timelineStatus' && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueTimelineStatuses().map((status) => (
                             <Chip
                               key={status}
                               label={
-                                status === "completed"
-                                  ? "Hoàn thành"
-                                  : status === "pending"
-                                    ? "Chờ xử lý"
-                                    : status === "in-progress"
-                                      ? "Đang xử lý"
-                                      : "Đã xác nhận"
+                                status === 'completed'
+                                  ? 'Hoàn thành'
+                                  : status === 'pending'
+                                    ? 'Chờ xử lý'
+                                    : status === 'in-progress'
+                                      ? 'Đang xử lý'
+                                      : 'Đã xác nhận'
                               }
                               size="small"
                               clickable
                               color={
-                                filters.timelineStatus.includes(status) ? "primary" : "default"
+                                filters.timelineStatus.includes(status) ? 'primary' : 'default'
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleFilter("timelineStatus", status);
+                                toggleFilter('timelineStatus', status);
                               }}
-                              sx={{ fontSize: "0.65rem", height: 24 }}
+                              sx={{ fontSize: '0.65rem', height: 24 }}
                             />
                           ))}
                         </Box>
@@ -1883,36 +1883,36 @@ const InboundInternational: React.FC = () => {
                     <Box
                       sx={{
                         p: 1.5,
-                        border: "1px solid",
+                        border: '1px solid',
                         borderColor:
-                          activeFilterSection === "carriers" ? "primary.main" : "grey.200",
+                          activeFilterSection === 'carriers' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
-                        cursor: "pointer",
-                        bgcolor: activeFilterSection === "carriers" ? "primary.50" : "white",
+                        cursor: 'pointer',
+                        bgcolor: activeFilterSection === 'carriers' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === "carriers" ? null : "carriers"
+                          activeFilterSection === 'carriers' ? null : 'carriers'
                         )
                       }
                     >
-                      <Typography variant="subtitle2" sx={{ fontSize: "0.8rem", mb: 1 }}>
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
                         Vận chuyển {filters.carriers.length > 0 && `(${filters.carriers.length})`}
                       </Typography>
-                      {activeFilterSection === "carriers" && (
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {activeFilterSection === 'carriers' && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueCarriers().map((carrier) => (
                             <Chip
                               key={carrier}
                               label={carrier}
                               size="small"
                               clickable
-                              color={filters.carriers.includes(carrier) ? "primary" : "default"}
+                              color={filters.carriers.includes(carrier) ? 'primary' : 'default'}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleFilter("carriers", carrier);
+                                toggleFilter('carriers', carrier);
                               }}
-                              sx={{ fontSize: "0.65rem", height: 24 }}
+                              sx={{ fontSize: '0.65rem', height: 24 }}
                             />
                           ))}
                         </Box>
@@ -1925,25 +1925,25 @@ const InboundInternational: React.FC = () => {
                     <Box
                       sx={{
                         p: 1.5,
-                        border: "1px solid",
+                        border: '1px solid',
                         borderColor:
-                          activeFilterSection === "destinations" ? "primary.main" : "grey.200",
+                          activeFilterSection === 'destinations' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
-                        cursor: "pointer",
-                        bgcolor: activeFilterSection === "destinations" ? "primary.50" : "white",
+                        cursor: 'pointer',
+                        bgcolor: activeFilterSection === 'destinations' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === "destinations" ? null : "destinations"
+                          activeFilterSection === 'destinations' ? null : 'destinations'
                         )
                       }
                     >
-                      <Typography variant="subtitle2" sx={{ fontSize: "0.8rem", mb: 1 }}>
-                        Đích đến{" "}
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
+                        Đích đến{' '}
                         {filters.destinations.length > 0 && `(${filters.destinations.length})`}
                       </Typography>
-                      {activeFilterSection === "destinations" && (
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {activeFilterSection === 'destinations' && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueDestinations().map((destination) => (
                             <Chip
                               key={destination}
@@ -1951,13 +1951,13 @@ const InboundInternational: React.FC = () => {
                               size="small"
                               clickable
                               color={
-                                filters.destinations.includes(destination) ? "primary" : "default"
+                                filters.destinations.includes(destination) ? 'primary' : 'default'
                               }
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleFilter("destinations", destination);
+                                toggleFilter('destinations', destination);
                               }}
-                              sx={{ fontSize: "0.65rem", height: 24 }}
+                              sx={{ fontSize: '0.65rem', height: 24 }}
                             />
                           ))}
                         </Box>
@@ -1970,36 +1970,36 @@ const InboundInternational: React.FC = () => {
                     <Box
                       sx={{
                         p: 1.5,
-                        border: "1px solid",
+                        border: '1px solid',
                         borderColor:
-                          activeFilterSection === "products" ? "primary.main" : "grey.200",
+                          activeFilterSection === 'products' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
-                        cursor: "pointer",
-                        bgcolor: activeFilterSection === "products" ? "primary.50" : "white",
+                        cursor: 'pointer',
+                        bgcolor: activeFilterSection === 'products' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === "products" ? null : "products"
+                          activeFilterSection === 'products' ? null : 'products'
                         )
                       }
                     >
-                      <Typography variant="subtitle2" sx={{ fontSize: "0.8rem", mb: 1 }}>
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
                         Sản phẩm {filters.products.length > 0 && `(${filters.products.length})`}
                       </Typography>
-                      {activeFilterSection === "products" && (
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {activeFilterSection === 'products' && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueProducts().map((product) => (
                             <Chip
                               key={product}
                               label={product}
                               size="small"
                               clickable
-                              color={filters.products.includes(product) ? "primary" : "default"}
+                              color={filters.products.includes(product) ? 'primary' : 'default'}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleFilter("products", product);
+                                toggleFilter('products', product);
                               }}
-                              sx={{ fontSize: "0.65rem", height: 24 }}
+                              sx={{ fontSize: '0.65rem', height: 24 }}
                             />
                           ))}
                         </Box>
@@ -2012,37 +2012,37 @@ const InboundInternational: React.FC = () => {
                     <Box
                       sx={{
                         p: 1.5,
-                        border: "1px solid",
+                        border: '1px solid',
                         borderColor:
-                          activeFilterSection === "categories" ? "primary.main" : "grey.200",
+                          activeFilterSection === 'categories' ? 'primary.main' : 'grey.200',
                         borderRadius: 1,
-                        cursor: "pointer",
-                        bgcolor: activeFilterSection === "categories" ? "primary.50" : "white",
+                        cursor: 'pointer',
+                        bgcolor: activeFilterSection === 'categories' ? 'primary.50' : 'white',
                       }}
                       onClick={() =>
                         setActiveFilterSection(
-                          activeFilterSection === "categories" ? null : "categories"
+                          activeFilterSection === 'categories' ? null : 'categories'
                         )
                       }
                     >
-                      <Typography variant="subtitle2" sx={{ fontSize: "0.8rem", mb: 1 }}>
-                        Phân loại{" "}
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.8rem', mb: 1 }}>
+                        Phân loại{' '}
                         {filters.categories.length > 0 && `(${filters.categories.length})`}
                       </Typography>
-                      {activeFilterSection === "categories" && (
-                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {activeFilterSection === 'categories' && (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                           {getUniqueCategories().map((category) => (
                             <Chip
                               key={category}
                               label={category}
                               size="small"
                               clickable
-                              color={filters.categories.includes(category) ? "primary" : "default"}
+                              color={filters.categories.includes(category) ? 'primary' : 'default'}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleFilter("categories", category);
+                                toggleFilter('categories', category);
                               }}
-                              sx={{ fontSize: "0.65rem", height: 24 }}
+                              sx={{ fontSize: '0.65rem', height: 24 }}
                             />
                           ))}
                         </Box>
@@ -2057,21 +2057,21 @@ const InboundInternational: React.FC = () => {
           {/* Calendar Header */}
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               mb: 3,
             }}
           >
-            <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <CalendarIcon color="primary" />
-              Lịch nhập hàng -{" "}
-              {currentDate.toLocaleDateString("vi-VN", {
-                month: "long",
-                year: "numeric",
+              Lịch nhập hàng -{' '}
+              {currentDate.toLocaleDateString('vi-VN', {
+                month: 'long',
+                year: 'numeric',
               })}
             </Typography>
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
               <IconButton onClick={handlePrevMonth} size="small">
                 <ArrowBackIcon />
               </IconButton>
@@ -2084,17 +2084,17 @@ const InboundInternational: React.FC = () => {
           <Box sx={{ mb: 3 }}>
             {/* Day headers */}
             <Grid container spacing={0}>
-              {["CN", "T2", "T3", "T4", "T5", "T6", "T7"].map((day) => (
+              {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map((day) => (
                 <Grid item xs={12 / 7} key={day}>
                   <Box
                     sx={{
                       p: 1,
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      bgcolor: "grey.100",
-                      color: "grey.700",
-                      borderRight: "1px solid",
-                      borderColor: "grey.300",
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      bgcolor: 'grey.100',
+                      color: 'grey.700',
+                      borderRight: '1px solid',
+                      borderColor: 'grey.300',
                     }}
                   >
                     <Typography variant="caption">{day}</Typography>
@@ -2163,8 +2163,8 @@ const InboundInternational: React.FC = () => {
                           isValidDay
                             ? hasItems
                               ? `Click để xem chi tiết (${dayItems.length} lô hàng)`
-                              : "Click icon 3 chấm để thao tác"
-                            : ""
+                              : 'Click icon 3 chấm để thao tác'
+                            : ''
                         }
                         placement="top"
                       >
@@ -2177,18 +2177,18 @@ const InboundInternational: React.FC = () => {
                           sx={{
                             height: rowHeight,
                             p: 1,
-                            border: "1px solid",
-                            borderColor: "grey.300",
-                            cursor: isValidDay ? "pointer" : "default",
-                            bgcolor: isSelected ? "primary.50" : isToday ? "warning.50" : "white",
-                            "&:hover": isValidDay
+                            border: '1px solid',
+                            borderColor: 'grey.300',
+                            cursor: isValidDay ? 'pointer' : 'default',
+                            bgcolor: isSelected ? 'primary.50' : isToday ? 'warning.50' : 'white',
+                            '&:hover': isValidDay
                               ? {
-                                  bgcolor: "grey.50",
+                                  bgcolor: 'grey.50',
                                 }
                               : {},
-                            position: "relative",
-                            display: "flex",
-                            flexDirection: "column",
+                            position: 'relative',
+                            display: 'flex',
+                            flexDirection: 'column',
                           }}
                         >
                           {isValidDay && (
@@ -2196,8 +2196,8 @@ const InboundInternational: React.FC = () => {
                               <Typography
                                 variant="body2"
                                 sx={{
-                                  fontWeight: isToday ? "bold" : "normal",
-                                  color: isToday ? "warning.main" : "text.primary",
+                                  fontWeight: isToday ? 'bold' : 'normal',
+                                  color: isToday ? 'warning.main' : 'text.primary',
                                 }}
                               >
                                 {dayNumber}
@@ -2207,31 +2207,31 @@ const InboundInternational: React.FC = () => {
                                   sx={{
                                     mt: 0.3,
                                     flex: 1,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "flex-start",
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'flex-start',
                                   }}
                                 >
                                   {dayItems.slice(0, 2).map((item, idx) => (
                                     <Box
                                       key={idx}
                                       sx={{
-                                        display: "flex",
-                                        alignItems: "center",
+                                        display: 'flex',
+                                        alignItems: 'center',
                                         gap: 0.2,
                                         mb: 0.15,
                                         p: 0.2,
-                                        bgcolor: "rgba(255,255,255,0.9)",
+                                        bgcolor: 'rgba(255,255,255,0.9)',
                                         borderRadius: 0.5,
-                                        border: "1px solid rgba(0,0,0,0.1)",
-                                        boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                                        border: '1px solid rgba(0,0,0,0.1)',
+                                        boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
                                       }}
                                     >
                                       <Box
                                         sx={{
                                           width: 4,
                                           height: 4,
-                                          borderRadius: "50%",
+                                          borderRadius: '50%',
                                           bgcolor: getStatusColor(item.status),
                                           flexShrink: 0,
                                         }}
@@ -2239,9 +2239,9 @@ const InboundInternational: React.FC = () => {
                                       <Typography
                                         variant="caption"
                                         sx={{
-                                          fontSize: "0.5rem",
-                                          fontWeight: "bold",
-                                          color: "text.secondary",
+                                          fontSize: '0.5rem',
+                                          fontWeight: 'bold',
+                                          color: 'text.secondary',
                                           flexShrink: 0,
                                         }}
                                       >
@@ -2249,9 +2249,9 @@ const InboundInternational: React.FC = () => {
                                       </Typography>
                                       <Box
                                         sx={{
-                                          fontSize: "0.4rem",
-                                          display: "flex",
-                                          alignItems: "center",
+                                          fontSize: '0.4rem',
+                                          display: 'flex',
+                                          alignItems: 'center',
                                           flexShrink: 0,
                                         }}
                                       >
@@ -2260,10 +2260,10 @@ const InboundInternational: React.FC = () => {
                                       <Typography
                                         variant="caption"
                                         sx={{
-                                          fontSize: "0.45rem",
-                                          overflow: "hidden",
-                                          textOverflow: "ellipsis",
-                                          whiteSpace: "nowrap",
+                                          fontSize: '0.45rem',
+                                          overflow: 'hidden',
+                                          textOverflow: 'ellipsis',
+                                          whiteSpace: 'nowrap',
                                           flex: 1,
                                           minWidth: 0,
                                         }}
@@ -2276,18 +2276,18 @@ const InboundInternational: React.FC = () => {
                                     <Box
                                       sx={{
                                         p: 0.2,
-                                        bgcolor: "rgba(25, 118, 210, 0.1)",
+                                        bgcolor: 'rgba(25, 118, 210, 0.1)',
                                         borderRadius: 0.5,
-                                        textAlign: "center",
-                                        border: "1px solid rgba(25, 118, 210, 0.2)",
+                                        textAlign: 'center',
+                                        border: '1px solid rgba(25, 118, 210, 0.2)',
                                       }}
                                     >
                                       <Typography
                                         variant="caption"
                                         sx={{
-                                          fontSize: "0.45rem",
-                                          color: "primary.main",
-                                          fontWeight: "bold",
+                                          fontSize: '0.45rem',
+                                          color: 'primary.main',
+                                          fontWeight: 'bold',
                                         }}
                                       >
                                         +{dayItems.length - 2} khác
@@ -2298,27 +2298,27 @@ const InboundInternational: React.FC = () => {
                               )}
                               <Box
                                 sx={{
-                                  position: "absolute",
+                                  position: 'absolute',
                                   top: 4,
                                   right: 4,
                                   width: 20,
                                   height: 20,
-                                  borderRadius: "50%",
-                                  bgcolor: "grey.100",
-                                  display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  cursor: "pointer",
-                                  "&:hover": {
-                                    bgcolor: "grey.200",
+                                  borderRadius: '50%',
+                                  bgcolor: 'grey.100',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  cursor: 'pointer',
+                                  '&:hover': {
+                                    bgcolor: 'grey.200',
                                   },
                                 }}
                                 onClick={(e) => handleCalendarMenuOpen(e, cellDate)}
                               >
                                 <MoreVertIcon
                                   sx={{
-                                    fontSize: "0.8rem",
-                                    color: "grey.600",
+                                    fontSize: '0.8rem',
+                                    color: 'grey.600',
                                   }}
                                 />
                               </Box>
@@ -2337,7 +2337,7 @@ const InboundInternational: React.FC = () => {
           {selectedDate && selectedDateItems.length > 0 && (
             <Box>
               <Typography variant="h6" gutterBottom>
-                Chi tiết ngày {selectedDate.toLocaleDateString("vi-VN")} ({selectedDateItems.length}{" "}
+                Chi tiết ngày {selectedDate.toLocaleDateString('vi-VN')} ({selectedDateItems.length}{' '}
                 lô hàng)
               </Typography>
 
@@ -2346,29 +2346,29 @@ const InboundInternational: React.FC = () => {
                   <Grid item xs={12} sm={6} md={4} key={item.id}>
                     <Card
                       sx={{
-                        cursor: "pointer",
-                        border: "1px solid",
-                        borderColor: "grey.300",
-                        "&:hover": {
+                        cursor: 'pointer',
+                        border: '1px solid',
+                        borderColor: 'grey.300',
+                        '&:hover': {
                           elevation: 4,
-                          transform: "translateY(-2px)",
-                          borderColor: "primary.main",
+                          transform: 'translateY(-2px)',
+                          borderColor: 'primary.main',
                         },
                       }}
                     >
                       <CardContent sx={{ p: 2 }}>
                         <Box
                           sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "flex-start",
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
                             mb: 1,
                           }}
                         >
                           <Box
                             sx={{
-                              display: "flex",
-                              alignItems: "center",
+                              display: 'flex',
+                              alignItems: 'center',
                               gap: 1,
                             }}
                           >
@@ -2381,13 +2381,13 @@ const InboundInternational: React.FC = () => {
                             label={getStatusLabel(item.status)}
                             color={
                               getStatusColorForChip(item.status) as
-                                | "default"
-                                | "primary"
-                                | "secondary"
-                                | "success"
-                                | "info"
-                                | "warning"
-                                | "error"
+                                | 'default'
+                                | 'primary'
+                                | 'secondary'
+                                | 'success'
+                                | 'info'
+                                | 'warning'
+                                | 'error'
                             }
                             size="small"
                           />
@@ -2403,42 +2403,42 @@ const InboundInternational: React.FC = () => {
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
                           <strong>Từ:</strong> {item.origin}
                         </Typography>
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
                           <strong>Sản phẩm:</strong> {item.product}
                         </Typography>
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
                           <strong>Số lượng:</strong> {item.quantity.toLocaleString()}
                         </Typography>
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
                           <strong>Container:</strong> {item.container} cont
                         </Typography>
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
                           <strong>Nhà vận chuyển:</strong> {item.carrier}
                         </Typography>
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
                           <strong>Quy cách đóng gói:</strong>
                         </Typography>
@@ -2447,7 +2447,7 @@ const InboundInternational: React.FC = () => {
                             key={pkg.id}
                             variant="body2"
                             color="text.secondary"
-                            sx={{ fontSize: "0.75rem", ml: 2 }}
+                            sx={{ fontSize: '0.75rem', ml: 2 }}
                           >
                             • {pkg.type}: {pkg.quantity} SET
                             {pkg.description && ` (${pkg.description})`}
@@ -2456,43 +2456,43 @@ const InboundInternational: React.FC = () => {
                         <Typography
                           variant="body2"
                           color="primary.main"
-                          sx={{ fontSize: "0.8rem", fontWeight: 600, mt: 1 }}
+                          sx={{ fontSize: '0.8rem', fontWeight: 600, mt: 1 }}
                         >
-                          <strong>📦 Tổng sản phẩm:</strong>{" "}
+                          <strong>📦 Tổng sản phẩm:</strong>{' '}
                           {calculateTotalProducts(item.packaging).toLocaleString()} PCS
                         </Typography>
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
-                          <strong>Mục đích:</strong>{" "}
-                          {item.purpose === "online" ? "Online" : "Offline"}
+                          <strong>Mục đích:</strong>{' '}
+                          {item.purpose === 'online' ? 'Online' : 'Offline'}
                         </Typography>
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
-                          <strong>Thời gian nhận:</strong> {item.receiveTime || "Chưa có"}
+                          <strong>Thời gian nhận:</strong> {item.receiveTime || 'Chưa có'}
                         </Typography>
 
                         {/* Phân loại hàng hóa */}
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
-                          <strong>Phân loại:</strong> {item.category || "Chưa có"}
+                          <strong>Phân loại:</strong> {item.category || 'Chưa có'}
                         </Typography>
 
                         {/* Đích đến */}
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem" }}
+                          sx={{ fontSize: '0.8rem' }}
                         >
-                          <strong>Đích đến:</strong> {item.destination || "Chưa có"}
+                          <strong>Đích đến:</strong> {item.destination || 'Chưa có'}
                         </Typography>
 
                         {/* Phiếu PO */}
@@ -2500,9 +2500,9 @@ const InboundInternational: React.FC = () => {
                           <Typography
                             variant="body2"
                             color="text.secondary"
-                            sx={{ fontSize: "0.8rem" }}
+                            sx={{ fontSize: '0.8rem' }}
                           >
-                            <strong>Phiếu PO:</strong> {item.poNumbers.join(", ")}
+                            <strong>Phiếu PO:</strong> {item.poNumbers.join(', ')}
                           </Typography>
                         )}
 
@@ -2513,7 +2513,7 @@ const InboundInternational: React.FC = () => {
                               variant="body2"
                               color="primary.main"
                               sx={{
-                                fontSize: "0.8rem",
+                                fontSize: '0.8rem',
                                 fontWeight: 600,
                                 mt: 1,
                               }}
@@ -2525,7 +2525,7 @@ const InboundInternational: React.FC = () => {
                                 key={timeline.id}
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem", ml: 2 }}
+                                sx={{ fontSize: '0.75rem', ml: 2 }}
                               >
                                 • {timeline.name}:
                                 {timeline.estimatedDate && ` Dự kiến: ${timeline.estimatedDate}`}
@@ -2543,7 +2543,7 @@ const InboundInternational: React.FC = () => {
                               variant="body2"
                               color="primary.main"
                               sx={{
-                                fontSize: "0.8rem",
+                                fontSize: '0.8rem',
                                 fontWeight: 600,
                                 mt: 1,
                               }}
@@ -2555,7 +2555,7 @@ const InboundInternational: React.FC = () => {
                                 key={doc.id}
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem", ml: 2 }}
+                                sx={{ fontSize: '0.75rem', ml: 2 }}
                               >
                                 • {doc.name}:{doc.estimatedDate && ` Dự kiến: ${doc.estimatedDate}`}
                                 {doc.date && ` | Thực tế: ${doc.date}`}
@@ -2569,9 +2569,9 @@ const InboundInternational: React.FC = () => {
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontSize: "0.8rem", mt: 1 }}
+                          sx={{ fontSize: '0.8rem', mt: 1 }}
                         >
-                          <strong>Ghi chú:</strong> {item.notes || "Chưa có"}
+                          <strong>Ghi chú:</strong> {item.notes || 'Chưa có'}
                         </Typography>
 
                         {/* Thông tin chi tiết từ flattened columns */}
@@ -2579,16 +2579,16 @@ const InboundInternational: React.FC = () => {
                           sx={{
                             mt: 2,
                             p: 1,
-                            bgcolor: "grey.50",
+                            bgcolor: 'grey.50',
                             borderRadius: 1,
                           }}
                         >
                           <Box
                             sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              cursor: "pointer",
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              cursor: 'pointer',
                               mb: showTechnicalDetails ? 1 : 0,
                             }}
                             onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
@@ -2596,16 +2596,16 @@ const InboundInternational: React.FC = () => {
                             <Typography
                               variant="body2"
                               color="primary.main"
-                              sx={{ fontSize: "0.8rem", fontWeight: 600 }}
+                              sx={{ fontSize: '0.8rem', fontWeight: 600 }}
                             >
                               <strong>🔍 Chi tiết kỹ thuật:</strong>
                             </Typography>
                             <Typography
                               variant="body2"
                               color="primary.main"
-                              sx={{ fontSize: "0.7rem" }}
+                              sx={{ fontSize: '0.7rem' }}
                             >
-                              {showTechnicalDetails ? "Thu gọn ▲" : "Xem thêm ▼"}
+                              {showTechnicalDetails ? 'Thu gọn ▲' : 'Xem thêm ▼'}
                             </Typography>
                           </Box>
 
@@ -2615,43 +2615,43 @@ const InboundInternational: React.FC = () => {
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Loại quy cách đóng gói:</strong>{" "}
-                                {item.packaging?.map((p) => p.type).join(", ") || "Chưa có"}
+                                <strong>Loại quy cách đóng gói:</strong>{' '}
+                                {item.packaging?.map((p) => p.type).join(', ') || 'Chưa có'}
                               </Typography>
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Số lượng đóng gói:</strong>{" "}
-                                {item.packaging?.map((p) => p.quantity).join(", ") || "Chưa có"}
+                                <strong>Số lượng đóng gói:</strong>{' '}
+                                {item.packaging?.map((p) => p.quantity).join(', ') || 'Chưa có'}
                               </Typography>
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Mô tả đóng gói:</strong>{" "}
+                                <strong>Mô tả đóng gói:</strong>{' '}
                                 {item.packaging
                                   ?.map((p) => p.description)
                                   .filter(Boolean)
-                                  .join(", ") || "Chưa có"}
+                                  .join(', ') || 'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - Cargo Ready */}
                               {(() => {
                                 const cargo = formatTimelineDisplay(
-                                  "Cargo Ready",
+                                  'Cargo Ready',
                                   item.timeline || [],
-                                  "timeline"
+                                  'timeline'
                                 );
                                 return (
                                   <Typography
                                     variant="body2"
                                     color="text.secondary"
-                                    sx={{ fontSize: "0.75rem", mt: 0.5 }}
+                                    sx={{ fontSize: '0.75rem', mt: 0.5 }}
                                   >
                                     <strong>Cargo Ready:</strong> Dự kiến: {cargo.estimated} | Thực
                                     tế: {cargo.actual} | Trạng thái: {cargo.status}
@@ -2663,166 +2663,166 @@ const InboundInternational: React.FC = () => {
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>ETD:</strong> Dự kiến:{" "}
-                                {item.timeline?.find((t) => t.name === "ETD")?.estimatedDate ||
-                                  "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.timeline?.find((t) => t.name === "ETD")?.date || "Chưa có"} |
-                                Trạng thái:{" "}
-                                {item.timeline?.find((t) => t.name === "ETD")?.status || "Chưa có"}
+                                <strong>ETD:</strong> Dự kiến:{' '}
+                                {item.timeline?.find((t) => t.name === 'ETD')?.estimatedDate ||
+                                  'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.timeline?.find((t) => t.name === 'ETD')?.date || 'Chưa có'} |
+                                Trạng thái:{' '}
+                                {item.timeline?.find((t) => t.name === 'ETD')?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - ETA */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>ETA:</strong> Dự kiến:{" "}
-                                {item.timeline?.find((t) => t.name === "ETA")?.estimatedDate ||
-                                  "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.timeline?.find((t) => t.name === "ETA")?.date || "Chưa có"} |
-                                Trạng thái:{" "}
-                                {item.timeline?.find((t) => t.name === "ETA")?.status || "Chưa có"}
+                                <strong>ETA:</strong> Dự kiến:{' '}
+                                {item.timeline?.find((t) => t.name === 'ETA')?.estimatedDate ||
+                                  'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.timeline?.find((t) => t.name === 'ETA')?.date || 'Chưa có'} |
+                                Trạng thái:{' '}
+                                {item.timeline?.find((t) => t.name === 'ETA')?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - Depart */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Ngày hàng đi:</strong> Dự kiến:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày hàng đi")
-                                  ?.estimatedDate || "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày hàng đi")?.date ||
-                                  "Chưa có"}{" "}
-                                | Trạng thái:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày hàng đi")?.status ||
-                                  "Chưa có"}
+                                <strong>Ngày hàng đi:</strong> Dự kiến:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng đi')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng đi')?.date ||
+                                  'Chưa có'}{' '}
+                                | Trạng thái:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng đi')?.status ||
+                                  'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - Arrival Port */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Ngày hàng về cảng:</strong> Dự kiến:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày hàng về cảng")
-                                  ?.estimatedDate || "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày hàng về cảng")?.date ||
-                                  "Chưa có"}{" "}
-                                | Trạng thái:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày hàng về cảng")
-                                  ?.status || "Chưa có"}
+                                <strong>Ngày hàng về cảng:</strong> Dự kiến:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng về cảng')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng về cảng')?.date ||
+                                  'Chưa có'}{' '}
+                                | Trạng thái:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày hàng về cảng')
+                                  ?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Timeline Flattened - Receive */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Ngày nhận hàng:</strong> Dự kiến:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày nhận hàng")
-                                  ?.estimatedDate || "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày nhận hàng")?.date ||
-                                  "Chưa có"}{" "}
-                                | Trạng thái:{" "}
-                                {item.timeline?.find((t) => t.name === "Ngày nhận hàng")?.status ||
-                                  "Chưa có"}
+                                <strong>Ngày nhận hàng:</strong> Dự kiến:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày nhận hàng')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày nhận hàng')?.date ||
+                                  'Chưa có'}{' '}
+                                | Trạng thái:{' '}
+                                {item.timeline?.find((t) => t.name === 'Ngày nhận hàng')?.status ||
+                                  'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Check Bill */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem", mt: 0.5 }}
+                                sx={{ fontSize: '0.75rem', mt: 0.5 }}
                               >
-                                <strong>Check Bill:</strong> Dự kiến:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Check bill")
-                                  ?.estimatedDate || "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Check bill")?.date ||
-                                  "Chưa có"}{" "}
-                                | Trạng thái:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Check bill")
-                                  ?.status || "Chưa có"}
+                                <strong>Check Bill:</strong> Dự kiến:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check bill')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check bill')?.date ||
+                                  'Chưa có'}{' '}
+                                | Trạng thái:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check bill')
+                                  ?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Check CO */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Check CO:</strong> Dự kiến:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Check CO")
-                                  ?.estimatedDate || "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Check CO")?.date ||
-                                  "Chưa có"}{" "}
-                                | Trạng thái:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Check CO")?.status ||
-                                  "Chưa có"}
+                                <strong>Check CO:</strong> Dự kiến:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check CO')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check CO')?.date ||
+                                  'Chưa có'}{' '}
+                                | Trạng thái:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Check CO')?.status ||
+                                  'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Send Docs */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>TQ gửi chứng từ đi:</strong> Dự kiến:{" "}
-                                {item.documentStatus?.find((d) => d.name === "TQ gửi chứng từ đi")
-                                  ?.estimatedDate || "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.documentStatus?.find((d) => d.name === "TQ gửi chứng từ đi")
-                                  ?.date || "Chưa có"}{" "}
-                                | Trạng thái:{" "}
-                                {item.documentStatus?.find((d) => d.name === "TQ gửi chứng từ đi")
-                                  ?.status || "Chưa có"}
+                                <strong>TQ gửi chứng từ đi:</strong> Dự kiến:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'TQ gửi chứng từ đi')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'TQ gửi chứng từ đi')
+                                  ?.date || 'Chưa có'}{' '}
+                                | Trạng thái:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'TQ gửi chứng từ đi')
+                                  ?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Customs */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Lên Tờ Khai Hải Quan:</strong> Dự kiến:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Lên Tờ Khai Hải Quan")
-                                  ?.estimatedDate || "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Lên Tờ Khai Hải Quan")
-                                  ?.date || "Chưa có"}{" "}
-                                | Trạng thái:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Lên Tờ Khai Hải Quan")
-                                  ?.status || "Chưa có"}
+                                <strong>Lên Tờ Khai Hải Quan:</strong> Dự kiến:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Lên Tờ Khai Hải Quan')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Lên Tờ Khai Hải Quan')
+                                  ?.date || 'Chưa có'}{' '}
+                                | Trạng thái:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Lên Tờ Khai Hải Quan')
+                                  ?.status || 'Chưa có'}
                               </Typography>
 
                               {/* Document Status Flattened - Tax */}
                               <Typography
                                 variant="body2"
                                 color="text.secondary"
-                                sx={{ fontSize: "0.75rem" }}
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <strong>Đóng thuế:</strong> Dự kiến:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Đóng thuế")
-                                  ?.estimatedDate || "Chưa có"}{" "}
-                                | Thực tế:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Đóng thuế")?.date ||
-                                  "Chưa có"}{" "}
-                                | Trạng thái:{" "}
-                                {item.documentStatus?.find((d) => d.name === "Đóng thuế")?.status ||
-                                  "Chưa có"}
+                                <strong>Đóng thuế:</strong> Dự kiến:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Đóng thuế')
+                                  ?.estimatedDate || 'Chưa có'}{' '}
+                                | Thực tế:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Đóng thuế')?.date ||
+                                  'Chưa có'}{' '}
+                                | Trạng thái:{' '}
+                                {item.documentStatus?.find((d) => d.name === 'Đóng thuế')?.status ||
+                                  'Chưa có'}
                               </Typography>
                             </Box>
                           )}
@@ -2833,42 +2833,42 @@ const InboundInternational: React.FC = () => {
                           sx={{
                             mt: 1,
                             pt: 1,
-                            borderTop: "1px solid",
-                            borderColor: "grey.200",
+                            borderTop: '1px solid',
+                            borderColor: 'grey.200',
                           }}
                         >
                           <Typography
                             variant="body2"
                             color="text.disabled"
-                            sx={{ fontSize: "0.7rem" }}
+                            sx={{ fontSize: '0.7rem' }}
                           >
                             <strong>ID:</strong> {item.id}
                           </Typography>
                           <Typography
                             variant="body2"
                             color="text.disabled"
-                            sx={{ fontSize: "0.7rem" }}
+                            sx={{ fontSize: '0.7rem' }}
                           >
-                            <strong>Tạo lúc:</strong> {item.createdAt || "Chưa có"}
+                            <strong>Tạo lúc:</strong> {item.createdAt || 'Chưa có'}
                           </Typography>
                           <Typography
                             variant="body2"
                             color="text.disabled"
-                            sx={{ fontSize: "0.7rem" }}
+                            sx={{ fontSize: '0.7rem' }}
                           >
-                            <strong>Cập nhật:</strong> {item.updatedAt || "Chưa có"}
+                            <strong>Cập nhật:</strong> {item.updatedAt || 'Chưa có'}
                           </Typography>
                         </Box>
 
                         {/* Card action menu */}
                         <Box
                           sx={{
-                            display: "flex",
-                            justifyContent: "flex-end",
+                            display: 'flex',
+                            justifyContent: 'flex-end',
                             mt: 2,
                             pt: 2,
-                            borderTop: "1px solid",
-                            borderColor: "grey.200",
+                            borderTop: '1px solid',
+                            borderColor: 'grey.200',
                           }}
                         >
                           <Tooltip title="Thao tác">
@@ -2876,14 +2876,14 @@ const InboundInternational: React.FC = () => {
                               size="small"
                               onClick={(e) => handleCardMenuOpen(e, item)}
                               sx={{
-                                color: "grey.600",
-                                "&:hover": {
-                                  backgroundColor: "primary.50",
-                                  color: "primary.main",
+                                color: 'grey.600',
+                                '&:hover': {
+                                  backgroundColor: 'primary.50',
+                                  color: 'primary.main',
                                 },
                               }}
                             >
-                              <MoreVertIcon sx={{ fontSize: "1rem" }} />
+                              <MoreVertIcon sx={{ fontSize: '1rem' }} />
                             </IconButton>
                           </Tooltip>
                         </Box>
@@ -2896,9 +2896,9 @@ const InboundInternational: React.FC = () => {
           )}
 
           {selectedDate && selectedDateItems.length === 0 && (
-            <Box sx={{ textAlign: "center", py: 3 }}>
+            <Box sx={{ textAlign: 'center', py: 3 }}>
               <Typography variant="body1" color="text.secondary">
-                Không có lô hàng nào trong ngày {selectedDate.toLocaleDateString("vi-VN")}
+                Không có lô hàng nào trong ngày {selectedDate.toLocaleDateString('vi-VN')}
               </Typography>
             </Box>
           )}
@@ -2909,7 +2909,7 @@ const InboundInternational: React.FC = () => {
       <Fab
         color="primary"
         aria-label="add"
-        sx={{ position: "fixed", bottom: 16, right: 16 }}
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
         onClick={handleAddNew}
       >
         <AddIcon />
@@ -2919,10 +2919,10 @@ const InboundInternational: React.FC = () => {
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>
           {editingItem
-            ? "Sửa lịch nhập hàng"
+            ? 'Sửa lịch nhập hàng'
             : addFromCalendar
-              ? `Thêm lịch nhập hàng - ${addFromCalendar.toLocaleDateString("vi-VN")}`
-              : "Thêm lịch nhập hàng mới"}
+              ? `Thêm lịch nhập hàng - ${addFromCalendar.toLocaleDateString('vi-VN')}`
+              : 'Thêm lịch nhập hàng mới'}
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -2931,7 +2931,7 @@ const InboundInternational: React.FC = () => {
                 fullWidth
                 label="Mã PI (Lô hàng)"
                 value={formFields.pi}
-                onChange={(e) => setField("pi", e.target.value)}
+                onChange={(e) => setField('pi', e.target.value)}
                 variant="outlined"
                 required
               />
@@ -2941,7 +2941,7 @@ const InboundInternational: React.FC = () => {
                 fullWidth
                 label="Nhà cung cấp"
                 value={formFields.supplier}
-                onChange={(e) => setField("supplier", e.target.value)}
+                onChange={(e) => setField('supplier', e.target.value)}
                 variant="outlined"
                 required
               />
@@ -2951,7 +2951,7 @@ const InboundInternational: React.FC = () => {
                 fullWidth
                 label="Sản phẩm"
                 value={formFields.product}
-                onChange={(e) => setField("product", e.target.value)}
+                onChange={(e) => setField('product', e.target.value)}
                 variant="outlined"
                 required
               />
@@ -2961,12 +2961,12 @@ const InboundInternational: React.FC = () => {
                 freeSolo
                 options={productCategories}
                 value={formFields.category}
-                onInputChange={(_, v) => setField("category", v)}
+                onInputChange={(_, v) => setField('category', v)}
                 renderOption={(props, option) => (
                   <Box
                     component="li"
                     {...props}
-                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
                     {getCategoryIcon(option)}
                     {option}
@@ -2982,7 +2982,7 @@ const InboundInternational: React.FC = () => {
                 fullWidth
                 label="Xuất xứ"
                 value={formFields.origin}
-                onChange={(e) => setField("origin", e.target.value)}
+                onChange={(e) => setField('origin', e.target.value)}
                 variant="outlined"
                 required
               />
@@ -2992,7 +2992,7 @@ const InboundInternational: React.FC = () => {
                 freeSolo
                 options={destinations}
                 value={formFields.destination}
-                onInputChange={(_, v) => setField("destination", v)}
+                onInputChange={(_, v) => setField('destination', v)}
                 renderInput={(params) => (
                   <TextField {...params} label="Đích đến" variant="outlined" required />
                 )}
@@ -3004,7 +3004,7 @@ const InboundInternational: React.FC = () => {
                 label="Số lượng"
                 type="number"
                 value={formFields.quantity}
-                onChange={(e) => setField("quantity", Number(e.target.value))}
+                onChange={(e) => setField('quantity', Number(e.target.value))}
                 variant="outlined"
                 required
               />
@@ -3015,7 +3015,7 @@ const InboundInternational: React.FC = () => {
                 label="Số lượng Container"
                 type="number"
                 value={formFields.container}
-                onChange={(e) => setField("container", Number(e.target.value))}
+                onChange={(e) => setField('container', Number(e.target.value))}
                 variant="outlined"
                 required
               />
@@ -3025,7 +3025,7 @@ const InboundInternational: React.FC = () => {
                 fullWidth
                 label="Phiếu PO (cách nhau bằng dấu phẩy)"
                 value={formFields.poNumbersInput}
-                onChange={(e) => setField("poNumbersInput", e.target.value)}
+                onChange={(e) => setField('poNumbersInput', e.target.value)}
                 variant="outlined"
                 placeholder="PO-2024-001, PO-2024-002"
                 helperText="Nhập nhiều PO cách nhau bằng dấu phẩy"
@@ -3036,7 +3036,7 @@ const InboundInternational: React.FC = () => {
                 <InputLabel>Trạng thái</InputLabel>
                 <Select
                   value={formFields.status}
-                  onChange={(e) => setField("status", e.target.value as InboundItem["status"])}
+                  onChange={(e) => setField('status', e.target.value as InboundItem['status'])}
                   label="Trạng thái"
                 >
                   <MenuItem value="pending">Chờ xác nhận</MenuItem>
@@ -3052,13 +3052,13 @@ const InboundInternational: React.FC = () => {
                 fullWidth
                 label="Nhà vận chuyển"
                 value={formFields.carrier}
-                onChange={(e) => setField("carrier", e.target.value)}
+                onChange={(e) => setField('carrier', e.target.value)}
                 variant="outlined"
                 required
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h6" sx={{ mb: 2, fontSize: "1rem" }}>
+              <Typography variant="h6" sx={{ mb: 2, fontSize: '1rem' }}>
                 📦 Quy cách đóng gói
               </Typography>
 
@@ -3067,30 +3067,30 @@ const InboundInternational: React.FC = () => {
                 <Box
                   key={item.id}
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                     gap: 2,
                     mb: 1,
                     p: 1,
-                    border: "1px solid #e0e0e0",
+                    border: '1px solid #e0e0e0',
                     borderRadius: 1,
-                    backgroundColor: "#f5f5f5",
+                    backgroundColor: '#f5f5f5',
                   }}
                 >
-                  <Typography variant="body2" sx={{ minWidth: "80px", fontWeight: 500 }}>
+                  <Typography variant="body2" sx={{ minWidth: '80px', fontWeight: 500 }}>
                     {item.type}
                   </Typography>
-                  <Typography variant="body2" sx={{ minWidth: "60px" }}>
+                  <Typography variant="body2" sx={{ minWidth: '60px' }}>
                     {item.quantity} SET
                   </Typography>
-                  <Typography variant="body2" sx={{ flex: 1, color: "text.secondary" }}>
+                  <Typography variant="body2" sx={{ flex: 1, color: 'text.secondary' }}>
                     {item.description}
                   </Typography>
-                  <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Box sx={{ display: 'flex', gap: 0.5 }}>
                     <Tooltip title="Sửa mô tả">
                       <IconButton
                         size="small"
-                        onClick={() => handleEditItem("packaging", item, index)}
+                        onClick={() => handleEditItem('packaging', item, index)}
                         color="primary"
                       >
                         <EditIcon />
@@ -3112,17 +3112,17 @@ const InboundInternational: React.FC = () => {
               {/* Add New Packaging Item */}
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   gap: 2,
-                  alignItems: "center",
+                  alignItems: 'center',
                   mt: 2,
                   p: 2,
-                  border: "2px dashed #ccc",
+                  border: '2px dashed #ccc',
                   borderRadius: 1,
-                  backgroundColor: "#fafafa",
+                  backgroundColor: '#fafafa',
                 }}
               >
-                <FormControl sx={{ minWidth: "120px" }}>
+                <FormControl sx={{ minWidth: '120px' }}>
                   <InputLabel>Loại</InputLabel>
                   <Select
                     value={newPackagingItem.type}
@@ -3152,7 +3152,7 @@ const InboundInternational: React.FC = () => {
                       quantity: parseInt(e.target.value) || 0,
                     }))
                   }
-                  sx={{ minWidth: "120px" }}
+                  sx={{ minWidth: '120px' }}
                   inputProps={{ min: 0 }}
                 />
 
@@ -3185,28 +3185,28 @@ const InboundInternational: React.FC = () => {
                   sx={{
                     mt: 2,
                     p: 2,
-                    backgroundColor: "#e3f2fd",
+                    backgroundColor: '#e3f2fd',
                     borderRadius: 1,
-                    border: "1px solid #2196f3",
+                    border: '1px solid #2196f3',
                   }}
                 >
                   <Typography
                     variant="h6"
                     sx={{
-                      color: "primary.main",
+                      color: 'primary.main',
                       fontWeight: 600,
-                      display: "flex",
-                      alignItems: "center",
+                      display: 'flex',
+                      alignItems: 'center',
                       gap: 1,
                     }}
                   >
-                    📦 Tổng số sản phẩm: {calculateTotalProducts(packagingItems).toLocaleString()}{" "}
+                    📦 Tổng số sản phẩm: {calculateTotalProducts(packagingItems).toLocaleString()}{' '}
                     PCS
                   </Typography>
                   <Typography
                     variant="body2"
                     sx={{
-                      color: "text.secondary",
+                      color: 'text.secondary',
                       mt: 0.5,
                     }}
                   >
@@ -3218,7 +3218,7 @@ const InboundInternational: React.FC = () => {
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth required>
                 <InputLabel>Mục đích</InputLabel>
-                <Select defaultValue={editingItem?.purpose || "online"} label="Mục đích">
+                <Select defaultValue={editingItem?.purpose || 'online'} label="Mục đích">
                   <MenuItem value="online">Online</MenuItem>
                   <MenuItem value="offline">Offline</MenuItem>
                 </Select>
@@ -3229,14 +3229,14 @@ const InboundInternational: React.FC = () => {
                 fullWidth
                 label="Thời gian nhận"
                 type="time"
-                defaultValue={editingItem?.receiveTime || ""}
+                defaultValue={editingItem?.receiveTime || ''}
                 variant="outlined"
                 required
                 InputLabelProps={{ shrink: true }}
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h6" sx={{ mb: 2, fontSize: "1rem" }}>
+              <Typography variant="h6" sx={{ mb: 2, fontSize: '1rem' }}>
                 📅 Timeline Vận Chuyển
               </Typography>
 
@@ -3245,49 +3245,49 @@ const InboundInternational: React.FC = () => {
                 <Box
                   key={item.id}
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                     gap: 2,
                     mb: 1,
                     p: 2,
-                    border: "1px solid #e0e0e0",
+                    border: '1px solid #e0e0e0',
                     borderRadius: 1,
                     backgroundColor:
-                      item.status === "completed"
-                        ? "#e8f5e8"
-                        : item.status === "delayed"
-                          ? "#ffeaa7"
-                          : "#f5f5f5",
+                      item.status === 'completed'
+                        ? '#e8f5e8'
+                        : item.status === 'delayed'
+                          ? '#ffeaa7'
+                          : '#f5f5f5',
                   }}
                 >
-                  <Box sx={{ minWidth: "120px" }}>
+                  <Box sx={{ minWidth: '120px' }}>
                     <Typography variant="body2" sx={{ fontWeight: 500 }}>
                       {item.name}
                     </Typography>
                     <Chip
                       label={
-                        item.status === "completed"
-                          ? "Hoàn thành"
-                          : item.status === "delayed"
-                            ? "Trễ"
-                            : "Chờ xử lý"
+                        item.status === 'completed'
+                          ? 'Hoàn thành'
+                          : item.status === 'delayed'
+                            ? 'Trễ'
+                            : 'Chờ xử lý'
                       }
                       color={
-                        item.status === "completed"
-                          ? "success"
-                          : item.status === "delayed"
-                            ? "warning"
-                            : "default"
+                        item.status === 'completed'
+                          ? 'success'
+                          : item.status === 'delayed'
+                            ? 'warning'
+                            : 'default'
                       }
                       size="small"
-                      sx={{ fontSize: "0.7rem", mt: 0.5 }}
+                      sx={{ fontSize: '0.7rem', mt: 0.5 }}
                     />
                   </Box>
 
-                  <Box sx={{ minWidth: "100px" }}>
+                  <Box sx={{ minWidth: '100px' }}>
                     <Typography
                       variant="caption"
-                      sx={{ display: "block", color: "text.secondary" }}
+                      sx={{ display: 'block', color: 'text.secondary' }}
                     >
                       Dự kiến:
                     </Typography>
@@ -3295,16 +3295,16 @@ const InboundInternational: React.FC = () => {
                       {item.estimatedDate
                         ? (() => {
                             const d = new Date(item.estimatedDate);
-                            return isNaN(d.getTime()) ? "Chưa có" : d.toLocaleDateString("vi-VN");
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()
-                        : "Chưa có"}
+                        : 'Chưa có'}
                     </Typography>
                   </Box>
 
-                  <Box sx={{ minWidth: "100px" }}>
+                  <Box sx={{ minWidth: '100px' }}>
                     <Typography
                       variant="caption"
-                      sx={{ display: "block", color: "text.secondary" }}
+                      sx={{ display: 'block', color: 'text.secondary' }}
                     >
                       Thực tế:
                     </Typography>
@@ -3312,21 +3312,21 @@ const InboundInternational: React.FC = () => {
                       {item.date
                         ? (() => {
                             const d = new Date(item.date);
-                            return isNaN(d.getTime()) ? "Chưa có" : d.toLocaleDateString("vi-VN");
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()
-                        : "Chưa có"}
+                        : 'Chưa có'}
                     </Typography>
                   </Box>
 
-                  <Typography variant="body2" sx={{ flex: 1, color: "text.secondary" }}>
+                  <Typography variant="body2" sx={{ flex: 1, color: 'text.secondary' }}>
                     {item.description}
                   </Typography>
 
-                  <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Box sx={{ display: 'flex', gap: 0.5 }}>
                     <Tooltip title="Sửa mô tả">
                       <IconButton
                         size="small"
-                        onClick={() => handleEditItem("timeline", item, index)}
+                        onClick={() => handleEditItem('timeline', item, index)}
                         color="primary"
                       >
                         <EditIcon />
@@ -3348,18 +3348,18 @@ const InboundInternational: React.FC = () => {
               {/* Add New Timeline Item */}
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   gap: 2,
-                  alignItems: "center",
+                  alignItems: 'center',
                   mt: 2,
                   p: 2,
-                  border: "2px dashed #ccc",
+                  border: '2px dashed #ccc',
                   borderRadius: 1,
-                  backgroundColor: "#fafafa",
-                  flexWrap: "wrap",
+                  backgroundColor: '#fafafa',
+                  flexWrap: 'wrap',
                 }}
               >
-                <FormControl sx={{ minWidth: "140px" }}>
+                <FormControl sx={{ minWidth: '140px' }}>
                   <InputLabel>Mốc thời gian</InputLabel>
                   <Select
                     value={newTimelineItem.name}
@@ -3391,7 +3391,7 @@ const InboundInternational: React.FC = () => {
                       estimatedDate: e.target.value,
                     }))
                   }
-                  sx={{ minWidth: "140px" }}
+                  sx={{ minWidth: '140px' }}
                   InputLabelProps={{ shrink: true }}
                 />
 
@@ -3405,18 +3405,18 @@ const InboundInternational: React.FC = () => {
                       date: e.target.value,
                     }))
                   }
-                  sx={{ minWidth: "140px" }}
+                  sx={{ minWidth: '140px' }}
                   InputLabelProps={{ shrink: true }}
                 />
 
-                <FormControl sx={{ minWidth: "120px" }}>
+                <FormControl sx={{ minWidth: '120px' }}>
                   <InputLabel>Trạng thái</InputLabel>
                   <Select
                     value={newTimelineItem.status}
                     onChange={(e) =>
                       setNewTimelineItem((prev) => ({
                         ...prev,
-                        status: e.target.value as "completed" | "pending",
+                        status: e.target.value as 'completed' | 'pending',
                       }))
                     }
                     label="Trạng thái"
@@ -3435,7 +3435,7 @@ const InboundInternational: React.FC = () => {
                       description: e.target.value,
                     }))
                   }
-                  sx={{ minWidth: "200px", flex: 1 }}
+                  sx={{ minWidth: '200px', flex: 1 }}
                   placeholder="Mô tả thêm..."
                 />
 
@@ -3450,7 +3450,7 @@ const InboundInternational: React.FC = () => {
               </Box>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h6" sx={{ mb: 2, fontSize: "1rem" }}>
+              <Typography variant="h6" sx={{ mb: 2, fontSize: '1rem' }}>
                 📄 Trạng thái chứng từ
               </Typography>
 
@@ -3459,55 +3459,55 @@ const InboundInternational: React.FC = () => {
                 <Box
                   key={item.id}
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                     gap: 2,
                     mb: 1,
                     p: 2,
-                    border: "1px solid #e0e0e0",
+                    border: '1px solid #e0e0e0',
                     borderRadius: 1,
                     backgroundColor:
-                      item.status === "completed"
-                        ? "#e8f5e8"
-                        : item.status === "delayed"
-                          ? "#ffeaa7"
-                          : item.status === "in-progress"
-                            ? "#e3f2fd"
-                            : "#f5f5f5",
+                      item.status === 'completed'
+                        ? '#e8f5e8'
+                        : item.status === 'delayed'
+                          ? '#ffeaa7'
+                          : item.status === 'in-progress'
+                            ? '#e3f2fd'
+                            : '#f5f5f5',
                   }}
                 >
-                  <Box sx={{ minWidth: "120px" }}>
+                  <Box sx={{ minWidth: '120px' }}>
                     <Typography variant="body2" sx={{ fontWeight: 500 }}>
                       {item.name}
                     </Typography>
                     <Chip
                       label={
-                        item.status === "completed"
-                          ? "Hoàn thành"
-                          : item.status === "delayed"
-                            ? "Trễ"
-                            : item.status === "in-progress"
-                              ? "Đang xử lý"
-                              : "Chờ xử lý"
+                        item.status === 'completed'
+                          ? 'Hoàn thành'
+                          : item.status === 'delayed'
+                            ? 'Trễ'
+                            : item.status === 'in-progress'
+                              ? 'Đang xử lý'
+                              : 'Chờ xử lý'
                       }
                       color={
-                        item.status === "completed"
-                          ? "success"
-                          : item.status === "delayed"
-                            ? "warning"
-                            : item.status === "in-progress"
-                              ? "info"
-                              : "default"
+                        item.status === 'completed'
+                          ? 'success'
+                          : item.status === 'delayed'
+                            ? 'warning'
+                            : item.status === 'in-progress'
+                              ? 'info'
+                              : 'default'
                       }
                       size="small"
-                      sx={{ fontSize: "0.7rem", mt: 0.5 }}
+                      sx={{ fontSize: '0.7rem', mt: 0.5 }}
                     />
                   </Box>
 
-                  <Box sx={{ minWidth: "100px" }}>
+                  <Box sx={{ minWidth: '100px' }}>
                     <Typography
                       variant="caption"
-                      sx={{ display: "block", color: "text.secondary" }}
+                      sx={{ display: 'block', color: 'text.secondary' }}
                     >
                       Dự kiến:
                     </Typography>
@@ -3515,16 +3515,16 @@ const InboundInternational: React.FC = () => {
                       {item.estimatedDate
                         ? (() => {
                             const d = new Date(item.estimatedDate);
-                            return isNaN(d.getTime()) ? "Chưa có" : d.toLocaleDateString("vi-VN");
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()
-                        : "Chưa có"}
+                        : 'Chưa có'}
                     </Typography>
                   </Box>
 
-                  <Box sx={{ minWidth: "100px" }}>
+                  <Box sx={{ minWidth: '100px' }}>
                     <Typography
                       variant="caption"
-                      sx={{ display: "block", color: "text.secondary" }}
+                      sx={{ display: 'block', color: 'text.secondary' }}
                     >
                       Thực tế:
                     </Typography>
@@ -3532,21 +3532,21 @@ const InboundInternational: React.FC = () => {
                       {item.date
                         ? (() => {
                             const d = new Date(item.date);
-                            return isNaN(d.getTime()) ? "Chưa có" : d.toLocaleDateString("vi-VN");
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()
-                        : "Chưa có"}
+                        : 'Chưa có'}
                     </Typography>
                   </Box>
 
-                  <Typography variant="body2" sx={{ flex: 1, color: "text.secondary" }}>
+                  <Typography variant="body2" sx={{ flex: 1, color: 'text.secondary' }}>
                     {item.description}
                   </Typography>
 
-                  <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Box sx={{ display: 'flex', gap: 0.5 }}>
                     <Tooltip title="Sửa mô tả">
                       <IconButton
                         size="small"
-                        onClick={() => handleEditItem("documentStatus", item, index)}
+                        onClick={() => handleEditItem('documentStatus', item, index)}
                         color="primary"
                       >
                         <EditIcon />
@@ -3568,18 +3568,18 @@ const InboundInternational: React.FC = () => {
               {/* Add New Document Status Item */}
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   gap: 2,
-                  alignItems: "center",
+                  alignItems: 'center',
                   mt: 2,
                   p: 2,
-                  border: "2px dashed #ccc",
+                  border: '2px dashed #ccc',
                   borderRadius: 1,
-                  backgroundColor: "#fafafa",
-                  flexWrap: "wrap",
+                  backgroundColor: '#fafafa',
+                  flexWrap: 'wrap',
                 }}
               >
-                <FormControl sx={{ minWidth: "140px" }}>
+                <FormControl sx={{ minWidth: '140px' }}>
                   <InputLabel>Trạng thái chứng từ</InputLabel>
                   <Select
                     value={newDocumentStatusItem.name}
@@ -3609,7 +3609,7 @@ const InboundInternational: React.FC = () => {
                       estimatedDate: e.target.value,
                     }))
                   }
-                  sx={{ minWidth: "140px" }}
+                  sx={{ minWidth: '140px' }}
                   InputLabelProps={{ shrink: true }}
                 />
 
@@ -3623,18 +3623,18 @@ const InboundInternational: React.FC = () => {
                       date: e.target.value,
                     }))
                   }
-                  sx={{ minWidth: "140px" }}
+                  sx={{ minWidth: '140px' }}
                   InputLabelProps={{ shrink: true }}
                 />
 
-                <FormControl sx={{ minWidth: "120px" }}>
+                <FormControl sx={{ minWidth: '120px' }}>
                   <InputLabel>Trạng thái</InputLabel>
                   <Select
                     value={newDocumentStatusItem.status}
                     onChange={(e) =>
                       setNewDocumentStatusItem((prev) => ({
                         ...prev,
-                        status: e.target.value as "completed" | "pending" | "in-progress",
+                        status: e.target.value as 'completed' | 'pending' | 'in-progress',
                       }))
                     }
                     label="Trạng thái"
@@ -3654,7 +3654,7 @@ const InboundInternational: React.FC = () => {
                       description: e.target.value,
                     }))
                   }
-                  sx={{ minWidth: "200px", flex: 1 }}
+                  sx={{ minWidth: '200px', flex: 1 }}
                   placeholder="Mô tả thêm..."
                 />
 
@@ -3674,7 +3674,7 @@ const InboundInternational: React.FC = () => {
                 label="Ghi chú"
                 multiline
                 rows={3}
-                value={editingItem?.notes || ""}
+                value={editingItem?.notes || ''}
                 variant="outlined"
               />
             </Grid>
@@ -3683,7 +3683,7 @@ const InboundInternational: React.FC = () => {
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Hủy</Button>
           <Button onClick={() => handleSave({})} variant="contained" disabled={saving}>
-            {editingItem ? "Cập nhật" : "Thêm mới"}
+            {editingItem ? 'Cập nhật' : 'Thêm mới'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -3694,29 +3694,29 @@ const InboundInternational: React.FC = () => {
         anchorEl={actionMenuAnchor}
         onClose={handleActionMenuClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <MenuItem
-          onClick={() => handleActionMenuAction("edit")}
-          sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem" } }}
+          onClick={() => handleActionMenuAction('edit')}
+          sx={{ fontSize: { xs: '0.65rem', sm: '0.7rem' } }}
         >
-          <EditIcon sx={{ mr: 1, fontSize: "1rem" }} />
+          <EditIcon sx={{ mr: 1, fontSize: '1rem' }} />
           Sửa
         </MenuItem>
         <MenuItem
-          onClick={() => handleActionMenuAction("delete")}
+          onClick={() => handleActionMenuAction('delete')}
           sx={{
-            fontSize: { xs: "0.65rem", sm: "0.7rem" },
-            color: "error.main",
+            fontSize: { xs: '0.65rem', sm: '0.7rem' },
+            color: 'error.main',
           }}
         >
-          <DeleteIcon sx={{ mr: 1, fontSize: "1rem" }} />
+          <DeleteIcon sx={{ mr: 1, fontSize: '1rem' }} />
           Xóa
         </MenuItem>
       </Menu>
@@ -3727,28 +3727,28 @@ const InboundInternational: React.FC = () => {
         anchorEl={calendarMenuAnchor}
         onClose={handleCalendarMenuClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <MenuItem
-          onClick={() => handleCalendarMenuAction("add")}
-          sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem" } }}
+          onClick={() => handleCalendarMenuAction('add')}
+          sx={{ fontSize: { xs: '0.65rem', sm: '0.7rem' } }}
         >
-          <AddIcon sx={{ mr: 1, fontSize: "1rem" }} />
+          <AddIcon sx={{ mr: 1, fontSize: '1rem' }} />
           Thêm lịch
         </MenuItem>
         {calendarMenuDate && getItemsForDate(calendarMenuDate).length > 0 && (
           <>
             <MenuItem
-              onClick={() => handleCalendarMenuAction("view")}
-              sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem" } }}
+              onClick={() => handleCalendarMenuAction('view')}
+              sx={{ fontSize: { xs: '0.65rem', sm: '0.7rem' } }}
             >
-              <ScheduleIcon sx={{ mr: 1, fontSize: "1rem" }} />
+              <ScheduleIcon sx={{ mr: 1, fontSize: '1rem' }} />
               Xem chi tiết
             </MenuItem>
           </>
@@ -3761,29 +3761,29 @@ const InboundInternational: React.FC = () => {
         open={Boolean(cardMenuAnchor)}
         onClose={handleCardMenuClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <MenuItem
-          onClick={() => handleCardMenuAction("edit")}
-          sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem" } }}
+          onClick={() => handleCardMenuAction('edit')}
+          sx={{ fontSize: { xs: '0.65rem', sm: '0.7rem' } }}
         >
-          <EditIcon sx={{ mr: 1, fontSize: "1rem" }} />
+          <EditIcon sx={{ mr: 1, fontSize: '1rem' }} />
           Sửa lịch
         </MenuItem>
         <MenuItem
-          onClick={() => handleCardMenuAction("delete")}
+          onClick={() => handleCardMenuAction('delete')}
           sx={{
-            fontSize: { xs: "0.65rem", sm: "0.7rem" },
-            color: "error.main",
+            fontSize: { xs: '0.65rem', sm: '0.7rem' },
+            color: 'error.main',
           }}
         >
-          <DeleteIcon sx={{ mr: 1, fontSize: "1rem" }} />
+          <DeleteIcon sx={{ mr: 1, fontSize: '1rem' }} />
           Xóa lịch
         </MenuItem>
       </Menu>
@@ -3791,25 +3791,25 @@ const InboundInternational: React.FC = () => {
       {/* Edit Item Dialog */}
       <Dialog open={editItemDialog.open} onClose={handleEditItemClose} maxWidth="sm" fullWidth>
         <DialogTitle>
-          Sửa mô tả -{" "}
-          {editItemDialog.type === "packaging"
-            ? "Quy cách đóng gói"
-            : editItemDialog.type === "timeline"
-              ? "Timeline Vận Chuyển"
-              : "Trạng thái chứng từ"}
+          Sửa mô tả -{' '}
+          {editItemDialog.type === 'packaging'
+            ? 'Quy cách đóng gói'
+            : editItemDialog.type === 'timeline'
+              ? 'Timeline Vận Chuyển'
+              : 'Trạng thái chứng từ'}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-              <strong>Item hiện tại:</strong>{" "}
-              {editItemDialog.item && "name" in editItemDialog.item
+              <strong>Item hiện tại:</strong>{' '}
+              {editItemDialog.item && 'name' in editItemDialog.item
                 ? editItemDialog.item.name
-                : editItemDialog.item && "type" in editItemDialog.item
+                : editItemDialog.item && 'type' in editItemDialog.item
                   ? editItemDialog.item.type
-                  : "N/A"}
+                  : 'N/A'}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              <strong>Mô tả cũ:</strong> {editItemDialog.item?.description || "Chưa có"}
+              <strong>Mô tả cũ:</strong> {editItemDialog.item?.description || 'Chưa có'}
             </Typography>
 
             <TextField
@@ -3829,7 +3829,7 @@ const InboundInternational: React.FC = () => {
               sx={{ mt: 2 }}
             />
 
-            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
               * Mô tả mới sẽ thay thế mô tả cũ và không thể sửa lại
             </Typography>
           </Box>

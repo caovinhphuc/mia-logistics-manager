@@ -1,16 +1,28 @@
 import {
   CheckCircle as CheckCircleIcon,
-  Error as ErrorIcon, PlayArrow as PlayArrowIcon, Refresh as RefreshIcon, Warning as WarningIcon
+  Error as ErrorIcon,
+  PlayArrow as PlayArrowIcon,
+  Refresh as RefreshIcon,
+  Warning as WarningIcon,
 } from '@mui/icons-material';
 import {
-  Alert, Box, Button, Card,
-  CardContent, Chip, CircularProgress, Grid, LinearProgress, Paper,
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  CircularProgress,
+  Grid,
+  LinearProgress,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow, Typography
+  TableRow,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 
@@ -27,7 +39,10 @@ import { telegramBotService } from '../../services/telegramBotService';
 
 // Import test utilities
 import { runDebugTest } from '../../debug/apiDebugTest';
-import { testCreateDriveFolder, testCreateDriveFolderREST } from '../../tests/testDriveFolderCreation';
+import {
+  testCreateDriveFolder,
+  testCreateDriveFolderREST,
+} from '../../tests/testDriveFolderCreation';
 
 const ApiDiagnostics = () => {
   const [diagnostics, setDiagnostics] = useState({
@@ -35,7 +50,7 @@ const ApiDiagnostics = () => {
     envVars: {},
     services: {},
     loading: false,
-    lastCheck: null
+    lastCheck: null,
   });
 
   const [testResults, setTestResults] = useState({});
@@ -47,10 +62,8 @@ const ApiDiagnostics = () => {
     runDiagnostics();
   }, []);
 
-
-
   const runDiagnostics = async () => {
-    setDiagnostics(prev => ({ ...prev, loading: true }));
+    setDiagnostics((prev) => ({ ...prev, loading: true }));
 
     try {
       // Check constants
@@ -62,8 +75,8 @@ const ApiDiagnostics = () => {
           spreadsheetId: !!CONSTANTS?.GOOGLE?.SPREADSHEET_ID,
           driveFolderId: !!CONSTANTS?.GOOGLE?.DRIVE_FOLDER_ID,
           projectId: !!CONSTANTS?.GOOGLE?.PROJECT_ID,
-          scopes: Array.isArray(CONSTANTS?.GOOGLE?.SCOPES) && CONSTANTS.GOOGLE.SCOPES.length > 0
-        }
+          scopes: Array.isArray(CONSTANTS?.GOOGLE?.SCOPES) && CONSTANTS.GOOGLE.SCOPES.length > 0,
+        },
       };
 
       // Check environment variables
@@ -71,38 +84,38 @@ const ApiDiagnostics = () => {
         clientId: {
           key: 'REACT_APP_GOOGLE_CLIENT_ID',
           value: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-          status: !!process.env.REACT_APP_GOOGLE_CLIENT_ID
+          status: !!process.env.REACT_APP_GOOGLE_CLIENT_ID,
         },
         apiKey: {
           key: 'REACT_APP_GOOGLE_API_KEY',
           value: process.env.REACT_APP_GOOGLE_API_KEY,
-          status: !!process.env.REACT_APP_GOOGLE_API_KEY
+          status: !!process.env.REACT_APP_GOOGLE_API_KEY,
         },
         mapsApiKey: {
           key: 'REACT_APP_GOOGLE_MAPS_API_KEY',
           value: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-          status: !!process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+          status: !!process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
         },
         spreadsheetId: {
           key: 'REACT_APP_GOOGLE_SHEET_ID',
           value: process.env.REACT_APP_GOOGLE_SHEET_ID,
-          status: !!process.env.REACT_APP_GOOGLE_SHEET_ID
+          status: !!process.env.REACT_APP_GOOGLE_SHEET_ID,
         },
         driveFolderId: {
           key: 'REACT_APP_GOOGLE_DRIVE_FOLDER_ID',
           value: process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID,
-          status: !!process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID
+          status: !!process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID,
         },
         telegramToken: {
           key: 'REACT_APP_TELEGRAM_BOT_TOKEN',
           value: process.env.REACT_APP_TELEGRAM_BOT_TOKEN,
-          status: !!process.env.REACT_APP_TELEGRAM_BOT_TOKEN
+          status: !!process.env.REACT_APP_TELEGRAM_BOT_TOKEN,
         },
         telegramChatId: {
           key: 'REACT_APP_TELEGRAM_CHAT_ID',
           value: process.env.REACT_APP_TELEGRAM_CHAT_ID,
-          status: !!process.env.REACT_APP_TELEGRAM_CHAT_ID
-        }
+          status: !!process.env.REACT_APP_TELEGRAM_CHAT_ID,
+        },
       };
 
       // Check services status
@@ -110,16 +123,16 @@ const ApiDiagnostics = () => {
         googleApiLoader: {
           loaded: !!window.gapi,
           initialized: googleApiLoader.isInitialized(),
-          status: 'unknown'
+          status: 'unknown',
         },
         googleSheets: {
           connected: googleSheetsService.isConnected,
-          status: 'unknown'
+          status: 'unknown',
         },
         googleDrive: {
           connected: googleDriveService.isConnected,
-          status: 'unknown'
-        }
+          status: 'unknown',
+        },
       };
 
       setDiagnostics({
@@ -127,22 +140,21 @@ const ApiDiagnostics = () => {
         envVars: envCheck,
         services: servicesCheck,
         loading: false,
-        lastCheck: new Date().toLocaleString()
+        lastCheck: new Date().toLocaleString(),
       });
-
     } catch (error) {
       console.error('Diagnostics error:', error);
-      setDiagnostics(prev => ({
+      setDiagnostics((prev) => ({
         ...prev,
         loading: false,
         error: error.message,
-        lastCheck: new Date().toLocaleString()
+        lastCheck: new Date().toLocaleString(),
       }));
     }
   };
 
   const testService = async (serviceName) => {
-    setLoading(prev => ({ ...prev, [serviceName]: true }));
+    setLoading((prev) => ({ ...prev, [serviceName]: true }));
 
     try {
       let result = { success: false, error: 'Service not implemented' };
@@ -167,101 +179,98 @@ const ApiDiagnostics = () => {
           result = { success: false, error: 'Unknown service' };
       }
 
-      setTestResults(prev => ({
+      setTestResults((prev) => ({
         ...prev,
         [serviceName]: {
           ...result,
-          timestamp: new Date().toLocaleString()
-        }
+          timestamp: new Date().toLocaleString(),
+        },
       }));
-
     } catch (error) {
-      setTestResults(prev => ({
+      setTestResults((prev) => ({
         ...prev,
         [serviceName]: {
           success: false,
           error: error.message,
-          timestamp: new Date().toLocaleString()
-        }
+          timestamp: new Date().toLocaleString(),
+        },
       }));
     } finally {
-      setLoading(prev => ({ ...prev, [serviceName]: false }));
+      setLoading((prev) => ({ ...prev, [serviceName]: false }));
     }
   };
 
   const handleTestAllConnections = async () => {
-    setLoading(prev => ({ ...prev, testAll: true }));
+    setLoading((prev) => ({ ...prev, testAll: true }));
     setFullTestResults(null);
 
     try {
       const results = await apiConnectionTester.testAllConnections();
       setFullTestResults({
         ...results,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } catch (error) {
       setFullTestResults({
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } finally {
-      setLoading(prev => ({ ...prev, testAll: false }));
+      setLoading((prev) => ({ ...prev, testAll: false }));
     }
   };
 
   const handleDebugTest = async () => {
-    setLoading(prev => ({ ...prev, debug: true }));
+    setLoading((prev) => ({ ...prev, debug: true }));
 
     try {
-      console.log('🔍 Starting debug test from UI...');
+      // console.log('🔍 Starting debug test from UI...');
       const results = await runDebugTest();
-      console.log('Debug test completed:', results);
+      // console.log('Debug test completed:', results);
 
       if (results.error) {
         alert(`Debug test failed: ${results.error}`);
       } else {
         alert('Debug test completed successfully! Check console for details.');
       }
-
     } catch (error) {
-      console.error('Debug test error:', error);
+      // console.error('Debug test error:', error);
       alert(`Debug test error: ${error.message}`);
     } finally {
-      setLoading(prev => ({ ...prev, debug: false }));
+      setLoading((prev) => ({ ...prev, debug: false }));
     }
   };
 
   const handleTestCreateFolder = async (useREST = false) => {
-    setLoading(prev => ({ ...prev, createFolder: true }));
+    setLoading((prev) => ({ ...prev, createFolder: true }));
     setFolderTestResult(null);
 
     try {
-      console.log(`🧪 Testing folder creation${useREST ? ' (REST API)' : ' (gapi.client)'}...`);
+      // console.log(`🧪 Testing folder creation${useREST ? ' (REST API)' : ' (gapi.client)'}...`);
 
-      const result = useREST
-        ? await testCreateDriveFolderREST()
-        : await testCreateDriveFolder();
+      const result = useREST ? await testCreateDriveFolderREST() : await testCreateDriveFolder();
 
       setFolderTestResult(result);
-      console.log('Folder creation test result:', result);
+      // console.log('Folder creation test result:', result);
 
       if (result.success) {
-        alert(`✅ Folder created successfully!\n\nName: ${result.folderName}\nID: ${result.folderId}\n\nCheck console for details.`);
+        alert(
+          `✅ Folder created successfully!\n\nName: ${result.folderName}\nID: ${result.folderId}\n\nCheck console for details.`
+        );
       } else {
         alert(`❌ Folder creation failed!\n\nError: ${result.error}\n\nCheck console for details.`);
       }
-
     } catch (error) {
       console.error('Folder creation test error:', error);
       const errorResult = {
         success: false,
         error: error.message,
-        steps: [`❌ Test failed: ${error.message}`]
+        steps: [`❌ Test failed: ${error.message}`],
       };
       setFolderTestResult(errorResult);
       alert(`❌ Test error: ${error.message}`);
     } finally {
-      setLoading(prev => ({ ...prev, createFolder: false }));
+      setLoading((prev) => ({ ...prev, createFolder: false }));
     }
   };
 
@@ -360,7 +369,9 @@ const ApiDiagnostics = () => {
 
               {diagnostics.constants.google && (
                 <Box>
-                  <Typography variant="subtitle2" gutterBottom>Google Constants:</Typography>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Google Constants:
+                  </Typography>
                   {Object.entries(diagnostics.constants.google).map(([key, value]) => (
                     <Chip
                       key={key}
@@ -411,12 +422,15 @@ const ApiDiagnostics = () => {
                           />
                         </TableCell>
                         <TableCell>
-                          <Typography variant="body2" sx={{
-                            fontFamily: 'monospace',
-                            maxWidth: 200,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                          }}>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              fontFamily: 'monospace',
+                              maxWidth: 200,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
                             {config.value ? `${config.value.substring(0, 20)}...` : 'Not set'}
                           </Typography>
                         </TableCell>
@@ -443,8 +457,8 @@ const ApiDiagnostics = () => {
                   { key: 'googleSheets', name: 'Google Sheets', icon: '📊' },
                   { key: 'googleDrive', name: 'Google Drive', icon: '💾' },
                   { key: 'telegram', name: 'Telegram Bot', icon: '💬' },
-                  { key: 'email', name: 'Email Service', icon: '📧' }
-                ].map(service => (
+                  { key: 'email', name: 'Email Service', icon: '📧' },
+                ].map((service) => (
                   <Grid item xs={12} sm={6} md={4} key={service.key}>
                     <Paper sx={{ p: 2, textAlign: 'center' }}>
                       <Typography variant="h6" gutterBottom>
@@ -465,7 +479,9 @@ const ApiDiagnostics = () => {
                       <Button
                         variant="contained"
                         size="small"
-                        startIcon={loading[service.key] ? <CircularProgress size={16} /> : <PlayArrowIcon />}
+                        startIcon={
+                          loading[service.key] ? <CircularProgress size={16} /> : <PlayArrowIcon />
+                        }
                         onClick={() => testService(service.key)}
                         disabled={loading[service.key]}
                         fullWidth
@@ -479,7 +495,9 @@ const ApiDiagnostics = () => {
                             severity={testResults[service.key].success ? 'success' : 'error'}
                             sx={{ textAlign: 'left', fontSize: '0.75rem' }}
                           >
-                            <strong>{testResults[service.key].success ? 'Success' : 'Error'}:</strong>
+                            <strong>
+                              {testResults[service.key].success ? 'Success' : 'Error'}:
+                            </strong>
                             <br />
                             {testResults[service.key].error || 'Connection successful'}
                             <br />
@@ -518,11 +536,16 @@ const ApiDiagnostics = () => {
                   <Typography variant="subtitle2" gutterBottom>
                     Test Steps:
                   </Typography>
-                  {folderTestResult.steps && folderTestResult.steps.map((step, index) => (
-                    <Typography key={index} variant="body2" sx={{ ml: 2, fontFamily: 'monospace', fontSize: '0.85rem' }}>
-                      {step}
-                    </Typography>
-                  ))}
+                  {folderTestResult.steps &&
+                    folderTestResult.steps.map((step, index) => (
+                      <Typography
+                        key={index}
+                        variant="body2"
+                        sx={{ ml: 2, fontFamily: 'monospace', fontSize: '0.85rem' }}
+                      >
+                        {step}
+                      </Typography>
+                    ))}
                 </Box>
 
                 {folderTestResult.success && (
@@ -544,7 +567,10 @@ const ApiDiagnostics = () => {
                           <Typography variant="body2" color="text.secondary">
                             Folder ID:
                           </Typography>
-                          <Typography variant="body1" sx={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                          <Typography
+                            variant="body1"
+                            sx={{ fontFamily: 'monospace', fontSize: '0.85rem' }}
+                          >
                             {folderTestResult.folderId}
                           </Typography>
                         </Grid>
@@ -554,7 +580,12 @@ const ApiDiagnostics = () => {
                               View Link:
                             </Typography>
                             <Typography variant="body2">
-                              <a href={folderTestResult.webViewLink} target="_blank" rel="noopener noreferrer" style={{ color: '#1976d2' }}>
+                              <a
+                                href={folderTestResult.webViewLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ color: '#1976d2' }}
+                              >
                                 {folderTestResult.webViewLink}
                               </a>
                             </Typography>
@@ -621,7 +652,9 @@ const ApiDiagnostics = () => {
                               <Box display="flex" alignItems="center" gap={1}>
                                 {getStatusIcon(result.success)}
                                 <Typography variant="subtitle2">
-                                  {service.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
+                                  {service
+                                    .replace(/([A-Z])/g, ' $1')
+                                    .replace(/^./, (str) => str.toUpperCase())}
                                 </Typography>
                               </Box>
 
@@ -633,7 +666,11 @@ const ApiDiagnostics = () => {
                               />
 
                               {result.error && (
-                                <Typography variant="body2" color="error" sx={{ mt: 1, fontSize: '0.75rem' }}>
+                                <Typography
+                                  variant="body2"
+                                  color="error"
+                                  sx={{ mt: 1, fontSize: '0.75rem' }}
+                                >
                                   {result.error}
                                 </Typography>
                               )}
@@ -641,7 +678,12 @@ const ApiDiagnostics = () => {
                               {result.errors && result.errors.length > 0 && (
                                 <Box sx={{ mt: 1 }}>
                                   {result.errors.map((error, index) => (
-                                    <Typography key={index} variant="body2" color="error" sx={{ fontSize: '0.75rem' }}>
+                                    <Typography
+                                      key={index}
+                                      variant="body2"
+                                      color="error"
+                                      sx={{ fontSize: '0.75rem' }}
+                                    >
                                       • {error}
                                     </Typography>
                                   ))}
@@ -651,7 +693,12 @@ const ApiDiagnostics = () => {
                               {result.warnings && result.warnings.length > 0 && (
                                 <Box sx={{ mt: 1 }}>
                                   {result.warnings.map((warning, index) => (
-                                    <Typography key={index} variant="body2" color="warning.main" sx={{ fontSize: '0.75rem' }}>
+                                    <Typography
+                                      key={index}
+                                      variant="body2"
+                                      color="warning.main"
+                                      sx={{ fontSize: '0.75rem' }}
+                                    >
                                       ⚠️ {warning}
                                     </Typography>
                                   ))}
@@ -677,30 +724,37 @@ const ApiDiagnostics = () => {
                 🐛 Debug Information
               </Typography>
 
-              <Box component="pre" sx={{
-                fontSize: '0.75rem',
-                overflow: 'auto',
-                maxHeight: 300,
-                backgroundColor: 'grey.100',
-                p: 2,
-                borderRadius: 1
-              }}>
-                {JSON.stringify({
-                  window: {
-                    gapi: !!window.gapi,
-                    gapiClient: !!window.gapi?.client,
-                    gapiAuth2: !!window.gapi?.auth2
+              <Box
+                component="pre"
+                sx={{
+                  fontSize: '0.75rem',
+                  overflow: 'auto',
+                  maxHeight: 300,
+                  backgroundColor: 'grey.100',
+                  p: 2,
+                  borderRadius: 1,
+                }}
+              >
+                {JSON.stringify(
+                  {
+                    window: {
+                      gapi: !!window.gapi,
+                      gapiClient: !!window.gapi?.client,
+                      gapiAuth2: !!window.gapi?.auth2,
+                    },
+                    process: {
+                      nodeEnv: process.env.NODE_ENV,
+                      reactAppGoogleClientId: !!process.env.REACT_APP_GOOGLE_CLIENT_ID,
+                      reactAppGoogleApiKey: !!process.env.REACT_APP_GOOGLE_API_KEY,
+                    },
+                    constants: {
+                      defined: typeof CONSTANTS !== 'undefined',
+                      google: CONSTANTS?.GOOGLE ? Object.keys(CONSTANTS.GOOGLE) : 'undefined',
+                    },
                   },
-                  process: {
-                    nodeEnv: process.env.NODE_ENV,
-                    reactAppGoogleClientId: !!process.env.REACT_APP_GOOGLE_CLIENT_ID,
-                    reactAppGoogleApiKey: !!process.env.REACT_APP_GOOGLE_API_KEY
-                  },
-                  constants: {
-                    defined: typeof CONSTANTS !== 'undefined',
-                    google: CONSTANTS?.GOOGLE ? Object.keys(CONSTANTS.GOOGLE) : 'undefined'
-                  }
-                }, null, 2)}
+                  null,
+                  2
+                )}
               </Box>
             </CardContent>
           </Card>

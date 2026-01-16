@@ -1,12 +1,12 @@
 class ProxyLocationsService {
   constructor() {
-    this.sheetName = "Locations";
+    this.sheetName = 'Locations';
   }
 
   async getLocations() {
     try {
       // Get data from backend API instead of googleSheetsService
-      const response = await fetch("/api/locations");
+      const response = await fetch('/api/locations');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -20,16 +20,16 @@ class ProxyLocationsService {
       const locations = data
         .map((row) => ({
           locationId: row.id || `loc_${Date.now()}`,
-          name: row.code || "",
-          type: row.category || "warehouse",
-          address: row.address || "",
+          name: row.code || '',
+          type: row.category || 'warehouse',
+          address: row.address || '',
           latitude: 0, // Not in Locations sheet
           longitude: 0, // Not in Locations sheet
-          phone: "", // Not in Locations sheet
-          contactPerson: "", // Not in Locations sheet
+          phone: '', // Not in Locations sheet
+          contactPerson: '', // Not in Locations sheet
           capacity: 0, // Not in Locations sheet
-          operatingHours: "", // Not in Locations sheet
-          status: row.status || "active",
+          operatingHours: '', // Not in Locations sheet
+          status: row.status || 'active',
           createdDate: row.createdAt || new Date().toISOString(),
           updatedDate: row.updatedAt || new Date().toISOString(),
           // Additional fields from Locations sheet
@@ -41,12 +41,12 @@ class ProxyLocationsService {
           province: row.province,
           note: row.note,
         }))
-        .filter((location) => location.status !== "deleted");
+        .filter((location) => location.status !== 'deleted');
 
       return locations;
     } catch (error) {
-      console.error("Error getting locations:", error);
-      throw new Error("Không thể tải dữ liệu địa điểm");
+      console.error('Error getting locations:', error);
+      throw new Error('Không thể tải dữ liệu địa điểm');
     }
   }
 
@@ -56,40 +56,40 @@ class ProxyLocationsService {
 
       const stats = {
         total: locations.length,
-        active: locations.filter((loc) => loc.status === "active").length,
-        inactive: locations.filter((loc) => loc.status === "inactive").length,
-        warehouse: locations.filter((loc) => loc.type === "warehouse").length,
-        distribution: locations.filter((loc) => loc.type === "distribution").length,
-        office: locations.filter((loc) => loc.type === "office").length,
-        customer: locations.filter((loc) => loc.type === "customer").length,
-        partner: locations.filter((loc) => loc.type === "partner").length,
+        active: locations.filter((loc) => loc.status === 'active').length,
+        inactive: locations.filter((loc) => loc.status === 'inactive').length,
+        warehouse: locations.filter((loc) => loc.type === 'warehouse').length,
+        distribution: locations.filter((loc) => loc.type === 'distribution').length,
+        office: locations.filter((loc) => loc.type === 'office').length,
+        customer: locations.filter((loc) => loc.type === 'customer').length,
+        partner: locations.filter((loc) => loc.type === 'partner').length,
       };
 
       return stats;
     } catch (error) {
-      console.error("Error getting location stats:", error);
-      throw new Error("Không thể tải thống kê địa điểm");
+      console.error('Error getting location stats:', error);
+      throw new Error('Không thể tải thống kê địa điểm');
     }
   }
 
   async addLocation(locationData) {
     try {
-      const response = await fetch("/api/locations", {
-        method: "POST",
+      const response = await fetch('/api/locations', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           code: locationData.code || locationData.name,
-          avatar: locationData.avatar || "🏢",
+          avatar: locationData.avatar || '🏢',
           category: locationData.category || locationData.type,
-          subcategory: locationData.subcategory || "",
-          address: locationData.address || "",
-          status: locationData.status || "active",
-          ward: locationData.ward || "",
-          district: locationData.district || "",
-          province: locationData.province || "",
-          note: locationData.note || "",
+          subcategory: locationData.subcategory || '',
+          address: locationData.address || '',
+          status: locationData.status || 'active',
+          ward: locationData.ward || '',
+          district: locationData.district || '',
+          province: locationData.province || '',
+          note: locationData.note || '',
         }),
       });
 
@@ -99,32 +99,32 @@ class ProxyLocationsService {
 
       return {
         success: true,
-        message: "Địa điểm đã được thêm thành công",
+        message: 'Địa điểm đã được thêm thành công',
       };
     } catch (error) {
-      console.error("Error adding location:", error);
-      throw new Error("Không thể thêm địa điểm mới");
+      console.error('Error adding location:', error);
+      throw new Error('Không thể thêm địa điểm mới');
     }
   }
 
   async updateLocation(locationId, locationData) {
     try {
       const response = await fetch(`/api/locations/${locationId}`, {
-        method: "PUT",
+        method: 'PUT',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           code: locationData.code || locationData.name,
-          avatar: locationData.avatar || "🏢",
+          avatar: locationData.avatar || '🏢',
           category: locationData.category || locationData.type,
-          subcategory: locationData.subcategory || "",
-          address: locationData.address || "",
-          status: locationData.status || "active",
-          ward: locationData.ward || "",
-          district: locationData.district || "",
-          province: locationData.province || "",
-          note: locationData.note || "",
+          subcategory: locationData.subcategory || '',
+          address: locationData.address || '',
+          status: locationData.status || 'active',
+          ward: locationData.ward || '',
+          district: locationData.district || '',
+          province: locationData.province || '',
+          note: locationData.note || '',
         }),
       });
 
@@ -134,18 +134,18 @@ class ProxyLocationsService {
 
       return {
         success: true,
-        message: "Địa điểm đã được cập nhật thành công",
+        message: 'Địa điểm đã được cập nhật thành công',
       };
     } catch (error) {
-      console.error("Error updating location:", error);
-      throw new Error("Không thể cập nhật địa điểm");
+      console.error('Error updating location:', error);
+      throw new Error('Không thể cập nhật địa điểm');
     }
   }
 
   async deleteLocation(locationId) {
     try {
       const response = await fetch(`/api/locations/${locationId}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (!response.ok) {
@@ -154,11 +154,11 @@ class ProxyLocationsService {
 
       return {
         success: true,
-        message: "Địa điểm đã được xóa thành công",
+        message: 'Địa điểm đã được xóa thành công',
       };
     } catch (error) {
-      console.error("Error deleting location:", error);
-      throw new Error("Không thể xóa địa điểm");
+      console.error('Error deleting location:', error);
+      throw new Error('Không thể xóa địa điểm');
     }
   }
 
@@ -168,8 +168,8 @@ class ProxyLocationsService {
       const allLocations = await this.getLocations();
       return allLocations.filter((location) => location.type === type);
     } catch (error) {
-      console.error("Error getting locations by type:", error);
-      throw new Error("Không thể lấy dữ liệu địa điểm theo loại");
+      console.error('Error getting locations by type:', error);
+      throw new Error('Không thể lấy dữ liệu địa điểm theo loại');
     }
   }
 
@@ -179,8 +179,8 @@ class ProxyLocationsService {
       const allLocations = await this.getLocations();
       return allLocations.filter((location) => location.status === status);
     } catch (error) {
-      console.error("Error getting locations by status:", error);
-      throw new Error("Không thể lấy dữ liệu địa điểm theo trạng thái");
+      console.error('Error getting locations by status:', error);
+      throw new Error('Không thể lấy dữ liệu địa điểm theo trạng thái');
     }
   }
 
@@ -197,8 +197,8 @@ class ProxyLocationsService {
           location.contactPerson.toLowerCase().includes(searchQuery)
       );
     } catch (error) {
-      console.error("Error searching locations:", error);
-      throw new Error("Không thể tìm kiếm địa điểm");
+      console.error('Error searching locations:', error);
+      throw new Error('Không thể tìm kiếm địa điểm');
     }
   }
 }

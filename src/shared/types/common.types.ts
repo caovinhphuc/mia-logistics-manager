@@ -1,4 +1,4 @@
-export type Status = "pending" | "in_transit" | "delivered" | "cancelled";
+export type Status = 'pending' | 'in_transit' | 'delivered' | 'cancelled';
 
 export interface Coordinates {
   lat: number;
@@ -37,7 +37,7 @@ export interface Employee {
   phone?: string;
   department?: string;
   position?: string;
-  status: "active" | "inactive";
+  status: 'active' | 'inactive';
   createdAt: string;
   updatedAt: string;
 }
@@ -48,7 +48,7 @@ export interface Transfer {
   fromWarehouse: string;
   toWarehouse: string;
   items: TransferItem[];
-  status: "pending" | "in_progress" | "completed" | "cancelled";
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
   requestedBy: string;
   approvedBy?: string;
   notes?: string;
@@ -62,5 +62,5 @@ export interface TransferItem {
   productName: string;
   quantity: number;
   unit: string;
-  condition: "good" | "damaged" | "expired";
+  condition: 'good' | 'damaged' | 'expired';
 }

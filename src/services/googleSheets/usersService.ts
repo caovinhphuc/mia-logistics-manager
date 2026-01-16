@@ -76,13 +76,7 @@ class UsersService extends BaseGoogleSheetsService {
         'write:carriers',
         'delete:carriers',
       ],
-      '2': [
-        'read:users',
-        'read:orders',
-        'write:orders',
-        'read:carriers',
-        'write:carriers',
-      ],
+      '2': ['read:users', 'read:orders', 'write:orders', 'read:carriers', 'write:carriers'],
       '3': ['read:orders', 'write:orders'],
       '4': ['read:orders'],
       '5': [],
@@ -127,9 +121,7 @@ class UsersService extends BaseGoogleSheetsService {
   async getUserByEmail(email: string): Promise<User | null> {
     try {
       const users = await this.getRecords<GoogleSheetsUser>(this.sheetName);
-      const user = users.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase()
-      );
+      const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
       return user ? this.convertToAppUser(user) : null;
     } catch (error) {
       console.error('Error getting user by email:', error);
@@ -157,16 +149,13 @@ class UsersService extends BaseGoogleSheetsService {
 
       // Get the raw Google Sheets user to access passwordHash
       const users = await this.getRecords<GoogleSheetsUser>(this.sheetName);
-      const sheetsUser = users.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase()
-      );
+      const sheetsUser = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
 
       if (!sheetsUser) return null;
 
       // Simple password verification (in production, use proper hashing)
       // For demo purposes, we'll use a simple comparison
-      const isValidPassword =
-        this.simpleHash(password) === sheetsUser.passwordHash;
+      const isValidPassword = this.simpleHash(password) === sheetsUser.passwordHash;
 
       return isValidPassword ? user : null;
     } catch (error) {
@@ -188,8 +177,7 @@ class UsersService extends BaseGoogleSheetsService {
         id: Date.now().toString(), // Simple ID generation
         email: userData.email,
         passwordHash: this.simpleHash(password),
-        fullName:
-          `${userData.firstName || ''} ${userData.lastName || ''}`.trim(),
+        fullName: `${userData.firstName || ''} ${userData.lastName || ''}`.trim(),
         roleId:
           userData.role === 'admin'
             ? '1'
@@ -205,10 +193,7 @@ class UsersService extends BaseGoogleSheetsService {
         updatedAt: new Date().toISOString(),
       };
 
-      const createdUser = await this.addRecord<GoogleSheetsUser>(
-        this.sheetName,
-        newUser
-      );
+      const createdUser = await this.addRecord<GoogleSheetsUser>(this.sheetName, newUser);
       return this.convertToAppUser(createdUser);
     } catch (error) {
       console.error('Error creating user:', error);

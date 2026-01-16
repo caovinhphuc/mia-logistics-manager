@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -21,8 +21,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from "@mui/material";
-import { Delete, Add } from "@mui/icons-material";
+} from '@mui/material';
+import { Delete, Add } from '@mui/icons-material';
 
 interface Permission {
   roleId: string;
@@ -42,20 +42,20 @@ const Permissions: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    roleId: "",
-    resource: "",
-    action: "",
+    roleId: '',
+    resource: '',
+    action: '',
   });
 
   const resources = [
-    "employees",
-    "carriers",
-    "transfers",
-    "locations",
-    "transport-requests",
-    "settings",
+    'employees',
+    'carriers',
+    'transfers',
+    'locations',
+    'transport-requests',
+    'settings',
   ];
-  const actions = ["view", "create", "update", "delete"];
+  const actions = ['view', 'create', 'update', 'delete'];
 
   useEffect(() => {
     loadData();
@@ -65,11 +65,11 @@ const Permissions: React.FC = () => {
     try {
       setLoading(true);
       const [permsRes, rolesRes] = await Promise.all([
-        fetch("http://localhost:5050/api/role-permissions"),
-        fetch("http://localhost:5050/api/roles"),
+        fetch('http://localhost:3100/api/role-permissions'),
+        fetch('http://localhost:3100/api/roles'),
       ]);
 
-      if (!permsRes.ok || !rolesRes.ok) throw new Error("Không thể tải dữ liệu");
+      if (!permsRes.ok || !rolesRes.ok) throw new Error('Không thể tải dữ liệu');
 
       const [perms, rolesData] = await Promise.all([permsRes.json(), rolesRes.json()]);
 
@@ -77,7 +77,7 @@ const Permissions: React.FC = () => {
       setRoles(rolesData);
       setError(null);
     } catch (err: any) {
-      setError(err.message || "Không thể tải dữ liệu");
+      setError(err.message || 'Không thể tải dữ liệu');
     } finally {
       setLoading(false);
     }
@@ -85,27 +85,27 @@ const Permissions: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:5050/api/role-permissions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('http://localhost:3100/api/role-permissions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error("Không thể lưu quyền");
+      if (!response.ok) throw new Error('Không thể lưu quyền');
 
       setOpen(false);
-      setFormData({ roleId: "", resource: "", action: "" });
+      setFormData({ roleId: '', resource: '', action: '' });
       loadData();
     } catch (err: any) {
-      setError(err.message || "Không thể lưu quyền");
+      setError(err.message || 'Không thể lưu quyền');
     }
   };
 
   const handleDelete = async (permission: Permission) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa quyền này?")) return;
+    if (!window.confirm('Bạn có chắc chắn muốn xóa quyền này?')) return;
     try {
       // Find permission ID by matching all fields
-      const allPerms = await fetch("http://localhost:5050/api/role-permissions").then((r) =>
+      const allPerms = await fetch('http://localhost:3100/api/role-permissions').then((r) =>
         r.json()
       );
       const perm = allPerms.find(
@@ -116,14 +116,14 @@ const Permissions: React.FC = () => {
       );
 
       if (perm && perm.id) {
-        const response = await fetch(`http://localhost:5050/api/role-permissions/${perm.id}`, {
-          method: "DELETE",
+        const response = await fetch(`http://localhost:3100/api/role-permissions/${perm.id}`, {
+          method: 'DELETE',
         });
-        if (!response.ok) throw new Error("Không thể xóa quyền");
+        if (!response.ok) throw new Error('Không thể xóa quyền');
         loadData();
       }
     } catch (err: any) {
-      setError(err.message || "Không thể xóa quyền");
+      setError(err.message || 'Không thể xóa quyền');
     }
   };
 
@@ -141,7 +141,7 @@ const Permissions: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
           Quản lý Quyền hạn
         </Typography>
@@ -197,14 +197,14 @@ const Permissions: React.FC = () => {
         open={open}
         onClose={() => {
           setOpen(false);
-          setFormData({ roleId: "", resource: "", action: "" });
+          setFormData({ roleId: '', resource: '', action: '' });
         }}
         maxWidth="sm"
         fullWidth
       >
         <DialogTitle>Thêm quyền mới</DialogTitle>
         <DialogContent>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
             <FormControl fullWidth>
               <InputLabel>Vai trò</InputLabel>
               <Select
@@ -253,7 +253,7 @@ const Permissions: React.FC = () => {
           <Button
             onClick={() => {
               setOpen(false);
-              setFormData({ roleId: "", resource: "", action: "" });
+              setFormData({ roleId: '', resource: '', action: '' });
             }}
           >
             Hủy

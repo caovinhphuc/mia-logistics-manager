@@ -1,7 +1,7 @@
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { Box, Button, Container, Paper, Typography } from "@mui/material";
-import React, { Component } from "react";
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { Box, Button, Container, Paper, Typography } from '@mui/material';
+import React, { Component } from 'react';
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class ErrorBoundary extends Component {
     });
 
     // Log error to external service
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
 
     // Here you can send error to logging service
     // Example: sendErrorToService(error, errorInfo);
@@ -40,14 +40,14 @@ class ErrorBoundary extends Component {
         <Container maxWidth="md">
           <Box
             sx={{
-              minHeight: "100vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              minHeight: '100vh',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            <Paper sx={{ p: 4, textAlign: "center", maxWidth: 600 }}>
-              <ErrorOutlineIcon sx={{ fontSize: 80, color: "error.main", mb: 2 }} />
+            <Paper sx={{ p: 4, textAlign: 'center', maxWidth: 600 }}>
+              <ErrorOutlineIcon sx={{ fontSize: 80, color: 'error.main', mb: 2 }} />
 
               <Typography variant="h4" component="h1" gutterBottom color="error">
                 Đã xảy ra lỗi
@@ -57,7 +57,7 @@ class ErrorBoundary extends Component {
                 Xin lỗi, đã xảy ra lỗi không mong muốn. Vui lòng thử lại hoặc liên hệ hỗ trợ.
               </Typography>
 
-              <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
+              <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
                 <Button variant="contained" startIcon={<RefreshIcon />} onClick={this.handleRetry}>
                   Thử lại
                 </Button>
@@ -66,19 +66,19 @@ class ErrorBoundary extends Component {
                 </Button>
               </Box>
 
-              {process.env.NODE_ENV === "development" && this.state.error && (
-                <Box sx={{ mt: 3, textAlign: "left" }}>
+              {process.env.NODE_ENV === 'development' && this.state.error && (
+                <Box sx={{ mt: 3, textAlign: 'left' }}>
                   <Typography variant="h6" color="error">
                     Chi tiết lỗi (Development):
                   </Typography>
                   <Typography
                     variant="body2"
                     sx={{
-                      fontFamily: "monospace",
-                      backgroundColor: "grey.100",
+                      fontFamily: 'monospace',
+                      backgroundColor: 'grey.100',
                       p: 1,
                       borderRadius: 1,
-                      overflow: "auto",
+                      overflow: 'auto',
                       maxHeight: 200,
                     }}
                   >

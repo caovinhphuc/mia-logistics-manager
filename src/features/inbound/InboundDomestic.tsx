@@ -110,9 +110,7 @@ interface InboundDomesticItem {
 
 const InboundDomestic: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [editingItem, setEditingItem] = useState<InboundDomesticItem | null>(
-    null
-  );
+  const [editingItem, setEditingItem] = useState<InboundDomesticItem | null>(null);
   const [viewMode, setViewMode] = useState<'calendar' | 'table'>('table');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -123,22 +121,18 @@ const InboundDomestic: React.FC = () => {
   // Calendar view states
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedDateItems, setSelectedDateItems] = useState<
-    InboundDomesticItem[]
-  >([]);
+  const [selectedDateItems, setSelectedDateItems] = useState<InboundDomesticItem[]>([]);
   const [addFromCalendar, setAddFromCalendar] = useState<Date | null>(null);
 
   // Calendar dropdown menu states
-  const [calendarMenuAnchor, setCalendarMenuAnchor] =
-    useState<null | HTMLElement>(null);
+  const [calendarMenuAnchor, setCalendarMenuAnchor] = useState<null | HTMLElement>(null);
   const [calendarMenuDate, setCalendarMenuDate] = useState<Date | null>(null);
 
   // Action menu state
-  const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(
+  const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(null);
+  const [selectedItemForAction, setSelectedItemForAction] = useState<InboundDomesticItem | null>(
     null
   );
-  const [selectedItemForAction, setSelectedItemForAction] =
-    useState<InboundDomesticItem | null>(null);
 
   // Data state
   const [inboundItems, setInboundItems] = useState<InboundDomesticItem[]>([]);
@@ -242,10 +236,7 @@ const InboundDomestic: React.FC = () => {
     }
   };
 
-  const handleUpdateItem = async (
-    id: string,
-    updates: Partial<InboundDomesticItem>
-  ) => {
+  const handleUpdateItem = async (id: string, updates: Partial<InboundDomesticItem>) => {
     try {
       setLoading(true);
       await updateInboundDomesticItem(id, updates);
@@ -299,18 +290,14 @@ const InboundDomestic: React.FC = () => {
       item.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.carrier.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === 'all' || item.status === statusFilter;
-    const matchesCategory =
-      categoryFilter === 'all' || item.category === categoryFilter;
+    const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+    const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
 
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
   // Get unique categories for filter
-  const categories = Array.from(
-    new Set(inboundItems.map((item) => item.category))
-  ).filter(Boolean);
+  const categories = Array.from(new Set(inboundItems.map((item) => item.category))).filter(Boolean);
 
   // Calendar helper functions
   const getDaysInMonth = (date: Date) => {
@@ -327,15 +314,11 @@ const InboundDomestic: React.FC = () => {
   };
 
   const handlePrevMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
-    );
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
   const handleDateClick = (date: Date) => {
@@ -350,10 +333,7 @@ const InboundDomestic: React.FC = () => {
   };
 
   // Calendar dropdown menu handlers
-  const handleCalendarMenuOpen = (
-    event: React.MouseEvent<HTMLElement>,
-    date: Date
-  ) => {
+  const handleCalendarMenuOpen = (event: React.MouseEvent<HTMLElement>, date: Date) => {
     event.stopPropagation();
     setCalendarMenuAnchor(event.currentTarget);
     setCalendarMenuDate(date);
@@ -527,11 +507,7 @@ const InboundDomestic: React.FC = () => {
                 <TruckIcon color="info" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {
-                      inboundItems.filter(
-                        (item) => item.status === 'in-transit'
-                      ).length
-                    }
+                    {inboundItems.filter((item) => item.status === 'in-transit').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Đang vận chuyển
@@ -548,10 +524,7 @@ const InboundDomestic: React.FC = () => {
                 <LocationIcon color="success" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {
-                      inboundItems.filter((item) => item.status === 'arrived')
-                        .length
-                    }
+                    {inboundItems.filter((item) => item.status === 'arrived').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Đã đến
@@ -568,10 +541,7 @@ const InboundDomestic: React.FC = () => {
                 <BusinessIcon color="warning" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {
-                      inboundItems.filter((item) => item.status === 'pending')
-                        .length
-                    }
+                    {inboundItems.filter((item) => item.status === 'pending').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Chờ xử lý
@@ -645,11 +615,7 @@ const InboundDomestic: React.FC = () => {
             Xóa bộ lọc
           </Button>
 
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ ml: 'auto' }}
-          >
+          <Typography variant="body2" color="text.secondary" sx={{ ml: 'auto' }}>
             Hiển thị {filteredItems.length} / {inboundItems.length} mục
           </Typography>
         </Box>
@@ -697,9 +663,7 @@ const InboundDomestic: React.FC = () => {
                     <TableCell>
                       {(() => {
                         const d = new Date(item.date);
-                        return isNaN(d.getTime())
-                          ? 'Chưa có'
-                          : d.toLocaleDateString('vi-VN');
+                        return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                       })()}
                     </TableCell>
                     <TableCell>
@@ -711,12 +675,8 @@ const InboundDomestic: React.FC = () => {
                     </TableCell>
                     <TableCell className="address-cell">
                       <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ fontSize: '0.65rem', fontWeight: 500 }}
-                        >
-                          {item.destination?.split(' - ')[0] ||
-                            item.destination}
+                        <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
+                          {item.destination?.split(' - ')[0] || item.destination}
                         </Typography>
                         {item.destination?.includes(' - ') && (
                           <Typography
@@ -843,13 +803,9 @@ const InboundDomestic: React.FC = () => {
                     <TableCell>
                       {(() => {
                         const isOnline = item.purpose === 'online';
-                        const color = isOnline
-                          ? 'success.main'
-                          : 'warning.main';
+                        const color = isOnline ? 'success.main' : 'warning.main';
                         const bgColor = isOnline ? 'success.50' : 'warning.50';
-                        const borderColor = isOnline
-                          ? 'success.main'
-                          : 'warning.main';
+                        const borderColor = isOnline ? 'success.main' : 'warning.main';
 
                         return (
                           <Typography
@@ -911,10 +867,7 @@ const InboundDomestic: React.FC = () => {
               mb: 3,
             }}
           >
-            <Typography
-              variant="h6"
-              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-            >
+            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <CalendarIcon color="primary" />
               Lịch nhập hàng -{' '}
               {currentDate.toLocaleDateString('vi-VN', {
@@ -979,17 +932,11 @@ const InboundDomestic: React.FC = () => {
 
                 // Days of the month
                 for (let day = 1; day <= daysInMonth; day++) {
-                  const cellDate = new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    day
-                  );
+                  const cellDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
                   const itemsForDate = getItemsForDate(cellDate);
-                  const isToday =
-                    cellDate.toDateString() === new Date().toDateString();
+                  const isToday = cellDate.toDateString() === new Date().toDateString();
                   const isSelected =
-                    selectedDate &&
-                    cellDate.toDateString() === selectedDate.toDateString();
+                    selectedDate && cellDate.toDateString() === selectedDate.toDateString();
 
                   days.push(
                     <Grid item xs={12 / 7} key={day}>
@@ -1035,21 +982,17 @@ const InboundDomestic: React.FC = () => {
                               backgroundColor:
                                 getStatusColorForChip(item.status) === 'success'
                                   ? 'success.100'
-                                  : getStatusColorForChip(item.status) ===
-                                      'warning'
+                                  : getStatusColorForChip(item.status) === 'warning'
                                     ? 'warning.100'
-                                    : getStatusColorForChip(item.status) ===
-                                        'info'
+                                    : getStatusColorForChip(item.status) === 'info'
                                       ? 'info.100'
                                       : 'grey.100',
                               color:
                                 getStatusColorForChip(item.status) === 'success'
                                   ? 'success.800'
-                                  : getStatusColorForChip(item.status) ===
-                                      'warning'
+                                  : getStatusColorForChip(item.status) === 'warning'
                                     ? 'warning.800'
-                                    : getStatusColorForChip(item.status) ===
-                                        'info'
+                                    : getStatusColorForChip(item.status) === 'info'
                                       ? 'info.800'
                                       : 'grey.800',
                               p: 0.5,
@@ -1156,68 +1099,35 @@ const InboundDomestic: React.FC = () => {
                             size="small"
                           />
                         </Box>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          gutterBottom
-                        >
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
                           <strong>Sản phẩm:</strong> {item.product}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          gutterBottom
-                        >
-                          <strong>Số lượng:</strong>{' '}
-                          {item.quantity.toLocaleString()}
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
+                          <strong>Số lượng:</strong> {item.quantity.toLocaleString()}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          gutterBottom
-                        >
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
                           <strong>Từ:</strong> {item.origin}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          gutterBottom
-                        >
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
                           <strong>Đến:</strong> {item.destination}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          gutterBottom
-                        >
+                        <Typography variant="body2" color="text.secondary" gutterBottom>
                           <strong>Thời gian nhận:</strong>{' '}
                           {(() => {
                             const d = new Date(item.receiveTime);
-                            return isNaN(d.getTime())
-                              ? 'Chưa có'
-                              : d.toLocaleDateString('vi-VN');
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()}
                         </Typography>
                         {item.notes && (
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                            gutterBottom
-                          >
+                          <Typography variant="body2" color="text.secondary" gutterBottom>
                             <strong>Ghi chú:</strong> {item.notes}
                           </Typography>
                         )}
                         <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleEdit(item)}
-                          >
+                          <IconButton size="small" onClick={() => handleEdit(item)}>
                             <EditIcon />
                           </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleDelete(item.id)}
-                          >
+                          <IconButton size="small" onClick={() => handleDelete(item.id)}>
                             <DeleteIcon />
                           </IconButton>
                         </Box>
@@ -1260,12 +1170,7 @@ const InboundDomestic: React.FC = () => {
         <AddIcon />
       </Fab>
       {/* Add/Edit Dialog */}
-      <Dialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        maxWidth="md"
-        fullWidth
-      >
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>
           {editingItem
             ? 'Sửa lịch nhập hàng'

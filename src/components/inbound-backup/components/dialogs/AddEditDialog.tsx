@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -20,13 +20,13 @@ import {
   Snackbar,
   Alert,
   CircularProgress,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Comment as CommentIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 // Date pickers for calendar popup
 import {
   InboundItem,
@@ -34,22 +34,22 @@ import {
   PackagingItem,
   TimelineItem,
   DocumentStatusItem,
-} from "../../types/inbound";
-import { getCategoryIcon } from "../../utils/statusUtils";
-import { formatDateForInput } from "../../utils/dateUtils";
+} from '../../types/inbound';
+import { getCategoryIcon } from '../../utils/statusUtils';
+import { formatDateForInput } from '../../utils/dateUtils';
 import {
   getLatestTimelineDescription,
   getLatestDocumentStatusDescription,
   getCurrentUser,
-} from "../../utils/descriptionUtils";
+} from '../../utils/descriptionUtils';
 
 // Helper: Parse Vietnamese date format dd/MM/yyyy correctly
 const parseVietnamDate = (dateString: string | undefined): Date | null => {
-  if (!dateString || !dateString.includes("/")) {
+  if (!dateString || !dateString.includes('/')) {
     return dateString ? new Date(dateString) : null;
   }
 
-  const [day, month, year] = dateString.split("/").map(Number);
+  const [day, month, year] = dateString.split('/').map(Number);
   if (isNaN(day) || isNaN(month) || isNaN(year)) {
     return null;
   }
@@ -59,10 +59,10 @@ const parseVietnamDate = (dateString: string | undefined): Date | null => {
 
 // Helper: Format date display
 const formatDateDisplay = (dateString: string | undefined): string => {
-  if (!dateString) return "Chưa có";
+  if (!dateString) return 'Chưa có';
 
   const d = parseVietnamDate(dateString);
-  return d && !isNaN(d.getTime()) ? d.toLocaleDateString("vi-VN") : "Chưa có";
+  return d && !isNaN(d.getTime()) ? d.toLocaleDateString('vi-VN') : 'Chưa có';
 };
 
 interface AddEditDialogProps {
@@ -123,10 +123,10 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
   destinations,
 }) => {
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-  const [snackbarMsg, setSnackbarMsg] = React.useState("");
+  const [snackbarMsg, setSnackbarMsg] = React.useState('');
   const [snackbarSeverity, setSnackbarSeverity] = React.useState<
-    "success" | "info" | "warning" | "error"
-  >("success");
+    'success' | 'info' | 'warning' | 'error'
+  >('success');
   const [isSaving, setIsSaving] = React.useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = React.useState(false);
 
@@ -137,9 +137,9 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
 
   // States for description dialog
   const [descriptionDialogOpen, setDescriptionDialogOpen] = React.useState(false);
-  const [descriptionText, setDescriptionText] = React.useState("");
+  const [descriptionText, setDescriptionText] = React.useState('');
   const [descriptionTarget, setDescriptionTarget] = React.useState<{
-    type: "timeline" | "document";
+    type: 'timeline' | 'document';
     index: number;
     name: string;
   } | null>(null);
@@ -154,25 +154,25 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
       setEditingTimelineIndex(null);
       setEditingDocIndex(null);
       setDescriptionDialogOpen(false);
-      setDescriptionText("");
+      setDescriptionText('');
       setDescriptionTarget(null);
 
       // Reset newItem fields to defaults
-      onNewPackagingItemChange("type", "2PCS/SET");
-      onNewPackagingItemChange("quantity", 0);
-      onNewPackagingItemChange("description", "");
+      onNewPackagingItemChange('type', '2PCS/SET');
+      onNewPackagingItemChange('quantity', 0);
+      onNewPackagingItemChange('description', '');
 
-      onNewTimelineItemChange("name", "");
-      onNewTimelineItemChange("estimatedDate", "");
-      onNewTimelineItemChange("date", "");
-      onNewTimelineItemChange("status", "pending");
-      onNewTimelineItemChange("description", "");
+      onNewTimelineItemChange('name', '');
+      onNewTimelineItemChange('estimatedDate', '');
+      onNewTimelineItemChange('date', '');
+      onNewTimelineItemChange('status', 'pending');
+      onNewTimelineItemChange('description', '');
 
-      onNewDocumentStatusItemChange("name", "");
-      onNewDocumentStatusItemChange("estimatedDate", "");
-      onNewDocumentStatusItemChange("date", "");
-      onNewDocumentStatusItemChange("status", "pending");
-      onNewDocumentStatusItemChange("description", "");
+      onNewDocumentStatusItemChange('name', '');
+      onNewDocumentStatusItemChange('estimatedDate', '');
+      onNewDocumentStatusItemChange('date', '');
+      onNewDocumentStatusItemChange('status', 'pending');
+      onNewDocumentStatusItemChange('description', '');
     }
   }, [
     open,
@@ -183,20 +183,20 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
   ]);
 
   // Auto-clear fields khi type thay đổi để tránh cache sai
-  const [previousType, setPreviousType] = React.useState<"international" | "domestic">(
-    "international"
+  const [previousType, setPreviousType] = React.useState<'international' | 'domestic'>(
+    'international'
   );
 
   React.useEffect(() => {
     const currentType =
-      formFields.origin && formFields.origin.trim() ? "international" : "domestic";
+      formFields.origin && formFields.origin.trim() ? 'international' : 'domestic';
 
     if (currentType !== previousType && !editingItem && open) {
       // Type đã thay đổi và không phải đang edit → clear fields không phù hợp
-      if (currentType === "domestic") {
+      if (currentType === 'domestic') {
         // Chuyển sang Quốc nội: Clear PI, carrier
-        onFieldChange("pi", "");
-        onFieldChange("carrier", "");
+        onFieldChange('pi', '');
+        onFieldChange('carrier', '');
 
         // Clear tất cả document status
         for (let i = documentStatusItems.length - 1; i >= 0; i--) {
@@ -206,7 +206,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
         // Chỉ giữ timeline "Ngày nhận hàng", xóa các timeline khác
         const nonReceiveIndices: number[] = [];
         timelineItems.forEach((item, index) => {
-          if (item.name !== "Ngày nhận hàng" && item.name !== "Ngày tạo phiếu") {
+          if (item.name !== 'Ngày nhận hàng' && item.name !== 'Ngày tạo phiếu') {
             nonReceiveIndices.push(index);
           }
         });
@@ -220,8 +220,8 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
       setPreviousType(currentType);
       setHasUnsavedChanges(true);
       openSnack(
-        `Chuyển sang ${currentType === "international" ? "🌍 Quốc tế" : "🏠 Quốc nội"}`,
-        "info"
+        `Chuyển sang ${currentType === 'international' ? '🌍 Quốc tế' : '🏠 Quốc nội'}`,
+        'info'
       );
     }
   }, [
@@ -238,7 +238,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
 
   const openSnack = (
     message: string,
-    severity: "success" | "info" | "warning" | "error" = "success"
+    severity: 'success' | 'info' | 'warning' | 'error' = 'success'
   ) => {
     setSnackbarMsg(message);
     setSnackbarSeverity(severity);
@@ -246,9 +246,9 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
   };
 
   // Helper: Mở dialog thêm mô tả
-  const openDescriptionDialog = (type: "timeline" | "document", index: number, name: string) => {
+  const openDescriptionDialog = (type: 'timeline' | 'document', index: number, name: string) => {
     setDescriptionTarget({ type, index, name });
-    setDescriptionText("");
+    setDescriptionText('');
     setDescriptionDialogOpen(true);
   };
 
@@ -258,7 +258,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
 
     const { type, index } = descriptionTarget;
 
-    if (type === "timeline") {
+    if (type === 'timeline') {
       const currentItem = timelineItems[index];
       if (currentItem) {
         // Import getCurrentUser và addTimelineDescription từ utils
@@ -276,9 +276,9 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
         };
         onUpdateTimelineItem(index, updatedItem);
         setHasUnsavedChanges(true);
-        openSnack(`Đã thêm mô tả cho ${descriptionTarget.name}`, "success");
+        openSnack(`Đã thêm mô tả cho ${descriptionTarget.name}`, 'success');
       }
-    } else if (type === "document") {
+    } else if (type === 'document') {
       const currentItem = documentStatusItems[index];
       if (currentItem) {
         const updatedItem = {
@@ -295,42 +295,42 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
         };
         onUpdateDocumentStatusItem(index, updatedItem);
         setHasUnsavedChanges(true);
-        openSnack(`Đã thêm mô tả cho ${descriptionTarget.name}`, "success");
+        openSnack(`Đã thêm mô tả cho ${descriptionTarget.name}`, 'success');
       }
     }
 
     // Close dialog
     setDescriptionDialogOpen(false);
-    setDescriptionText("");
+    setDescriptionText('');
     setDescriptionTarget(null);
   };
 
   const handleAddPackaging = () => {
     onAddPackagingItem();
     setHasUnsavedChanges(true);
-    openSnack("Đã thêm quy cách đóng gói (chưa lưu)");
+    openSnack('Đã thêm quy cách đóng gói (chưa lưu)');
   };
 
   const handleAddTimeline = () => {
     onAddTimelineItem();
     setHasUnsavedChanges(true);
-    openSnack("Đã thêm mốc thời gian (chưa lưu)");
+    openSnack('Đã thêm mốc thời gian (chưa lưu)');
   };
 
   const handleAddDocumentStatus = () => {
     onAddDocumentStatusItem();
     setHasUnsavedChanges(true);
-    openSnack("Đã thêm trạng thái chứng từ (chưa lưu)");
+    openSnack('Đã thêm trạng thái chứng từ (chưa lưu)');
   };
 
   const handleSaveClick = async () => {
     try {
       setIsSaving(true);
-      openSnack(editingItem ? "Đang cập nhật..." : "Đang thêm mới...", "info");
+      openSnack(editingItem ? 'Đang cập nhật...' : 'Đang thêm mới...', 'info');
       await Promise.resolve(onSave({} as Record<string, unknown>));
       setHasUnsavedChanges(false);
       // Dialog thường sẽ đóng từ parent; nếu chưa đóng, báo thành công
-      openSnack(editingItem ? "Cập nhật thành công" : "Thêm mới thành công");
+      openSnack(editingItem ? 'Cập nhật thành công' : 'Thêm mới thành công');
     } finally {
       setIsSaving(false);
     }
@@ -342,7 +342,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
   // Tính tổng PCS = SUM(quantity * PCS/SET)
   const calculateTotalPCS = (items: PackagingItem[]): number => {
     return items.reduce((sum, p) => {
-      const match = /^(\d+)\s*PCS\s*\/\s*SET/i.exec(p.type || "");
+      const match = /^(\d+)\s*PCS\s*\/\s*SET/i.exec(p.type || '');
       const pcsPerSet = match ? parseInt(match[1], 10) : 1;
       const qty = Number.isFinite(p.quantity) ? p.quantity : 0;
       return sum + pcsPerSet * qty;
@@ -353,24 +353,24 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
   React.useEffect(() => {
     if (editingItem && open) {
       // Load main form fields
-      onFieldChange("id", editingItem.id);
-      onFieldChange("date", editingItem.date);
-      onFieldChange("supplier", editingItem.supplier);
-      onFieldChange("origin", editingItem.origin);
-      onFieldChange("destination", editingItem.destination);
-      onFieldChange("product", editingItem.product);
-      onFieldChange("quantity", editingItem.quantity);
-      onFieldChange("status", editingItem.status);
-      onFieldChange("estimatedArrival", editingItem.estimatedArrival);
-      onFieldChange("actualArrival", editingItem.actualArrival);
-      onFieldChange("carrier", editingItem.carrier);
-      onFieldChange("pi", editingItem.pi);
-      onFieldChange("container", editingItem.container);
-      onFieldChange("category", editingItem.category);
-      onFieldChange("purpose", editingItem.purpose);
-      onFieldChange("receiveTime", editingItem.receiveTime);
-      onFieldChange("notes", editingItem.notes);
-      onFieldChange("poNumbersInput", editingItem.poNumbers?.join(", ") || "");
+      onFieldChange('id', editingItem.id);
+      onFieldChange('date', editingItem.date);
+      onFieldChange('supplier', editingItem.supplier);
+      onFieldChange('origin', editingItem.origin);
+      onFieldChange('destination', editingItem.destination);
+      onFieldChange('product', editingItem.product);
+      onFieldChange('quantity', editingItem.quantity);
+      onFieldChange('status', editingItem.status);
+      onFieldChange('estimatedArrival', editingItem.estimatedArrival);
+      onFieldChange('actualArrival', editingItem.actualArrival);
+      onFieldChange('carrier', editingItem.carrier);
+      onFieldChange('pi', editingItem.pi);
+      onFieldChange('container', editingItem.container);
+      onFieldChange('category', editingItem.category);
+      onFieldChange('purpose', editingItem.purpose);
+      onFieldChange('receiveTime', editingItem.receiveTime);
+      onFieldChange('notes', editingItem.notes);
+      onFieldChange('poNumbersInput', editingItem.poNumbers?.join(', ') || '');
       setHasUnsavedChanges(false); // Reset when loading data
     }
   }, [editingItem, open, onFieldChange]);
@@ -378,13 +378,13 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
   React.useEffect(() => {
     const totalPcs = calculateTotalPCS(packagingItems);
     if ((formFields.quantity as number) !== totalPcs) {
-      onFieldChange("quantity", totalPcs);
+      onFieldChange('quantity', totalPcs);
     }
   }, [packagingItems, formFields.quantity, onFieldChange]);
   const handleClose = () => {
     if (hasUnsavedChanges) {
       if (
-        window.confirm("Bạn có thay đổi chưa lưu. Bạn có chắc chắn muốn đóng? Thay đổi sẽ bị mất.")
+        window.confirm('Bạn có thay đổi chưa lưu. Bạn có chắc chắn muốn đóng? Thay đổi sẽ bị mất.')
       ) {
         setHasUnsavedChanges(false);
         onClose();
@@ -405,29 +405,29 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle
         sx={{
-          borderBottom: "2px solid",
-          borderColor: "primary.main",
+          borderBottom: '2px solid',
+          borderColor: 'primary.main',
           pb: 2,
-          bgcolor: "primary.50",
+          bgcolor: 'primary.50',
         }}
       >
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
           <Box>
-            <Typography variant="h5" sx={{ fontWeight: 700, color: "primary.main" }}>
-              {editingItem ? "✏️ Sửa lịch nhập hàng" : "➕ Thêm lịch nhập hàng"}
+            <Typography variant="h5" sx={{ fontWeight: 700, color: 'primary.main' }}>
+              {editingItem ? '✏️ Sửa lịch nhập hàng' : '➕ Thêm lịch nhập hàng'}
             </Typography>
             {addFromCalendar && (
               <Typography
                 variant="body2"
-                sx={{ color: "text.secondary", mt: 0.5, fontSize: "0.8rem" }}
+                sx={{ color: 'text.secondary', mt: 0.5, fontSize: '0.8rem' }}
               >
-                📅 Ngày: {addFromCalendar.toLocaleDateString("vi-VN")}
+                📅 Ngày: {addFromCalendar.toLocaleDateString('vi-VN')}
               </Typography>
             )}
           </Box>
@@ -436,17 +436,17 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
           {!editingItem &&
             (() => {
               const type =
-                formFields.origin && formFields.origin.trim() ? "international" : "domestic";
+                formFields.origin && formFields.origin.trim() ? 'international' : 'domestic';
               return (
                 <Chip
-                  label={type === "international" ? "🌍 Quốc tế" : "🏠 Quốc nội"}
+                  label={type === 'international' ? '🌍 Quốc tế' : '🏠 Quốc nội'}
                   size="medium"
-                  color={type === "international" ? "primary" : "secondary"}
+                  color={type === 'international' ? 'primary' : 'secondary'}
                   sx={{
-                    fontSize: "0.8rem",
+                    fontSize: '0.8rem',
                     fontWeight: 700,
                     px: 2,
-                    "& .MuiChip-label": { px: 1.5 },
+                    '& .MuiChip-label': { px: 1.5 },
                   }}
                 />
               );
@@ -460,7 +460,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
             severity="info"
             sx={{
               mb: 2,
-              "& .MuiAlert-message": { fontSize: "0.85rem", fontWeight: 500 },
+              '& .MuiAlert-message': { fontSize: '0.85rem', fontWeight: 500 },
             }}
             icon="✏️"
           >
@@ -473,10 +473,10 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
             severity="warning"
             sx={{
               mb: 2,
-              "& .MuiAlert-message": { fontSize: "0.85rem", fontWeight: 500 },
-              bgcolor: "warning.50",
-              borderLeft: "4px solid",
-              borderColor: "warning.main",
+              '& .MuiAlert-message': { fontSize: '0.85rem', fontWeight: 500 },
+              bgcolor: 'warning.50',
+              borderLeft: '4px solid',
+              borderColor: 'warning.main',
             }}
           >
             ⚠️ <strong>Có thay đổi chưa lưu!</strong> Nhớ nhấn nút <strong>"Cập nhật"</strong> ở
@@ -492,7 +492,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                 fullWidth
                 label="Mã PI (Lô hàng)"
                 value={formFields.pi}
-                onChange={(e) => handleFieldChange("pi", e.target.value)}
+                onChange={(e) => handleFieldChange('pi', e.target.value)}
                 variant="outlined"
                 required
               />
@@ -503,7 +503,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               fullWidth
               label="Nhà cung cấp"
               value={formFields.supplier}
-              onChange={(e) => handleFieldChange("supplier", e.target.value)}
+              onChange={(e) => handleFieldChange('supplier', e.target.value)}
               variant="outlined"
               required
             />
@@ -513,7 +513,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               fullWidth
               label="Sản phẩm"
               value={formFields.product}
-              onChange={(e) => handleFieldChange("product", e.target.value)}
+              onChange={(e) => handleFieldChange('product', e.target.value)}
               variant="outlined"
               required
             />
@@ -523,12 +523,12 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               freeSolo
               options={productCategories}
               value={formFields.category}
-              onInputChange={(_, v) => handleFieldChange("category", v)}
+              onInputChange={(_, v) => handleFieldChange('category', v)}
               renderOption={(props, option) => (
                 <Box
                   component="li"
                   {...props}
-                  sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                  sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                 >
                   {getCategoryIcon(option)}
                   {option}
@@ -544,11 +544,11 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               fullWidth
               label="Xuất xứ"
               value={formFields.origin}
-              onChange={(e) => onFieldChange("origin", e.target.value)}
+              onChange={(e) => onFieldChange('origin', e.target.value)}
               variant="outlined"
               helperText="💡 Để trống = Quốc nội, Có dữ liệu = Quốc tế"
               FormHelperTextProps={{
-                sx: { fontSize: "0.7rem", color: "info.main" },
+                sx: { fontSize: '0.7rem', color: 'info.main' },
               }}
             />
           </Grid>
@@ -559,13 +559,13 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               <Alert
                 severity="success"
                 sx={{
-                  bgcolor: "success.50",
-                  borderLeft: "4px solid",
-                  borderColor: "success.main",
-                  "& .MuiAlert-message": { fontSize: "0.8rem" },
+                  bgcolor: 'success.50',
+                  borderLeft: '4px solid',
+                  borderColor: 'success.main',
+                  '& .MuiAlert-message': { fontSize: '0.8rem' },
                 }}
               >
-                <Typography component="span" sx={{ fontWeight: 600, fontSize: "0.85rem" }}>
+                <Typography component="span" sx={{ fontWeight: 600, fontSize: '0.85rem' }}>
                   🏠 Form đơn giản cho Quốc nội
                 </Typography>
                 <Box
@@ -573,8 +573,8 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   sx={{
                     mt: 0.5,
                     mb: 0,
-                    fontSize: "0.75rem",
-                    color: "text.secondary",
+                    fontSize: '0.75rem',
+                    color: 'text.secondary',
                     pl: 2,
                   }}
                 >
@@ -590,7 +590,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               freeSolo
               options={destinations}
               value={formFields.destination}
-              onInputChange={(_, v) => onFieldChange("destination", v)}
+              onInputChange={(_, v) => onFieldChange('destination', v)}
               renderInput={(params) => (
                 <TextField {...params} label="Đích đến" variant="outlined" required />
               )}
@@ -602,7 +602,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               label="Số lượng"
               type="number"
               value={formFields.quantity}
-              onChange={(e) => onFieldChange("quantity", Number(e.target.value))}
+              onChange={(e) => onFieldChange('quantity', Number(e.target.value))}
               variant="outlined"
               required
             />
@@ -613,7 +613,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               label="Số lượng Container"
               type="number"
               value={formFields.container}
-              onChange={(e) => onFieldChange("container", Number(e.target.value))}
+              onChange={(e) => onFieldChange('container', Number(e.target.value))}
               variant="outlined"
               required
             />
@@ -623,7 +623,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               <InputLabel>Mục đích</InputLabel>
               <Select
                 value={formFields.purpose}
-                onChange={(e) => onFieldChange("purpose", e.target.value)}
+                onChange={(e) => onFieldChange('purpose', e.target.value)}
                 label="Mục đích"
               >
                 <MenuItem value="online">Online</MenuItem>
@@ -637,7 +637,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               label="Thời gian nhận"
               type="time"
               value={formFields.receiveTime}
-              onChange={(e) => onFieldChange("receiveTime", e.target.value)}
+              onChange={(e) => onFieldChange('receiveTime', e.target.value)}
               variant="outlined"
               required
               InputLabelProps={{ shrink: true }}
@@ -648,7 +648,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               fullWidth
               label="Phiếu PO (cách nhau bằng dấu phẩy)"
               value={formFields.poNumbersInput}
-              onChange={(e) => onFieldChange("poNumbersInput", e.target.value)}
+              onChange={(e) => onFieldChange('poNumbersInput', e.target.value)}
               variant="outlined"
               placeholder="PO-2024-001, PO-2024-002"
               helperText="Nhập nhiều PO cách nhau bằng dấu phẩy"
@@ -659,7 +659,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               <InputLabel>Trạng thái</InputLabel>
               <Select
                 value={formFields.status}
-                onChange={(e) => onFieldChange("status", e.target.value as InboundItem["status"])}
+                onChange={(e) => onFieldChange('status', e.target.value as InboundItem['status'])}
                 label="Trạng thái"
               >
                 <MenuItem value="pending">Chờ xác nhận</MenuItem>
@@ -677,7 +677,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                 fullWidth
                 label="Nhà vận chuyển"
                 value={formFields.carrier}
-                onChange={(e) => onFieldChange("carrier", e.target.value)}
+                onChange={(e) => onFieldChange('carrier', e.target.value)}
                 variant="outlined"
                 required
               />
@@ -686,7 +686,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
 
           {/* Packaging Section */}
           <Grid item xs={12}>
-            <Typography variant="h6" sx={{ mb: 2, fontSize: "1rem" }}>
+            <Typography variant="h6" sx={{ mb: 2, fontSize: '1rem' }}>
               📦 Quy cách đóng gói
             </Typography>
 
@@ -697,26 +697,26 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                 sx={{
                   mb: 1,
                   p: 2,
-                  border: "1px solid #e0e0e0",
+                  border: '1px solid #e0e0e0',
                   borderRadius: 1,
-                  backgroundColor: "#f5f5f5",
+                  backgroundColor: '#f5f5f5',
                 }}
               >
                 {editingPackagingIndex === index ? (
                   // Inline editing form
                   <Box
                     sx={{
-                      display: "flex",
+                      display: 'flex',
                       gap: 2,
-                      alignItems: "center",
-                      flexWrap: "wrap",
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
                     }}
                   >
                     <FormControl size="small" sx={{ minWidth: 120 }}>
                       <InputLabel>Loại</InputLabel>
                       <Select
                         value={newPackagingItem.type}
-                        onChange={(e) => onNewPackagingItemChange("type", e.target.value)}
+                        onChange={(e) => onNewPackagingItemChange('type', e.target.value)}
                         label="Loại"
                       >
                         <MenuItem value="1PCS/SET">1PCS/SET</MenuItem>
@@ -731,7 +731,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                       label="Số lượng SET"
                       type="number"
                       value={newPackagingItem.quantity}
-                      onChange={(e) => onNewPackagingItemChange("quantity", Number(e.target.value))}
+                      onChange={(e) => onNewPackagingItemChange('quantity', Number(e.target.value))}
                       sx={{ minWidth: 120 }}
                       inputProps={{ min: 0 }}
                     />
@@ -739,11 +739,11 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                       size="small"
                       label="Mô tả"
                       value={newPackagingItem.description}
-                      onChange={(e) => onNewPackagingItemChange("description", e.target.value)}
+                      onChange={(e) => onNewPackagingItemChange('description', e.target.value)}
                       sx={{ flex: 1 }}
                       placeholder="VD: Thùng carton, Pallet gỗ..."
                     />
-                    <Box sx={{ display: "flex", gap: 1 }}>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
                       <Button
                         variant="contained"
                         size="small"
@@ -752,7 +752,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                           handleAddPackaging();
                           setEditingPackagingIndex(null);
                           setHasUnsavedChanges(true);
-                          openSnack("Đã cập nhật quy cách (chưa lưu)");
+                          openSnack('Đã cập nhật quy cách (chưa lưu)');
                         }}
                         disabled={!newPackagingItem.type || newPackagingItem.quantity <= 0}
                       >
@@ -771,29 +771,29 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   // Display mode
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
+                      display: 'flex',
+                      alignItems: 'center',
                       gap: 2,
                     }}
                   >
-                    <Typography variant="body2" sx={{ minWidth: "80px", fontWeight: 500 }}>
+                    <Typography variant="body2" sx={{ minWidth: '80px', fontWeight: 500 }}>
                       {item.type}
                     </Typography>
-                    <Typography variant="body2" sx={{ minWidth: "60px" }}>
+                    <Typography variant="body2" sx={{ minWidth: '60px' }}>
                       {item.quantity} SET
                     </Typography>
-                    <Typography variant="body2" sx={{ flex: 1, color: "text.secondary" }}>
+                    <Typography variant="body2" sx={{ flex: 1, color: 'text.secondary' }}>
                       {item.description}
                     </Typography>
-                    <Box sx={{ display: "flex", gap: 0.5 }}>
+                    <Box sx={{ display: 'flex', gap: 0.5 }}>
                       <Tooltip title="Sửa">
                         <IconButton
                           size="small"
                           onClick={() => {
                             setEditingPackagingIndex(index);
-                            onNewPackagingItemChange("type", item.type);
-                            onNewPackagingItemChange("quantity", item.quantity);
-                            onNewPackagingItemChange("description", item.description || "");
+                            onNewPackagingItemChange('type', item.type);
+                            onNewPackagingItemChange('quantity', item.quantity);
+                            onNewPackagingItemChange('description', item.description || '');
                           }}
                           color="primary"
                         >
@@ -819,21 +819,21 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
             {editingPackagingIndex === null && (
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   gap: 2,
-                  alignItems: "center",
+                  alignItems: 'center',
                   mt: 2,
                   p: 2,
-                  border: "2px dashed #ccc",
+                  border: '2px dashed #ccc',
                   borderRadius: 1,
-                  backgroundColor: "#fafafa",
+                  backgroundColor: '#fafafa',
                 }}
               >
                 <FormControl size="small" sx={{ minWidth: 120 }}>
                   <InputLabel>Loại</InputLabel>
                   <Select
                     value={newPackagingItem.type}
-                    onChange={(e) => onNewPackagingItemChange("type", e.target.value)}
+                    onChange={(e) => onNewPackagingItemChange('type', e.target.value)}
                     label="Loại"
                   >
                     <MenuItem value="1PCS/SET">1PCS/SET</MenuItem>
@@ -848,7 +848,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   label="Số lượng SET"
                   type="number"
                   value={newPackagingItem.quantity}
-                  onChange={(e) => onNewPackagingItemChange("quantity", Number(e.target.value))}
+                  onChange={(e) => onNewPackagingItemChange('quantity', Number(e.target.value))}
                   sx={{ minWidth: 120 }}
                   inputProps={{ min: 0 }}
                 />
@@ -856,7 +856,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   size="small"
                   label="Mô tả"
                   value={newPackagingItem.description}
-                  onChange={(e) => onNewPackagingItemChange("description", e.target.value)}
+                  onChange={(e) => onNewPackagingItemChange('description', e.target.value)}
                   sx={{ flex: 1 }}
                   placeholder="VD: Thùng carton, Pallet gỗ..."
                 />
@@ -868,7 +868,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                       onDeletePackagingItem(editingPackagingIndex);
                       handleAddPackaging();
                       setEditingPackagingIndex(null);
-                      openSnack("Đã cập nhật quy cách");
+                      openSnack('Đã cập nhật quy cách');
                     } else {
                       handleAddPackaging();
                     }
@@ -876,16 +876,16 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   disabled={!newPackagingItem.type || newPackagingItem.quantity <= 0}
                   startIcon={<AddIcon />}
                   sx={{
-                    color: "white",
+                    color: 'white',
                     fontWeight: 600,
-                    "&.Mui-disabled": {
-                      bgcolor: "primary.200",
-                      color: "white",
+                    '&.Mui-disabled': {
+                      bgcolor: 'primary.200',
+                      color: 'white',
                       opacity: 0.7,
                     },
                   }}
                 >
-                  {editingPackagingIndex !== null ? "Lưu" : "Thêm"}
+                  {editingPackagingIndex !== null ? 'Lưu' : 'Thêm'}
                 </Button>
               </Box>
             )}
@@ -895,25 +895,25 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                 sx={{
                   mt: 2,
                   p: 2,
-                  backgroundColor: "#e3f2fd",
+                  backgroundColor: '#e3f2fd',
                   borderRadius: 1,
-                  border: "1px solid #2196f3",
+                  border: '1px solid #2196f3',
                 }}
               >
                 <Typography
                   variant="h6"
                   sx={{
-                    color: "primary.main",
+                    color: 'primary.main',
                     fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
+                    display: 'flex',
+                    alignItems: 'center',
                     gap: 1,
                   }}
                 >
-                  📦 Tổng số: {calculateTotalPCS(packagingItems).toLocaleString()} PCS /{" "}
+                  📦 Tổng số: {calculateTotalPCS(packagingItems).toLocaleString()} PCS /{' '}
                   {calculateTotalProducts(packagingItems).toLocaleString()} SET
                 </Typography>
-                <Typography variant="body2" sx={{ color: "text.secondary", mt: 0.5 }}>
+                <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
                   Tự động tính từ các loại quy cách đóng gói
                 </Typography>
               </Box>
@@ -922,10 +922,10 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
 
           {/* Timeline Section */}
           <Grid item xs={12}>
-            <Typography variant="h6" sx={{ mb: 2, fontSize: "1rem" }}>
+            <Typography variant="h6" sx={{ mb: 2, fontSize: '1rem' }}>
               {formFields.origin && formFields.origin.trim()
-                ? "🚚 Timeline Vận Chuyển"
-                : "📅 Lịch Nhận Hàng"}
+                ? '🚚 Timeline Vận Chuyển'
+                : '📅 Lịch Nhận Hàng'}
             </Typography>
 
             {/* Timeline Items List - Quốc tế: tất cả, Quốc nội: chỉ Ngày nhận hàng */}
@@ -936,7 +936,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   return true; // Hiển thị tất cả timeline cho Quốc tế
                 } else {
                   // Quốc nội: chỉ hiển thị "Ngày nhận hàng" và "Ngày tạo phiếu"
-                  return item.name === "Ngày nhận hàng" || item.name === "Ngày tạo phiếu";
+                  return item.name === 'Ngày nhận hàng' || item.name === 'Ngày tạo phiếu';
                 }
               })
               .map((item, index) => (
@@ -945,31 +945,31 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   sx={{
                     mb: 1,
                     p: 2,
-                    border: "1px solid #e0e0e0",
+                    border: '1px solid #e0e0e0',
                     borderRadius: 1,
                     backgroundColor:
-                      item.status === "completed"
-                        ? "#e8f5e8"
-                        : item.status === "confirmed"
-                          ? "#e3f2fd"
-                          : "#f5f5f5",
+                      item.status === 'completed'
+                        ? '#e8f5e8'
+                        : item.status === 'confirmed'
+                          ? '#e3f2fd'
+                          : '#f5f5f5',
                   }}
                 >
                   {editingTimelineIndex === index ? (
                     // Inline editing form
                     <Box
                       sx={{
-                        display: "flex",
+                        display: 'flex',
                         gap: 2,
-                        alignItems: "center",
-                        flexWrap: "wrap",
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
                       }}
                     >
-                      <FormControl sx={{ minWidth: "140px" }}>
+                      <FormControl sx={{ minWidth: '140px' }}>
                         <InputLabel>Mốc thời gian</InputLabel>
                         <Select
                           value={newTimelineItem.name}
-                          onChange={(e) => onNewTimelineItemChange("name", e.target.value)}
+                          onChange={(e) => onNewTimelineItemChange('name', e.target.value)}
                           label="Mốc thời gian"
                         >
                           <MenuItem value="Ngày nhập hàng">Ngày nhập hàng</MenuItem>
@@ -986,12 +986,12 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                         type="date"
                         value={newTimelineItem.estimatedDate as string}
                         onChange={(e) => {
-                          onNewTimelineItemChange("estimatedDate", e.target.value);
-                          if (newTimelineItem.name === "Ngày nhập hàng" && e.target.value) {
-                            onFieldChange("estimatedArrival", e.target.value);
+                          onNewTimelineItemChange('estimatedDate', e.target.value);
+                          if (newTimelineItem.name === 'Ngày nhập hàng' && e.target.value) {
+                            onFieldChange('estimatedArrival', e.target.value);
                           }
                         }}
-                        sx={{ minWidth: "140px" }}
+                        sx={{ minWidth: '140px' }}
                         InputLabelProps={{ shrink: true }}
                       />
                       <TextField
@@ -999,20 +999,20 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                         type="date"
                         value={newTimelineItem.date as string}
                         onChange={(e) => {
-                          onNewTimelineItemChange("date", e.target.value);
-                          if (newTimelineItem.name === "Ngày nhập hàng" && e.target.value) {
-                            onFieldChange("actualArrival", e.target.value);
-                            onFieldChange("date", e.target.value);
+                          onNewTimelineItemChange('date', e.target.value);
+                          if (newTimelineItem.name === 'Ngày nhập hàng' && e.target.value) {
+                            onFieldChange('actualArrival', e.target.value);
+                            onFieldChange('date', e.target.value);
                           }
                         }}
-                        sx={{ minWidth: "140px" }}
+                        sx={{ minWidth: '140px' }}
                         InputLabelProps={{ shrink: true }}
                       />
-                      <FormControl sx={{ minWidth: "120px" }}>
+                      <FormControl sx={{ minWidth: '120px' }}>
                         <InputLabel>Trạng thái</InputLabel>
                         <Select
                           value={newTimelineItem.status}
-                          onChange={(e) => onNewTimelineItemChange("status", e.target.value)}
+                          onChange={(e) => onNewTimelineItemChange('status', e.target.value)}
                           label="Trạng thái"
                         >
                           <MenuItem value="pending">Chờ xử lý</MenuItem>
@@ -1022,11 +1022,11 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                       <TextField
                         label="Mô tả"
                         value={newTimelineItem.description}
-                        onChange={(e) => onNewTimelineItemChange("description", e.target.value)}
-                        sx={{ minWidth: "200px", flex: 1 }}
+                        onChange={(e) => onNewTimelineItemChange('description', e.target.value)}
+                        sx={{ minWidth: '200px', flex: 1 }}
                         placeholder="Mô tả thêm..."
                       />
-                      <Box sx={{ display: "flex", gap: 1 }}>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
                         <Button
                           variant="contained"
                           size="small"
@@ -1038,7 +1038,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                             onUpdateTimelineItem(editingTimelineIndex, updatedItem);
                             setEditingTimelineIndex(null);
                             setHasUnsavedChanges(true);
-                            openSnack("Đã cập nhật mốc thời gian (chưa lưu)");
+                            openSnack('Đã cập nhật mốc thời gian (chưa lưu)');
                           }}
                           disabled={
                             !newTimelineItem.name ||
@@ -1069,15 +1069,15 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                           </Typography>
                         </Grid>
                         <Grid item xs={12} md={5}>
-                          <Box sx={{ display: "flex", gap: 3 }}>
+                          <Box sx={{ display: 'flex', gap: 3 }}>
                             {/* Hide "Dự kiến" for "Ngày tạo phiếu" */}
-                            {item.name !== "Ngày tạo phiếu" && (
+                            {item.name !== 'Ngày tạo phiếu' && (
                               <Typography variant="body2" noWrap>
                                 Dự kiến: {formatDateDisplay(item.estimatedDate)}
                               </Typography>
                             )}
                             <Typography variant="body2" noWrap>
-                              {item.name === "Ngày tạo phiếu" ? "Ngày: " : "Thực tế: "}
+                              {item.name === 'Ngày tạo phiếu' ? 'Ngày: ' : 'Thực tế: '}
                               {formatDateDisplay(item.date)}
                             </Typography>
                           </Box>
@@ -1085,35 +1085,35 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                         <Grid item xs={12} md={2}>
                           <Chip
                             label={
-                              item.status === "completed"
-                                ? "Hoàn thành"
-                                : item.status === "confirmed"
-                                  ? "Đã xác nhận"
-                                  : "Chờ xử lý"
+                              item.status === 'completed'
+                                ? 'Hoàn thành'
+                                : item.status === 'confirmed'
+                                  ? 'Đã xác nhận'
+                                  : 'Chờ xử lý'
                             }
                             color={
-                              item.status === "completed"
-                                ? "success"
-                                : item.status === "confirmed"
-                                  ? "primary"
-                                  : "default"
+                              item.status === 'completed'
+                                ? 'success'
+                                : item.status === 'confirmed'
+                                  ? 'primary'
+                                  : 'default'
                             }
                             size="small"
-                            sx={{ fontSize: "0.7rem" }}
+                            sx={{ fontSize: '0.7rem' }}
                           />
                         </Grid>
                         <Grid item xs={12} md={1.5}>
                           {/* Delay Status - Auto calculated */}
-                          {item.estimatedDate && item.date && item.name !== "Ngày tạo phiếu" && (
+                          {item.estimatedDate && item.date && item.name !== 'Ngày tạo phiếu' && (
                             <Chip
                               label={(() => {
                                 // Calculate delay status
-                                if (!item.estimatedDate || !item.date) return "❓";
+                                if (!item.estimatedDate || !item.date) return '❓';
 
                                 // Parse dates
                                 const parseDate = (dateStr: string): Date => {
-                                  if (dateStr.includes("/")) {
-                                    const [day, month, year] = dateStr.split("/");
+                                  if (dateStr.includes('/')) {
+                                    const [day, month, year] = dateStr.split('/');
                                     return new Date(
                                       parseInt(year),
                                       parseInt(month) - 1,
@@ -1126,17 +1126,17 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                                 const estimated = parseDate(item.estimatedDate);
                                 const actual = parseDate(item.date);
 
-                                if (estimated.getTime() === actual.getTime()) return "✅ Đúng hạn";
-                                if (actual < estimated) return "⚡ Trước hạn";
-                                if (actual > estimated) return "🚨 Trễ hạn";
-                                return "❓ Chưa xác định";
+                                if (estimated.getTime() === actual.getTime()) return '✅ Đúng hạn';
+                                if (actual < estimated) return '⚡ Trước hạn';
+                                if (actual > estimated) return '🚨 Trễ hạn';
+                                return '❓ Chưa xác định';
                               })()}
                               color={(() => {
-                                if (!item.estimatedDate || !item.date) return "default";
+                                if (!item.estimatedDate || !item.date) return 'default';
 
                                 const parseDate = (dateStr: string): Date => {
-                                  if (dateStr.includes("/")) {
-                                    const [day, month, year] = dateStr.split("/");
+                                  if (dateStr.includes('/')) {
+                                    const [day, month, year] = dateStr.split('/');
                                     return new Date(
                                       parseInt(year),
                                       parseInt(month) - 1,
@@ -1149,21 +1149,21 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                                 const estimated = parseDate(item.estimatedDate);
                                 const actual = parseDate(item.date);
 
-                                if (estimated.getTime() === actual.getTime()) return "success";
-                                if (actual < estimated) return "info";
-                                if (actual > estimated) return "error";
-                                return "default";
+                                if (estimated.getTime() === actual.getTime()) return 'success';
+                                if (actual < estimated) return 'info';
+                                if (actual > estimated) return 'error';
+                                return 'default';
                               })()}
                               size="small"
-                              sx={{ fontSize: "0.6rem", height: 20 }}
+                              sx={{ fontSize: '0.6rem', height: 20 }}
                             />
                           )}
                         </Grid>
                         <Grid item xs={12} md={1.5}>
                           <Box
                             sx={{
-                              display: "flex",
-                              justifyContent: "flex-end",
+                              display: 'flex',
+                              justifyContent: 'flex-end',
                               gap: 0.5,
                             }}
                           >
@@ -1171,33 +1171,33 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                             <Tooltip title="Thêm mô tả">
                               <IconButton
                                 size="small"
-                                onClick={() => openDescriptionDialog("timeline", index, item.name)}
+                                onClick={() => openDescriptionDialog('timeline', index, item.name)}
                                 color="info"
                               >
                                 <CommentIcon fontSize="small" />
                               </IconButton>
                             </Tooltip>
                             {/* Hide edit/delete buttons for "Ngày tạo phiếu" */}
-                            {item.name !== "Ngày tạo phiếu" && (
+                            {item.name !== 'Ngày tạo phiếu' && (
                               <>
                                 <Tooltip title="Sửa">
                                   <IconButton
                                     size="small"
                                     onClick={() => {
                                       setEditingTimelineIndex(index);
-                                      onNewTimelineItemChange("name", item.name);
+                                      onNewTimelineItemChange('name', item.name);
                                       onNewTimelineItemChange(
-                                        "estimatedDate",
-                                        formatDateForInput(item.estimatedDate || "")
+                                        'estimatedDate',
+                                        formatDateForInput(item.estimatedDate || '')
                                       );
                                       onNewTimelineItemChange(
-                                        "date",
-                                        formatDateForInput(item.date || "")
+                                        'date',
+                                        formatDateForInput(item.date || '')
                                       );
-                                      onNewTimelineItemChange("status", item.status);
+                                      onNewTimelineItemChange('status', item.status);
                                       onNewTimelineItemChange(
-                                        "description",
-                                        item.description || ""
+                                        'description',
+                                        item.description || ''
                                       );
                                     }}
                                     color="primary"
@@ -1225,9 +1225,9 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                           <Typography
                             variant="body2"
                             sx={{
-                              color: "text.secondary",
-                              fontSize: "0.75rem",
-                              fontStyle: "italic",
+                              color: 'text.secondary',
+                              fontSize: '0.75rem',
+                              fontStyle: 'italic',
                             }}
                           >
                             📝 {getLatestTimelineDescription(item)}
@@ -1237,8 +1237,8 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                               <Typography
                                 variant="caption"
                                 sx={{
-                                  color: "text.disabled",
-                                  fontSize: "0.7rem",
+                                  color: 'text.disabled',
+                                  fontSize: '0.7rem',
                                 }}
                               >
                                 Lịch sử mô tả ({(item.descriptions || []).length}
@@ -1249,30 +1249,30 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                                   key={desc.id}
                                   variant="caption"
                                   sx={{
-                                    display: "block",
-                                    fontSize: "0.65rem",
-                                    color: "text.secondary",
+                                    display: 'block',
+                                    fontSize: '0.65rem',
+                                    color: 'text.secondary',
                                     ml: 1,
                                     mt: 0.3,
                                     py: 0.3,
                                     px: 0.5,
                                     bgcolor:
                                       idx === (item.descriptions || []).length - 1
-                                        ? "#e8f5e8"
-                                        : "#f5f5f5",
+                                        ? '#e8f5e8'
+                                        : '#f5f5f5',
                                     borderRadius: 0.5,
-                                    border: "1px solid",
+                                    border: '1px solid',
                                     borderColor:
                                       idx === (item.descriptions || []).length - 1
-                                        ? "#4caf50"
-                                        : "#e0e0e0",
+                                        ? '#4caf50'
+                                        : '#e0e0e0',
                                   }}
                                 >
                                   <strong>{desc.author}</strong> (
-                                  {new Date(desc.timestamp).toLocaleDateString("vi-VN")}{" "}
-                                  {new Date(desc.timestamp).toLocaleTimeString("vi-VN", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
+                                  {new Date(desc.timestamp).toLocaleDateString('vi-VN')}{' '}
+                                  {new Date(desc.timestamp).toLocaleTimeString('vi-VN', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
                                   })}
                                   ):
                                   <br />
@@ -1292,22 +1292,22 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
             {editingTimelineIndex === null && formFields.origin && formFields.origin.trim() && (
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   gap: 2,
-                  alignItems: "center",
+                  alignItems: 'center',
                   mt: 2,
                   p: 2,
-                  border: "2px dashed #ccc",
+                  border: '2px dashed #ccc',
                   borderRadius: 1,
-                  backgroundColor: "#fafafa",
-                  flexWrap: "wrap",
+                  backgroundColor: '#fafafa',
+                  flexWrap: 'wrap',
                 }}
               >
-                <FormControl sx={{ minWidth: "140px" }}>
+                <FormControl sx={{ minWidth: '140px' }}>
                   <InputLabel>Mốc thời gian</InputLabel>
                   <Select
                     value={newTimelineItem.name}
-                    onChange={(e) => onNewTimelineItemChange("name", e.target.value)}
+                    onChange={(e) => onNewTimelineItemChange('name', e.target.value)}
                     label="Mốc thời gian"
                   >
                     <MenuItem value="Ngày nhập hàng">Ngày nhập hàng</MenuItem>
@@ -1324,12 +1324,12 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   type="date"
                   value={newTimelineItem.estimatedDate as string}
                   onChange={(e) => {
-                    onNewTimelineItemChange("estimatedDate", e.target.value);
-                    if (newTimelineItem.name === "Ngày nhập hàng" && e.target.value) {
-                      onFieldChange("estimatedArrival", e.target.value);
+                    onNewTimelineItemChange('estimatedDate', e.target.value);
+                    if (newTimelineItem.name === 'Ngày nhập hàng' && e.target.value) {
+                      onFieldChange('estimatedArrival', e.target.value);
                     }
                   }}
-                  sx={{ minWidth: "140px" }}
+                  sx={{ minWidth: '140px' }}
                   InputLabelProps={{ shrink: true }}
                 />
 
@@ -1338,20 +1338,20 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   type="date"
                   value={newTimelineItem.date as string}
                   onChange={(e) => {
-                    onNewTimelineItemChange("date", e.target.value);
-                    if (newTimelineItem.name === "Ngày nhập hàng" && e.target.value) {
-                      onFieldChange("actualArrival", e.target.value);
-                      onFieldChange("date", e.target.value);
+                    onNewTimelineItemChange('date', e.target.value);
+                    if (newTimelineItem.name === 'Ngày nhập hàng' && e.target.value) {
+                      onFieldChange('actualArrival', e.target.value);
+                      onFieldChange('date', e.target.value);
                     }
                   }}
-                  sx={{ minWidth: "140px" }}
+                  sx={{ minWidth: '140px' }}
                   InputLabelProps={{ shrink: true }}
                 />
-                <FormControl sx={{ minWidth: "120px" }}>
+                <FormControl sx={{ minWidth: '120px' }}>
                   <InputLabel>Trạng thái</InputLabel>
                   <Select
                     value={newTimelineItem.status}
-                    onChange={(e) => onNewTimelineItemChange("status", e.target.value)}
+                    onChange={(e) => onNewTimelineItemChange('status', e.target.value)}
                     label="Trạng thái"
                   >
                     <MenuItem value="pending">Chờ xử lý</MenuItem>
@@ -1361,8 +1361,8 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                 <TextField
                   label="Mô tả"
                   value={newTimelineItem.description}
-                  onChange={(e) => onNewTimelineItemChange("description", e.target.value)}
-                  sx={{ minWidth: "200px", flex: 1 }}
+                  onChange={(e) => onNewTimelineItemChange('description', e.target.value)}
+                  sx={{ minWidth: '200px', flex: 1 }}
                   placeholder="Mô tả thêm..."
                 />
                 <Button
@@ -1372,7 +1372,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                       onDeleteTimelineItem(editingTimelineIndex);
                       handleAddTimeline();
                       setEditingTimelineIndex(null);
-                      openSnack("Đã cập nhật mốc thời gian");
+                      openSnack('Đã cập nhật mốc thời gian');
                     } else {
                       handleAddTimeline();
                     }
@@ -1383,16 +1383,16 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                     !((newTimelineItem.estimatedDate as string) || (newTimelineItem.date as string))
                   }
                   sx={{
-                    color: "white",
+                    color: 'white',
                     fontWeight: 600,
-                    "&.Mui-disabled": {
-                      bgcolor: "primary.200",
-                      color: "white",
+                    '&.Mui-disabled': {
+                      bgcolor: 'primary.200',
+                      color: 'white',
                       opacity: 0.7,
                     },
                   }}
                 >
-                  {editingTimelineIndex !== null ? "Lưu" : "Thêm"}
+                  {editingTimelineIndex !== null ? 'Lưu' : 'Thêm'}
                 </Button>
               </Box>
             )}
@@ -1403,22 +1403,22 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
             <Grid item xs={12}>
               <Box
                 sx={{
-                  display: "flex",
+                  display: 'flex',
                   gap: 2,
-                  alignItems: "center",
+                  alignItems: 'center',
                   mt: 1,
                   p: 2,
-                  border: "2px dashed #4caf50",
+                  border: '2px dashed #4caf50',
                   borderRadius: 1,
-                  backgroundColor: "#e8f5e8",
-                  flexWrap: "wrap",
+                  backgroundColor: '#e8f5e8',
+                  flexWrap: 'wrap',
                 }}
               >
                 <Typography
                   variant="body2"
                   sx={{
-                    fontSize: "0.8rem",
-                    color: "success.main",
+                    fontSize: '0.8rem',
+                    color: 'success.main',
                     fontWeight: 600,
                   }}
                 >
@@ -1427,27 +1427,27 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                 <Button
                   variant="contained"
                   onClick={() => {
-                    onNewTimelineItemChange("name", "Ngày nhận hàng");
-                    onNewTimelineItemChange("status", "pending");
+                    onNewTimelineItemChange('name', 'Ngày nhận hàng');
+                    onNewTimelineItemChange('status', 'pending');
                     handleAddTimeline();
                   }}
                   startIcon={<AddIcon />}
-                  disabled={timelineItems.some((t) => t.name === "Ngày nhận hàng")}
+                  disabled={timelineItems.some((t) => t.name === 'Ngày nhận hàng')}
                   size="small"
                   color="success"
                   sx={{
-                    color: "white",
+                    color: 'white',
                     fontWeight: 600,
-                    "&.Mui-disabled": {
-                      bgcolor: "success.200",
-                      color: "white",
+                    '&.Mui-disabled': {
+                      bgcolor: 'success.200',
+                      color: 'white',
                       opacity: 0.8,
                     },
                   }}
                 >
-                  {timelineItems.some((t) => t.name === "Ngày nhận hàng")
-                    ? "Đã có ngày nhận hàng"
-                    : "Thêm ngày nhận hàng"}
+                  {timelineItems.some((t) => t.name === 'Ngày nhận hàng')
+                    ? 'Đã có ngày nhận hàng'
+                    : 'Thêm ngày nhận hàng'}
                 </Button>
               </Box>
             </Grid>
@@ -1456,7 +1456,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
           {/* Document Status Section - Chỉ hiện cho Quốc tế */}
           {formFields.origin && formFields.origin.trim() && (
             <Grid item xs={12}>
-              <Typography variant="h6" sx={{ mb: 2, fontSize: "1rem" }}>
+              <Typography variant="h6" sx={{ mb: 2, fontSize: '1rem' }}>
                 📄 Trạng thái chứng từ
               </Typography>
 
@@ -1467,26 +1467,26 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   sx={{
                     mb: 1,
                     p: 2,
-                    border: "1px solid #e0e0e0",
+                    border: '1px solid #e0e0e0',
                     borderRadius: 1,
-                    backgroundColor: "#f5f5f5",
+                    backgroundColor: '#f5f5f5',
                   }}
                 >
                   {editingDocIndex === index ? (
                     // Inline editing form
                     <Box
                       sx={{
-                        display: "flex",
+                        display: 'flex',
                         gap: 2,
-                        alignItems: "center",
-                        flexWrap: "wrap",
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
                       }}
                     >
-                      <FormControl sx={{ minWidth: "140px" }}>
+                      <FormControl sx={{ minWidth: '140px' }}>
                         <InputLabel>Trạng thái chứng từ</InputLabel>
                         <Select
                           value={newDocumentStatusItem.name}
-                          onChange={(e) => onNewDocumentStatusItemChange("name", e.target.value)}
+                          onChange={(e) => onNewDocumentStatusItemChange('name', e.target.value)}
                           label="Trạng thái chứng từ"
                         >
                           <MenuItem value="Check bill">Check bill</MenuItem>
@@ -1501,24 +1501,24 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                         type="date"
                         value={newDocumentStatusItem.estimatedDate as string}
                         onChange={(e) =>
-                          onNewDocumentStatusItemChange("estimatedDate", e.target.value)
+                          onNewDocumentStatusItemChange('estimatedDate', e.target.value)
                         }
-                        sx={{ minWidth: "140px" }}
+                        sx={{ minWidth: '140px' }}
                         InputLabelProps={{ shrink: true }}
                       />
                       <TextField
                         label="Ngày thực tế"
                         type="date"
                         value={newDocumentStatusItem.date as string}
-                        onChange={(e) => onNewDocumentStatusItemChange("date", e.target.value)}
-                        sx={{ minWidth: "140px" }}
+                        onChange={(e) => onNewDocumentStatusItemChange('date', e.target.value)}
+                        sx={{ minWidth: '140px' }}
                         InputLabelProps={{ shrink: true }}
                       />
-                      <FormControl sx={{ minWidth: "120px" }}>
+                      <FormControl sx={{ minWidth: '120px' }}>
                         <InputLabel>Trạng thái</InputLabel>
                         <Select
                           value={newDocumentStatusItem.status}
-                          onChange={(e) => onNewDocumentStatusItemChange("status", e.target.value)}
+                          onChange={(e) => onNewDocumentStatusItemChange('status', e.target.value)}
                           label="Trạng thái"
                         >
                           <MenuItem value="pending">Chờ xử lý</MenuItem>
@@ -1530,12 +1530,12 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                         label="Mô tả"
                         value={newDocumentStatusItem.description}
                         onChange={(e) =>
-                          onNewDocumentStatusItemChange("description", e.target.value)
+                          onNewDocumentStatusItemChange('description', e.target.value)
                         }
-                        sx={{ minWidth: "200px", flex: 1 }}
+                        sx={{ minWidth: '200px', flex: 1 }}
                         placeholder="Mô tả thêm..."
                       />
-                      <Box sx={{ display: "flex", gap: 1 }}>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
                         <Button
                           variant="contained"
                           size="small"
@@ -1544,7 +1544,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                             handleAddDocumentStatus();
                             setEditingDocIndex(null);
                             setHasUnsavedChanges(true);
-                            openSnack("Đã cập nhật trạng thái chứng từ (chưa lưu)");
+                            openSnack('Đã cập nhật trạng thái chứng từ (chưa lưu)');
                           }}
                           disabled={
                             !newDocumentStatusItem.name ||
@@ -1575,15 +1575,15 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                           </Typography>
                         </Grid>
                         <Grid item xs={12} md={5}>
-                          <Box sx={{ display: "flex", gap: 3 }}>
+                          <Box sx={{ display: 'flex', gap: 3 }}>
                             {/* Hide "Dự kiến" for "Ngày tạo phiếu" */}
-                            {item.name !== "Ngày tạo phiếu" && (
+                            {item.name !== 'Ngày tạo phiếu' && (
                               <Typography variant="body2" noWrap>
                                 Dự kiến: {formatDateDisplay(item.estimatedDate)}
                               </Typography>
                             )}
                             <Typography variant="body2" noWrap>
-                              {item.name === "Ngày tạo phiếu" ? "Ngày: " : "Thực tế: "}
+                              {item.name === 'Ngày tạo phiếu' ? 'Ngày: ' : 'Thực tế: '}
                               {formatDateDisplay(item.date)}
                             </Typography>
                           </Box>
@@ -1591,21 +1591,21 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                         <Grid item xs={12} md={2}>
                           <Chip
                             label={
-                              item.status === "completed"
-                                ? "Hoàn thành"
-                                : item.status === "confirmed"
-                                  ? "Đã xác nhận"
-                                  : "Chờ xử lý"
+                              item.status === 'completed'
+                                ? 'Hoàn thành'
+                                : item.status === 'confirmed'
+                                  ? 'Đã xác nhận'
+                                  : 'Chờ xử lý'
                             }
                             color={
-                              item.status === "completed"
-                                ? "success"
-                                : item.status === "confirmed"
-                                  ? "primary"
-                                  : "default"
+                              item.status === 'completed'
+                                ? 'success'
+                                : item.status === 'confirmed'
+                                  ? 'primary'
+                                  : 'default'
                             }
                             size="small"
-                            sx={{ fontSize: "0.7rem" }}
+                            sx={{ fontSize: '0.7rem' }}
                           />
                         </Grid>
                         <Grid item xs={12} md={1.5}>
@@ -1614,12 +1614,12 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                             <Chip
                               label={(() => {
                                 // Calculate delay status
-                                if (!item.estimatedDate || !item.date) return "❓";
+                                if (!item.estimatedDate || !item.date) return '❓';
 
                                 // Parse dates
                                 const parseDate = (dateStr: string): Date => {
-                                  if (dateStr.includes("/")) {
-                                    const [day, month, year] = dateStr.split("/");
+                                  if (dateStr.includes('/')) {
+                                    const [day, month, year] = dateStr.split('/');
                                     return new Date(
                                       parseInt(year),
                                       parseInt(month) - 1,
@@ -1632,17 +1632,17 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                                 const estimated = parseDate(item.estimatedDate);
                                 const actual = parseDate(item.date);
 
-                                if (estimated.getTime() === actual.getTime()) return "✅ Đúng hạn";
-                                if (actual < estimated) return "⚡ Trước hạn";
-                                if (actual > estimated) return "🚨 Trễ hạn";
-                                return "❓ Chưa xác định";
+                                if (estimated.getTime() === actual.getTime()) return '✅ Đúng hạn';
+                                if (actual < estimated) return '⚡ Trước hạn';
+                                if (actual > estimated) return '🚨 Trễ hạn';
+                                return '❓ Chưa xác định';
                               })()}
                               color={(() => {
-                                if (!item.estimatedDate || !item.date) return "default";
+                                if (!item.estimatedDate || !item.date) return 'default';
 
                                 const parseDate = (dateStr: string): Date => {
-                                  if (dateStr.includes("/")) {
-                                    const [day, month, year] = dateStr.split("/");
+                                  if (dateStr.includes('/')) {
+                                    const [day, month, year] = dateStr.split('/');
                                     return new Date(
                                       parseInt(year),
                                       parseInt(month) - 1,
@@ -1655,21 +1655,21 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                                 const estimated = parseDate(item.estimatedDate);
                                 const actual = parseDate(item.date);
 
-                                if (estimated.getTime() === actual.getTime()) return "success";
-                                if (actual < estimated) return "info";
-                                if (actual > estimated) return "error";
-                                return "default";
+                                if (estimated.getTime() === actual.getTime()) return 'success';
+                                if (actual < estimated) return 'info';
+                                if (actual > estimated) return 'error';
+                                return 'default';
                               })()}
                               size="small"
-                              sx={{ fontSize: "0.6rem", height: 20 }}
+                              sx={{ fontSize: '0.6rem', height: 20 }}
                             />
                           )}
                         </Grid>
                         <Grid item xs={12} md={1.5}>
                           <Box
                             sx={{
-                              display: "flex",
-                              justifyContent: "flex-end",
+                              display: 'flex',
+                              justifyContent: 'flex-end',
                               gap: 0.5,
                             }}
                           >
@@ -1678,19 +1678,19 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                                 size="small"
                                 onClick={() => {
                                   setEditingDocIndex(index);
-                                  onNewDocumentStatusItemChange("name", item.name);
+                                  onNewDocumentStatusItemChange('name', item.name);
                                   onNewDocumentStatusItemChange(
-                                    "estimatedDate",
-                                    formatDateForInput(item.estimatedDate || "")
+                                    'estimatedDate',
+                                    formatDateForInput(item.estimatedDate || '')
                                   );
                                   onNewDocumentStatusItemChange(
-                                    "date",
-                                    formatDateForInput(item.date || "")
+                                    'date',
+                                    formatDateForInput(item.date || '')
                                   );
-                                  onNewDocumentStatusItemChange("status", item.status);
+                                  onNewDocumentStatusItemChange('status', item.status);
                                   onNewDocumentStatusItemChange(
-                                    "description",
-                                    item.description || ""
+                                    'description',
+                                    item.description || ''
                                   );
                                 }}
                                 color="primary"
@@ -1701,7 +1701,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                             <Tooltip title="Thêm mô tả">
                               <IconButton
                                 size="small"
-                                onClick={() => openDescriptionDialog("document", index, item.name)}
+                                onClick={() => openDescriptionDialog('document', index, item.name)}
                                 color="info"
                               >
                                 <CommentIcon fontSize="small" />
@@ -1724,7 +1724,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                         <Box sx={{ mt: 1 }}>
                           <Typography
                             variant="body2"
-                            sx={{ color: "text.secondary", fontSize: "0.8rem" }}
+                            sx={{ color: 'text.secondary', fontSize: '0.8rem' }}
                           >
                             📝 {getLatestDocumentStatusDescription(item)}
                           </Typography>
@@ -1733,8 +1733,8 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                               <Typography
                                 variant="caption"
                                 sx={{
-                                  color: "text.disabled",
-                                  fontSize: "0.7rem",
+                                  color: 'text.disabled',
+                                  fontSize: '0.7rem',
                                 }}
                               >
                                 Lịch sử mô tả ({(item.descriptions || []).length}
@@ -1745,30 +1745,30 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                                   key={desc.id}
                                   variant="caption"
                                   sx={{
-                                    display: "block",
-                                    fontSize: "0.65rem",
-                                    color: "text.secondary",
+                                    display: 'block',
+                                    fontSize: '0.65rem',
+                                    color: 'text.secondary',
                                     ml: 1,
                                     mt: 0.3,
                                     py: 0.3,
                                     px: 0.5,
                                     bgcolor:
                                       idx === (item.descriptions || []).length - 1
-                                        ? "#e8f5e8"
-                                        : "#f5f5f5",
+                                        ? '#e8f5e8'
+                                        : '#f5f5f5',
                                     borderRadius: 0.5,
-                                    border: "1px solid",
+                                    border: '1px solid',
                                     borderColor:
                                       idx === (item.descriptions || []).length - 1
-                                        ? "#4caf50"
-                                        : "#e0e0e0",
+                                        ? '#4caf50'
+                                        : '#e0e0e0',
                                   }}
                                 >
                                   <strong>{desc.author}</strong> (
-                                  {new Date(desc.timestamp).toLocaleDateString("vi-VN")}{" "}
-                                  {new Date(desc.timestamp).toLocaleTimeString("vi-VN", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
+                                  {new Date(desc.timestamp).toLocaleDateString('vi-VN')}{' '}
+                                  {new Date(desc.timestamp).toLocaleTimeString('vi-VN', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
                                   })}
                                   ):
                                   <br />
@@ -1788,22 +1788,22 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               {editingDocIndex === null && (
                 <Box
                   sx={{
-                    display: "flex",
+                    display: 'flex',
                     gap: 2,
-                    alignItems: "center",
+                    alignItems: 'center',
                     mt: 2,
                     p: 2,
-                    border: "2px dashed #ccc",
+                    border: '2px dashed #ccc',
                     borderRadius: 1,
-                    backgroundColor: "#fafafa",
-                    flexWrap: "wrap",
+                    backgroundColor: '#fafafa',
+                    flexWrap: 'wrap',
                   }}
                 >
-                  <FormControl sx={{ minWidth: "140px" }}>
+                  <FormControl sx={{ minWidth: '140px' }}>
                     <InputLabel>Trạng thái chứng từ</InputLabel>
                     <Select
                       value={newDocumentStatusItem.name}
-                      onChange={(e) => onNewDocumentStatusItemChange("name", e.target.value)}
+                      onChange={(e) => onNewDocumentStatusItemChange('name', e.target.value)}
                       label="Trạng thái chứng từ"
                     >
                       <MenuItem value="Check bill">Check bill</MenuItem>
@@ -1818,8 +1818,8 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                     label="Ngày dự kiến"
                     type="date"
                     value={newDocumentStatusItem.estimatedDate as string}
-                    onChange={(e) => onNewDocumentStatusItemChange("estimatedDate", e.target.value)}
-                    sx={{ minWidth: "140px" }}
+                    onChange={(e) => onNewDocumentStatusItemChange('estimatedDate', e.target.value)}
+                    sx={{ minWidth: '140px' }}
                     InputLabelProps={{ shrink: true }}
                   />
 
@@ -1827,16 +1827,16 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                     label="Ngày thực tế"
                     type="date"
                     value={newDocumentStatusItem.date as string}
-                    onChange={(e) => onNewDocumentStatusItemChange("date", e.target.value)}
-                    sx={{ minWidth: "140px" }}
+                    onChange={(e) => onNewDocumentStatusItemChange('date', e.target.value)}
+                    sx={{ minWidth: '140px' }}
                     InputLabelProps={{ shrink: true }}
                   />
 
-                  <FormControl sx={{ minWidth: "120px" }}>
+                  <FormControl sx={{ minWidth: '120px' }}>
                     <InputLabel>Trạng thái</InputLabel>
                     <Select
                       value={newDocumentStatusItem.status}
-                      onChange={(e) => onNewDocumentStatusItemChange("status", e.target.value)}
+                      onChange={(e) => onNewDocumentStatusItemChange('status', e.target.value)}
                       label="Trạng thái"
                     >
                       <MenuItem value="pending">Chờ xử lý</MenuItem>
@@ -1848,8 +1848,8 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                   <TextField
                     label="Mô tả"
                     value={newDocumentStatusItem.description}
-                    onChange={(e) => onNewDocumentStatusItemChange("description", e.target.value)}
-                    sx={{ minWidth: "200px", flex: 1 }}
+                    onChange={(e) => onNewDocumentStatusItemChange('description', e.target.value)}
+                    sx={{ minWidth: '200px', flex: 1 }}
                     placeholder="Mô tả thêm..."
                   />
 
@@ -1860,7 +1860,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                         onDeleteDocumentStatusItem(editingDocIndex);
                         handleAddDocumentStatus();
                         setEditingDocIndex(null);
-                        openSnack("Đã cập nhật trạng thái chứng từ");
+                        openSnack('Đã cập nhật trạng thái chứng từ');
                       } else {
                         handleAddDocumentStatus();
                       }
@@ -1874,16 +1874,16 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
                       )
                     }
                     sx={{
-                      color: "white",
+                      color: 'white',
                       fontWeight: 600,
-                      "&.Mui-disabled": {
-                        bgcolor: "primary.200",
-                        color: "white",
+                      '&.Mui-disabled': {
+                        bgcolor: 'primary.200',
+                        color: 'white',
                         opacity: 0.7,
                       },
                     }}
                   >
-                    {editingDocIndex !== null ? "Lưu" : "Thêm"}
+                    {editingDocIndex !== null ? 'Lưu' : 'Thêm'}
                   </Button>
                 </Box>
               )}
@@ -1895,7 +1895,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
               fullWidth
               label="Ghi chú"
               value={formFields.notes}
-              onChange={(e) => onFieldChange("notes", e.target.value)}
+              onChange={(e) => onFieldChange('notes', e.target.value)}
               variant="outlined"
               multiline
               rows={3}
@@ -1914,23 +1914,23 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
         >
           {isSaving
             ? editingItem
-              ? "Đang cập nhật..."
-              : "Đang thêm..."
+              ? 'Đang cập nhật...'
+              : 'Đang thêm...'
             : editingItem
-              ? "Cập nhật"
-              : "Thêm mới"}
+              ? 'Cập nhật'
+              : 'Thêm mới'}
         </Button>
       </DialogActions>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={1500}
         onClose={() => setSnackbarOpen(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert
           onClose={() => setSnackbarOpen(false)}
           severity={snackbarSeverity}
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {snackbarMsg}
         </Alert>
@@ -1955,7 +1955,7 @@ const AddEditDialog: React.FC<AddEditDialogProps> = ({
             value={descriptionText}
             onChange={(e) => setDescriptionText(e.target.value)}
             sx={{ mt: 1 }}
-            helperText={`Người thêm: ${getCurrentUser()} | Thời gian: ${new Date().toLocaleString("vi-VN")}`}
+            helperText={`Người thêm: ${getCurrentUser()} | Thời gian: ${new Date().toLocaleString('vi-VN')}`}
           />
         </DialogContent>
         <DialogActions>

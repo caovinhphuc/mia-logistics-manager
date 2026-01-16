@@ -1,12 +1,12 @@
-import { ViewList, ViewModule } from "@mui/icons-material";
-import { Avatar, Box, Card, CardContent, IconButton, Typography } from "@mui/material";
-import React from "react";
+import { ViewList, ViewModule } from '@mui/icons-material';
+import { Avatar, Box, Card, CardContent, IconButton, Typography } from '@mui/material';
+import React from 'react';
 
 // GridView Component
 export const GridView = ({ items = [], onItemClick, onEdit, onDelete, loading = false }) => {
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
         <Typography>Đang tải...</Typography>
       </Box>
     );
@@ -15,19 +15,19 @@ export const GridView = ({ items = [], onItemClick, onEdit, onDelete, loading = 
   return (
     <Box
       sx={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
         gap: 2,
       }}
     >
       {items.map((item) => (
-        <Card key={item.id} sx={{ cursor: "pointer" }} onClick={() => onItemClick?.(item)}>
+        <Card key={item.id} sx={{ cursor: 'pointer' }} onClick={() => onItemClick?.(item)}>
           <CardContent>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               {item.avatar ? (
                 <Avatar src={item.avatar} sx={{ mr: 2 }} />
               ) : (
-                <Avatar sx={{ mr: 2, bgcolor: "primary.main" }}>
+                <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
                   {item.avatarText || item.title?.[0]?.toUpperCase()}
                 </Avatar>
               )}
@@ -47,7 +47,7 @@ export const GridView = ({ items = [], onItemClick, onEdit, onDelete, loading = 
               </Typography>
             )}
 
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
               {onEdit && (
                 <IconButton
                   size="small"

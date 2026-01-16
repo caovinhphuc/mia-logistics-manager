@@ -2,7 +2,8 @@
 
 // Backend API URL
 
-import type { PackagingItem } from '../inbound/types/inbound'; const API_BASE_URL = 'http://localhost:5050';
+import type { PackagingItem } from '../inbound/types/inbound';
+const API_BASE_URL = 'http://localhost:3100';
 
 export interface InboundDomesticItem {
   id: string;
@@ -12,13 +13,7 @@ export interface InboundDomesticItem {
   destination: string;
   product: string;
   quantity: number;
-  status:
-    | 'pending'
-    | 'confirmed'
-    | 'in-transit'
-    | 'arrived'
-    | 'completed'
-    | 'cancelled';
+  status: 'pending' | 'confirmed' | 'in-transit' | 'arrived' | 'completed' | 'cancelled';
   category: string;
   carrier: string;
   purpose: 'online' | 'offline';
@@ -56,12 +51,8 @@ const serializePackaging = (packaging: PackagingItem[]) => {
 // Helper: Convert flat fields to packaging array
 const deserializePackaging = (record: any): PackagingItem[] => {
   const types = (record.packagingTypes || '').split(';').filter(Boolean);
-  const quantities = (record.packagingQuantities || '')
-    .split(';')
-    .filter(Boolean);
-  const descriptions = (record.packagingDescriptions || '')
-    .split(';')
-    .filter(Boolean);
+  const quantities = (record.packagingQuantities || '').split(';').filter(Boolean);
+  const descriptions = (record.packagingDescriptions || '').split(';').filter(Boolean);
 
   return types.map((type, index) => ({
     id: `${record.id}-pkg-${index}`,
@@ -72,9 +63,7 @@ const deserializePackaging = (record: any): PackagingItem[] => {
 };
 
 // Get all inbound domestic items
-export const getInboundDomesticItems = async (): Promise<
-  InboundDomesticItem[]
-> => {
+export const getInboundDomesticItems = async (): Promise<InboundDomesticItem[]> => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/inbounddomestic`);
     if (!response.ok) {

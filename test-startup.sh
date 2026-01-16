@@ -5,13 +5,13 @@ set -e
 
 export $(cat .env | grep -v '^#' | xargs)
 
-BACKEND_URL="http://localhost:5050"
+BACKEND_URL="http://localhost:3100"
 
 echo "🔍 Testing Backend Connection..."
 
 # Check if backend is running
 if ! curl -s "${BACKEND_URL}/api/health" >/dev/null 2>&1; then
-    echo "❌ Backend is not running on port 5050"
+    echo "❌ Backend is not running on port 3100"
     echo "Please start backend first: node src/server.js"
     exit 1
 fi

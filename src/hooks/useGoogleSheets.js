@@ -1,6 +1,6 @@
 // React hooks for Google Sheets data integration
-import { useCallback, useEffect, useState } from "react";
-import GoogleSheetsService from "../services/googleSheets.js";
+import { useCallback, useEffect, useState } from 'react';
+import GoogleSheetsService from '../services/googleSheets.js';
 
 // Hook for locations data
 export const useLocations = () => {
@@ -16,7 +16,7 @@ export const useLocations = () => {
       setLocations(data);
     } catch (err) {
       setError(err.message);
-      console.error("Error fetching locations:", err);
+      console.error('Error fetching locations:', err);
     } finally {
       setLoading(false);
     }
@@ -31,7 +31,7 @@ export const useLocations = () => {
         return true;
       } catch (err) {
         setError(err.message);
-        console.error("Error adding location:", err);
+        console.error('Error adding location:', err);
         return false;
       }
     },
@@ -65,7 +65,7 @@ export const useEmployees = () => {
       setEmployees(data);
     } catch (err) {
       setError(err.message);
-      console.error("Error fetching employees:", err);
+      console.error('Error fetching employees:', err);
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,7 @@ export const useCarriers = () => {
       setCarriers(data);
     } catch (err) {
       setError(err.message);
-      console.error("Error fetching carriers:", err);
+      console.error('Error fetching carriers:', err);
     } finally {
       setLoading(false);
     }
@@ -129,7 +129,7 @@ export const useTransportRequests = () => {
       setTransportRequests(data);
     } catch (err) {
       setError(err.message);
-      console.error("Error fetching transport requests:", err);
+      console.error('Error fetching transport requests:', err);
     } finally {
       setLoading(false);
     }
@@ -149,23 +149,23 @@ export const useTransportRequests = () => {
 
 // Hook for connection testing
 export const useGoogleSheetsConnection = () => {
-  const [connectionStatus, setConnectionStatus] = useState("checking"); // 'checking', 'connected', 'error'
+  const [connectionStatus, setConnectionStatus] = useState('checking'); // 'checking', 'connected', 'error'
   const [error, setError] = useState(null);
 
   const testConnection = useCallback(async () => {
     try {
-      setConnectionStatus("checking");
+      setConnectionStatus('checking');
       setError(null);
       const isConnected = await GoogleSheetsService.testConnection();
-      setConnectionStatus(isConnected ? "connected" : "error");
+      setConnectionStatus(isConnected ? 'connected' : 'error');
       if (!isConnected) {
-        setError("Failed to connect to Google Sheets");
+        setError('Failed to connect to Google Sheets');
       }
       return isConnected;
     } catch (err) {
-      setConnectionStatus("error");
+      setConnectionStatus('error');
       setError(err.message);
-      console.error("Connection test failed:", err);
+      console.error('Connection test failed:', err);
       return false;
     }
   }, []);
@@ -190,14 +190,14 @@ export const useDashboardStats = () => {
 
   const stats = {
     totalLocations: locations.length,
-    activeLocations: locations.filter((loc) => loc.Status === "Active").length,
+    activeLocations: locations.filter((loc) => loc.Status === 'Active').length,
     totalEmployees: employees.length,
-    activeEmployees: employees.filter((emp) => emp.Status === "Active").length,
+    activeEmployees: employees.filter((emp) => emp.Status === 'Active').length,
     totalCarriers: carriers.length,
-    activeCarriers: carriers.filter((carrier) => carrier.Status === "Active").length,
+    activeCarriers: carriers.filter((carrier) => carrier.Status === 'Active').length,
     totalTransportRequests: transportRequests.length,
-    pendingRequests: transportRequests.filter((req) => req.Status === "Pending").length,
-    completedRequests: transportRequests.filter((req) => req.Status === "Completed").length,
+    pendingRequests: transportRequests.filter((req) => req.Status === 'Pending').length,
+    completedRequests: transportRequests.filter((req) => req.Status === 'Completed').length,
   };
 
   return stats;

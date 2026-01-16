@@ -3,8 +3,8 @@
  * Theo dõi hoạt động người dùng để reset session timer
  */
 
-import { useEffect, useCallback, useRef } from "react";
-import sessionManager from "../services/sessionManager";
+import { useEffect, useCallback, useRef } from 'react';
+import sessionManager from '../services/sessionManager';
 
 /**
  * useActivityMonitor Hook
@@ -27,7 +27,7 @@ const useActivityMonitor = (enabled = true) => {
     if (!enabled) return;
 
     // List of events to monitor
-    const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart", "click"];
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
 
     // Throttle function to avoid too many updates
     let throttleTimer = null;

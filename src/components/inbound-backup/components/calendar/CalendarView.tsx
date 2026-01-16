@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Typography, Grid, IconButton, Tooltip, Paper } from "@mui/material";
+import React from 'react';
+import { Box, Typography, Grid, IconButton, Tooltip, Paper } from '@mui/material';
 import {
   ArrowBackIos as ArrowBackIcon,
   ArrowForwardIos as ArrowForwardIcon,
@@ -10,9 +10,9 @@ import {
   TravelExplore as TravelExploreIcon,
   Handyman as HandymanIcon,
   Inventory as InventoryIcon,
-} from "@mui/icons-material";
-import { InboundItem } from "../../types/inbound";
-import { getDaysInMonth, getFirstDayOfMonth, getWeekDays } from "../../utils/dateUtils";
+} from '@mui/icons-material';
+import { InboundItem } from '../../types/inbound';
+import { getDaysInMonth, getFirstDayOfMonth, getWeekDays } from '../../utils/dateUtils';
 // status label helper not used in calendar view
 
 interface CalendarViewProps {
@@ -27,17 +27,17 @@ interface CalendarViewProps {
 }
 
 const getCategoryIcon = (category?: string) => {
-  const cat = (category || "").toLowerCase();
-  if (cat.includes("vali")) return <LuggageIcon sx={{ fontSize: "0.7rem", color: "info.main" }} />;
-  if (cat.includes("balo")) return <BackpackIcon sx={{ fontSize: "0.7rem", color: "info.main" }} />;
-  if (cat.includes("quà")) return <GiftIcon sx={{ fontSize: "0.7rem", color: "info.main" }} />;
-  if (cat.includes("phụ kiện sửa"))
-    return <HandymanIcon sx={{ fontSize: "0.7rem", color: "info.main" }} />;
-  if (cat.includes("phụ kiện"))
-    return <TravelExploreIcon sx={{ fontSize: "0.7rem", color: "info.main" }} />;
-  if (cat.includes("nguyên vật liệu"))
-    return <InventoryIcon sx={{ fontSize: "0.7rem", color: "info.main" }} />;
-  return <LuggageIcon sx={{ fontSize: "0.7rem", color: "info.main" }} />;
+  const cat = (category || '').toLowerCase();
+  if (cat.includes('vali')) return <LuggageIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  if (cat.includes('balo')) return <BackpackIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  if (cat.includes('quà')) return <GiftIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  if (cat.includes('phụ kiện sửa'))
+    return <HandymanIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  if (cat.includes('phụ kiện'))
+    return <TravelExploreIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  if (cat.includes('nguyên vật liệu'))
+    return <InventoryIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  return <LuggageIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
 };
 
 // Removed unused statusPillSx to satisfy eslint
@@ -68,9 +68,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({
 
       // Handle different date formats
       let parsedDate: Date;
-      if (receiveDate.includes("/")) {
+      if (receiveDate.includes('/')) {
         // Handle dd/MM/yyyy format
-        const [day, month, year] = receiveDate.split("/");
+        const [day, month, year] = receiveDate.split('/');
         parsedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       } else {
         // Handle yyyy-MM-dd format
@@ -84,17 +84,17 @@ const CalendarView: React.FC<CalendarViewProps> = ({
     <Paper sx={{ p: 2 }}>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           mb: 2,
         }}
       >
         <Typography variant="subtitle1" sx={{ fontWeight: 700, letterSpacing: 0.2 }}>
-          Lịch nhập hàng -{" "}
-          {currentDate.toLocaleDateString("vi-VN", {
-            month: "long",
-            year: "numeric",
+          Lịch nhập hàng -{' '}
+          {currentDate.toLocaleDateString('vi-VN', {
+            month: 'long',
+            year: 'numeric',
           })}
         </Typography>
         <Box>
@@ -111,7 +111,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
       <Grid container sx={{ mb: 1 }}>
         {weekDays.map((w) => (
           <Grid key={w} item xs={12 / 7} sx={{ px: 1 }}>
-            <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 600 }}>
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
               {w}
             </Typography>
           </Grid>
@@ -134,7 +134,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
           return (
             <Grid key={i} item xs={12 / 7} sx={{ p: 0.5 }}>
               <Tooltip
-                title={cellDate ? `Click để xem chi tiết (${dayItems.length} lô hàng)` : ""}
+                title={cellDate ? `Click để xem chi tiết (${dayItems.length} lô hàng)` : ''}
                 placement="top"
               >
                 <Box
@@ -142,13 +142,13 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                   sx={{
                     p: 1,
                     height: 96,
-                    border: "1px solid",
-                    borderColor: "grey.300",
-                    bgcolor: isSelected ? "primary.50" : isToday ? "warning.50" : "white",
-                    position: "relative",
-                    display: "flex",
-                    flexDirection: "column",
-                    transition: "background-color 0.15s ease-in-out",
+                    border: '1px solid',
+                    borderColor: 'grey.300',
+                    bgcolor: isSelected ? 'primary.50' : isToday ? 'warning.50' : 'white',
+                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'background-color 0.15s ease-in-out',
                   }}
                 >
                   {isValid && (
@@ -156,7 +156,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                       <Typography
                         variant="body2"
                         sx={{
-                          color: isToday ? "warning.main" : "text.primary",
+                          color: isToday ? 'warning.main' : 'text.primary',
                         }}
                       >
                         {dayNumber}
@@ -167,8 +167,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                         <Box
                           sx={{
                             mt: 0.4,
-                            display: "flex",
-                            flexDirection: "column",
+                            display: 'flex',
+                            flexDirection: 'column',
                             gap: 0.35,
                           }}
                         >
@@ -177,40 +177,40 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                               key={it.id}
                               onClick={(e) => onItemMenuOpen && onItemMenuOpen(e, it)}
                               sx={{
-                                display: "flex",
-                                alignItems: "center",
+                                display: 'flex',
+                                alignItems: 'center',
                                 gap: 0.45,
                                 px: 0.5,
                                 py: 0.25,
-                                bgcolor: "#fff",
+                                bgcolor: '#fff',
                                 borderRadius: 1,
-                                border: "1px solid rgba(0,0,0,0.14)",
-                                boxShadow: "0 1px 2px rgba(0,0,0,0.06)",
-                                cursor: "pointer",
+                                border: '1px solid rgba(0,0,0,0.14)',
+                                boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
+                                cursor: 'pointer',
                               }}
                             >
                               <Box
                                 sx={{
                                   width: 5,
                                   height: 5,
-                                  borderRadius: "50%",
+                                  borderRadius: '50%',
                                   bgcolor:
-                                    it.status === "pending"
-                                      ? "warning.main"
-                                      : it.status === "confirmed"
-                                        ? "info.main"
-                                        : it.status === "arrived" || it.status === "completed"
-                                          ? "success.main"
-                                          : "grey.500",
+                                    it.status === 'pending'
+                                      ? 'warning.main'
+                                      : it.status === 'confirmed'
+                                        ? 'info.main'
+                                        : it.status === 'arrived' || it.status === 'completed'
+                                          ? 'success.main'
+                                          : 'grey.500',
                                   flexShrink: 0,
                                 }}
                               />
                               <Typography
                                 variant="caption"
                                 sx={{
-                                  fontSize: "0.6rem",
+                                  fontSize: '0.6rem',
                                   fontWeight: 700,
-                                  color: "warning.main",
+                                  color: 'warning.main',
                                 }}
                               >
                                 {it.quantity.toLocaleString()}
@@ -219,12 +219,12 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                               <Typography
                                 variant="caption"
                                 sx={{
-                                  fontSize: "0.6rem",
+                                  fontSize: '0.6rem',
                                   fontWeight: 600,
-                                  color: "text.primary",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
+                                  color: 'text.primary',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
                                   flex: 1,
                                 }}
                               >
@@ -237,9 +237,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                             <Typography
                               variant="caption"
                               sx={{
-                                fontSize: "0.5rem",
-                                color: "text.secondary",
-                                textAlign: "center",
+                                fontSize: '0.5rem',
+                                color: 'text.secondary',
+                                textAlign: 'center',
                               }}
                             >
                               +{dayItems.length - 2} khác
@@ -251,16 +251,16 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                       {/* Day menu (always visible) */}
                       <Box
                         sx={{
-                          position: "absolute",
+                          position: 'absolute',
                           top: 4,
                           right: 4,
                           opacity: 0.35,
-                          "&:hover": { opacity: 1, bgcolor: "grey.200" },
+                          '&:hover': { opacity: 1, bgcolor: 'grey.200' },
                           borderRadius: 1,
                         }}
                         onClick={(e) => cellDate && onCalendarMenuOpen(e, cellDate)}
                       >
-                        <MoreVertIcon sx={{ fontSize: "0.85rem", color: "grey.600" }} />
+                        <MoreVertIcon sx={{ fontSize: '0.85rem', color: 'grey.600' }} />
                       </Box>
                     </>
                   )}

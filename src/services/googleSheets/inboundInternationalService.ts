@@ -14,12 +14,7 @@ export interface InboundInternationalRecord {
   category: string;
   quantity: number;
   container: number;
-  status:
-    | 'pending'
-    | 'confirmed'
-    | 'waiting-notification'
-    | 'notified'
-    | 'received';
+  status: 'pending' | 'confirmed' | 'waiting-notification' | 'notified' | 'received';
   carrier: string;
   purpose: 'online' | 'offline';
   receiveTime?: string; // HH:mm
@@ -108,10 +103,6 @@ export class InboundInternationalService extends BaseGoogleSheetsService {
   }
 
   async remove(id: string): Promise<boolean> {
-    return this.deleteRecord(
-      SHEETS_CONFIG.SHEETS.INBOUND_INTERNATIONAL,
-      id,
-      'id'
-    );
+    return this.deleteRecord(SHEETS_CONFIG.SHEETS.INBOUND_INTERNATIONAL, id, 'id');
   }
 }

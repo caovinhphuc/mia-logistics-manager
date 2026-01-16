@@ -1,7 +1,7 @@
-import React from "react";
-import { Button, IconButton, Tooltip } from "@mui/material";
-import { hasPermission, hasAnyPermission, hasAllPermissions } from "../../utils/rbac";
-import { useAuth } from "../../contexts/AuthContext";
+import React from 'react';
+import { Button, IconButton, Tooltip } from '@mui/material';
+import { hasPermission, hasAnyPermission, hasAllPermissions } from '../../utils/rbac';
+import { useAuth } from '../../contexts/AuthContext';
 
 /**
  * PermissionButton Component
@@ -14,10 +14,10 @@ const PermissionButton = ({
   requireAll = false,
   onClick,
   disabled = false,
-  tooltip = "",
-  variant = "contained",
-  color = "primary",
-  size = "medium",
+  tooltip = '',
+  variant = 'contained',
+  color = 'primary',
+  size = 'medium',
   startIcon = null,
   endIcon = null,
   fullWidth = false,
@@ -78,9 +78,9 @@ export const PermissionIconButton = ({
   requireAll = false,
   onClick,
   disabled = false,
-  tooltip = "",
-  color = "default",
-  size = "medium",
+  tooltip = '',
+  color = 'default',
+  size = 'medium',
   sx = {},
   ...otherProps
 }) => {

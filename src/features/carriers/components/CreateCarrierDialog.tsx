@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Box,
   Button,
@@ -11,10 +11,10 @@ import {
   TextField,
   FormControlLabel,
   Checkbox,
-} from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { useAddCarrier, useUpdateCarrier } from "../hooks/useCarriers";
-import type { Carrier } from "../../../services/googleSheets/carriersService";
+} from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
+import { useAddCarrier, useUpdateCarrier } from '../hooks/useCarriers';
+import type { Carrier } from '../../../services/googleSheets/carriersService';
 
 type CreateCarrierDialogProps = {
   open: boolean;
@@ -31,7 +31,7 @@ type FormValues = {
   phone?: string;
   address?: string;
   serviceAreas?: string;
-  pricingMethod: "PER_KM" | "PER_M3" | "PER_TRIP" | "PER_KG";
+  pricingMethod: 'PER_KM' | 'PER_M3' | 'PER_TRIP' | 'PER_KG';
   baseRate?: number;
   perKmRate?: number;
   perM3Rate?: number;
@@ -47,14 +47,14 @@ type FormValues = {
 };
 
 const defaultValues: FormValues = {
-  name: "",
-  avatarUrl: "",
-  contactPerson: "",
-  email: "",
-  phone: "",
-  address: "",
-  serviceAreas: "",
-  pricingMethod: "PER_KM",
+  name: '',
+  avatarUrl: '',
+  contactPerson: '',
+  email: '',
+  phone: '',
+  address: '',
+  serviceAreas: '',
+  pricingMethod: 'PER_KM',
   baseRate: 0,
   perKmRate: 0,
   perM3Rate: 0,
@@ -62,10 +62,10 @@ const defaultValues: FormValues = {
   fuelSurcharge: 0,
   remoteAreaFee: 0,
   insuranceRate: 0,
-  vehicleTypes: "",
+  vehicleTypes: '',
   maxWeight: 0,
   maxVolume: 0,
-  operatingHours: "",
+  operatingHours: '',
   isActive: true,
 };
 
@@ -77,7 +77,7 @@ const CreateCarrierDialog: React.FC<CreateCarrierDialogProps> = ({
 }) => {
   const { control, handleSubmit, reset } = useForm<FormValues>({
     defaultValues,
-    mode: "onChange",
+    mode: 'onChange',
   });
   const addCarrier = useAddCarrier();
   const updateCarrier = useUpdateCarrier();
@@ -109,14 +109,14 @@ const CreateCarrierDialog: React.FC<CreateCarrierDialogProps> = ({
           isActive,
         } = carrier as Carrier;
         reset({
-          name: name || "",
-          avatarUrl: avatarUrl || "",
-          contactPerson: contactPerson || "",
-          email: email || "",
-          phone: phone || "",
-          address: address || "",
-          serviceAreas: serviceAreas || "",
-          pricingMethod: (pricingMethod as any) || "PER_KM",
+          name: name || '',
+          avatarUrl: avatarUrl || '',
+          contactPerson: contactPerson || '',
+          email: email || '',
+          phone: phone || '',
+          address: address || '',
+          serviceAreas: serviceAreas || '',
+          pricingMethod: (pricingMethod as any) || 'PER_KM',
           baseRate: Number(baseRate || 0),
           perKmRate: Number(perKmRate || 0),
           perM3Rate: Number(perM3Rate || 0),
@@ -124,11 +124,11 @@ const CreateCarrierDialog: React.FC<CreateCarrierDialogProps> = ({
           fuelSurcharge: Number(fuelSurcharge || 0),
           remoteAreaFee: Number(remoteAreaFee || 0),
           insuranceRate: Number(insuranceRate || 0),
-          vehicleTypes: vehicleTypes || "",
+          vehicleTypes: vehicleTypes || '',
           maxWeight: Number(maxWeight || 0),
           maxVolume: Number(maxVolume || 0),
-          operatingHours: operatingHours || "",
-          isActive: Boolean((isActive as any) === "true" || isActive === true),
+          operatingHours: operatingHours || '',
+          isActive: Boolean((isActive as any) === 'true' || isActive === true),
         });
       } else {
         reset(defaultValues);
@@ -150,7 +150,7 @@ const CreateCarrierDialog: React.FC<CreateCarrierDialogProps> = ({
       onClose();
       onSuccess?.(); // Call onSuccess callback if provided
     } catch (error) {
-      console.error("Error saving carrier:", error);
+      console.error('Error saving carrier:', error);
       // You can add error notification here
     }
   };
@@ -158,7 +158,7 @@ const CreateCarrierDialog: React.FC<CreateCarrierDialogProps> = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>
-        {carrier && carrier.carrierId ? "Sửa nhà vận chuyển" : "Thêm nhà vận chuyển"}
+        {carrier && carrier.carrierId ? 'Sửa nhà vận chuyển' : 'Thêm nhà vận chuyển'}
       </DialogTitle>
       <DialogContent>
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 2 }}>
@@ -181,7 +181,7 @@ const CreateCarrierDialog: React.FC<CreateCarrierDialogProps> = ({
               <Controller
                 name="name"
                 control={control}
-                rules={{ required: "Vui lòng nhập tên nhà vận chuyển" }}
+                rules={{ required: 'Vui lòng nhập tên nhà vận chuyển' }}
                 render={({ field, fieldState }) => (
                   <TextField
                     {...field}
@@ -364,10 +364,10 @@ const CreateCarrierDialog: React.FC<CreateCarrierDialogProps> = ({
             <Button onClick={onClose}>Hủy</Button>
             <Button type="submit" variant="contained" disabled={isSubmitting}>
               {isSubmitting
-                ? "Đang lưu..."
+                ? 'Đang lưu...'
                 : carrier && carrier.carrierId
-                  ? "Cập nhật"
-                  : "Thêm mới"}
+                  ? 'Cập nhật'
+                  : 'Thêm mới'}
             </Button>
           </DialogActions>
         </Box>

@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
-import { hasPermission, hasAnyPermission, hasAllPermissions } from "../../utils/rbac";
-import { useAuth } from "../../contexts/AuthContext";
+import type { ReactNode } from 'react';
+import { hasPermission, hasAnyPermission, hasAllPermissions } from '../../utils/rbac';
+import { useAuth } from '../../contexts/AuthContext';
 
 type PermissionGateProps = {
   children: ReactNode;

@@ -1,7 +1,16 @@
 import { Key, Lock, Save, Security, Shield } from '@mui/icons-material';
 import {
-  Alert, Box, Button, Card,
-  CardContent, Container, FormControlLabel, Grid, Switch, TextField, Typography
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  FormControlLabel,
+  Grid,
+  Switch,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 
@@ -13,25 +22,25 @@ const SecuritySettings = () => {
       requireLowercase: true,
       requireNumbers: true,
       requireSpecialChars: true,
-      passwordExpiry: 90
+      passwordExpiry: 90,
     },
     twoFactor: {
       enabled: false,
-      method: 'email'
+      method: 'email',
     },
     sessionSecurity: {
       sessionTimeout: 30,
       maxSessions: 3,
-      lockAfterFailedAttempts: 5
+      lockAfterFailedAttempts: 5,
     },
     auditLog: {
       enabled: true,
-      retentionDays: 365
-    }
+      retentionDays: 365,
+    },
   });
 
   const handleSave = () => {
-    console.log('Saving security settings:', settings);
+    // console.log('Saving security settings:', settings);
   };
 
   return (
@@ -52,9 +61,7 @@ const SecuritySettings = () => {
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                   <Lock sx={{ mr: 2, color: 'primary.main' }} />
-                  <Typography variant="h6">
-                    Chính sách mật khẩu
-                  </Typography>
+                  <Typography variant="h6">Chính sách mật khẩu</Typography>
                 </Box>
 
                 <Grid container spacing={3}>
@@ -64,10 +71,15 @@ const SecuritySettings = () => {
                       type="number"
                       label="Độ dài tối thiểu"
                       value={settings.passwordPolicy.minLength}
-                      onChange={(e) => setSettings(prev => ({
-                        ...prev,
-                        passwordPolicy: { ...prev.passwordPolicy, minLength: parseInt(e.target.value) }
-                      }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          passwordPolicy: {
+                            ...prev.passwordPolicy,
+                            minLength: parseInt(e.target.value),
+                          },
+                        }))
+                      }
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -76,10 +88,15 @@ const SecuritySettings = () => {
                       type="number"
                       label="Thời hạn mật khẩu (ngày)"
                       value={settings.passwordPolicy.passwordExpiry}
-                      onChange={(e) => setSettings(prev => ({
-                        ...prev,
-                        passwordPolicy: { ...prev.passwordPolicy, passwordExpiry: parseInt(e.target.value) }
-                      }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          passwordPolicy: {
+                            ...prev.passwordPolicy,
+                            passwordExpiry: parseInt(e.target.value),
+                          },
+                        }))
+                      }
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -113,19 +130,19 @@ const SecuritySettings = () => {
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                   <Shield sx={{ mr: 2, color: 'primary.main' }} />
-                  <Typography variant="h6">
-                    Xác thực hai yếu tố
-                  </Typography>
+                  <Typography variant="h6">Xác thực hai yếu tố</Typography>
                 </Box>
 
                 <FormControlLabel
                   control={
                     <Switch
                       checked={settings.twoFactor.enabled}
-                      onChange={(e) => setSettings(prev => ({
-                        ...prev,
-                        twoFactor: { ...prev.twoFactor, enabled: e.target.checked }
-                      }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          twoFactor: { ...prev.twoFactor, enabled: e.target.checked },
+                        }))
+                      }
                     />
                   }
                   label="Bật xác thực hai yếu tố"
@@ -146,9 +163,7 @@ const SecuritySettings = () => {
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                   <Key sx={{ mr: 2, color: 'primary.main' }} />
-                  <Typography variant="h6">
-                    Bảo mật phiên
-                  </Typography>
+                  <Typography variant="h6">Bảo mật phiên</Typography>
                 </Box>
 
                 <Grid container spacing={3}>
@@ -158,10 +173,15 @@ const SecuritySettings = () => {
                       type="number"
                       label="Thời gian timeout (phút)"
                       value={settings.sessionSecurity.sessionTimeout}
-                      onChange={(e) => setSettings(prev => ({
-                        ...prev,
-                        sessionSecurity: { ...prev.sessionSecurity, sessionTimeout: parseInt(e.target.value) }
-                      }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          sessionSecurity: {
+                            ...prev.sessionSecurity,
+                            sessionTimeout: parseInt(e.target.value),
+                          },
+                        }))
+                      }
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -170,10 +190,15 @@ const SecuritySettings = () => {
                       type="number"
                       label="Số phiên tối đa"
                       value={settings.sessionSecurity.maxSessions}
-                      onChange={(e) => setSettings(prev => ({
-                        ...prev,
-                        sessionSecurity: { ...prev.sessionSecurity, maxSessions: parseInt(e.target.value) }
-                      }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          sessionSecurity: {
+                            ...prev.sessionSecurity,
+                            maxSessions: parseInt(e.target.value),
+                          },
+                        }))
+                      }
                     />
                   </Grid>
                   <Grid item xs={12} md={4}>
@@ -182,10 +207,15 @@ const SecuritySettings = () => {
                       type="number"
                       label="Khóa sau số lần sai"
                       value={settings.sessionSecurity.lockAfterFailedAttempts}
-                      onChange={(e) => setSettings(prev => ({
-                        ...prev,
-                        sessionSecurity: { ...prev.sessionSecurity, lockAfterFailedAttempts: parseInt(e.target.value) }
-                      }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          sessionSecurity: {
+                            ...prev.sessionSecurity,
+                            lockAfterFailedAttempts: parseInt(e.target.value),
+                          },
+                        }))
+                      }
                     />
                   </Grid>
                 </Grid>
@@ -205,10 +235,12 @@ const SecuritySettings = () => {
                   control={
                     <Switch
                       checked={settings.auditLog.enabled}
-                      onChange={(e) => setSettings(prev => ({
-                        ...prev,
-                        auditLog: { ...prev.auditLog, enabled: e.target.checked }
-                      }))}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          auditLog: { ...prev.auditLog, enabled: e.target.checked },
+                        }))
+                      }
                     />
                   }
                   label="Bật ghi log hoạt động"
@@ -219,10 +251,12 @@ const SecuritySettings = () => {
                     type="number"
                     label="Thời gian lưu trữ log (ngày)"
                     value={settings.auditLog.retentionDays}
-                    onChange={(e) => setSettings(prev => ({
-                      ...prev,
-                      auditLog: { ...prev.auditLog, retentionDays: parseInt(e.target.value) }
-                    }))}
+                    onChange={(e) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        auditLog: { ...prev.auditLog, retentionDays: parseInt(e.target.value) },
+                      }))
+                    }
                     sx={{ width: 200 }}
                   />
                 </Box>
@@ -233,14 +267,8 @@ const SecuritySettings = () => {
           {/* Save Button */}
           <Grid item xs={12}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-              <Button variant="outlined">
-                Hủy bỏ
-              </Button>
-              <Button
-                variant="contained"
-                startIcon={<Save />}
-                onClick={handleSave}
-              >
+              <Button variant="outlined">Hủy bỏ</Button>
+              <Button variant="contained" startIcon={<Save />} onClick={handleSave}>
                 Lưu cài đặt
               </Button>
             </Box>

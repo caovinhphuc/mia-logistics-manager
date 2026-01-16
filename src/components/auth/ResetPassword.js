@@ -5,7 +5,7 @@ import {
   Security as SecurityIcon,
   Visibility,
   VisibilityOff,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -16,27 +16,27 @@ import {
   InputAdornment,
   TextField,
   Typography,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { motion } from "framer-motion";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { useNotification } from "../../contexts/NotificationContext";
-import { logService } from "../../services/logService";
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNotification } from '../../contexts/NotificationContext';
+import { logService } from '../../services/logService';
 
 // Enhanced validation schema
 const validationSchema = {
   password: (value) => {
-    if (!value) return "Mật khẩu là bắt buộc";
-    if (value.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự";
+    if (!value) return 'Mật khẩu là bắt buộc';
+    if (value.length < 8) return 'Mật khẩu phải có ít nhất 8 ký tự';
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value))
-      return "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số";
+      return 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số';
     return null;
   },
   confirmPassword: (value, password) => {
-    if (!value) return "Xác nhận mật khẩu là bắt buộc";
-    if (value !== password) return "Mật khẩu xác nhận không khớp";
+    if (!value) return 'Xác nhận mật khẩu là bắt buộc';
+    if (value !== password) return 'Mật khẩu xác nhận không khớp';
     return null;
   },
 };
@@ -44,18 +44,18 @@ const validationSchema = {
 // Security features
 const securityFeatures = [
   {
-    title: "Bảo mật cao",
-    description: "Mã hóa dữ liệu với tiêu chuẩn quốc tế",
+    title: 'Bảo mật cao',
+    description: 'Mã hóa dữ liệu với tiêu chuẩn quốc tế',
     icon: <SecurityIcon />,
   },
   {
-    title: "Khôi phục nhanh",
-    description: "Đặt lại mật khẩu trong vài phút",
+    title: 'Khôi phục nhanh',
+    description: 'Đặt lại mật khẩu trong vài phút',
     icon: <CheckCircleIcon />,
   },
   {
-    title: "Đáng tin cậy",
-    description: "Hệ thống đã được kiểm chứng",
+    title: 'Đáng tin cậy',
+    description: 'Hệ thống đã được kiểm chứng',
     icon: <SecurityIcon />,
   },
 ];
@@ -67,15 +67,15 @@ const ResetPassword = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [formData, setFormData] = useState({
-    password: "",
-    confirmPassword: "",
+    password: '',
+    confirmPassword: '',
   });
   const [isSuccess, setIsSuccess] = useState(false);
   const [tokenValid, setTokenValid] = useState(true);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  const token = searchParams.get('token');
 
   const { resetPassword } = useAuth();
   const { showSuccess, showError } = useNotification();
@@ -106,7 +106,7 @@ const ResetPassword = () => {
 
       // Clear error when user starts typing
       if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: "" }));
+        setErrors((prev) => ({ ...prev, [field]: '' }));
       }
     },
     [errors]
@@ -130,7 +130,7 @@ const ResetPassword = () => {
     e.preventDefault();
 
     if (!token) {
-      showError("Token không hợp lệ");
+      showError('Token không hợp lệ');
       return;
     }
 
@@ -152,13 +152,13 @@ const ResetPassword = () => {
 
       if (result.success) {
         setIsSuccess(true);
-        showSuccess("Mật khẩu đã được đặt lại thành công!");
+        showSuccess('Mật khẩu đã được đặt lại thành công!');
       } else {
-        showError(result.error || "Đặt lại mật khẩu thất bại");
+        showError(result.error || 'Đặt lại mật khẩu thất bại');
       }
     } catch (error) {
-      logService.error("ResetPassword", "Reset password error", error);
-      showError("Đã xảy ra lỗi khi đặt lại mật khẩu");
+      logService.error('ResetPassword', 'Reset password error', error);
+      showError('Đã xảy ra lỗi khi đặt lại mật khẩu');
     } finally {
       setIsLoading(false);
     }
@@ -168,7 +168,7 @@ const ResetPassword = () => {
   useEffect(() => {
     if (!token) {
       setTokenValid(false);
-      showError("Token không hợp lệ");
+      showError('Token không hợp lệ');
     }
   }, [token, showError]);
 
@@ -190,10 +190,10 @@ const ResetPassword = () => {
   if (!tokenValid) {
     return (
       <motion.div variants={containerVariants} initial="hidden" animate="visible">
-        <Box sx={{ maxWidth: 500, mx: "auto", p: 2 }}>
+        <Box sx={{ maxWidth: 500, mx: 'auto', p: 2 }}>
           <Card sx={{ p: 3, boxShadow: theme.shadows[8] }}>
-            <Box sx={{ textAlign: "center" }}>
-              <ErrorIcon sx={{ fontSize: 64, color: "error.main", mb: 2 }} />
+            <Box sx={{ textAlign: 'center' }}>
+              <ErrorIcon sx={{ fontSize: 64, color: 'error.main', mb: 2 }} />
               <Typography variant="h6" gutterBottom>
                 Token không hợp lệ
               </Typography>
@@ -203,10 +203,10 @@ const ResetPassword = () => {
               </Typography>
               <Button
                 variant="contained"
-                onClick={() => navigate("/forgot-password")}
+                onClick={() => navigate('/forgot-password')}
                 sx={{
                   background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                  "&:hover": {
+                  '&:hover': {
                     background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                   },
                 }}
@@ -222,7 +222,7 @@ const ResetPassword = () => {
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
-      <Box sx={{ maxWidth: 500, mx: "auto", p: 2 }}>
+      <Box sx={{ maxWidth: 500, mx: 'auto', p: 2 }}>
         {/* Header */}
         <motion.div variants={itemVariants}>
           <Typography
@@ -234,9 +234,9 @@ const ResetPassword = () => {
               mb: 2,
               fontWeight: 700,
               background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
             Đặt lại mật khẩu
@@ -258,10 +258,10 @@ const ResetPassword = () => {
                   id="password"
                   name="password"
                   label="Mật khẩu mới"
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   value={formData.password}
-                  onChange={(e) => handleChange("password", e.target.value)}
-                  onBlur={() => handleBlur("password")}
+                  onChange={(e) => handleChange('password', e.target.value)}
+                  onBlur={() => handleBlur('password')}
                   error={touched.password && Boolean(errors.password)}
                   helperText={touched.password && errors.password}
                   disabled={isLoading}
@@ -285,9 +285,9 @@ const ResetPassword = () => {
                     ),
                   }}
                   sx={{
-                    "& .MuiOutlinedInput-root": {
-                      transition: "all 0.2s",
-                      "&:hover": {
+                    '& .MuiOutlinedInput-root': {
+                      transition: 'all 0.2s',
+                      '&:hover': {
                         boxShadow: `0 0 0 2px ${theme.palette.primary.main}20`,
                       },
                     },
@@ -300,10 +300,10 @@ const ResetPassword = () => {
                   id="confirmPassword"
                   name="confirmPassword"
                   label="Xác nhận mật khẩu mới"
-                  type={showConfirmPassword ? "text" : "password"}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   value={formData.confirmPassword}
-                  onChange={(e) => handleChange("confirmPassword", e.target.value)}
-                  onBlur={() => handleBlur("confirmPassword")}
+                  onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                  onBlur={() => handleBlur('confirmPassword')}
                   error={touched.confirmPassword && Boolean(errors.confirmPassword)}
                   helperText={touched.confirmPassword && errors.confirmPassword}
                   disabled={isLoading}
@@ -328,9 +328,9 @@ const ResetPassword = () => {
                   }}
                   sx={{
                     mt: 2,
-                    "& .MuiOutlinedInput-root": {
-                      transition: "all 0.2s",
-                      "&:hover": {
+                    '& .MuiOutlinedInput-root': {
+                      transition: 'all 0.2s',
+                      '&:hover': {
                         boxShadow: `0 0 0 2px ${theme.palette.primary.main}20`,
                       },
                     },
@@ -349,27 +349,27 @@ const ResetPassword = () => {
                     mb: 2,
                     py: 1.5,
                     background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                    "&:hover": {
+                    '&:hover': {
                       background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                     },
-                    "&:disabled": {
+                    '&:disabled': {
                       background: theme.palette.action.disabledBackground,
                     },
                   }}
                 >
                   {isLoading ? (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <CircularProgress size={20} color="inherit" />
                       <Typography variant="body2">Đang đặt lại mật khẩu...</Typography>
                     </Box>
                   ) : (
-                    "Đặt lại mật khẩu"
+                    'Đặt lại mật khẩu'
                   )}
                 </Button>
               </form>
             ) : (
-              <Box sx={{ textAlign: "center" }}>
-                <CheckCircleIcon sx={{ fontSize: 64, color: "success.main", mb: 2 }} />
+              <Box sx={{ textAlign: 'center' }}>
+                <CheckCircleIcon sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
                 <Typography variant="h6" gutterBottom>
                   Mật khẩu đã được đặt lại!
                 </Typography>
@@ -379,10 +379,10 @@ const ResetPassword = () => {
                 </Typography>
                 <Button
                   variant="contained"
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate('/login')}
                   sx={{
                     background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                    "&:hover": {
+                    '&:hover': {
                       background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                     },
                   }}
@@ -396,21 +396,21 @@ const ResetPassword = () => {
 
         {/* Security features */}
         <motion.div variants={itemVariants}>
-          <Card sx={{ mt: 3, bgcolor: "background.paper" }}>
+          <Card sx={{ mt: 3, bgcolor: 'background.paper' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom align="center">
                 Tính năng bảo mật
               </Typography>
-              <Box sx={{ display: "flex", justifyContent: "center", gap: 4 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
                 {securityFeatures.map((feature, index) => (
-                  <Box key={index} sx={{ textAlign: "center", p: 2 }}>
+                  <Box key={index} sx={{ textAlign: 'center', p: 2 }}>
                     <Box
                       sx={{
-                        display: "inline-flex",
+                        display: 'inline-flex',
                         p: 1,
-                        borderRadius: "50%",
-                        bgcolor: "primary.main",
-                        color: "white",
+                        borderRadius: '50%',
+                        bgcolor: 'primary.main',
+                        color: 'white',
                         mb: 1,
                       }}
                     >

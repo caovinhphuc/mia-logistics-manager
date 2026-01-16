@@ -1,6 +1,6 @@
 import { Employee } from '../../shared/types/commonTypes';
 
-const API_BASE_URL = 'http://localhost:5050/api';
+const API_BASE_URL = 'http://localhost:3100/api';
 
 export const employeesService = {
   // Lấy danh sách nhân viên
@@ -43,10 +43,7 @@ export const employeesService = {
   },
 
   // Cập nhật nhân viên
-  async updateEmployee(
-    id: string,
-    employee: Partial<Employee>
-  ): Promise<Employee | null> {
+  async updateEmployee(id: string, employee: Partial<Employee>): Promise<Employee | null> {
     try {
       const response = await fetch(`${API_BASE_URL}/employees/${id}`, {
         method: 'PUT',

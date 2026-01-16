@@ -1,4 +1,4 @@
-import { Add, Assessment, Delete, Edit, LocalShipping } from "@mui/icons-material";
+import { Add, Assessment, Delete, Edit, LocalShipping } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -18,9 +18,9 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
-import ReportsCenter from "../../components/reports/ReportsCenter";
+} from '@mui/material';
+import { useState } from 'react';
+import ReportsCenter from '../../components/reports/ReportsCenter';
 
 const TransportManagement = () => {
   const [transports] = useState([]);
@@ -36,11 +36,11 @@ const TransportManagement = () => {
 
   return (
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" gutterBottom>
           Quản lý vận chuyển
         </Typography>
-        <Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1 }}>
           <Button variant="outlined" startIcon={<Assessment />} onClick={handleOpenReports}>
             Báo cáo
           </Button>
@@ -53,8 +53,8 @@ const TransportManagement = () => {
       <Grid container spacing={3}>
         {/* Statistics Cards */}
         <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <LocalShipping sx={{ fontSize: 40, color: "primary.main", mb: 1 }} />
+          <Paper sx={{ p: 2, textAlign: 'center' }}>
+            <LocalShipping sx={{ fontSize: 40, color: 'primary.main', mb: 1 }} />
             <Typography variant="h6">Đang giao</Typography>
             <Typography variant="h4" color="primary">
               0
@@ -63,8 +63,8 @@ const TransportManagement = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <LocalShipping sx={{ fontSize: 40, color: "warning.main", mb: 1 }} />
+          <Paper sx={{ p: 2, textAlign: 'center' }}>
+            <LocalShipping sx={{ fontSize: 40, color: 'warning.main', mb: 1 }} />
             <Typography variant="h6">Chờ xử lý</Typography>
             <Typography variant="h4" color="warning.main">
               0
@@ -73,8 +73,8 @@ const TransportManagement = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <LocalShipping sx={{ fontSize: 40, color: "success.main", mb: 1 }} />
+          <Paper sx={{ p: 2, textAlign: 'center' }}>
+            <LocalShipping sx={{ fontSize: 40, color: 'success.main', mb: 1 }} />
             <Typography variant="h6">Hoàn thành</Typography>
             <Typography variant="h4" color="success.main">
               0
@@ -83,8 +83,8 @@ const TransportManagement = () => {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2, textAlign: "center" }}>
-            <LocalShipping sx={{ fontSize: 40, color: "error.main", mb: 1 }} />
+          <Paper sx={{ p: 2, textAlign: 'center' }}>
+            <LocalShipping sx={{ fontSize: 40, color: 'error.main', mb: 1 }} />
             <Typography variant="h6">Hủy</Typography>
             <Typography variant="h4" color="error.main">
               0
@@ -126,11 +126,11 @@ const TransportManagement = () => {
                           <Chip
                             label={transport.status}
                             color={
-                              transport.status === "Hoàn thành"
-                                ? "success"
-                                : transport.status === "Đang giao"
-                                  ? "primary"
-                                  : "default"
+                              transport.status === 'Hoàn thành'
+                                ? 'success'
+                                : transport.status === 'Đang giao'
+                                  ? 'primary'
+                                  : 'default'
                             }
                           />
                         </TableCell>
@@ -160,11 +160,11 @@ const TransportManagement = () => {
         maxWidth="xl"
         fullWidth
         PaperProps={{
-          sx: { height: "90vh" },
+          sx: { height: '90vh' },
         }}
       >
         <DialogTitle>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Assessment sx={{ mr: 1 }} />
             Báo cáo vận chuyển
           </Box>

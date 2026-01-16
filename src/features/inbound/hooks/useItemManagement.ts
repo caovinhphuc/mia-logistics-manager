@@ -1,10 +1,5 @@
 import { useState, useCallback } from 'react';
-import {
-  PackagingItem,
-  TimelineItem,
-  DocumentStatusItem,
-  InboundItem,
-} from '../types/inbound';
+import { PackagingItem, TimelineItem, DocumentStatusItem, InboundItem } from '../types/inbound';
 
 export const useItemManagement = () => {
   // Packaging items
@@ -28,17 +23,14 @@ export const useItemManagement = () => {
   });
 
   // Document status items
-  const [documentStatusItems, setDocumentStatusItems] = useState<
-    DocumentStatusItem[]
-  >([]);
-  const [newDocumentStatusItem, setNewDocumentStatusItem] =
-    useState<DocumentStatusItem>({
-      id: '',
-      name: '',
-      date: '',
-      status: 'pending',
-      description: '',
-    });
+  const [documentStatusItems, setDocumentStatusItems] = useState<DocumentStatusItem[]>([]);
+  const [newDocumentStatusItem, setNewDocumentStatusItem] = useState<DocumentStatusItem>({
+    id: '',
+    name: '',
+    date: '',
+    status: 'pending',
+    description: '',
+  });
 
   // Packaging item handlers
   const addPackagingItem = useCallback(() => {
@@ -60,9 +52,7 @@ export const useItemManagement = () => {
   const updatePackagingItem = useCallback(
     (index: number, field: keyof PackagingItem, value: unknown) => {
       setPackagingItems((prev) =>
-        prev.map((item, i) =>
-          i === index ? { ...item, [field]: value } : item
-        )
+        prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
       );
     },
     []
@@ -72,19 +62,13 @@ export const useItemManagement = () => {
     setPackagingItems((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  const setNewPackagingItemField = useCallback(
-    (field: keyof PackagingItem, value: unknown) => {
-      setNewPackagingItem((prev) => ({ ...prev, [field]: value }));
-    },
-    []
-  );
+  const setNewPackagingItemField = useCallback((field: keyof PackagingItem, value: unknown) => {
+    setNewPackagingItem((prev) => ({ ...prev, [field]: value }));
+  }, []);
 
   // Timeline item handlers
   const addTimelineItem = useCallback(() => {
-    if (
-      newTimelineItem.name &&
-      (newTimelineItem.estimatedDate || newTimelineItem.date)
-    ) {
+    if (newTimelineItem.name && (newTimelineItem.estimatedDate || newTimelineItem.date)) {
       const item: TimelineItem = {
         ...newTimelineItem,
         id: `timeline_${Date.now()}`,
@@ -118,35 +102,25 @@ export const useItemManagement = () => {
   const updateTimelineItem = useCallback(
     (index: number, field: keyof TimelineItem, value: unknown) => {
       setTimelineItems((prev) =>
-        prev.map((item, i) =>
-          i === index ? { ...item, [field]: value } : item
-        )
+        prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
       );
     },
     []
   );
 
-  const updateTimelineItemFull = useCallback(
-    (index: number, updatedItem: TimelineItem) => {
-      setTimelineItems((prev) =>
-        prev.map((item, i) =>
-          i === index ? { ...updatedItem, id: item.id } : item
-        )
-      );
-    },
-    []
-  );
+  const updateTimelineItemFull = useCallback((index: number, updatedItem: TimelineItem) => {
+    setTimelineItems((prev) =>
+      prev.map((item, i) => (i === index ? { ...updatedItem, id: item.id } : item))
+    );
+  }, []);
 
   const deleteTimelineItem = useCallback((index: number) => {
     setTimelineItems((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  const setNewTimelineItemField = useCallback(
-    (field: keyof TimelineItem, value: unknown) => {
-      setNewTimelineItem((prev) => ({ ...prev, [field]: value }));
-    },
-    []
-  );
+  const setNewTimelineItemField = useCallback((field: keyof TimelineItem, value: unknown) => {
+    setNewTimelineItem((prev) => ({ ...prev, [field]: value }));
+  }, []);
 
   // Document status item handlers
   const addDocumentStatusItem = useCallback(() => {
@@ -173,9 +147,7 @@ export const useItemManagement = () => {
   const updateDocumentStatusItem = useCallback(
     (index: number, field: keyof DocumentStatusItem, value: unknown) => {
       setDocumentStatusItems((prev) =>
-        prev.map((item, i) =>
-          i === index ? { ...item, [field]: value } : item
-        )
+        prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
       );
     },
     []
@@ -184,9 +156,7 @@ export const useItemManagement = () => {
   const updateDocumentStatusItemFull = useCallback(
     (index: number, updatedItem: DocumentStatusItem) => {
       setDocumentStatusItems((prev) =>
-        prev.map((item, i) =>
-          i === index ? { ...updatedItem, id: item.id } : item
-        )
+        prev.map((item, i) => (i === index ? { ...updatedItem, id: item.id } : item))
       );
     },
     []

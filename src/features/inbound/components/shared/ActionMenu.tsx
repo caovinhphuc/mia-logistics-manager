@@ -1,11 +1,11 @@
-import React from "react";
-import { IconButton, Menu } from "@mui/material";
-import { MoreVert } from "@mui/icons-material";
+import React from 'react';
+import { IconButton, Menu } from '@mui/material';
+import { MoreVert } from '@mui/icons-material';
 
 interface Action {
   label: string;
   onClick: () => void;
-  color?: "primary" | "secondary" | "error";
+  color?: 'primary' | 'secondary' | 'error';
 }
 
 interface ActionMenuProps {

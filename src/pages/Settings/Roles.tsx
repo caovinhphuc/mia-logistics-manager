@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -18,8 +18,8 @@ import {
   TableHead,
   TableRow,
   IconButton,
-} from "@mui/material";
-import { Edit, Delete, Add } from "@mui/icons-material";
+} from '@mui/material';
+import { Edit, Delete, Add } from '@mui/icons-material';
 
 interface Role {
   id: string;
@@ -34,8 +34,8 @@ const Roles: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Role | null>(null);
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
   });
 
   useEffect(() => {
@@ -45,13 +45,13 @@ const Roles: React.FC = () => {
   const loadRoles = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5050/api/roles");
-      if (!response.ok) throw new Error("Không thể tải danh sách vai trò");
+      const response = await fetch('http://localhost:3100/api/roles');
+      if (!response.ok) throw new Error('Không thể tải danh sách vai trò');
       const data = await response.json();
       setRoles(data);
       setError(null);
     } catch (err: any) {
-      setError(err.message || "Không thể tải danh sách vai trò");
+      setError(err.message || 'Không thể tải danh sách vai trò');
     } finally {
       setLoading(false);
     }
@@ -60,45 +60,45 @@ const Roles: React.FC = () => {
   const handleSubmit = async () => {
     try {
       const url = editing
-        ? `http://localhost:5050/api/roles/${editing.id}`
-        : "http://localhost:5050/api/roles";
-      const method = editing ? "PUT" : "POST";
+        ? `http://localhost:3100/api/roles/${editing.id}`
+        : 'http://localhost:3100/api/roles';
+      const method = editing ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error("Không thể lưu vai trò");
+      if (!response.ok) throw new Error('Không thể lưu vai trò');
 
       setOpen(false);
       setEditing(null);
-      setFormData({ name: "", description: "" });
+      setFormData({ name: '', description: '' });
       loadRoles();
     } catch (err: any) {
-      setError(err.message || "Không thể lưu vai trò");
+      setError(err.message || 'Không thể lưu vai trò');
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa vai trò này?")) return;
+    if (!window.confirm('Bạn có chắc chắn muốn xóa vai trò này?')) return;
     try {
-      const response = await fetch(`http://localhost:5050/api/roles/${id}`, {
-        method: "DELETE",
+      const response = await fetch(`http://localhost:3100/api/roles/${id}`, {
+        method: 'DELETE',
       });
-      if (!response.ok) throw new Error("Không thể xóa vai trò");
+      if (!response.ok) throw new Error('Không thể xóa vai trò');
       loadRoles();
     } catch (err: any) {
-      setError(err.message || "Không thể xóa vai trò");
+      setError(err.message || 'Không thể xóa vai trò');
     }
   };
 
   const handleEdit = (role: Role) => {
     setEditing(role);
     setFormData({
-      name: role.name || "",
-      description: role.description || "",
+      name: role.name || '',
+      description: role.description || '',
     });
     setOpen(true);
   };
@@ -113,7 +113,7 @@ const Roles: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
           Quản lý Vai trò
         </Typography>
@@ -153,7 +153,7 @@ const Roles: React.FC = () => {
                 <TableCell>
                   <strong>{role.name}</strong>
                 </TableCell>
-                <TableCell>{role.description || "-"}</TableCell>
+                <TableCell>{role.description || '-'}</TableCell>
                 <TableCell align="right">
                   <IconButton size="small" onClick={() => handleEdit(role)} color="primary">
                     <Edit />
@@ -173,14 +173,14 @@ const Roles: React.FC = () => {
         onClose={() => {
           setOpen(false);
           setEditing(null);
-          setFormData({ name: "", description: "" });
+          setFormData({ name: '', description: '' });
         }}
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>{editing ? "Sửa vai trò" : "Thêm vai trò mới"}</DialogTitle>
+        <DialogTitle>{editing ? 'Sửa vai trò' : 'Thêm vai trò mới'}</DialogTitle>
         <DialogContent>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
             <TextField
               label="Tên vai trò"
               value={formData.name}
@@ -208,7 +208,7 @@ const Roles: React.FC = () => {
             Hủy
           </Button>
           <Button onClick={handleSubmit} variant="contained">
-            {editing ? "Cập nhật" : "Tạo"}
+            {editing ? 'Cập nhật' : 'Tạo'}
           </Button>
         </DialogActions>
       </Dialog>

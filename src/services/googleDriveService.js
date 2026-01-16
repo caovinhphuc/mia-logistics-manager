@@ -1,12 +1,12 @@
-import { googleAuthService } from "./googleAuthService";
-import { logService } from "./logService";
+import { googleAuthService } from './googleAuthService';
+import { logService } from './logService';
 
 const driveLogger = {
-  debug: (message, data) => logService.debug("GoogleDriveService", message, data),
-  info: (message, data) => logService.info("GoogleDriveService", message, data),
-  warn: (message, data) => logService.warn("GoogleDriveService", message, data),
+  debug: (message, data) => logService.debug('GoogleDriveService', message, data),
+  info: (message, data) => logService.info('GoogleDriveService', message, data),
+  warn: (message, data) => logService.warn('GoogleDriveService', message, data),
   error: (message, error, data = {}) =>
-    logService.error("GoogleDriveService", message, {
+    logService.error('GoogleDriveService', message, {
       ...data,
       error:
         error instanceof Error ? { message: error.message, stack: error.stack } : String(error),
@@ -17,16 +17,16 @@ class GoogleDriveService {
   constructor() {
     this.isConnected = false;
     this.folderId = null;
-    this.apiUrl = "https://www.googleapis.com/drive/v3";
-    this.uploadUrl = "https://www.googleapis.com/upload/drive/v3";
+    this.apiUrl = 'https://www.googleapis.com/drive/v3';
+    this.uploadUrl = 'https://www.googleapis.com/upload/drive/v3';
   }
 
   async initialize() {
     try {
-      driveLogger.debug("Initializing Google Drive Service");
+      driveLogger.debug('Initializing Google Drive Service');
       // Service will be connected when folder ID is provided
     } catch (error) {
-      driveLogger.error("Google Drive initialization failed", error);
+      driveLogger.error('Google Drive initialization failed', error);
       throw error;
     }
   }
@@ -39,11 +39,11 @@ class GoogleDriveService {
       const folderInfo = await this.getFolderInfo(folderId);
 
       this.isConnected = true;
-      driveLogger.info("Connected to Drive folder", { folderName: folderInfo.name, folderId });
+      driveLogger.info('Connected to Drive folder', { folderName: folderInfo.name, folderId });
 
       return folderInfo;
     } catch (error) {
-      driveLogger.error("Failed to connect to Google Drive", error, { folderId });
+      driveLogger.error('Failed to connect to Google Drive', error, { folderId });
       throw error;
     }
   }
@@ -66,10 +66,10 @@ class GoogleDriveService {
       }
 
       const result = await response.json();
-      driveLogger.debug("Fetched folder info", { folderId, name: result?.name });
+      driveLogger.debug('Fetched folder info', { folderId, name: result?.name });
       return result;
     } catch (error) {
-      driveLogger.error("Failed to get folder info", error, { folderId });
+      driveLogger.error('Failed to get folder info', error, { folderId });
       throw error;
     }
   }
@@ -78,7 +78,7 @@ class GoogleDriveService {
     try {
       const targetFolderId = folderId || this.folderId;
       if (!targetFolderId) {
-        throw new Error("No folder ID specified");
+        throw new Error('No folder ID specified');
       }
 
       const headers = await googleAuthService.getAuthHeaders();
@@ -87,7 +87,7 @@ class GoogleDriveService {
       const metadata = {
         name: options.name || file.name,
         parents: [targetFolderId],
-        description: options.description || "",
+        description: options.description || '',
         ...options.metadata,
       };
 
@@ -95,13 +95,13 @@ class GoogleDriveService {
         file.size > 5 * 1024 * 1024
           ? await this.resumableUpload(file, metadata, headers)
           : await this.simpleUpload(file, metadata, headers);
-      driveLogger.info("File uploaded successfully", {
+      driveLogger.info('File uploaded successfully', {
         fileName: metadata.name,
         folderId: targetFolderId,
       });
       return result;
     } catch (error) {
-      driveLogger.error("Failed to upload file", error, {
+      driveLogger.error('Failed to upload file', error, {
         fileName: file?.name,
         folderId,
       });
@@ -112,15 +112,15 @@ class GoogleDriveService {
   async simpleUpload(file, metadata, headers) {
     const formData = new FormData();
     formData.append(
-      "metadata",
+      'metadata',
       new Blob([JSON.stringify(metadata)], {
-        type: "application/json",
+        type: 'application/json',
       })
     );
-    formData.append("file", file);
+    formData.append('file', file);
 
     const response = await fetch(`${this.uploadUrl}/files?uploadType=multipart`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         Authorization: headers.Authorization,
       },
@@ -132,18 +132,18 @@ class GoogleDriveService {
     }
 
     const result = await response.json();
-    driveLogger.debug("Simple upload completed", { fileName: metadata.name });
+    driveLogger.debug('Simple upload completed', { fileName: metadata.name });
     return result;
   }
 
   async resumableUpload(file, metadata, headers) {
     // Initiate resumable upload
     const initResponse = await fetch(`${this.uploadUrl}/files?uploadType=resumable`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         ...headers,
-        "X-Upload-Content-Type": file.type,
-        "X-Upload-Content-Length": file.size.toString(),
+        'X-Upload-Content-Type': file.type,
+        'X-Upload-Content-Length': file.size.toString(),
       },
       body: JSON.stringify(metadata),
     });
@@ -152,13 +152,13 @@ class GoogleDriveService {
       throw new Error(`Upload initiation failed: ${initResponse.statusText}`);
     }
 
-    const uploadUrl = initResponse.headers.get("Location");
+    const uploadUrl = initResponse.headers.get('Location');
 
     // Upload file content
     const uploadResponse = await fetch(uploadUrl, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": file.type,
+        'Content-Type': file.type,
       },
       body: file,
     });
@@ -168,7 +168,7 @@ class GoogleDriveService {
     }
 
     const result = await uploadResponse.json();
-    driveLogger.debug("Resumable upload completed", { fileName: metadata.name });
+    driveLogger.debug('Resumable upload completed', { fileName: metadata.name });
     return result;
   }
 
@@ -186,7 +186,7 @@ class GoogleDriveService {
 
       return await response.blob();
     } catch (error) {
-      driveLogger.error("Failed to download file", error, { fileId });
+      driveLogger.error('Failed to download file', error, { fileId });
       throw error;
     }
   }
@@ -196,7 +196,7 @@ class GoogleDriveService {
       const headers = await googleAuthService.getAuthHeaders();
 
       const response = await fetch(`${this.apiUrl}/files/${fileId}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers,
       });
 
@@ -206,7 +206,7 @@ class GoogleDriveService {
 
       return { success: true };
     } catch (error) {
-      driveLogger.error("Failed to delete file", error, { fileId });
+      driveLogger.error('Failed to delete file', error, { fileId });
       throw error;
     }
   }
@@ -218,9 +218,9 @@ class GoogleDriveService {
 
       const params = new URLSearchParams({
         q: `'${targetFolderId}' in parents and trashed=false`,
-        fields: "files(id,name,mimeType,size,createdTime,modifiedTime,webViewLink,thumbnailLink)",
-        orderBy: options.orderBy || "modifiedTime desc",
-        pageSize: options.pageSize || "100",
+        fields: 'files(id,name,mimeType,size,createdTime,modifiedTime,webViewLink,thumbnailLink)',
+        orderBy: options.orderBy || 'modifiedTime desc',
+        pageSize: options.pageSize || '100',
         ...options.params,
       });
 
@@ -234,7 +234,7 @@ class GoogleDriveService {
 
       return await response.json();
     } catch (error) {
-      console.error("Failed to list files:", error);
+      console.error('Failed to list files:', error);
       throw error;
     }
   }
@@ -245,9 +245,9 @@ class GoogleDriveService {
 
       const params = new URLSearchParams({
         q: query,
-        fields: "files(id,name,mimeType,size,createdTime,modifiedTime,webViewLink,thumbnailLink)",
-        orderBy: options.orderBy || "modifiedTime desc",
-        pageSize: options.pageSize || "50",
+        fields: 'files(id,name,mimeType,size,createdTime,modifiedTime,webViewLink,thumbnailLink)',
+        orderBy: options.orderBy || 'modifiedTime desc',
+        pageSize: options.pageSize || '50',
         ...options.params,
       });
 
@@ -261,7 +261,7 @@ class GoogleDriveService {
 
       return await response.json();
     } catch (error) {
-      console.error("Failed to search files:", error);
+      console.error('Failed to search files:', error);
       throw error;
     }
   }
@@ -273,12 +273,12 @@ class GoogleDriveService {
 
       const metadata = {
         name,
-        mimeType: "application/vnd.google-apps.folder",
+        mimeType: 'application/vnd.google-apps.folder',
         parents: [targetParent],
       };
 
       const response = await fetch(`${this.apiUrl}/files`, {
-        method: "POST",
+        method: 'POST',
         headers,
         body: JSON.stringify(metadata),
       });
@@ -289,7 +289,7 @@ class GoogleDriveService {
 
       return await response.json();
     } catch (error) {
-      console.error("Failed to create folder:", error);
+      console.error('Failed to create folder:', error);
       throw error;
     }
   }
@@ -304,17 +304,17 @@ class GoogleDriveService {
       });
 
       if (!fileInfo.ok) {
-        throw new Error("Failed to get file info");
+        throw new Error('Failed to get file info');
       }
 
       const { parents } = await fileInfo.json();
-      const previousParents = parents.join(",");
+      const previousParents = parents.join(',');
 
       // Move file
       const response = await fetch(
         `${this.apiUrl}/files/${fileId}?addParents=${newParentId}&removeParents=${previousParents}`,
         {
-          method: "PATCH",
+          method: 'PATCH',
           headers,
         }
       );
@@ -325,7 +325,7 @@ class GoogleDriveService {
 
       return await response.json();
     } catch (error) {
-      console.error("Failed to move file:", error);
+      console.error('Failed to move file:', error);
       throw error;
     }
   }
@@ -344,23 +344,23 @@ class GoogleDriveService {
 
       return await response.json();
     } catch (error) {
-      console.error("Failed to get quota:", error);
+      console.error('Failed to get quota:', error);
       throw error;
     }
   }
 
-  async shareFile(fileId, email, role = "reader") {
+  async shareFile(fileId, email, role = 'reader') {
     try {
       const headers = await googleAuthService.getAuthHeaders();
 
       const permission = {
-        type: "user",
+        type: 'user',
         role,
         emailAddress: email,
       };
 
       const response = await fetch(`${this.apiUrl}/files/${fileId}/permissions`, {
-        method: "POST",
+        method: 'POST',
         headers,
         body: JSON.stringify(permission),
       });
@@ -371,7 +371,7 @@ class GoogleDriveService {
 
       return await response.json();
     } catch (error) {
-      console.error("Failed to share file:", error);
+      console.error('Failed to share file:', error);
       throw error;
     }
   }
@@ -386,7 +386,7 @@ class GoogleDriveService {
         lastSync: new Date().toISOString(),
       };
     } catch (error) {
-      console.error("Failed to sync files:", error);
+      console.error('Failed to sync files:', error);
       throw error;
     }
   }
@@ -409,7 +409,7 @@ class GoogleDriveService {
   }
 
   async uploadWarehouseImage(file, itemCode) {
-    const folderName = "Warehouse_Images";
+    const folderName = 'Warehouse_Images';
 
     // Create warehouse images folder if it doesn't exist
     let imagesFolder = await this.searchFiles(
@@ -421,7 +421,7 @@ class GoogleDriveService {
     }
 
     return await this.uploadFile(file, imagesFolder.files[0].id, {
-      name: `${itemCode}_${Date.now()}.${file.name.split(".").pop()}`,
+      name: `${itemCode}_${Date.now()}.${file.name.split('.').pop()}`,
       description: `Image for warehouse item: ${itemCode}`,
     });
   }

@@ -22,13 +22,7 @@ export interface Order {
   actualCost?: number;
   distance?: number;
   estimatedDuration?: number;
-  status:
-    | 'PENDING'
-    | 'CONFIRMED'
-    | 'PICKUP'
-    | 'IN_TRANSIT'
-    | 'DELIVERED'
-    | 'CANCELLED';
+  status: 'PENDING' | 'CONFIRMED' | 'PICKUP' | 'IN_TRANSIT' | 'DELIVERED' | 'CANCELLED';
   notes?: string;
   createdAt: string;
   updatedAt: string;
@@ -39,9 +33,7 @@ export interface Order {
 }
 
 export class OrdersService extends BaseGoogleSheetsService {
-  async createOrder(
-    orderData: Omit<Order, 'orderId' | 'createdAt' | 'updatedAt'>
-  ): Promise<Order> {
+  async createOrder(orderData: Omit<Order, 'orderId' | 'createdAt' | 'updatedAt'>): Promise<Order> {
     const order: Order = {
       ...orderData,
       orderId: `ORD-${Date.now()}-${uuidv4().slice(0, 8)}`,
@@ -49,10 +41,7 @@ export class OrdersService extends BaseGoogleSheetsService {
       updatedAt: new Date().toISOString(),
     };
 
-    await this.addRecord(
-      SHEETS_CONFIG.SHEETS.ORDERS,
-      order as unknown as Record<string, unknown>
-    );
+    await this.addRecord(SHEETS_CONFIG.SHEETS.ORDERS, order as unknown as Record<string, unknown>);
     return order as unknown as Order;
   }
 
@@ -74,10 +63,7 @@ export class OrdersService extends BaseGoogleSheetsService {
     ) as unknown as Promise<Order>;
   }
 
-  async updateOrderStatus(
-    orderId: string,
-    status: Order['status']
-  ): Promise<Order> {
+  async updateOrderStatus(orderId: string, status: Order['status']): Promise<Order> {
     return this.updateOrder(orderId, { status });
   }
 
@@ -90,10 +76,7 @@ export class OrdersService extends BaseGoogleSheetsService {
     return orders.filter((order) => order.status === status);
   }
 
-  async getOrdersByDateRange(
-    startDate: string,
-    endDate: string
-  ): Promise<Order[]> {
+  async getOrdersByDateRange(startDate: string, endDate: string): Promise<Order[]> {
     const orders = await this.getOrders();
     return orders.filter((order) => {
       const orderDate = new Date(order.createdAt);

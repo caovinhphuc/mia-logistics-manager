@@ -11,14 +11,14 @@ import {
   MenuItem,
   Select,
   TextField,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
 // import { SHEETS_CONFIG } from '../../../config/sheetsConfig';
 
 // Temporary config until sheetsConfig is created
 const SHEETS_CONFIG = {
-  SPREADSHEET_ID: "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As",
-  RANGE: "Sheet1!A:Z",
+  SPREADSHEET_ID: '18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As',
+  RANGE: 'Sheet1!A:Z',
 };
 
 interface Location {
@@ -28,7 +28,7 @@ interface Location {
   category: string;
   subcategory: string;
   address: string;
-  status: "active" | "inactive";
+  status: 'active' | 'inactive';
   ward: string;
   district: string;
   province: string;
@@ -45,28 +45,28 @@ interface CreateLocationDialogProps {
 const SHEET_ID = SHEETS_CONFIG.SPREADSHEET_ID;
 
 const AVATAR_OPTIONS = [
-  { value: "🏢", label: "🏢 Tòa nhà" },
-  { value: "🏪", label: "🏪 Cửa hàng" },
-  { value: "🏭", label: "🏭 Nhà máy" },
-  { value: "🏠", label: "🏠 Nhà ở" },
-  { value: "🏢", label: "🏢 Văn phòng" },
-  { value: "🏬", label: "🏬 Trung tâm thương mại" },
-  { value: "🏗️", label: "🏗️ Công trường" },
-  { value: "🚚", label: "🚚 Kho vận" },
+  { value: '🏢', label: '🏢 Tòa nhà' },
+  { value: '🏪', label: '🏪 Cửa hàng' },
+  { value: '🏭', label: '🏭 Nhà máy' },
+  { value: '🏠', label: '🏠 Nhà ở' },
+  { value: '🏢', label: '🏢 Văn phòng' },
+  { value: '🏬', label: '🏬 Trung tâm thương mại' },
+  { value: '🏗️', label: '🏗️ Công trường' },
+  { value: '🚚', label: '🚚 Kho vận' },
 ];
 
 const CATEGORY_OPTIONS = [
-  "Kho hàng",
-  "Cửa hàng",
-  "Nhà máy",
-  "Văn phòng",
-  "Trung tâm thương mại",
-  "Công trường",
-  "Kho vận",
-  "Khác",
+  'Kho hàng',
+  'Cửa hàng',
+  'Nhà máy',
+  'Văn phòng',
+  'Trung tâm thương mại',
+  'Công trường',
+  'Kho vận',
+  'Khác',
 ];
 
-const PROVINCE_OPTIONS = ["TP. Hồ Chí Minh", "Hà Nội", "Đà Nẵng", "Cần Thơ", "Hải Phòng", "Khác"];
+const PROVINCE_OPTIONS = ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng', 'Khác'];
 
 const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
   open,
@@ -75,16 +75,16 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
   onSuccess,
 }) => {
   const [formData, setFormData] = useState<Partial<Location>>({
-    code: "",
-    avatar: "🏢",
-    category: "",
-    subcategory: "",
-    address: "",
-    status: "active",
-    ward: "",
-    district: "",
-    province: "TP. Hồ Chí Minh",
-    note: "",
+    code: '',
+    avatar: '🏢',
+    category: '',
+    subcategory: '',
+    address: '',
+    status: 'active',
+    ward: '',
+    district: '',
+    province: 'TP. Hồ Chí Minh',
+    note: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -93,23 +93,23 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
       setFormData(editing);
     } else {
       setFormData({
-        code: "",
-        avatar: "🏢",
-        category: "",
-        subcategory: "",
-        address: "",
-        status: "active",
-        ward: "",
-        district: "",
-        province: "TP. Hồ Chí Minh",
-        note: "",
+        code: '',
+        avatar: '🏢',
+        category: '',
+        subcategory: '',
+        address: '',
+        status: 'active',
+        ward: '',
+        district: '',
+        province: 'TP. Hồ Chí Minh',
+        note: '',
       });
     }
   }, [editing, open]);
 
   const handleSubmit = async () => {
     if (!formData.code?.trim()) {
-      alert("Vui lòng nhập mã địa điểm");
+      alert('Vui lòng nhập mã địa điểm');
       return;
     }
 
@@ -119,11 +119,11 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
         ? `/api/locations/${editing.id}?spreadsheetId=${encodeURIComponent(SHEET_ID)}`
         : `/api/locations?spreadsheetId=${encodeURIComponent(SHEET_ID)}`;
 
-      const method = editing ? "PUT" : "POST";
+      const method = editing ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
@@ -132,11 +132,11 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
         onClose();
       } else {
         const error = await response.json();
-        alert(`Lỗi: ${error.error || "Không thể lưu địa điểm"}`);
+        alert(`Lỗi: ${error.error || 'Không thể lưu địa điểm'}`);
       }
     } catch (error) {
-      console.error("Lỗi lưu địa điểm:", error);
-      alert("Lỗi kết nối server");
+      console.error('Lỗi lưu địa điểm:', error);
+      alert('Lỗi kết nối server');
     } finally {
       setLoading(false);
     }
@@ -148,7 +148,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>{editing ? "Sửa địa điểm" : "Thêm địa điểm mới"}</DialogTitle>
+      <DialogTitle>{editing ? 'Sửa địa điểm' : 'Thêm địa điểm mới'}</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 2 }}>
           <Grid container spacing={2}>
@@ -156,8 +156,8 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
               <TextField
                 fullWidth
                 label="Mã địa điểm *"
-                value={formData.code || ""}
-                onChange={(e) => handleChange("code", e.target.value)}
+                value={formData.code || ''}
+                onChange={(e) => handleChange('code', e.target.value)}
                 required
               />
             </Grid>
@@ -165,8 +165,8 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
               <FormControl fullWidth>
                 <InputLabel>Avatar</InputLabel>
                 <Select
-                  value={formData.avatar || "🏢"}
-                  onChange={(e) => handleChange("avatar", e.target.value)}
+                  value={formData.avatar || '🏢'}
+                  onChange={(e) => handleChange('avatar', e.target.value)}
                   label="Avatar"
                 >
                   {AVATAR_OPTIONS.map((option) => (
@@ -181,8 +181,8 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
               <FormControl fullWidth>
                 <InputLabel>Danh mục</InputLabel>
                 <Select
-                  value={formData.category || ""}
-                  onChange={(e) => handleChange("category", e.target.value)}
+                  value={formData.category || ''}
+                  onChange={(e) => handleChange('category', e.target.value)}
                   label="Danh mục"
                 >
                   {CATEGORY_OPTIONS.map((category) => (
@@ -197,16 +197,16 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
               <TextField
                 fullWidth
                 label="Hạng mục"
-                value={formData.subcategory || ""}
-                onChange={(e) => handleChange("subcategory", e.target.value)}
+                value={formData.subcategory || ''}
+                onChange={(e) => handleChange('subcategory', e.target.value)}
               />
             </Grid>
             <Grid size={12}>
               <TextField
                 fullWidth
                 label="Địa chỉ"
-                value={formData.address || ""}
-                onChange={(e) => handleChange("address", e.target.value)}
+                value={formData.address || ''}
+                onChange={(e) => handleChange('address', e.target.value)}
                 multiline
                 rows={2}
               />
@@ -215,24 +215,24 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
               <TextField
                 fullWidth
                 label="Phường/Xã"
-                value={formData.ward || ""}
-                onChange={(e) => handleChange("ward", e.target.value)}
+                value={formData.ward || ''}
+                onChange={(e) => handleChange('ward', e.target.value)}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 4 }}>
               <TextField
                 fullWidth
                 label="Quận/Huyện"
-                value={formData.district || ""}
-                onChange={(e) => handleChange("district", e.target.value)}
+                value={formData.district || ''}
+                onChange={(e) => handleChange('district', e.target.value)}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 4 }}>
               <FormControl fullWidth>
                 <InputLabel>Tỉnh/Thành phố</InputLabel>
                 <Select
-                  value={formData.province || "TP. Hồ Chí Minh"}
-                  onChange={(e) => handleChange("province", e.target.value)}
+                  value={formData.province || 'TP. Hồ Chí Minh'}
+                  onChange={(e) => handleChange('province', e.target.value)}
                   label="Tỉnh/Thành phố"
                 >
                   {PROVINCE_OPTIONS.map((province) => (
@@ -247,8 +247,8 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
               <FormControl fullWidth>
                 <InputLabel>Trạng thái</InputLabel>
                 <Select
-                  value={formData.status || "active"}
-                  onChange={(e) => handleChange("status", e.target.value)}
+                  value={formData.status || 'active'}
+                  onChange={(e) => handleChange('status', e.target.value)}
                   label="Trạng thái"
                 >
                   <MenuItem value="active">Hoạt động</MenuItem>
@@ -260,8 +260,8 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
               <TextField
                 fullWidth
                 label="Ghi chú"
-                value={formData.note || ""}
-                onChange={(e) => handleChange("note", e.target.value)}
+                value={formData.note || ''}
+                onChange={(e) => handleChange('note', e.target.value)}
                 multiline
                 rows={3}
               />
@@ -278,7 +278,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
           variant="contained"
           disabled={loading || !formData.code?.trim()}
         >
-          {loading ? "Đang lưu..." : editing ? "Cập nhật" : "Thêm mới"}
+          {loading ? 'Đang lưu...' : editing ? 'Cập nhật' : 'Thêm mới'}
         </Button>
       </DialogActions>
     </Dialog>

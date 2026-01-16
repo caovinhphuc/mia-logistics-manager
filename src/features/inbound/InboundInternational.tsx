@@ -1803,10 +1803,10 @@ const InboundInternational: React.FC = () => {
                                 status === 'completed'
                                   ? 'Hoàn thành'
                                   : status === 'pending'
-                                  ? 'Chờ xử lý'
-                                  : status === 'in-progress'
-                                  ? 'Đang xử lý'
-                                  : 'Đã xác nhận'
+                                    ? 'Chờ xử lý'
+                                    : status === 'in-progress'
+                                      ? 'Đang xử lý'
+                                      : 'Đã xác nhận'
                               }
                               size="small"
                               clickable
@@ -1856,10 +1856,10 @@ const InboundInternational: React.FC = () => {
                                 status === 'completed'
                                   ? 'Hoàn thành'
                                   : status === 'pending'
-                                  ? 'Chờ xử lý'
-                                  : status === 'in-progress'
-                                  ? 'Đang xử lý'
-                                  : 'Đã xác nhận'
+                                    ? 'Chờ xử lý'
+                                    : status === 'in-progress'
+                                      ? 'Đang xử lý'
+                                      : 'Đã xác nhận'
                               }
                               size="small"
                               clickable
@@ -2921,8 +2921,8 @@ const InboundInternational: React.FC = () => {
           {editingItem
             ? 'Sửa lịch nhập hàng'
             : addFromCalendar
-            ? `Thêm lịch nhập hàng - ${addFromCalendar.toLocaleDateString('vi-VN')}`
-            : 'Thêm lịch nhập hàng mới'}
+              ? `Thêm lịch nhập hàng - ${addFromCalendar.toLocaleDateString('vi-VN')}`
+              : 'Thêm lịch nhập hàng mới'}
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -3256,8 +3256,8 @@ const InboundInternational: React.FC = () => {
                       item.status === 'completed'
                         ? '#e8f5e8'
                         : item.status === 'delayed'
-                        ? '#ffeaa7'
-                        : '#f5f5f5',
+                          ? '#ffeaa7'
+                          : '#f5f5f5',
                   }}
                 >
                   <Box sx={{ minWidth: '120px' }}>
@@ -3269,15 +3269,15 @@ const InboundInternational: React.FC = () => {
                         item.status === 'completed'
                           ? 'Hoàn thành'
                           : item.status === 'delayed'
-                          ? 'Trễ'
-                          : 'Chờ xử lý'
+                            ? 'Trễ'
+                            : 'Chờ xử lý'
                       }
                       color={
                         item.status === 'completed'
                           ? 'success'
                           : item.status === 'delayed'
-                          ? 'warning'
-                          : 'default'
+                            ? 'warning'
+                            : 'default'
                       }
                       size="small"
                       sx={{ fontSize: '0.7rem', mt: 0.5 }}
@@ -3470,10 +3470,10 @@ const InboundInternational: React.FC = () => {
                       item.status === 'completed'
                         ? '#e8f5e8'
                         : item.status === 'delayed'
-                        ? '#ffeaa7'
-                        : item.status === 'in-progress'
-                        ? '#e3f2fd'
-                        : '#f5f5f5',
+                          ? '#ffeaa7'
+                          : item.status === 'in-progress'
+                            ? '#e3f2fd'
+                            : '#f5f5f5',
                   }}
                 >
                   <Box sx={{ minWidth: '120px' }}>
@@ -3485,19 +3485,19 @@ const InboundInternational: React.FC = () => {
                         item.status === 'completed'
                           ? 'Hoàn thành'
                           : item.status === 'delayed'
-                          ? 'Trễ'
-                          : item.status === 'in-progress'
-                          ? 'Đang xử lý'
-                          : 'Chờ xử lý'
+                            ? 'Trễ'
+                            : item.status === 'in-progress'
+                              ? 'Đang xử lý'
+                              : 'Chờ xử lý'
                       }
                       color={
                         item.status === 'completed'
                           ? 'success'
                           : item.status === 'delayed'
-                          ? 'warning'
-                          : item.status === 'in-progress'
-                          ? 'info'
-                          : 'default'
+                            ? 'warning'
+                            : item.status === 'in-progress'
+                              ? 'info'
+                              : 'default'
                       }
                       size="small"
                       sx={{ fontSize: '0.7rem', mt: 0.5 }}
@@ -3795,8 +3795,8 @@ const InboundInternational: React.FC = () => {
           {editItemDialog.type === 'packaging'
             ? 'Quy cách đóng gói'
             : editItemDialog.type === 'timeline'
-            ? 'Timeline Vận Chuyển'
-            : 'Trạng thái chứng từ'}
+              ? 'Timeline Vận Chuyển'
+              : 'Trạng thái chứng từ'}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
@@ -3805,8 +3805,8 @@ const InboundInternational: React.FC = () => {
               {editItemDialog.item && 'name' in editItemDialog.item
                 ? editItemDialog.item.name
                 : editItemDialog.item && 'type' in editItemDialog.item
-                ? editItemDialog.item.type
-                : 'N/A'}
+                  ? editItemDialog.item.type
+                  : 'N/A'}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               <strong>Mô tả cũ:</strong> {editItemDialog.item?.description || 'Chưa có'}

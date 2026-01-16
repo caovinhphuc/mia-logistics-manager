@@ -1,8 +1,8 @@
-import { apiClient } from "../../../services/api/client";
-import type { Invoices, InvoicesFormData, InvoicesFilterParams } from "../types";
+import { apiClient } from '../../../services/api/client';
+import type { Invoices, InvoicesFormData, InvoicesFilterParams } from '../types';
 
 export class InvoicesService {
-  private static BASE_URL = "/invoices";
+  private static BASE_URL = '/invoices';
 
   /**
    * Get all invoices

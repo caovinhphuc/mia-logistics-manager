@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -9,8 +9,8 @@ import {
   Grid,
   IconButton,
   Typography,
-} from "@mui/material";
-import React from "react";
+} from '@mui/material';
+import React from 'react';
 
 interface GridViewItem {
   id: string;
@@ -32,14 +32,14 @@ interface GridViewProps {
 const GridView: React.FC<GridViewProps> = ({ items, onEdit, onDelete, renderCustomContent }) => {
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
-      case "active":
-      case "hoạt động":
-        return "success";
-      case "inactive":
-      case "không hoạt động":
-        return "error";
+      case 'active':
+      case 'hoạt động':
+        return 'success';
+      case 'inactive':
+      case 'không hoạt động':
+        return 'error';
       default:
-        return "default";
+        return 'default';
     }
   };
 
@@ -47,11 +47,11 @@ const GridView: React.FC<GridViewProps> = ({ items, onEdit, onDelete, renderCust
     <Grid container spacing={2}>
       {items.map((item) => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-          <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+          <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ flexGrow: 1 }}>
               <Box display="flex" alignItems="center" mb={1}>
                 {item.avatar && (
-                  <Avatar sx={{ mr: 1, bgcolor: "transparent", fontSize: "1.5rem" }}>
+                  <Avatar sx={{ mr: 1, bgcolor: 'transparent', fontSize: '1.5rem' }}>
                     {item.avatar}
                   </Avatar>
                 )}
@@ -70,7 +70,7 @@ const GridView: React.FC<GridViewProps> = ({ items, onEdit, onDelete, renderCust
               {item.status && (
                 <Box mb={1}>
                   <Chip
-                    label={item.status === "active" ? "Hoạt động" : "Không hoạt động"}
+                    label={item.status === 'active' ? 'Hoạt động' : 'Không hoạt động'}
                     color={getStatusColor(item.status)}
                     size="small"
                   />

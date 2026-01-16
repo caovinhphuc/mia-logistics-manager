@@ -5,7 +5,11 @@ import { useCreateReports } from '../hooks';
 import type { ReportsFormData } from '../types';
 
 export const ReportsForm: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<ReportsFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ReportsFormData>();
   const { mutate: create, isPending } = useCreateReports();
 
   const onSubmit = (data: ReportsFormData) => {
@@ -27,11 +31,7 @@ export const ReportsForm: React.FC = () => {
         sx={{ mb: 2 }}
       />
 
-      <Button
-        type="submit"
-        variant="contained"
-        disabled={isPending}
-      >
+      <Button type="submit" variant="contained" disabled={isPending}>
         {isPending ? 'Creating...' : 'Create Reports'}
       </Button>
     </Box>

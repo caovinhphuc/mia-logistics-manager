@@ -1,8 +1,8 @@
-import { ViewList, ViewModule } from "@mui/icons-material";
-import { ToggleButton, ToggleButtonGroup, Tooltip } from "@mui/material";
+import { ViewList, ViewModule } from '@mui/icons-material';
+import { ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
 
 // ViewIcons Component
-export const ViewIcons = ({ viewMode = "grid", onViewModeChange, ...props }) => {
+export const ViewIcons = ({ viewMode = 'grid', onViewModeChange, ...props }) => {
   const handleViewModeChange = (event, newViewMode) => {
     if (newViewMode !== null) {
       onViewModeChange?.(newViewMode);

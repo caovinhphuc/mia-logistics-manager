@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Container, Typography, Paper, Grid, Card, CardContent } from "@mui/material";
-import { Construction as ConstructionIcon, Info as InfoIcon } from "@mui/icons-material";
+import React from 'react';
+import { Box, Container, Typography, Paper, Grid, Card, CardContent } from '@mui/material';
+import { Construction as ConstructionIcon, Info as InfoIcon } from '@mui/icons-material';
 
 interface PageTemplateProps {
   title: string;
@@ -18,12 +18,12 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ title, subtitle, descriptio
     <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "60vh",
-          textAlign: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '60vh',
+          textAlign: 'center',
         }}
       >
         <Paper
@@ -32,17 +32,17 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ title, subtitle, descriptio
             p: 6,
             borderRadius: 4,
             maxWidth: 800,
-            width: "100%",
+            width: '100%',
             background: (theme) =>
-              theme.palette.mode === "dark"
+              theme.palette.mode === 'dark'
                 ? `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`
                 : `linear-gradient(135deg, ${theme.palette.background.paper} 0%, ${theme.palette.grey[50]} 100%)`,
           }}
         >
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "center",
+              display: 'flex',
+              justifyContent: 'center',
               mb: 3,
             }}
           >
@@ -50,7 +50,7 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ title, subtitle, descriptio
               <ConstructionIcon
                 sx={{
                   fontSize: 80,
-                  color: "warning.main",
+                  color: 'warning.main',
                   opacity: 0.8,
                 }}
               />
@@ -63,7 +63,7 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ title, subtitle, descriptio
             gutterBottom
             sx={{
               fontWeight: 700,
-              color: "primary.main",
+              color: 'primary.main',
               mb: 2,
             }}
           >
@@ -76,7 +76,7 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ title, subtitle, descriptio
               component="h2"
               gutterBottom
               sx={{
-                color: "text.secondary",
+                color: 'text.secondary',
                 mb: 3,
                 fontWeight: 500,
               }}
@@ -87,17 +87,17 @@ const PageTemplate: React.FC<PageTemplateProps> = ({ title, subtitle, descriptio
 
           <Box
             sx={{
-              backgroundColor: "info.50",
+              backgroundColor: 'info.50',
               borderRadius: 2,
               p: 3,
               mb: 4,
-              border: "1px solid",
-              borderColor: "info.200",
+              border: '1px solid',
+              borderColor: 'info.200',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "flex-start", gap: 2 }}>
-              <InfoIcon sx={{ color: "info.main", mt: 0.5 }} />
-              <Box sx={{ flex: 1, textAlign: "left" }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
+              <InfoIcon sx={{ color: 'info.main', mt: 0.5 }} />
+              <Box sx={{ flex: 1, textAlign: 'left' }}>
                 <Typography variant="body1" sx={{ fontWeight: 600, mb: 1 }}>
                   Trang này đang được phát triển
                 </Typography>

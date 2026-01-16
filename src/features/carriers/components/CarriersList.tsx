@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
@@ -22,24 +22,24 @@ import {
   Refresh as RefreshIcon,
   ViewList as ListIcon,
   ViewModule as ModuleIcon,
-} from "@mui/icons-material";
-import { useCarriers, useDeleteCarrier } from "../hooks/useCarriers";
-import { Carrier } from "../../../services/googleSheets/carriersService";
-import CreateCarrierDialog from "./CreateCarrierDialog";
+} from '@mui/icons-material';
+import { useCarriers, useDeleteCarrier } from '../hooks/useCarriers';
+import { Carrier } from '../../../services/googleSheets/carriersService';
+import CreateCarrierDialog from './CreateCarrierDialog';
 
-type ViewMode = "table" | "grid";
+type ViewMode = 'table' | 'grid';
 
 const formatCurrency = (value?: string | number | null) => {
   if (!value) {
-    return "Chưa có";
+    return 'Chưa có';
   }
 
   const numeric = Number(value);
   if (Number.isNaN(numeric) || numeric <= 0) {
-    return "Chưa có";
+    return 'Chưa có';
   }
 
-  return numeric.toLocaleString("vi-VN");
+  return numeric.toLocaleString('vi-VN');
 };
 
 const CarriersList: React.FC = () => {
@@ -48,7 +48,7 @@ const CarriersList: React.FC = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCarrier, setEditingCarrier] = useState<Carrier | null>(null);
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -98,8 +98,8 @@ const CarriersList: React.FC = () => {
   const gridItems = useMemo(() => {
     return carriers.map((carrier) => ({
       id: carrier.carrierId,
-      title: carrier.name || "Chưa có tên",
-      subtitle: carrier.serviceAreas || "Chưa có khu vực",
+      title: carrier.name || 'Chưa có tên',
+      subtitle: carrier.serviceAreas || 'Chưa có khu vực',
       contactPerson: carrier.contactPerson,
       phone: carrier.phone,
       pricingMethod: carrier.pricingMethod,
@@ -113,10 +113,10 @@ const CarriersList: React.FC = () => {
     return (
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "60vh",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '60vh',
         }}
       >
         <CircularProgress />
@@ -128,11 +128,11 @@ const CarriersList: React.FC = () => {
     return (
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "60vh",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '60vh',
           gap: 2,
         }}
       >
@@ -151,8 +151,8 @@ const CarriersList: React.FC = () => {
     );
   }
 
-  console.log("carriers", carriers);
-  console.log("viewMode", viewMode);
+  console.log('carriers', carriers);
+  console.log('viewMode', viewMode);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -164,9 +164,9 @@ const CarriersList: React.FC = () => {
       />
 
       <Stack
-        direction={{ xs: "column", md: "row" }}
+        direction={{ xs: 'column', md: 'row' }}
         spacing={2}
-        alignItems={{ xs: "stretch", md: "center" }}
+        alignItems={{ xs: 'stretch', md: 'center' }}
         justifyContent="space-between"
         mb={3}
       >
@@ -181,18 +181,18 @@ const CarriersList: React.FC = () => {
 
         <Stack direction="row" spacing={1} alignItems="center">
           <Button
-            variant={viewMode === "grid" ? "contained" : "outlined"}
+            variant={viewMode === 'grid' ? 'contained' : 'outlined'}
             size="small"
             startIcon={<ModuleIcon fontSize="small" />}
-            onClick={() => setViewMode("grid")}
+            onClick={() => setViewMode('grid')}
           >
             Lưới
           </Button>
           <Button
-            variant={viewMode === "table" ? "contained" : "outlined"}
+            variant={viewMode === 'table' ? 'contained' : 'outlined'}
             size="small"
             startIcon={<ListIcon fontSize="small" />}
-            onClick={() => setViewMode("table")}
+            onClick={() => setViewMode('table')}
           >
             Bảng
           </Button>
@@ -218,10 +218,10 @@ const CarriersList: React.FC = () => {
       </Stack>
 
       {carriers.length === 0 ? (
-        <Paper sx={{ p: 4, textAlign: "center" }}>
+        <Paper sx={{ p: 4, textAlign: 'center' }}>
           <Typography color="text.secondary">Chưa có nhà vận chuyển nào trong hệ thống.</Typography>
         </Paper>
-      ) : viewMode === "table" ? (
+      ) : viewMode === 'table' ? (
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -247,35 +247,35 @@ const CarriersList: React.FC = () => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography fontWeight={600}>{carrier.name || "Chưa có tên"}</Typography>
+                    <Typography fontWeight={600}>{carrier.name || 'Chưa có tên'}</Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {carrier.serviceAreas || "Chưa có khu vực"}
+                      {carrier.serviceAreas || 'Chưa có khu vực'}
                     </Typography>
                   </TableCell>
-                  <TableCell>{carrier.contactPerson || "Chưa có"}</TableCell>
+                  <TableCell>{carrier.contactPerson || 'Chưa có'}</TableCell>
                   <TableCell>
                     <Typography fontFamily="monospace" color="primary">
-                      {carrier.phone || "Chưa có"}
+                      {carrier.phone || 'Chưa có'}
                     </Typography>
                   </TableCell>
-                  <TableCell>{carrier.pricingMethod || "Chưa có"}</TableCell>
+                  <TableCell>{carrier.pricingMethod || 'Chưa có'}</TableCell>
                   <TableCell align="right">{formatCurrency(carrier.baseRate)}</TableCell>
                   <TableCell align="right">{formatCurrency(carrier.perKmRate)}</TableCell>
                   <TableCell align="right">{formatCurrency(carrier.perM3Rate)}</TableCell>
                   <TableCell align="center">
                     <Typography
                       sx={{
-                        display: "inline-block",
+                        display: 'inline-block',
                         px: 1,
                         py: 0.25,
                         borderRadius: 1,
-                        bgcolor: carrier.isActive ? "success.light" : "grey.200",
-                        color: carrier.isActive ? "success.dark" : "text.secondary",
-                        fontSize: "0.75rem",
+                        bgcolor: carrier.isActive ? 'success.light' : 'grey.200',
+                        color: carrier.isActive ? 'success.dark' : 'text.secondary',
+                        fontSize: '0.75rem',
                         fontWeight: 600,
                       }}
                     >
-                      {carrier.isActive ? "Hoạt động" : "Tạm dừng"}
+                      {carrier.isActive ? 'Hoạt động' : 'Tạm dừng'}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
@@ -309,7 +309,7 @@ const CarriersList: React.FC = () => {
           {gridItems.map((item) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
               <Paper
-                sx={{ p: 2, height: "100%", display: "flex", flexDirection: "column", gap: 1.5 }}
+                sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column', gap: 1.5 }}
               >
                 <Box>
                   <Typography variant="h6" fontWeight={700}>
@@ -321,17 +321,17 @@ const CarriersList: React.FC = () => {
                 </Box>
                 <Box>
                   <Typography fontWeight={600}>Người liên hệ</Typography>
-                  <Typography color="text.secondary">{item.contactPerson || "Chưa có"}</Typography>
+                  <Typography color="text.secondary">{item.contactPerson || 'Chưa có'}</Typography>
                 </Box>
                 <Box>
                   <Typography fontWeight={600}>Điện thoại</Typography>
                   <Typography fontFamily="monospace" color="primary">
-                    {item.phone || "Chưa có"}
+                    {item.phone || 'Chưa có'}
                   </Typography>
                 </Box>
                 <Box>
                   <Typography fontWeight={600}>Phương thức</Typography>
-                  <Typography color="text.secondary">{item.pricingMethod || "Chưa có"}</Typography>
+                  <Typography color="text.secondary">{item.pricingMethod || 'Chưa có'}</Typography>
                 </Box>
                 <Box>
                   <Typography fontWeight={600}>Định giá</Typography>

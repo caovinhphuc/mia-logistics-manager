@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -9,7 +9,7 @@ import {
   Paper,
   Box,
   Typography,
-} from "@mui/material";
+} from '@mui/material';
 
 export interface DataTableColumn<T = any> {
   id: string;
@@ -37,11 +37,11 @@ export function DataTable<T>({
   showRowNumbers = false,
   alternateRowColors = false,
   hoverEffects = true,
-  emptyMessage = "Không có dữ liệu",
+  emptyMessage = 'Không có dữ liệu',
 }: DataTableProps<T>) {
   if (!data || data.length === 0) {
     return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
+      <Box sx={{ p: 4, textAlign: 'center' }}>
         <Typography variant="body1" color="text.secondary">
           {emptyMessage}
         </Typography>
@@ -67,7 +67,7 @@ export function DataTable<T>({
             <TableRow>
               {showRowNumbers && <TableCell width={60}>#</TableCell>}
               {columns.map((column) => (
-                <TableCell key={column.id} width={column.width} sx={{ fontWeight: "bold" }}>
+                <TableCell key={column.id} width={column.width} sx={{ fontWeight: 'bold' }}>
                   {column.label}
                 </TableCell>
               ))}
@@ -78,8 +78,8 @@ export function DataTable<T>({
               <TableRow
                 key={index}
                 sx={{
-                  backgroundColor: alternateRowColors && index % 2 === 1 ? "grey.50" : "inherit",
-                  "&:hover": hoverEffects ? { backgroundColor: "action.hover" } : {},
+                  backgroundColor: alternateRowColors && index % 2 === 1 ? 'grey.50' : 'inherit',
+                  '&:hover': hoverEffects ? { backgroundColor: 'action.hover' } : {},
                 }}
               >
                 {showRowNumbers && <TableCell>{index + 1}</TableCell>}

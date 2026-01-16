@@ -19,7 +19,7 @@ export interface TimelineItem {
   name: string; // Tên mốc thời gian
   date: string; // Ngày thực tế
   estimatedDate?: string; // Ngày dự kiến (nếu có)
-  status: "completed" | "pending" | "in-progress" | "confirmed"; // Trạng thái
+  status: 'completed' | 'pending' | 'in-progress' | 'confirmed'; // Trạng thái
   description?: string; // Mô tả thêm (backward compatibility)
   descriptions?: DescriptionEntry[]; // Lịch sử mô tả (mới)
 }
@@ -29,7 +29,7 @@ export interface DocumentStatusItem {
   name: string; // Tên trạng thái chứng từ
   date: string; // Ngày thực tế
   estimatedDate?: string; // Ngày dự kiến (nếu có)
-  status: "completed" | "pending" | "in-progress" | "confirmed"; // Trạng thái
+  status: 'completed' | 'pending' | 'in-progress' | 'confirmed'; // Trạng thái
   description?: string; // Mô tả thêm (backward compatibility)
   descriptions?: DescriptionEntry[]; // Lịch sử mô tả (mới)
 }
@@ -42,15 +42,15 @@ export interface InboundItem {
   destination: string;
   product: string;
   quantity: number;
-  status: "pending" | "confirmed" | "in-transit" | "arrived" | "completed" | "cancelled";
+  status: 'pending' | 'confirmed' | 'in-transit' | 'arrived' | 'completed' | 'cancelled';
   estimatedArrival: string;
   actualArrival?: string;
-  type: "international" | "domestic";
+  type: 'international' | 'domestic';
   carrier: string;
   pi: string;
   container: number;
   category: string;
-  purpose: "online" | "offline";
+  purpose: 'online' | 'offline';
   receiveTime: string;
   notes?: string;
   poNumbers: string[];
@@ -75,7 +75,7 @@ export interface FormFields {
   pi: string;
   container: number;
   category: string;
-  purpose: "online" | "offline";
+  purpose: 'online' | 'offline';
   receiveTime: string;
   notes: string;
   poNumbers: string;
@@ -96,7 +96,7 @@ export interface Filters {
 // Edit dialog types
 export interface EditItemDialog {
   open: boolean;
-  type: "packaging" | "timeline" | "documentStatus";
+  type: 'packaging' | 'timeline' | 'documentStatus';
   item: PackagingItem | TimelineItem | DocumentStatusItem | null;
   index: number;
 }
@@ -109,27 +109,27 @@ export interface EditItemForm {
 export interface SnackbarState {
   open: boolean;
   message: string;
-  severity: "success" | "error" | "warning" | "info";
+  severity: 'success' | 'error' | 'warning' | 'info';
 }
 
 // View mode types
-export type ViewMode = "calendar" | "table";
+export type ViewMode = 'calendar' | 'table';
 
 // Status types
 export type ItemStatus =
-  | "pending"
-  | "confirmed"
-  | "in-transit"
-  | "arrived"
-  | "completed"
-  | "cancelled";
+  | 'pending'
+  | 'confirmed'
+  | 'in-transit'
+  | 'arrived'
+  | 'completed'
+  | 'cancelled';
 
-export type TimelineStatus = "completed" | "pending" | "in-progress" | "confirmed";
+export type TimelineStatus = 'completed' | 'pending' | 'in-progress' | 'confirmed';
 
-export type Purpose = "online" | "offline";
+export type Purpose = 'online' | 'offline';
 
 // Action menu types
-export type ActionMenuAction = "edit" | "delete" | "add_calendar";
+export type ActionMenuAction = 'edit' | 'delete' | 'add_calendar';
 
 // Calendar types
 export interface CalendarState {
@@ -146,7 +146,7 @@ export interface TableColumn {
   id: string;
   label: string;
   minWidth?: number;
-  align?: "right" | "left" | "center";
+  align?: 'right' | 'left' | 'center';
   format?: (value: unknown) => string;
 }
 

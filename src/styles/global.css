@@ -15,17 +15,17 @@ body {
   margin: 0;
   padding: 0;
   font-family:
-    "Roboto",
-    "Inter",
+    'Roboto',
+    'Inter',
     -apple-system,
     BlinkMacSystemFont,
-    "Segoe UI",
-    "Oxygen",
-    "Ubuntu",
-    "Cantarell",
-    "Fira Sans",
-    "Droid Sans",
-    "Helvetica Neue",
+    'Segoe UI',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -59,15 +59,15 @@ body {
 }
 
 /* Dark mode scrollbar */
-[data-theme="dark"] ::-webkit-scrollbar-track {
+[data-theme='dark'] ::-webkit-scrollbar-track {
   background: #2c2c2c;
 }
 
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
   background: #555;
 }
 
-[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
   background: #666;
 }
 
@@ -251,8 +251,8 @@ body {
 
 /* Vietnamese typography helpers */
 .vietnamese-text {
-  font-family: "Roboto", "Inter", sans-serif;
-  font-feature-settings: "liga" 1;
+  font-family: 'Roboto', 'Inter', sans-serif;
+  font-feature-settings: 'liga' 1;
 }
 
 /* Print styles */
@@ -326,7 +326,7 @@ body {
   }
 }
 
-[data-theme="dark"] .skeleton {
+[data-theme='dark'] .skeleton {
   background: linear-gradient(90deg, #2c2c2c 25%, #3c3c3c 50%, #2c2c2c 75%);
   background-size: 200% 100%;
 }
@@ -349,23 +349,23 @@ body {
   font-weight: 600;
 }
 
-[data-theme="dark"] .custom-table th {
+[data-theme='dark'] .custom-table th {
   background-color: #333;
   color: #fff;
 }
 
-[data-theme="dark"] .custom-table th,
-[data-theme="dark"] .custom-table td {
+[data-theme='dark'] .custom-table th,
+[data-theme='dark'] .custom-table td {
   border-bottom-color: #555;
 }
 
 /* Vietnam-specific styles */
 .vn-currency::before {
-  content: "";
+  content: '';
 }
 
 .vn-currency::after {
-  content: " ₫";
+  content: ' ₫';
 }
 
 /* Responsive grid */

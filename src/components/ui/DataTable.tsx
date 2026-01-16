@@ -1,2 +1,1 @@
-export * from "../../shared/components/ui/DataTable";
-
+export * from '../../shared/components/ui/DataTable';

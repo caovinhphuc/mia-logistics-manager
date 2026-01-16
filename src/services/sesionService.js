@@ -1,10 +1,10 @@
-import CryptoJS from "crypto-js";
+import CryptoJS from 'crypto-js';
 // This is a test comment
 
 class SessionService {
   constructor() {
-    this.encryptionKey = process.env.REACT_APP_ENCRYPTION_KEY || "mia-logistics-default-key-2024";
-    this.sessionKey = "mia-session";
+    this.encryptionKey = process.env.REACT_APP_ENCRYPTION_KEY || 'mia-logistics-default-key-2024';
+    this.sessionKey = 'mia-session';
     this.sessionTimeout = parseInt(process.env.REACT_APP_SESSION_TIMEOUT) || 3600000; // 1 hour
   }
 
@@ -35,12 +35,12 @@ class SessionService {
       localStorage.setItem(this.sessionKey, encryptedSession);
 
       // Store session ID in sessionStorage for tab-specific tracking
-      sessionStorage.setItem("mia-session-id", sessionData.id);
+      sessionStorage.setItem('mia-session-id', sessionData.id);
 
-      console.log("Session created:", sessionData.id);
+      console.log('Session created:', sessionData.id);
       return sessionData;
     } catch (error) {
-      console.error("Failed to create session:", error);
+      console.error('Failed to create session:', error);
       throw error;
     }
   }
@@ -62,7 +62,7 @@ class SessionService {
 
       return sessionData;
     } catch (error) {
-      console.error("Failed to get session:", error);
+      console.error('Failed to get session:', error);
       this.clearSession(); // Clear corrupted session
       return null;
     }
@@ -72,7 +72,7 @@ class SessionService {
     try {
       const session = this.getSession();
       if (!session) {
-        throw new Error("No active session");
+        throw new Error('No active session');
       }
 
       const updatedSession = {
@@ -86,7 +86,7 @@ class SessionService {
 
       return updatedSession;
     } catch (error) {
-      console.error("Failed to update session:", error);
+      console.error('Failed to update session:', error);
       throw error;
     }
   }
@@ -109,7 +109,7 @@ class SessionService {
 
       return refreshedSession;
     } catch (error) {
-      console.error("Failed to refresh session:", error);
+      console.error('Failed to refresh session:', error);
       throw error;
     }
   }
@@ -117,10 +117,10 @@ class SessionService {
   clearSession() {
     try {
       localStorage.removeItem(this.sessionKey);
-      sessionStorage.removeItem("mia-session-id");
-      console.log("Session cleared");
+      sessionStorage.removeItem('mia-session-id');
+      console.log('Session cleared');
     } catch (error) {
-      console.error("Failed to clear session:", error);
+      console.error('Failed to clear session:', error);
     }
   }
 
@@ -146,7 +146,7 @@ class SessionService {
   }
 
   generateSessionId() {
-    return "sess_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+    return 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
   }
 
   encryptData(data) {
@@ -164,7 +164,7 @@ class SessionService {
   getClientIP() {
     // In a real application, you would get this from the server
     // For demo purposes, return a placeholder
-    return "127.0.0.1";
+    return '127.0.0.1';
   }
 
   // Security utilities
@@ -173,7 +173,7 @@ class SessionService {
     const currentUserAgent = navigator.userAgent;
 
     if (session.userAgent !== currentUserAgent) {
-      console.warn("Possible session hijacking detected: User agent mismatch");
+      console.warn('Possible session hijacking detected: User agent mismatch');
       return true;
     }
 
@@ -184,7 +184,7 @@ class SessionService {
     // Additional security checks
     if (this.isSessionHijacked(session)) {
       this.clearSession();
-      throw new Error("Session security violation detected");
+      throw new Error('Session security violation detected');
     }
 
     return true;
@@ -207,30 +207,30 @@ class SessionService {
       // Keep only last 100 activities
       const recentActivities = activities.slice(-100);
 
-      localStorage.setItem("mia-activity-log", JSON.stringify(recentActivities));
+      localStorage.setItem('mia-activity-log', JSON.stringify(recentActivities));
     } catch (error) {
-      console.error("Failed to track activity:", error);
+      console.error('Failed to track activity:', error);
     }
   }
 
   getActivityLog() {
     try {
-      const log = localStorage.getItem("mia-activity-log");
+      const log = localStorage.getItem('mia-activity-log');
       return log ? JSON.parse(log) : [];
     } catch (error) {
-      console.error("Failed to get activity log:", error);
+      console.error('Failed to get activity log:', error);
       return [];
     }
   }
 
   clearActivityLog() {
-    localStorage.removeItem("mia-activity-log");
+    localStorage.removeItem('mia-activity-log');
   }
 
   // Multi-tab session management
   synchronizeSession() {
     // Listen for storage events to sync sessions across tabs
-    window.addEventListener("storage", (event) => {
+    window.addEventListener('storage', (event) => {
       if (event.key === this.sessionKey) {
         // Session was updated in another tab
         if (!event.newValue) {
@@ -243,8 +243,8 @@ class SessionService {
 
   // Session statistics
   getSessionStats() {
-    console.log("🔍 Getting session stats");
-    console.log("🔍 Session:", this.getSession());
+    console.log('🔍 Getting session stats');
+    console.log('🔍 Session:', this.getSession());
     const session = this.getSession();
     if (!session) return null;
 

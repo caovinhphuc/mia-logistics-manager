@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -30,7 +30,7 @@ import {
   List,
   ListItemButton,
   ListItemText,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -53,14 +53,14 @@ import {
   CalendarMonth as CalendarIcon,
   ArrowBackIos as ArrowBackIcon,
   ArrowForwardIos as ArrowForwardIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 // Import service functions
 import {
   getInboundDomesticItems,
   addInboundDomesticItem,
   updateInboundDomesticItem,
   deleteInboundDomesticItem,
-} from "../../services/googleSheets/inboundDomesticService";
+} from '../../services/googleSheets/inboundDomesticService';
 
 // Removed MUI X Date Pickers to avoid extra dependency
 
@@ -72,10 +72,10 @@ interface InboundDomesticItem {
   destination: string; // Kho nhận
   product: string; // Mã Sản phẩm
   quantity: number; // Số lượng
-  status: "pending" | "in-transit" | "arrived" | "completed";
+  status: 'pending' | 'in-transit' | 'arrived' | 'completed';
   category: string; // Phân loại hàng hóa
   carrier: string; // Nhà vận chuyển
-  purpose: "online" | "offline"; // Mục đích
+  purpose: 'online' | 'offline'; // Mục đích
   receiveTime: string; // Thời gian nhận
   notes?: string;
   createdAt?: string;
@@ -85,12 +85,12 @@ interface InboundDomesticItem {
 const InboundDomestic: React.FC = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [editingItem, setEditingItem] = useState<InboundDomesticItem | null>(null);
-  const [viewMode, setViewMode] = useState<"calendar" | "table">("table");
+  const [viewMode, setViewMode] = useState<'calendar' | 'table'>('table');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
 
   // Calendar view states
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -120,8 +120,8 @@ const InboundDomestic: React.FC = () => {
         const data = await getInboundDomesticItems();
         setInboundItems(data);
       } catch (err) {
-        console.error("Error loading inbound domestic items:", err);
-        setError("Không thể tải dữ liệu. Vui lòng thử lại.");
+        console.error('Error loading inbound domestic items:', err);
+        setError('Không thể tải dữ liệu. Vui lòng thử lại.');
       } finally {
         setLoading(false);
       }
@@ -133,14 +133,14 @@ const InboundDomestic: React.FC = () => {
   // Helper functions
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case "pending":
-        return "Chờ xử lý";
-      case "in-transit":
-        return "Đang vận chuyển";
-      case "arrived":
-        return "Đã đến";
-      case "completed":
-        return "Hoàn thành";
+      case 'pending':
+        return 'Chờ xử lý';
+      case 'in-transit':
+        return 'Đang vận chuyển';
+      case 'arrived':
+        return 'Đã đến';
+      case 'completed':
+        return 'Hoàn thành';
       default:
         return status;
     }
@@ -148,42 +148,42 @@ const InboundDomestic: React.FC = () => {
 
   const getStatusColorForChip = (status: string) => {
     switch (status) {
-      case "pending":
-        return "warning";
-      case "in-transit":
-        return "info";
-      case "arrived":
-        return "success";
-      case "completed":
-        return "success";
+      case 'pending':
+        return 'warning';
+      case 'in-transit':
+        return 'info';
+      case 'arrived':
+        return 'success';
+      case 'completed':
+        return 'success';
       default:
-        return "default";
+        return 'default';
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "Vali":
+      case 'Vali':
         return <LuggageIcon />;
-      case "Balo":
+      case 'Balo':
         return <BackpackIcon />;
-      case "Quà tặng":
+      case 'Quà tặng':
         return <GiftIcon />;
-      case "Phụ kiện":
+      case 'Phụ kiện':
         return <TravelExploreIcon />;
-      case "Phụ kiện sửa chữa":
+      case 'Phụ kiện sửa chữa':
         return <HandymanIcon />;
-      case "Nguyên vật liệu":
+      case 'Nguyên vật liệu':
         return <InventoryIcon />;
-      case "Thùng giấy":
+      case 'Thùng giấy':
         return <Inventory2Icon />;
-      case "Văn phòng phẩm":
+      case 'Văn phòng phẩm':
         return <DescriptionIcon />;
-      case "Thiết bị văn phòng":
+      case 'Thiết bị văn phòng':
         return <BusinessCenterIcon />;
-      case "Thực phẩm":
+      case 'Thực phẩm':
         return <InventoryIcon />;
-      case "Xây dựng":
+      case 'Xây dựng':
         return <HandymanIcon />;
       default:
         return <InventoryIcon />;
@@ -192,7 +192,7 @@ const InboundDomestic: React.FC = () => {
 
   // CRUD Operations
   const handleAddItem = async (
-    item: Omit<InboundDomesticItem, "id" | "createdAt" | "updatedAt">
+    item: Omit<InboundDomesticItem, 'id' | 'createdAt' | 'updatedAt'>
   ) => {
     try {
       setLoading(true);
@@ -203,8 +203,8 @@ const InboundDomestic: React.FC = () => {
       setOpenDialog(false);
       setEditingItem(null);
     } catch (err) {
-      console.error("Error adding item:", err);
-      setError("Không thể thêm mục. Vui lòng thử lại.");
+      console.error('Error adding item:', err);
+      setError('Không thể thêm mục. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -220,8 +220,8 @@ const InboundDomestic: React.FC = () => {
       setOpenDialog(false);
       setEditingItem(null);
     } catch (err) {
-      console.error("Error updating item:", err);
-      setError("Không thể cập nhật mục. Vui lòng thử lại.");
+      console.error('Error updating item:', err);
+      setError('Không thể cập nhật mục. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -235,8 +235,8 @@ const InboundDomestic: React.FC = () => {
       const data = await getInboundDomesticItems();
       setInboundItems(data);
     } catch (err) {
-      console.error("Error deleting item:", err);
-      setError("Không thể xóa mục. Vui lòng thử lại.");
+      console.error('Error deleting item:', err);
+      setError('Không thể xóa mục. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -249,8 +249,8 @@ const InboundDomestic: React.FC = () => {
       const data = await getInboundDomesticItems();
       setInboundItems(data);
     } catch (err) {
-      console.error("Error refreshing data:", err);
-      setError("Không thể làm mới dữ liệu. Vui lòng thử lại.");
+      console.error('Error refreshing data:', err);
+      setError('Không thể làm mới dữ liệu. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -264,8 +264,8 @@ const InboundDomestic: React.FC = () => {
       item.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.carrier.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus = statusFilter === "all" || item.status === statusFilter;
-    const matchesCategory = categoryFilter === "all" || item.category === categoryFilter;
+    const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+    const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
 
     return matchesSearch && matchesStatus && matchesCategory;
   });
@@ -283,7 +283,7 @@ const InboundDomestic: React.FC = () => {
   };
 
   const getItemsForDate = (date: Date) => {
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = date.toISOString().split('T')[0];
     return filteredItems.filter((item) => item.date === dateStr);
   };
 
@@ -322,10 +322,10 @@ const InboundDomestic: React.FC = () => {
     if (!calendarMenuDate) return;
 
     switch (action) {
-      case "add":
+      case 'add':
         handleAddFromCalendar(calendarMenuDate);
         break;
-      case "view":
+      case 'view':
         handleDateClick(calendarMenuDate);
         break;
     }
@@ -343,7 +343,7 @@ const InboundDomestic: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa mục này?")) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa mục này?')) {
       await handleDeleteItem(id);
     }
   };
@@ -354,19 +354,19 @@ const InboundDomestic: React.FC = () => {
     } else {
       const newItem = {
         date: addFromCalendar
-          ? addFromCalendar.toLocaleDateString("vi-VN")
-          : new Date().toLocaleDateString("vi-VN"),
-        supplier: "",
-        origin: "",
-        destination: "",
-        product: "",
+          ? addFromCalendar.toLocaleDateString('vi-VN')
+          : new Date().toLocaleDateString('vi-VN'),
+        supplier: '',
+        origin: '',
+        destination: '',
+        product: '',
         quantity: 0,
-        status: "pending" as const,
-        category: "",
-        carrier: "",
-        purpose: "offline" as const,
-        receiveTime: "",
-        notes: "",
+        status: 'pending' as const,
+        category: '',
+        carrier: '',
+        purpose: 'offline' as const,
+        receiveTime: '',
+        notes: '',
         ...item,
       };
       await handleAddItem(newItem);
@@ -391,13 +391,13 @@ const InboundDomestic: React.FC = () => {
     if (!selectedItemForAction) return;
 
     switch (action) {
-      case "edit":
+      case 'edit':
         handleEdit(selectedItemForAction);
         break;
-      case "delete":
+      case 'delete':
         handleDelete(selectedItemForAction.id);
         break;
-      case "add_calendar":
+      case 'add_calendar':
         // Set the item's receive time as the selected date for calendar
         setAddFromCalendar(new Date(selectedItemForAction.receiveTime));
         setOpenDialog(true);
@@ -411,37 +411,37 @@ const InboundDomestic: React.FC = () => {
       {/* Header */}
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           mb: 3,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <HomeIcon sx={{ fontSize: 32, color: "primary.main" }} />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <HomeIcon sx={{ fontSize: 32, color: 'primary.main' }} />
           <Typography variant="h4" component="h1" fontWeight="bold">
             Lịch nhập hàng Quốc nội
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
           <Button
             variant="outlined"
             onClick={handleRefresh}
             disabled={loading}
             startIcon={loading ? <ScheduleIcon /> : <ScheduleIcon />}
           >
-            {loading ? "Đang tải..." : "Làm mới"}
+            {loading ? 'Đang tải...' : 'Làm mới'}
           </Button>
           <Button
-            variant={viewMode === "calendar" ? "contained" : "outlined"}
-            onClick={() => setViewMode("calendar")}
+            variant={viewMode === 'calendar' ? 'contained' : 'outlined'}
+            onClick={() => setViewMode('calendar')}
             startIcon={<ScheduleIcon />}
           >
             Lịch
           </Button>
           <Button
-            variant={viewMode === "table" ? "contained" : "outlined"}
-            onClick={() => setViewMode("table")}
+            variant={viewMode === 'table' ? 'contained' : 'outlined'}
+            onClick={() => setViewMode('table')}
           >
             Bảng
           </Button>
@@ -460,7 +460,7 @@ const InboundDomestic: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <ScheduleIcon color="primary" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
@@ -477,11 +477,11 @@ const InboundDomestic: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <TruckIcon color="info" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {inboundItems.filter((item) => item.status === "in-transit").length}
+                    {inboundItems.filter((item) => item.status === 'in-transit').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Đang vận chuyển
@@ -494,11 +494,11 @@ const InboundDomestic: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <LocationIcon color="success" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {inboundItems.filter((item) => item.status === "arrived").length}
+                    {inboundItems.filter((item) => item.status === 'arrived').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Đã đến
@@ -511,11 +511,11 @@ const InboundDomestic: React.FC = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <BusinessIcon color="warning" />
                 <Box>
                   <Typography variant="h6" fontWeight="bold">
-                    {inboundItems.filter((item) => item.status === "pending").length}
+                    {inboundItems.filter((item) => item.status === 'pending').length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Chờ xử lý
@@ -530,10 +530,10 @@ const InboundDomestic: React.FC = () => {
       <Paper sx={{ p: 2, mb: 2 }}>
         <Box
           sx={{
-            display: "flex",
+            display: 'flex',
             gap: 2,
-            alignItems: "center",
-            flexWrap: "wrap",
+            alignItems: 'center',
+            flexWrap: 'wrap',
           }}
         >
           <TextField
@@ -580,37 +580,37 @@ const InboundDomestic: React.FC = () => {
           <Button
             variant="outlined"
             onClick={() => {
-              setSearchTerm("");
-              setStatusFilter("all");
-              setCategoryFilter("all");
+              setSearchTerm('');
+              setStatusFilter('all');
+              setCategoryFilter('all');
             }}
             size="small"
           >
             Xóa bộ lọc
           </Button>
 
-          <Typography variant="body2" color="text.secondary" sx={{ ml: "auto" }}>
+          <Typography variant="body2" color="text.secondary" sx={{ ml: 'auto' }}>
             Hiển thị {filteredItems.length} / {inboundItems.length} mục
           </Typography>
         </Box>
       </Paper>
       {/* Content */}
-      {viewMode === "table" ? (
+      {viewMode === 'table' ? (
         <Paper sx={{ p: 2 }}>
           <TableContainer>
             <Table
               size="small"
               sx={{
-                tableLayout: "auto",
-                "& th, & td": {
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
+                tableLayout: 'auto',
+                '& th, & td': {
+                  whiteSpace: 'nowrap',
+                  textOverflow: 'ellipsis',
+                  overflow: 'hidden',
                 },
-                "& .address-cell": {
-                  whiteSpace: "normal",
-                  textOverflow: "unset",
-                  overflow: "visible",
+                '& .address-cell': {
+                  whiteSpace: 'normal',
+                  textOverflow: 'unset',
+                  overflow: 'visible',
                   lineHeight: 1.2,
                 },
               }}
@@ -626,7 +626,7 @@ const InboundDomestic: React.FC = () => {
                   <TableCell>Trạng thái</TableCell>
                   <TableCell>NVC</TableCell>
                   <TableCell>Mục đích</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>
+                  <TableCell sx={{ textAlign: 'center' }}>
                     {/* tiêu đề tác vụ để trống */}
                   </TableCell>
                 </TableRow>
@@ -637,35 +637,35 @@ const InboundDomestic: React.FC = () => {
                     <TableCell>
                       {(() => {
                         const d = new Date(item.date);
-                        return isNaN(d.getTime()) ? "Chưa có" : d.toLocaleDateString("vi-VN");
+                        return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                       })()}
                     </TableCell>
                     <TableCell>
                       <Tooltip title={item.supplier}>
-                        <Typography noWrap sx={{ fontSize: "0.65rem" }}>
+                        <Typography noWrap sx={{ fontSize: '0.65rem' }}>
                           {item.supplier}
                         </Typography>
                       </Tooltip>
                     </TableCell>
                     <TableCell className="address-cell">
                       <Box>
-                        <Typography variant="body2" sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
-                          {item.destination?.split(" - ")[0] || item.destination}
+                        <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
+                          {item.destination?.split(' - ')[0] || item.destination}
                         </Typography>
-                        {item.destination?.includes(" - ") && (
+                        {item.destination?.includes(' - ') && (
                           <Typography
                             variant="caption"
                             color="text.secondary"
-                            sx={{ fontSize: "0.55rem" }}
+                            sx={{ fontSize: '0.55rem' }}
                           >
-                            {item.destination.split(" - ").slice(1).join(" - ")}
+                            {item.destination.split(' - ').slice(1).join(' - ')}
                           </Typography>
                         )}
                       </Box>
                     </TableCell>
                     <TableCell>
                       <Tooltip title={item.product}>
-                        <Typography noWrap sx={{ fontSize: "0.65rem" }}>
+                        <Typography noWrap sx={{ fontSize: '0.65rem' }}>
                           {item.product}
                         </Typography>
                       </Tooltip>
@@ -673,43 +673,43 @@ const InboundDomestic: React.FC = () => {
                     <TableCell>
                       <Box
                         sx={{
-                          display: "flex",
-                          alignItems: "center",
+                          display: 'flex',
+                          alignItems: 'center',
                           gap: 0.5,
-                          fontSize: "0.65rem",
+                          fontSize: '0.65rem',
                           fontWeight: 500,
-                          color: "info.main",
-                          backgroundColor: "info.50",
-                          border: "1px solid",
-                          borderColor: "info.main",
+                          color: 'info.main',
+                          backgroundColor: 'info.50',
+                          border: '1px solid',
+                          borderColor: 'info.main',
                           borderRadius: 1,
                           px: 0.5,
                           py: 0.25,
-                          textAlign: "center",
-                          minWidth: "fit-content",
-                          maxWidth: "100%",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
+                          textAlign: 'center',
+                          minWidth: 'fit-content',
+                          maxWidth: '100%',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
                         }}
                       >
                         <Box
                           sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            fontSize: "0.6rem",
+                            display: 'flex',
+                            alignItems: 'center',
+                            fontSize: '0.6rem',
                           }}
                         >
                           {getCategoryIcon(item.category)}
                         </Box>
                         <Typography
                           sx={{
-                            fontSize: "0.65rem",
+                            fontSize: '0.65rem',
                             fontWeight: 500,
-                            color: "info.main",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
+                            color: 'info.main',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
                           }}
                         >
                           {item.category}
@@ -723,43 +723,43 @@ const InboundDomestic: React.FC = () => {
                         const colorKey = getStatusColorForChip(item.status);
 
                         // Xác định màu sắc dựa trên trạng thái
-                        let color = "primary.main";
-                        let bgColor = "primary.50";
-                        let borderColor = "primary.main";
+                        let color = 'primary.main';
+                        let bgColor = 'primary.50';
+                        let borderColor = 'primary.main';
 
-                        if (colorKey === "warning") {
-                          color = "warning.main";
-                          bgColor = "warning.50";
-                          borderColor = "warning.main";
-                        } else if (colorKey === "success") {
-                          color = "success.main";
-                          bgColor = "success.50";
-                          borderColor = "success.main";
-                        } else if (colorKey === "info") {
-                          color = "info.main";
-                          bgColor = "info.50";
-                          borderColor = "info.main";
+                        if (colorKey === 'warning') {
+                          color = 'warning.main';
+                          bgColor = 'warning.50';
+                          borderColor = 'warning.main';
+                        } else if (colorKey === 'success') {
+                          color = 'success.main';
+                          bgColor = 'success.50';
+                          borderColor = 'success.main';
+                        } else if (colorKey === 'info') {
+                          color = 'info.main';
+                          bgColor = 'info.50';
+                          borderColor = 'info.main';
                         }
 
                         return (
                           <Typography
                             sx={{
-                              fontSize: "0.65rem",
+                              fontSize: '0.65rem',
                               fontWeight: 500,
                               color: color,
                               backgroundColor: bgColor,
-                              border: "1px solid",
+                              border: '1px solid',
                               borderColor: borderColor,
                               borderRadius: 1,
                               px: 0.5,
                               py: 0.25,
-                              textAlign: "center",
-                              display: "inline-block",
-                              minWidth: "fit-content",
-                              maxWidth: "100%",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
+                              textAlign: 'center',
+                              display: 'inline-block',
+                              minWidth: 'fit-content',
+                              maxWidth: '100%',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
                             }}
                           >
                             {status}
@@ -769,53 +769,53 @@ const InboundDomestic: React.FC = () => {
                     </TableCell>
                     <TableCell>
                       <Tooltip title={item.carrier}>
-                        <Typography noWrap sx={{ fontSize: "0.65rem" }}>
+                        <Typography noWrap sx={{ fontSize: '0.65rem' }}>
                           {item.carrier}
                         </Typography>
                       </Tooltip>
                     </TableCell>
                     <TableCell>
                       {(() => {
-                        const isOnline = item.purpose === "online";
-                        const color = isOnline ? "success.main" : "warning.main";
-                        const bgColor = isOnline ? "success.50" : "warning.50";
-                        const borderColor = isOnline ? "success.main" : "warning.main";
+                        const isOnline = item.purpose === 'online';
+                        const color = isOnline ? 'success.main' : 'warning.main';
+                        const bgColor = isOnline ? 'success.50' : 'warning.50';
+                        const borderColor = isOnline ? 'success.main' : 'warning.main';
 
                         return (
                           <Typography
                             sx={{
-                              fontSize: "0.65rem",
+                              fontSize: '0.65rem',
                               fontWeight: 500,
                               color: color,
                               backgroundColor: bgColor,
-                              border: "1px solid",
+                              border: '1px solid',
                               borderColor: borderColor,
                               borderRadius: 1,
                               px: 0.5,
                               py: 0.25,
-                              textAlign: "center",
-                              display: "inline-block",
-                              minWidth: "fit-content",
-                              maxWidth: "100%",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
+                              textAlign: 'center',
+                              display: 'inline-block',
+                              minWidth: 'fit-content',
+                              maxWidth: '100%',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
                             }}
                           >
-                            {isOnline ? "Online" : "Offline"}
+                            {isOnline ? 'Online' : 'Offline'}
                           </Typography>
                         );
                       })()}
                     </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
+                    <TableCell sx={{ textAlign: 'center' }}>
                       <Tooltip title="Thao tác">
                         <IconButton
                           size="small"
                           onClick={(e) => handleActionMenuOpen(e, item)}
                           sx={{
-                            color: "primary.main",
-                            "&:hover": {
-                              backgroundColor: "primary.50",
+                            color: 'primary.main',
+                            '&:hover': {
+                              backgroundColor: 'primary.50',
                             },
                           }}
                         >
@@ -835,21 +835,21 @@ const InboundDomestic: React.FC = () => {
           {/* Calendar Header */}
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               mb: 3,
             }}
           >
-            <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <CalendarIcon color="primary" />
-              Lịch nhập hàng -{" "}
-              {currentDate.toLocaleDateString("vi-VN", {
-                month: "long",
-                year: "numeric",
+              Lịch nhập hàng -{' '}
+              {currentDate.toLocaleDateString('vi-VN', {
+                month: 'long',
+                year: 'numeric',
               })}
             </Typography>
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
               <IconButton onClick={handlePrevMonth} size="small">
                 <ArrowBackIcon />
               </IconButton>
@@ -863,16 +863,16 @@ const InboundDomestic: React.FC = () => {
           <Box sx={{ mb: 3 }}>
             {/* Day headers */}
             <Grid container spacing={0}>
-              {["CN", "T2", "T3", "T4", "T5", "T6", "T7"].map((day) => (
+              {['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'].map((day) => (
                 <Grid item xs={12 / 7} key={day}>
                   <Box
                     sx={{
                       p: 1,
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      backgroundColor: "grey.100",
-                      border: "1px solid",
-                      borderColor: "grey.300",
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      backgroundColor: 'grey.100',
+                      border: '1px solid',
+                      borderColor: 'grey.300',
                     }}
                   >
                     {day}
@@ -895,9 +895,9 @@ const InboundDomestic: React.FC = () => {
                       <Box
                         sx={{
                           minHeight: 120,
-                          border: "1px solid",
-                          borderColor: "grey.300",
-                          backgroundColor: "grey.50",
+                          border: '1px solid',
+                          borderColor: 'grey.300',
+                          backgroundColor: 'grey.50',
                         }}
                       />
                     </Grid>
@@ -917,22 +917,22 @@ const InboundDomestic: React.FC = () => {
                       <Box
                         sx={{
                           minHeight: 120,
-                          border: "1px solid",
-                          borderColor: "grey.300",
+                          border: '1px solid',
+                          borderColor: 'grey.300',
                           backgroundColor: isToday
-                            ? "primary.50"
+                            ? 'primary.50'
                             : isSelected
-                              ? "secondary.50"
-                              : "white",
+                              ? 'secondary.50'
+                              : 'white',
                           p: 1,
-                          position: "relative",
-                          cursor: "pointer",
-                          "&:hover": {
+                          position: 'relative',
+                          cursor: 'pointer',
+                          '&:hover': {
                             backgroundColor: isToday
-                              ? "primary.100"
+                              ? 'primary.100'
                               : isSelected
-                                ? "secondary.100"
-                                : "grey.50",
+                                ? 'secondary.100'
+                                : 'grey.50',
                           },
                         }}
                         onClick={() => handleDateClick(cellDate)}
@@ -940,8 +940,8 @@ const InboundDomestic: React.FC = () => {
                         <Typography
                           variant="body2"
                           sx={{
-                            fontWeight: isToday ? "bold" : "normal",
-                            color: isToday ? "primary.main" : "text.primary",
+                            fontWeight: isToday ? 'bold' : 'normal',
+                            color: isToday ? 'primary.main' : 'text.primary',
                             mb: 1,
                           }}
                         >
@@ -954,28 +954,28 @@ const InboundDomestic: React.FC = () => {
                             key={item.id}
                             sx={{
                               backgroundColor:
-                                getStatusColorForChip(item.status) === "success"
-                                  ? "success.100"
-                                  : getStatusColorForChip(item.status) === "warning"
-                                    ? "warning.100"
-                                    : getStatusColorForChip(item.status) === "info"
-                                      ? "info.100"
-                                      : "grey.100",
+                                getStatusColorForChip(item.status) === 'success'
+                                  ? 'success.100'
+                                  : getStatusColorForChip(item.status) === 'warning'
+                                    ? 'warning.100'
+                                    : getStatusColorForChip(item.status) === 'info'
+                                      ? 'info.100'
+                                      : 'grey.100',
                               color:
-                                getStatusColorForChip(item.status) === "success"
-                                  ? "success.800"
-                                  : getStatusColorForChip(item.status) === "warning"
-                                    ? "warning.800"
-                                    : getStatusColorForChip(item.status) === "info"
-                                      ? "info.800"
-                                      : "grey.800",
+                                getStatusColorForChip(item.status) === 'success'
+                                  ? 'success.800'
+                                  : getStatusColorForChip(item.status) === 'warning'
+                                    ? 'warning.800'
+                                    : getStatusColorForChip(item.status) === 'info'
+                                      ? 'info.800'
+                                      : 'grey.800',
                               p: 0.5,
                               mb: 0.5,
                               borderRadius: 0.5,
-                              fontSize: "0.7rem",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
+                              fontSize: '0.7rem',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
                             }}
                           >
                             {item.supplier}
@@ -986,8 +986,8 @@ const InboundDomestic: React.FC = () => {
                           <Typography
                             variant="caption"
                             sx={{
-                              color: "text.secondary",
-                              fontSize: "0.6rem",
+                              color: 'text.secondary',
+                              fontSize: '0.6rem',
                             }}
                           >
                             +{itemsForDate.length - 3} khác
@@ -997,12 +997,12 @@ const InboundDomestic: React.FC = () => {
                         {/* Menu button */}
                         <Box
                           sx={{
-                            position: "absolute",
+                            position: 'absolute',
                             top: 2,
                             right: 2,
                             opacity: 0,
-                            transition: "opacity 0.2s",
-                            "&:hover": {
+                            transition: 'opacity 0.2s',
+                            '&:hover': {
                               opacity: 1,
                             },
                           }}
@@ -1013,15 +1013,15 @@ const InboundDomestic: React.FC = () => {
                             sx={{
                               width: 20,
                               height: 20,
-                              "&:hover": {
-                                bgcolor: "grey.200",
+                              '&:hover': {
+                                bgcolor: 'grey.200',
                               },
                             }}
                           >
                             <MoreVertIcon
                               sx={{
-                                fontSize: "0.8rem",
-                                color: "grey.600",
+                                fontSize: '0.8rem',
+                                color: 'grey.600',
                               }}
                             />
                           </IconButton>
@@ -1040,7 +1040,7 @@ const InboundDomestic: React.FC = () => {
           {selectedDate && selectedDateItems.length > 0 && (
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography variant="h6" gutterBottom>
-                Lịch nhập hàng - {selectedDate.toLocaleDateString("vi-VN")}
+                Lịch nhập hàng - {selectedDate.toLocaleDateString('vi-VN')}
               </Typography>
               <Grid container spacing={2}>
                 {selectedDateItems.map((item) => (
@@ -1049,9 +1049,9 @@ const InboundDomestic: React.FC = () => {
                       <CardContent>
                         <Box
                           sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "flex-start",
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
                             mb: 1,
                           }}
                         >
@@ -1062,13 +1062,13 @@ const InboundDomestic: React.FC = () => {
                             label={getStatusLabel(item.status)}
                             color={
                               getStatusColorForChip(item.status) as
-                                | "default"
-                                | "primary"
-                                | "secondary"
-                                | "success"
-                                | "info"
-                                | "warning"
-                                | "error"
+                                | 'default'
+                                | 'primary'
+                                | 'secondary'
+                                | 'success'
+                                | 'info'
+                                | 'warning'
+                                | 'error'
                             }
                             size="small"
                           />
@@ -1086,10 +1086,10 @@ const InboundDomestic: React.FC = () => {
                           <strong>Đến:</strong> {item.destination}
                         </Typography>
                         <Typography variant="body2" color="text.secondary" gutterBottom>
-                          <strong>Thời gian nhận:</strong>{" "}
+                          <strong>Thời gian nhận:</strong>{' '}
                           {(() => {
                             const d = new Date(item.receiveTime);
-                            return isNaN(d.getTime()) ? "Chưa có" : d.toLocaleDateString("vi-VN");
+                            return isNaN(d.getTime()) ? 'Chưa có' : d.toLocaleDateString('vi-VN');
                           })()}
                         </Typography>
                         {item.notes && (
@@ -1097,7 +1097,7 @@ const InboundDomestic: React.FC = () => {
                             <strong>Ghi chú:</strong> {item.notes}
                           </Typography>
                         )}
-                        <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+                        <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
                           <IconButton size="small" onClick={() => handleEdit(item)}>
                             <EditIcon />
                           </IconButton>
@@ -1121,15 +1121,15 @@ const InboundDomestic: React.FC = () => {
         anchorEl={calendarMenuAnchor}
         onClose={handleCalendarMenuClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
       >
         <List>
-          <ListItemButton onClick={() => handleCalendarMenuAction("add")}>
+          <ListItemButton onClick={() => handleCalendarMenuAction('add')}>
             <ListItemText primary="Thêm lịch nhập hàng" />
           </ListItemButton>
-          <ListItemButton onClick={() => handleCalendarMenuAction("view")}>
+          <ListItemButton onClick={() => handleCalendarMenuAction('view')}>
             <ListItemText primary="Xem chi tiết" />
           </ListItemButton>
         </List>
@@ -1138,7 +1138,7 @@ const InboundDomestic: React.FC = () => {
       <Fab
         color="primary"
         aria-label="add"
-        sx={{ position: "fixed", bottom: 16, right: 16 }}
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
         onClick={handleAddNew}
       >
         <AddIcon />
@@ -1147,10 +1147,10 @@ const InboundDomestic: React.FC = () => {
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>
           {editingItem
-            ? "Sửa lịch nhập hàng"
+            ? 'Sửa lịch nhập hàng'
             : addFromCalendar
-              ? `Thêm lịch nhập hàng - ${addFromCalendar.toLocaleDateString("vi-VN")}`
-              : "Thêm lịch nhập hàng mới"}
+              ? `Thêm lịch nhập hàng - ${addFromCalendar.toLocaleDateString('vi-VN')}`
+              : 'Thêm lịch nhập hàng mới'}
         </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -1159,7 +1159,7 @@ const InboundDomestic: React.FC = () => {
                 <TextField
                   fullWidth
                   label="Mã ID"
-                  defaultValue={editingItem?.id || ""}
+                  defaultValue={editingItem?.id || ''}
                   variant="outlined"
                   required
                 />
@@ -1169,7 +1169,7 @@ const InboundDomestic: React.FC = () => {
               <TextField
                 fullWidth
                 label="Nhà cung cấp"
-                defaultValue={editingItem?.supplier || ""}
+                defaultValue={editingItem?.supplier || ''}
                 variant="outlined"
                 required
               />
@@ -1178,7 +1178,7 @@ const InboundDomestic: React.FC = () => {
               <TextField
                 fullWidth
                 label="Sản phẩm"
-                defaultValue={editingItem?.product || ""}
+                defaultValue={editingItem?.product || ''}
                 variant="outlined"
                 required
               />
@@ -1189,7 +1189,7 @@ const InboundDomestic: React.FC = () => {
                   fullWidth
                   label="Ngày nhận hàng"
                   type="date"
-                  defaultValue={addFromCalendar.toLocaleDateString("vi-VN")}
+                  defaultValue={addFromCalendar.toLocaleDateString('vi-VN')}
                   variant="outlined"
                   required
                   InputLabelProps={{ shrink: true }}
@@ -1201,7 +1201,7 @@ const InboundDomestic: React.FC = () => {
         <DialogActions>
           <Button onClick={() => setOpenDialog(false)}>Hủy</Button>
           <Button onClick={() => handleSave({})} variant="contained">
-            {editingItem ? "Cập nhật" : "Thêm mới"}
+            {editingItem ? 'Cập nhật' : 'Thêm mới'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -1211,37 +1211,37 @@ const InboundDomestic: React.FC = () => {
         anchorEl={actionMenuAnchor}
         onClose={handleActionMenuClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <Box sx={{ p: 1 }}>
           <MenuItem
-            onClick={() => handleActionMenuAction("edit")}
-            sx={{ fontSize: { xs: "0.6rem", sm: "0.65rem" } }}
+            onClick={() => handleActionMenuAction('edit')}
+            sx={{ fontSize: { xs: '0.6rem', sm: '0.65rem' } }}
           >
-            <EditIcon sx={{ mr: 1, fontSize: "1rem" }} />
+            <EditIcon sx={{ mr: 1, fontSize: '1rem' }} />
             Sửa
           </MenuItem>
           <MenuItem
-            onClick={() => handleActionMenuAction("add_calendar")}
-            sx={{ fontSize: { xs: "0.6rem", sm: "0.65rem" } }}
+            onClick={() => handleActionMenuAction('add_calendar')}
+            sx={{ fontSize: { xs: '0.6rem', sm: '0.65rem' } }}
           >
-            <ScheduleIcon sx={{ mr: 1, fontSize: "1rem" }} />
+            <ScheduleIcon sx={{ mr: 1, fontSize: '1rem' }} />
             Thêm lịch
           </MenuItem>
           <MenuItem
-            onClick={() => handleActionMenuAction("delete")}
+            onClick={() => handleActionMenuAction('delete')}
             sx={{
-              fontSize: { xs: "0.6rem", sm: "0.65rem" },
-              color: "error.main",
+              fontSize: { xs: '0.6rem', sm: '0.65rem' },
+              color: 'error.main',
             }}
           >
-            <DeleteIcon sx={{ mr: 1, fontSize: "1rem" }} />
+            <DeleteIcon sx={{ mr: 1, fontSize: '1rem' }} />
             Xóa
           </MenuItem>
         </Box>

@@ -11,7 +11,7 @@ export const telegramBotService = {
     if (!token || !chatId) {
       return {
         success: false,
-        error: "Telegram bot token or chat ID not configured",
+        error: 'Telegram bot token or chat ID not configured',
       };
     }
 
@@ -20,8 +20,8 @@ export const telegramBotService = {
       const isValidFormat = /^\d+:[A-Za-z0-9_-]+$/.test(token);
       return {
         success: isValidFormat,
-        botInfo: isValidFormat ? { token: token.substring(0, 10) + "..." } : null,
-        error: isValidFormat ? null : "Invalid token format",
+        botInfo: isValidFormat ? { token: token.substring(0, 10) + '...' } : null,
+        error: isValidFormat ? null : 'Invalid token format',
       };
     } catch (error) {
       return {
@@ -35,25 +35,25 @@ export const telegramBotService = {
     return {
       id: null,
       username: null,
-      first_name: "Telegram Bot (Mock)",
+      first_name: 'Telegram Bot (Mock)',
     };
   },
 
   sendMessage: async (message) => {
     // eslint-disable-next-line no-console
-    console.log("Telegram service mock - sendMessage:", message);
+    console.log('Telegram service mock - sendMessage:', message);
     return {
       success: false,
-      error: "Telegram service not fully implemented yet",
+      error: 'Telegram service not fully implemented yet',
     };
   },
 
   sendAlert: async (title, message, level, data) => {
     // eslint-disable-next-line no-console
-    console.log("Telegram service mock - sendAlert:", { title, message, level, data });
+    console.log('Telegram service mock - sendAlert:', { title, message, level, data });
     return {
       success: false,
-      error: "Telegram service not fully implemented yet",
+      error: 'Telegram service not fully implemented yet',
     };
   },
 };

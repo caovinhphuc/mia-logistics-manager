@@ -20,7 +20,7 @@ export const runDebugTest = async () => {
     };
 
     // eslint-disable-next-line no-console
-    console.log("🔍 Debug Test Results:", debugInfo);
+    console.log('🔍 Debug Test Results:', debugInfo);
 
     return {
       success: true,

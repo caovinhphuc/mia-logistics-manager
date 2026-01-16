@@ -1,1 +1,1 @@
-export { ModernPageLayout } from "./ModernPageLayout";
+export { ModernPageLayout } from './ModernPageLayout';

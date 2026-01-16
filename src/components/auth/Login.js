@@ -9,7 +9,7 @@ import {
   Visibility,
   VisibilityOff,
   Warning as WarningIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Alert,
   Box,
@@ -26,25 +26,25 @@ import {
   Link,
   TextField,
   Typography,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { motion } from "framer-motion";
-import { useCallback, useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { useNotification } from "../../contexts/NotificationContext";
-import { logService } from "../../services/logService";
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNotification } from '../../contexts/NotificationContext';
+import { logService } from '../../services/logService';
 
 // Enhanced validation schema
 const validationSchema = {
   email: (value) => {
-    if (!value) return "Email là bắt buộc";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email không hợp lệ";
+    if (!value) return 'Email là bắt buộc';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Email không hợp lệ';
     return null;
   },
   password: (value) => {
-    if (!value) return "Mật khẩu là bắt buộc";
-    if (value.length < 6) return "Mật khẩu phải có ít nhất 6 ký tự";
+    if (!value) return 'Mật khẩu là bắt buộc';
+    if (value.length < 6) return 'Mật khẩu phải có ít nhất 6 ký tự';
     return null;
   },
 };
@@ -52,18 +52,18 @@ const validationSchema = {
 // Enhanced security features
 const securityFeatures = [
   {
-    title: "Bảo mật cao",
-    description: "Mã hóa dữ liệu với tiêu chuẩn quốc tế",
+    title: 'Bảo mật cao',
+    description: 'Mã hóa dữ liệu với tiêu chuẩn quốc tế',
     icon: <SecurityIcon />,
   },
   {
-    title: "Hiệu suất tốt",
-    description: "Tốc độ xử lý nhanh và ổn định",
+    title: 'Hiệu suất tốt',
+    description: 'Tốc độ xử lý nhanh và ổn định',
     icon: <SpeedIcon />,
   },
   {
-    title: "Đáng tin cậy",
-    description: "Hệ thống đã được kiểm chứng",
+    title: 'Đáng tin cậy',
+    description: 'Hệ thống đã được kiểm chứng',
     icon: <CheckCircleIcon />,
   },
 ];
@@ -77,8 +77,8 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     rememberMe: false,
   });
   const [loginAttempts, setLoginAttempts] = useState(0);
@@ -92,7 +92,7 @@ const Login = () => {
   useEffect(() => {
     if (isAuthenticated && !hasRedirectedRef.current) {
       hasRedirectedRef.current = true;
-      navigate("/dashboard", { replace: true });
+      navigate('/dashboard', { replace: true });
     }
     // Reset ref when not authenticated (for logout case)
     if (!isAuthenticated) {
@@ -124,7 +124,7 @@ const Login = () => {
 
       // Clear error when user starts typing
       if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: "" }));
+        setErrors((prev) => ({ ...prev, [field]: '' }));
       }
     },
     [errors]
@@ -171,18 +171,18 @@ const Login = () => {
       });
 
       if (result && result.success) {
-        showSuccess("Đăng nhập thành công!");
+        showSuccess('Đăng nhập thành công!');
         setLoginAttempts(0);
         setIsLocked(false);
 
-        logService.info("Login", "User logged in successfully", {
+        logService.info('Login', 'User logged in successfully', {
           email: formData.email,
           rememberMe: formData.rememberMe,
         });
 
         // Navigate to dashboard after successful login
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate('/dashboard');
         }, 1000); // Small delay to show success message
       } else {
         const newAttempts = loginAttempts + 1;
@@ -191,18 +191,18 @@ const Login = () => {
         if (newAttempts >= 3) {
           setIsLocked(true);
           setLockoutTime(Date.now() + 300000); // 5 minutes
-          logService.warn("Login", "Account locked due to repeated failures", {
+          logService.warn('Login', 'Account locked due to repeated failures', {
             attempts: newAttempts,
             email: formData.email,
           });
-          showWarning("Tài khoản bị khóa 5 phút do đăng nhập sai nhiều lần");
+          showWarning('Tài khoản bị khóa 5 phút do đăng nhập sai nhiều lần');
         } else {
-          showError((result && result.error) || "Đăng nhập thất bại");
+          showError((result && result.error) || 'Đăng nhập thất bại');
         }
       }
     } catch (error) {
-      logService.error("Login", "Login error", error);
-      showError("Đã xảy ra lỗi khi đăng nhập");
+      logService.error('Login', 'Login error', error);
+      showError('Đã xảy ra lỗi khi đăng nhập');
     } finally {
       setIsLoading(false);
     }
@@ -214,7 +214,7 @@ const Login = () => {
 
     try {
       if (!googleAuthService) {
-        throw new Error("Google Auth Service not available");
+        throw new Error('Google Auth Service not available');
       }
 
       // Initialize Google OAuth
@@ -230,17 +230,17 @@ const Login = () => {
       });
 
       if (result && result.success) {
-        showSuccess("Đăng nhập Google thành công!");
+        showSuccess('Đăng nhập Google thành công!');
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate('/dashboard');
         }, 1000);
       } else {
-        showError("Đăng nhập Google thất bại");
+        showError('Đăng nhập Google thất bại');
       }
     } catch (error) {
-      logService.error("Login", "Google login error", error);
-      const message = error instanceof Error ? error.message : "Không xác định";
-      showError("Đăng nhập Google thất bại: " + message);
+      logService.error('Login', 'Google login error', error);
+      const message = error instanceof Error ? error.message : 'Không xác định';
+      showError('Đăng nhập Google thất bại: ' + message);
     } finally {
       setIsLoading(false);
     }
@@ -249,28 +249,28 @@ const Login = () => {
   // Enhanced forgot password
   const handleForgotPassword = async () => {
     // Show dialog for email input
-    const email = prompt("Nhập email của bạn để đặt lại mật khẩu:");
+    const email = prompt('Nhập email của bạn để đặt lại mật khẩu:');
     if (!email) return;
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL || "http://localhost:5050"}/api/auth/forgot-password`,
+        `${process.env.REACT_APP_API_BASE_URL || 'http://localhost:3100'}/api/auth/forgot-password`,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email }),
         }
       );
 
       const result = await response.json();
       if (result.success) {
-        showSuccess("Email đặt lại mật khẩu đã được gửi!");
+        showSuccess('Email đặt lại mật khẩu đã được gửi!');
       } else {
-        showError(result.error || "Có lỗi xảy ra");
+        showError(result.error || 'Có lỗi xảy ra');
       }
     } catch (error) {
-      logService.error("Login", "Forgot password error", error);
-      showError("Có lỗi xảy ra khi gửi email");
+      logService.error('Login', 'Forgot password error', error);
+      showError('Có lỗi xảy ra khi gửi email');
     }
   };
 
@@ -282,7 +282,7 @@ const Login = () => {
           setIsLocked(false);
           setLockoutTime(0);
           setLoginAttempts(0);
-          showSuccess("Tài khoản đã được mở khóa");
+          showSuccess('Tài khoản đã được mở khóa');
         }
       }, 1000);
 
@@ -307,7 +307,7 @@ const Login = () => {
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
-      <Box sx={{ maxWidth: 500, mx: "auto", p: 2 }}>
+      <Box sx={{ maxWidth: 500, mx: 'auto', p: 2 }}>
         {/* Header */}
         <motion.div variants={itemVariants}>
           <Typography
@@ -319,9 +319,9 @@ const Login = () => {
               mb: 2,
               fontWeight: 700,
               background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
             Chào mừng trở lại!
@@ -344,8 +344,8 @@ const Login = () => {
                 label="Email"
                 type="email"
                 value={formData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                onBlur={() => handleBlur("email")}
+                onChange={(e) => handleChange('email', e.target.value)}
+                onBlur={() => handleBlur('email')}
                 error={touched.email && Boolean(errors.email)}
                 helperText={touched.email && errors.email}
                 margin="normal"
@@ -358,9 +358,9 @@ const Login = () => {
                   ),
                 }}
                 sx={{
-                  "& .MuiOutlinedInput-root": {
-                    transition: "all 0.2s",
-                    "&:hover": {
+                  '& .MuiOutlinedInput-root': {
+                    transition: 'all 0.2s',
+                    '&:hover': {
                       boxShadow: `0 0 0 2px ${theme.palette.primary.main}20`,
                     },
                   },
@@ -373,10 +373,10 @@ const Login = () => {
                 id="password"
                 name="password"
                 label="Mật khẩu"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 value={formData.password}
-                onChange={(e) => handleChange("password", e.target.value)}
-                onBlur={() => handleBlur("password")}
+                onChange={(e) => handleChange('password', e.target.value)}
+                onBlur={() => handleBlur('password')}
                 error={touched.password && Boolean(errors.password)}
                 helperText={touched.password && errors.password}
                 margin="normal"
@@ -401,10 +401,10 @@ const Login = () => {
                   ),
                 }}
                 sx={{
-                  "& .MuiOutlinedInput-root": {
-                    transition: "all 0.2s",
-                    "&:hover": {
-                      boxShadow: `0 0 0 2px ${theme?.palette?.primary?.main || "#1976d2"}20`,
+                  '& .MuiOutlinedInput-root': {
+                    transition: 'all 0.2s',
+                    '&:hover': {
+                      boxShadow: `0 0 0 2px ${theme?.palette?.primary?.main || '#1976d2'}20`,
                     },
                   },
                 }}
@@ -415,7 +415,7 @@ const Login = () => {
                 control={
                   <Checkbox
                     checked={formData.rememberMe}
-                    onChange={(e) => handleChange("rememberMe", e.target.checked)}
+                    onChange={(e) => handleChange('rememberMe', e.target.checked)}
                     name="rememberMe"
                     color="primary"
                     disabled={isLoading || isLocked}
@@ -437,26 +437,26 @@ const Login = () => {
                   mb: 2,
                   py: 1.5,
                   background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                  "&:hover": {
+                  '&:hover': {
                     background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                   },
-                  "&:disabled": {
+                  '&:disabled': {
                     background: theme.palette.action.disabledBackground,
                   },
                 }}
               >
                 {isLoading ? (
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <CircularProgress size={20} color="inherit" />
                     <Typography variant="body2">Đang đăng nhập...</Typography>
                   </Box>
                 ) : isLocked ? (
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <WarningIcon />
                     <Typography variant="body2">Tài khoản bị khóa</Typography>
                   </Box>
                 ) : (
-                  "Đăng nhập"
+                  'Đăng nhập'
                 )}
               </Button>
 
@@ -478,9 +478,9 @@ const Login = () => {
                   py: 1.5,
                   borderColor: theme.palette.grey[300],
                   color: theme.palette.text.primary,
-                  "&:hover": {
+                  '&:hover': {
                     borderColor: theme.palette.primary.main,
-                    backgroundColor: theme.palette.primary.main + "10",
+                    backgroundColor: theme.palette.primary.main + '10',
                   },
                 }}
               >
@@ -488,16 +488,16 @@ const Login = () => {
               </Button>
 
               {/* Forgot password */}
-              <Box sx={{ mt: 2, textAlign: "center" }}>
+              <Box sx={{ mt: 2, textAlign: 'center' }}>
                 <Link
                   component="button"
                   variant="body2"
                   onClick={handleForgotPassword}
                   disabled={isLoading || isLocked}
                   sx={{
-                    textDecoration: "none",
-                    "&:hover": {
-                      textDecoration: "underline",
+                    textDecoration: 'none',
+                    '&:hover': {
+                      textDecoration: 'underline',
                     },
                   }}
                 >
@@ -510,7 +510,7 @@ const Login = () => {
 
         {/* Security features */}
         <motion.div variants={itemVariants}>
-          <Card sx={{ mt: 3, bgcolor: "background.paper" }}>
+          <Card sx={{ mt: 3, bgcolor: 'background.paper' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom align="center">
                 Tính năng bảo mật
@@ -518,14 +518,14 @@ const Login = () => {
               <Grid container spacing={2}>
                 {securityFeatures.map((feature, index) => (
                   <Grid item xs={12} sm={4} key={index}>
-                    <Box sx={{ textAlign: "center", p: 2 }}>
+                    <Box sx={{ textAlign: 'center', p: 2 }}>
                       <Box
                         sx={{
-                          display: "inline-flex",
+                          display: 'inline-flex',
                           p: 1,
-                          borderRadius: "50%",
-                          bgcolor: "primary.main",
-                          color: "white",
+                          borderRadius: '50%',
+                          bgcolor: 'primary.main',
+                          color: 'white',
                           mb: 1,
                         }}
                       >
@@ -555,7 +555,7 @@ const Login = () => {
             <Alert severity="warning" sx={{ mt: 2 }} icon={<WarningIcon />}>
               <Typography variant="body2">
                 Bạn đã đăng nhập sai {loginAttempts}/3 lần.
-                {loginAttempts >= 2 && " Tài khoản sẽ bị khóa sau lần đăng nhập sai tiếp theo."}
+                {loginAttempts >= 2 && ' Tài khoản sẽ bị khóa sau lần đăng nhập sai tiếp theo.'}
               </Typography>
             </Alert>
           </motion.div>

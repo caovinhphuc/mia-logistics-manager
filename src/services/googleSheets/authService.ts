@@ -1,11 +1,6 @@
-import {
-  Role,
-  RolePermission,
-  User,
-  Permission,
-} from '../../shared/types/commonTypes';
+import { Role, RolePermission, User, Permission } from '../../shared/types/commonTypes';
 
-const API_BASE_URL = 'http://localhost:5050/api';
+const API_BASE_URL = 'http://localhost:3100/api';
 
 export const authService = {
   // Roles
@@ -37,9 +32,7 @@ export const authService = {
 
   // Role Permissions
   async getRolePermissions(roleId: string): Promise<RolePermission[]> {
-    const response = await fetch(
-      `${API_BASE_URL}/auth/role-permissions?roleId=${roleId}`
-    );
+    const response = await fetch(`${API_BASE_URL}/auth/role-permissions?roleId=${roleId}`);
     if (!response.ok) throw new Error('Failed to fetch role permissions');
     return response.json();
   },
@@ -78,10 +71,7 @@ export const authService = {
     return response.json();
   },
 
-  async updateUser(
-    id: string,
-    updates: Partial<User & { password?: string }>
-  ): Promise<User> {
+  async updateUser(id: string, updates: Partial<User & { password?: string }>): Promise<User> {
     const response = await fetch(`${API_BASE_URL}/auth/users/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

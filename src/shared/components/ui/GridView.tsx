@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Grid,
   Card,
@@ -9,7 +9,7 @@ import {
   Avatar,
   Chip,
   IconButton,
-} from "@mui/material";
+} from '@mui/material';
 
 export interface GridViewItem {
   id: string;
@@ -20,7 +20,7 @@ export interface GridViewItem {
   status?: {
     active: boolean;
     label: string;
-    color: "success" | "error" | "warning" | "info" | "default";
+    color: 'success' | 'error' | 'warning' | 'info' | 'default';
   };
   details?: Array<{
     label: string;
@@ -37,7 +37,7 @@ export interface GridViewItem {
     label: string;
     icon: string;
     onClick: () => void;
-    color?: "primary" | "secondary" | "error" | "warning" | "info";
+    color?: 'primary' | 'secondary' | 'error' | 'warning' | 'info';
   }>;
 }
 
@@ -53,12 +53,12 @@ export function GridView({
   items,
   title,
   subtitle,
-  emptyMessage = "Không có dữ liệu",
+  emptyMessage = 'Không có dữ liệu',
   onItemClick,
 }: GridViewProps) {
   if (!items || items.length === 0) {
     return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
+      <Box sx={{ p: 4, textAlign: 'center' }}>
         <Typography variant="body1" color="text.secondary">
           {emptyMessage}
         </Typography>
@@ -83,16 +83,16 @@ export function GridView({
           <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
             <Card
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                cursor: onItemClick ? "pointer" : "default",
-                "&:hover": onItemClick ? { boxShadow: 4 } : {},
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                cursor: onItemClick ? 'pointer' : 'default',
+                '&:hover': onItemClick ? { boxShadow: 4 } : {},
               }}
               onClick={() => onItemClick?.(item)}
             >
               <CardContent sx={{ flexGrow: 1 }}>
-                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <Avatar src={item.avatar} sx={{ mr: 2, width: 48, height: 48 }}>
                     {item.avatarText}
                   </Avatar>
@@ -123,8 +123,8 @@ export function GridView({
                       <Box
                         key={index}
                         sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
+                          display: 'flex',
+                          justifyContent: 'space-between',
                           mb: 0.5,
                         }}
                       >
@@ -150,8 +150,8 @@ export function GridView({
                           <Box
                             key={itemIndex}
                             sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
+                              display: 'flex',
+                              justifyContent: 'space-between',
                               mb: 0.5,
                             }}
                           >
@@ -175,7 +175,7 @@ export function GridView({
                     <IconButton
                       key={index}
                       size="small"
-                      color={action.color || "primary"}
+                      color={action.color || 'primary'}
                       onClick={(e) => {
                         e.stopPropagation();
                         action.onClick();

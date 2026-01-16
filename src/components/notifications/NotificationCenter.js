@@ -3,7 +3,7 @@ import {
   Info as InfoIcon,
   Notifications as NotificationsIcon,
   Warning as WarningIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -16,9 +16,9 @@ import {
   Paper,
   Typography,
   useTheme,
-} from "@mui/material";
-import { motion } from "framer-motion";
-import { useTheme as useThemeContext } from "../../contexts/ThemeContext";
+} from '@mui/material';
+import { motion } from 'framer-motion';
+import { useTheme as useThemeContext } from '../../contexts/ThemeContext';
 
 const NotificationCenter = () => {
   const theme = useTheme();
@@ -28,37 +28,37 @@ const NotificationCenter = () => {
   const notifications = [
     {
       id: 1,
-      type: "success",
-      title: "Đơn hàng đã được giao thành công",
-      message: "Đơn hàng #DH001 đã được giao đến khách hàng lúc 14:30",
-      time: "2 giờ trước",
+      type: 'success',
+      title: 'Đơn hàng đã được giao thành công',
+      message: 'Đơn hàng #DH001 đã được giao đến khách hàng lúc 14:30',
+      time: '2 giờ trước',
       read: false,
     },
     {
       id: 2,
-      type: "warning",
-      title: "Cảnh báo tồn kho thấp",
-      message: "Sản phẩm ABC chỉ còn 5 đơn vị trong kho",
-      time: "4 giờ trước",
+      type: 'warning',
+      title: 'Cảnh báo tồn kho thấp',
+      message: 'Sản phẩm ABC chỉ còn 5 đơn vị trong kho',
+      time: '4 giờ trước',
       read: false,
     },
     {
       id: 3,
-      type: "info",
-      title: "Cập nhật hệ thống",
-      message: "Hệ thống đã được cập nhật lên phiên bản mới nhất",
-      time: "1 ngày trước",
+      type: 'info',
+      title: 'Cập nhật hệ thống',
+      message: 'Hệ thống đã được cập nhật lên phiên bản mới nhất',
+      time: '1 ngày trước',
       read: true,
     },
   ];
 
   const getNotificationIcon = (type) => {
     switch (type) {
-      case "success":
+      case 'success':
         return <CheckCircleIcon color="success" />;
-      case "warning":
+      case 'warning':
         return <WarningIcon color="warning" />;
-      case "info":
+      case 'info':
         return <InfoIcon color="info" />;
       default:
         return <NotificationsIcon />;
@@ -67,14 +67,14 @@ const NotificationCenter = () => {
 
   const getNotificationColor = (type) => {
     switch (type) {
-      case "success":
-        return "success";
-      case "warning":
-        return "warning";
-      case "info":
-        return "info";
+      case 'success':
+        return 'success';
+      case 'warning':
+        return 'warning';
+      case 'info':
+        return 'info';
       default:
-        return "default";
+        return 'default';
     }
   };
 
@@ -103,13 +103,13 @@ const NotificationCenter = () => {
                     borderBottom:
                       index < notifications.length - 1
                         ? `1px solid ${theme.palette.divider}`
-                        : "none",
+                        : 'none',
                     backgroundColor: notification.read
-                      ? "transparent"
+                      ? 'transparent'
                       : isDarkMode
                         ? theme.palette.action.hover
                         : theme.palette.grey[50],
-                    "&:hover": {
+                    '&:hover': {
                       backgroundColor: isDarkMode
                         ? theme.palette.action.selected
                         : theme.palette.grey[100],
@@ -117,7 +117,7 @@ const NotificationCenter = () => {
                   }}
                 >
                   <ListItemAvatar>
-                    <Avatar sx={{ backgroundColor: "transparent" }}>
+                    <Avatar sx={{ backgroundColor: 'transparent' }}>
                       {getNotificationIcon(notification.type)}
                     </Avatar>
                   </ListItemAvatar>
@@ -125,25 +125,25 @@ const NotificationCenter = () => {
                     primary={notification.title}
                     secondary={notification.message}
                     primaryTypographyProps={{
-                      variant: "h6",
+                      variant: 'h6',
                       sx: {
                         fontWeight: notification.read ? 400 : 600,
-                        display: "flex",
-                        alignItems: "center",
+                        display: 'flex',
+                        alignItems: 'center',
                         gap: 1,
                         mb: 1,
                       },
-                      component: "div",
+                      component: 'div',
                     }}
                     secondaryTypographyProps={{
-                      variant: "body2",
-                      component: "div",
+                      variant: 'body2',
+                      component: 'div',
                     }}
                   />
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
+                      display: 'flex',
+                      alignItems: 'center',
                       gap: 1,
                       mb: 1,
                     }}
@@ -169,8 +169,8 @@ const NotificationCenter = () => {
         </Paper>
 
         {notifications.length === 0 && (
-          <Box sx={{ textAlign: "center", py: 4 }}>
-            <NotificationsIcon sx={{ fontSize: 64, color: "text.disabled", mb: 2 }} />
+          <Box sx={{ textAlign: 'center', py: 4 }}>
+            <NotificationsIcon sx={{ fontSize: 64, color: 'text.disabled', mb: 2 }} />
             <Typography variant="h6" color="text.secondary">
               Chưa có thông báo nào
             </Typography>

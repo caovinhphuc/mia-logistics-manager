@@ -1,10 +1,5 @@
 import { useState, useCallback } from 'react';
-import {
-  InboundItem,
-  PackagingItem,
-  TimelineItem,
-  DocumentStatusItem,
-} from '../types/inbound';
+import { InboundItem, PackagingItem, TimelineItem, DocumentStatusItem } from '../types/inbound';
 
 export const useDialogs = () => {
   // Main add/edit dialog
@@ -31,24 +26,16 @@ export const useDialogs = () => {
   });
 
   // Action menu states
-  const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(
-    null
-  );
-  const [selectedItemForAction, setSelectedItemForAction] =
-    useState<InboundItem | null>(null);
+  const [actionMenuAnchor, setActionMenuAnchor] = useState<null | HTMLElement>(null);
+  const [selectedItemForAction, setSelectedItemForAction] = useState<InboundItem | null>(null);
 
   // Calendar menu states
-  const [calendarMenuAnchor, setCalendarMenuAnchor] =
-    useState<null | HTMLElement>(null);
+  const [calendarMenuAnchor, setCalendarMenuAnchor] = useState<null | HTMLElement>(null);
   const [calendarMenuDate, setCalendarMenuDate] = useState<Date | null>(null);
 
   // Card menu states
-  const [cardMenuAnchor, setCardMenuAnchor] = useState<null | HTMLElement>(
-    null
-  );
-  const [selectedCardItem, setSelectedCardItem] = useState<InboundItem | null>(
-    null
-  );
+  const [cardMenuAnchor, setCardMenuAnchor] = useState<null | HTMLElement>(null);
+  const [selectedCardItem, setSelectedCardItem] = useState<InboundItem | null>(null);
 
   // Main dialog handlers
   const openAddDialog = useCallback(() => {
@@ -106,13 +93,10 @@ export const useDialogs = () => {
   }, []);
 
   // Action menu handlers
-  const openActionMenu = useCallback(
-    (event: React.MouseEvent<HTMLElement>, item: InboundItem) => {
-      setActionMenuAnchor(event.currentTarget);
-      setSelectedItemForAction(item);
-    },
-    []
-  );
+  const openActionMenu = useCallback((event: React.MouseEvent<HTMLElement>, item: InboundItem) => {
+    setActionMenuAnchor(event.currentTarget);
+    setSelectedItemForAction(item);
+  }, []);
 
   const closeActionMenu = useCallback(() => {
     setActionMenuAnchor(null);
@@ -120,13 +104,10 @@ export const useDialogs = () => {
   }, []);
 
   // Calendar menu handlers
-  const openCalendarMenu = useCallback(
-    (event: React.MouseEvent<HTMLElement>, date: Date) => {
-      setCalendarMenuAnchor(event.currentTarget);
-      setCalendarMenuDate(date);
-    },
-    []
-  );
+  const openCalendarMenu = useCallback((event: React.MouseEvent<HTMLElement>, date: Date) => {
+    setCalendarMenuAnchor(event.currentTarget);
+    setCalendarMenuDate(date);
+  }, []);
 
   const closeCalendarMenu = useCallback(() => {
     setCalendarMenuAnchor(null);
@@ -134,13 +115,10 @@ export const useDialogs = () => {
   }, []);
 
   // Card menu handlers
-  const openCardMenu = useCallback(
-    (event: React.MouseEvent<HTMLElement>, item: InboundItem) => {
-      setCardMenuAnchor(event.currentTarget);
-      setSelectedCardItem(item);
-    },
-    []
-  );
+  const openCardMenu = useCallback((event: React.MouseEvent<HTMLElement>, item: InboundItem) => {
+    setCardMenuAnchor(event.currentTarget);
+    setSelectedCardItem(item);
+  }, []);
 
   const closeCardMenu = useCallback(() => {
     setCardMenuAnchor(null);

@@ -1,18 +1,18 @@
 // src/services/googleSheets/baseService.ts
-import axios from "axios";
+import axios from 'axios';
 
 const API_BASE_URL =
   (process.env.REACT_APP_API_URL as string) ||
-  (process.env.NODE_ENV === "development" ? "http://localhost:5050" : "");
+  (process.env.NODE_ENV === 'development' ? 'http://localhost:3100' : '');
 
 function toResourcePath(sheetName: string): string {
   // Map sheet titles to REST resource names
   const normalized = sheetName.trim().toLowerCase();
   switch (normalized) {
-    case "orders":
-      return "orders";
-    case "carriers":
-      return "carriers";
+    case 'orders':
+      return 'orders';
+    case 'carriers':
+      return 'carriers';
     default:
       return normalized;
   }

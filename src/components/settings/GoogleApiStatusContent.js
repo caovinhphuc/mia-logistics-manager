@@ -1,4 +1,4 @@
-import { CheckCircle, Cloud, Error, Google, Refresh, Storage } from "@mui/icons-material";
+import { CheckCircle, Cloud, Error, Google, Refresh, Storage } from '@mui/icons-material';
 import {
   Alert,
   Box,
@@ -8,8 +8,8 @@ import {
   Divider,
   Grid,
   Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 
 const GoogleAPIStatusContent = () => {
   const [status, setStatus] = useState({
@@ -41,18 +41,18 @@ const GoogleAPIStatusContent = () => {
           } else {
             // Try to load it with proper error handling
             await window.gapi.client.load(
-              "https://www.googleapis.com/discovery/v1/apis/sheets/v4/rest"
+              'https://www.googleapis.com/discovery/v1/apis/sheets/v4/rest'
             );
             sheetsAvailable = true;
           }
         } catch (e) {
-          console.warn("Google Sheets API not available:", e);
+          console.warn('Google Sheets API not available:', e);
           // Try alternative loading method
           try {
-            await window.gapi.client.load("sheets", "v4");
+            await window.gapi.client.load('sheets', 'v4');
             sheetsAvailable = true;
           } catch (e2) {
-            console.warn("Google Sheets API load failed (both methods):", e2.message);
+            console.warn('Google Sheets API load failed (both methods):', e2.message);
           }
         }
       }
@@ -67,32 +67,32 @@ const GoogleAPIStatusContent = () => {
           } else {
             // Try to load it with proper error handling
             await window.gapi.client.load(
-              "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
+              'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'
             );
             driveAvailable = true;
           }
         } catch (e) {
-          console.warn("Google Drive API not available:", e);
+          console.warn('Google Drive API not available:', e);
           // Try alternative loading method
           try {
-            await window.gapi.client.load("drive", "v3");
+            await window.gapi.client.load('drive', 'v3');
             driveAvailable = true;
           } catch (e2) {
-            console.warn("Google Drive API load failed (both methods):", e2.message);
+            console.warn('Google Drive API load failed (both methods):', e2.message);
           }
         }
       }
 
       // Check environment variables (simulated)
-      const hasClientId = !!(process.env.REACT_APP_GOOGLE_CLIENT_ID || "placeholder");
+      const hasClientId = !!(process.env.REACT_APP_GOOGLE_CLIENT_ID || 'placeholder');
       const hasApiKey = !!(
         process.env.REACT_APP_GOOGLE_MAPS_API_KEY ||
         process.env.REACT_APP_GOOGLE_API_KEY ||
-        "placeholder"
+        'placeholder'
       );
-      const hasSpreadsheetId = !!(process.env.REACT_APP_GOOGLE_SHEET_ID || "placeholder");
-      const hasDriveFolder = !!(process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID || "placeholder");
-      const hasPrivateKey = !!(process.env.REACT_APP_GOOGLE_PRIVATE_KEY || "placeholder");
+      const hasSpreadsheetId = !!(process.env.REACT_APP_GOOGLE_SHEET_ID || 'placeholder');
+      const hasDriveFolder = !!(process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID || 'placeholder');
+      const hasPrivateKey = !!(process.env.REACT_APP_GOOGLE_PRIVATE_KEY || 'placeholder');
 
       // Check specific APIs
       const apiDetails = {
@@ -123,7 +123,7 @@ const GoogleAPIStatusContent = () => {
         details: apiDetails,
       });
     } catch (error) {
-      console.error("Error testing Google API:", error);
+      console.error('Error testing Google API:', error);
       setStatus((prev) => ({
         ...prev,
         loading: false,
@@ -139,20 +139,20 @@ const GoogleAPIStatusContent = () => {
   const getStatusIcon = (isAvailable) => {
     if (status.loading) return <CircularProgress size={20} />;
     return isAvailable ? (
-      <CheckCircle sx={{ color: "success.main" }} />
+      <CheckCircle sx={{ color: 'success.main' }} />
     ) : (
-      <Error sx={{ color: "error.main" }} />
+      <Error sx={{ color: 'error.main' }} />
     );
   };
 
-  const getStatusChip = (isAvailable, loadingText = "Đang kiểm tra") => {
+  const getStatusChip = (isAvailable, loadingText = 'Đang kiểm tra') => {
     if (status.loading) {
       return <Chip label={loadingText} size="small" />;
     }
     return (
       <Chip
-        label={isAvailable ? "Có sẵn" : "Lỗi"}
-        color={isAvailable ? "success" : "error"}
+        label={isAvailable ? 'Có sẵn' : 'Lỗi'}
+        color={isAvailable ? 'success' : 'error'}
         size="small"
       />
     );
@@ -161,8 +161,8 @@ const GoogleAPIStatusContent = () => {
   const ContentComponent = () => (
     <Box>
       {/* Header with refresh button */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-        <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Google color="primary" />
           Trạng thái Google API
         </Typography>
@@ -192,11 +192,11 @@ const GoogleAPIStatusContent = () => {
             sx={{
               p: 3,
               border: 1,
-              borderColor: "divider",
+              borderColor: 'divider',
               borderRadius: 2,
-              textAlign: "center",
-              bgcolor: "background.paper",
-              "&:hover": {
+              textAlign: 'center',
+              bgcolor: 'background.paper',
+              '&:hover': {
                 boxShadow: 2,
               },
             }}
@@ -217,11 +217,11 @@ const GoogleAPIStatusContent = () => {
             sx={{
               p: 3,
               border: 1,
-              borderColor: "divider",
+              borderColor: 'divider',
               borderRadius: 2,
-              textAlign: "center",
-              bgcolor: "background.paper",
-              "&:hover": {
+              textAlign: 'center',
+              bgcolor: 'background.paper',
+              '&:hover': {
                 boxShadow: 2,
               },
             }}
@@ -242,11 +242,11 @@ const GoogleAPIStatusContent = () => {
             sx={{
               p: 3,
               border: 1,
-              borderColor: "divider",
+              borderColor: 'divider',
               borderRadius: 2,
-              textAlign: "center",
-              bgcolor: "background.paper",
-              "&:hover": {
+              textAlign: 'center',
+              bgcolor: 'background.paper',
+              '&:hover': {
                 boxShadow: 2,
               },
             }}
@@ -261,13 +261,13 @@ const GoogleAPIStatusContent = () => {
             {getStatusChip(status.googleDrive)}
           </Box>
         </Grid>
-      </Grid>{" "}
+      </Grid>{' '}
       <Divider sx={{ my: 3 }} />
       {/* Technical Details */}
       <Typography
         variant="h6"
         gutterBottom
-        sx={{ mt: 4, mb: 3, display: "flex", alignItems: "center", gap: 1 }}
+        sx={{ mt: 4, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}
       >
         <Storage color="primary" />
         Chi tiết kỹ thuật
@@ -277,14 +277,14 @@ const GoogleAPIStatusContent = () => {
           <Box
             sx={{
               p: 3,
-              bgcolor: "background.default",
+              bgcolor: 'background.default',
               borderRadius: 2,
               border: 1,
-              borderColor: "divider",
-              height: "100%",
+              borderColor: 'divider',
+              height: '100%',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Error color="error" sx={{ mr: 1 }} />
               <Typography variant="subtitle1" fontWeight={500}>
                 Script Google API
@@ -301,14 +301,14 @@ const GoogleAPIStatusContent = () => {
           <Box
             sx={{
               p: 3,
-              bgcolor: "background.default",
+              bgcolor: 'background.default',
               borderRadius: 2,
               border: 1,
-              borderColor: "divider",
-              height: "100%",
+              borderColor: 'divider',
+              height: '100%',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Error color="error" sx={{ mr: 1 }} />
               <Typography variant="subtitle1" fontWeight={500}>
                 Google API Client
@@ -325,14 +325,14 @@ const GoogleAPIStatusContent = () => {
           <Box
             sx={{
               p: 3,
-              bgcolor: "background.default",
+              bgcolor: 'background.default',
               borderRadius: 2,
               border: 1,
-              borderColor: "divider",
-              height: "100%",
+              borderColor: 'divider',
+              height: '100%',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Error color="error" sx={{ mr: 1 }} />
               <Typography variant="subtitle1" fontWeight={500}>
                 Google Sheets
@@ -344,13 +344,13 @@ const GoogleAPIStatusContent = () => {
             <Chip label="Lỗi" color="error" size="small" />
           </Box>
         </Grid>
-      </Grid>{" "}
+      </Grid>{' '}
       <Divider sx={{ my: 3 }} />
       {/* Environment Variables */}
       <Typography
         variant="h6"
         gutterBottom
-        sx={{ mt: 4, mb: 3, display: "flex", alignItems: "center", gap: 1 }}
+        sx={{ mt: 4, mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}
       >
         <Cloud color="primary" />
         Environment Variables
@@ -360,14 +360,14 @@ const GoogleAPIStatusContent = () => {
           <Box
             sx={{
               p: 3,
-              bgcolor: "background.default",
+              bgcolor: 'background.default',
               borderRadius: 2,
               border: 1,
-              borderColor: "divider",
-              height: "100%",
+              borderColor: 'divider',
+              height: '100%',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Error color="error" sx={{ mr: 1 }} />
               <Typography variant="subtitle1" fontWeight={500}>
                 Google Client ID
@@ -384,14 +384,14 @@ const GoogleAPIStatusContent = () => {
           <Box
             sx={{
               p: 3,
-              bgcolor: "background.default",
+              bgcolor: 'background.default',
               borderRadius: 2,
               border: 1,
-              borderColor: "divider",
-              height: "100%",
+              borderColor: 'divider',
+              height: '100%',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Error color="error" sx={{ mr: 1 }} />
               <Typography variant="subtitle1" fontWeight={500}>
                 Google API Key
@@ -408,14 +408,14 @@ const GoogleAPIStatusContent = () => {
           <Box
             sx={{
               p: 3,
-              bgcolor: "background.default",
+              bgcolor: 'background.default',
               borderRadius: 2,
               border: 1,
-              borderColor: "divider",
-              height: "100%",
+              borderColor: 'divider',
+              height: '100%',
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Error color="error" sx={{ mr: 1 }} />
               <Typography variant="subtitle1" fontWeight={500}>
                 Spreadsheet ID
@@ -427,7 +427,7 @@ const GoogleAPIStatusContent = () => {
             <Chip label="Lỗi" color="error" size="small" />
           </Box>
         </Grid>
-      </Grid>{" "}
+      </Grid>{' '}
       {/* Status Messages */}
       <Box sx={{ mt: 3 }}>
         {!status.googleAPI && (

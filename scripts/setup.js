@@ -266,7 +266,7 @@ ${colors.cyan}📋 Các bước tiếp theo:${colors.reset}
 
 4. ${colors.yellow}Chạy ứng dụng:${colors.reset}
    ${colors.blue}npm start${colors.reset}          # Frontend (port 3000)
-   ${colors.blue}node server.js${colors.reset}     # Backend (port 5050)
+   ${colors.blue}node server.js${colors.reset}     # Backend (port 3100)
 
 5. ${colors.yellow}Test ứng dụng:${colors.reset}
    - Truy cập http://localhost:3000

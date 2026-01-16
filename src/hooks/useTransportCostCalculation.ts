@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 
 interface TransportCostCalculation {
   distance: number;
@@ -32,7 +32,7 @@ export const useTransportCostCalculation = () => {
         costPerKm,
       });
     } catch (error) {
-      console.error("Error calculating transport cost:", error);
+      console.error('Error calculating transport cost:', error);
     } finally {
       setLoading(false);
     }

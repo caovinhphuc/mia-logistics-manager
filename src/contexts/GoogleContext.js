@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useReducer, useEffect } from "react";
-import { googleSheetsService } from "../services/googleSheetsService";
-import { googleDriveService } from "../services/googleDriveService";
-import { googleAppsScriptService } from "../services/googleAppsScriptService";
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { googleSheetsService } from '../services/googleSheetsService';
+import { googleDriveService } from '../services/googleDriveService';
+import { googleAppsScriptService } from '../services/googleAppsScriptService';
 
 // Google state structure
 const initialState = {
@@ -28,15 +28,15 @@ const initialState = {
 
 // Google actions
 const GOOGLE_ACTIONS = {
-  SET_LOADING: "SET_LOADING",
-  SET_ERROR: "SET_ERROR",
-  CLEAR_ERROR: "CLEAR_ERROR",
-  INITIALIZE_SUCCESS: "INITIALIZE_SUCCESS",
-  CONNECT_SHEETS: "CONNECT_SHEETS",
-  CONNECT_DRIVE: "CONNECT_DRIVE",
-  CONNECT_APPS_SCRIPT: "CONNECT_APPS_SCRIPT",
-  DISCONNECT: "DISCONNECT",
-  UPDATE_SYNC: "UPDATE_SYNC",
+  SET_LOADING: 'SET_LOADING',
+  SET_ERROR: 'SET_ERROR',
+  CLEAR_ERROR: 'CLEAR_ERROR',
+  INITIALIZE_SUCCESS: 'INITIALIZE_SUCCESS',
+  CONNECT_SHEETS: 'CONNECT_SHEETS',
+  CONNECT_DRIVE: 'CONNECT_DRIVE',
+  CONNECT_APPS_SCRIPT: 'CONNECT_APPS_SCRIPT',
+  DISCONNECT: 'DISCONNECT',
+  UPDATE_SYNC: 'UPDATE_SYNC',
 };
 
 // Google reducer
@@ -128,6 +128,21 @@ export const GoogleProvider = ({ children }) => {
     try {
       dispatch({ type: GOOGLE_ACTIONS.SET_LOADING, payload: true });
 
+      // Check if Google Client ID is configured
+      const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your-google-client-id';
+      if (clientId === 'your-google-client-id' || !clientId) {
+        // Only log in development mode to avoid console noise
+        if (process.env.NODE_ENV === 'development') {
+          console.debug('Google Client ID not configured. Google services will be disabled.');
+        }
+        dispatch({
+          type: GOOGLE_ACTIONS.SET_ERROR,
+          payload: null, // Don't show error to user, just disable silently
+        });
+        dispatch({ type: GOOGLE_ACTIONS.SET_LOADING, payload: false });
+        return;
+      }
+
       // Initialize Google APIs
       await Promise.all([
         googleSheetsService.initialize(),
@@ -140,8 +155,15 @@ export const GoogleProvider = ({ children }) => {
       // Auto-connect if credentials are available
       await autoConnect();
     } catch (error) {
-      console.error("Google services initialization error:", error);
-      dispatch({ type: GOOGLE_ACTIONS.SET_ERROR, payload: error.message });
+      // Log error but don't block the app - only in development
+      if (process.env.NODE_ENV === 'development') {
+        console.debug('Google services initialization error (non-blocking):', error);
+      }
+      dispatch({
+        type: GOOGLE_ACTIONS.SET_ERROR,
+        payload: null, // Don't show error to user, just disable silently
+      });
+      dispatch({ type: GOOGLE_ACTIONS.SET_LOADING, payload: false });
     }
   };
 
@@ -168,10 +190,10 @@ export const GoogleProvider = ({ children }) => {
       // Silently ignore auto-connect failures (user not logged in yet)
       // Only log if it's not a "User not signed in" error
       if (
-        !error.message.includes("User not signed in") &&
-        !error.message.includes("not signed in")
+        !error.message.includes('User not signed in') &&
+        !error.message.includes('not signed in')
       ) {
-        console.warn("Auto-connect failed:", error.message);
+        console.warn('Auto-connect failed:', error.message);
       }
     }
   };
@@ -251,7 +273,7 @@ export const GoogleProvider = ({ children }) => {
 
       dispatch({ type: GOOGLE_ACTIONS.DISCONNECT });
     } catch (error) {
-      console.error("Disconnect error:", error);
+      console.error('Disconnect error:', error);
       dispatch({ type: GOOGLE_ACTIONS.SET_ERROR, payload: error.message });
     }
   };
@@ -343,7 +365,7 @@ export const GoogleProvider = ({ children }) => {
 
   const calculateDistance = async (origin, destination) => {
     try {
-      return await runScript("calculateDistance", [origin, destination]);
+      return await runScript('calculateDistance', [origin, destination]);
     } catch (error) {
       dispatch({ type: GOOGLE_ACTIONS.SET_ERROR, payload: error.message });
       throw error;
@@ -352,7 +374,7 @@ export const GoogleProvider = ({ children }) => {
 
   const optimizeRoute = async (waypoints) => {
     try {
-      return await runScript("optimizeRoute", [waypoints]);
+      return await runScript('optimizeRoute', [waypoints]);
     } catch (error) {
       dispatch({ type: GOOGLE_ACTIONS.SET_ERROR, payload: error.message });
       throw error;
@@ -361,7 +383,7 @@ export const GoogleProvider = ({ children }) => {
 
   const geocodeAddress = async (address) => {
     try {
-      return await runScript("geocodeAddress", [address]);
+      return await runScript('geocodeAddress', [address]);
     } catch (error) {
       dispatch({ type: GOOGLE_ACTIONS.SET_ERROR, payload: error.message });
       throw error;
@@ -433,7 +455,7 @@ export const GoogleProvider = ({ children }) => {
 export const useGoogle = () => {
   const context = useContext(GoogleContext);
   if (!context) {
-    throw new Error("useGoogle must be used within a GoogleProvider");
+    throw new Error('useGoogle must be used within a GoogleProvider');
   }
   return context;
 };

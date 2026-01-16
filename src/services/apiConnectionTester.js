@@ -3,11 +3,11 @@
  * For use in Settings components
  */
 
-import { googleApiLoader } from "./googleApiLoader";
-import { googleSheetsService } from "./googleSheetsService";
-import { googleDriveService } from "./googleDriveService";
-import { telegramBotService } from "./telegramBotService";
-import { emailService } from "./emailService";
+import { googleApiLoader } from './googleApiLoader';
+import { googleSheetsService } from './googleSheetsService';
+import { googleDriveService } from './googleDriveService';
+import { telegramBotService } from './telegramBotService';
+import { emailService } from './emailService';
 
 export const apiConnectionTester = {
   testAllConnections: async () => {

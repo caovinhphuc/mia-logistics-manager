@@ -1,29 +1,29 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
-import createMIATheme from "../styles/theme";
+import { createContext, useContext, useEffect, useReducer } from 'react';
+import createMIATheme from '../styles/theme';
 import {
   getSystemThemePreference,
   listenToSystemTheme,
   updateBrowserTheme,
-} from "../utils/browserTheme";
+} from '../utils/browserTheme';
 
 // Theme state structure
 const initialState = {
   isDarkMode: false,
-  primaryColor: "#1976d2",
+  primaryColor: '#1976d2',
   customizations: {
     borderRadius: 8,
-    fontFamily: "Roboto",
+    fontFamily: 'Roboto',
     compactMode: false,
   },
 };
 
 // Theme actions
 const THEME_ACTIONS = {
-  TOGGLE_DARK_MODE: "TOGGLE_DARK_MODE",
-  SET_DARK_MODE: "SET_DARK_MODE",
-  SET_PRIMARY_COLOR: "SET_PRIMARY_COLOR",
-  UPDATE_CUSTOMIZATIONS: "UPDATE_CUSTOMIZATIONS",
-  RESET_THEME: "RESET_THEME",
+  TOGGLE_DARK_MODE: 'TOGGLE_DARK_MODE',
+  SET_DARK_MODE: 'SET_DARK_MODE',
+  SET_PRIMARY_COLOR: 'SET_PRIMARY_COLOR',
+  UPDATE_CUSTOMIZATIONS: 'UPDATE_CUSTOMIZATIONS',
+  RESET_THEME: 'RESET_THEME',
 };
 
 // Theme reducer
@@ -61,7 +61,7 @@ export const ThemeContextProvider = ({ children }) => {
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem("mia-theme");
+    const savedTheme = localStorage.getItem('mia-theme');
     if (savedTheme) {
       try {
         const parsed = JSON.parse(savedTheme);
@@ -82,7 +82,7 @@ export const ThemeContextProvider = ({ children }) => {
           });
         }
       } catch (error) {
-        console.warn("Failed to load theme from localStorage:", error);
+        console.warn('Failed to load theme from localStorage:', error);
       }
     } else {
       // If no saved theme, check system preference
@@ -100,7 +100,7 @@ export const ThemeContextProvider = ({ children }) => {
   useEffect(() => {
     const cleanup = listenToSystemTheme((systemIsDark) => {
       // Only update if user hasn't set a manual preference
-      const hasManualPreference = localStorage.getItem("mia-theme");
+      const hasManualPreference = localStorage.getItem('mia-theme');
       if (!hasManualPreference) {
         dispatch({
           type: THEME_ACTIONS.SET_DARK_MODE,
@@ -114,11 +114,11 @@ export const ThemeContextProvider = ({ children }) => {
 
   // Save theme to localStorage and update browser theme when it changes
   useEffect(() => {
-    localStorage.setItem("mia-theme", JSON.stringify(state));
+    localStorage.setItem('mia-theme', JSON.stringify(state));
 
     // Update CSS custom properties
-    document.documentElement.setAttribute("data-theme", state.isDarkMode ? "dark" : "light");
-    document.documentElement.style.setProperty("--primary-color", state.primaryColor);
+    document.documentElement.setAttribute('data-theme', state.isDarkMode ? 'dark' : 'light');
+    document.documentElement.style.setProperty('--primary-color', state.primaryColor);
 
     // Update browser native theme (status bar, PWA theme, etc.)
     updateBrowserTheme(state.isDarkMode, state.primaryColor);
@@ -149,7 +149,7 @@ export const ThemeContextProvider = ({ children }) => {
 
   // Create MUI theme based on current state
   const muiTheme =
-    typeof createMIATheme === "function" ? createMIATheme(state.isDarkMode) : createMIATheme;
+    typeof createMIATheme === 'function' ? createMIATheme(state.isDarkMode) : createMIATheme;
 
   const contextValue = {
     ...state,
@@ -168,7 +168,7 @@ export const ThemeContextProvider = ({ children }) => {
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error("useTheme must be used within a ThemeContextProvider");
+    throw new Error('useTheme must be used within a ThemeContextProvider');
   }
   return context;
 };

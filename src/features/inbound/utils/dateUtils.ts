@@ -62,10 +62,7 @@ export const formatDateForInput = (date: Date | string): string => {
   return dateObj.toISOString().split('T')[0];
 };
 
-export const isSameDay = (
-  date1: Date | string,
-  date2: Date | string
-): boolean => {
+export const isSameDay = (date1: Date | string, date2: Date | string): boolean => {
   const d1 = typeof date1 === 'string' ? new Date(date1) : date1;
   const d2 = typeof date2 === 'string' ? new Date(date2) : date2;
   return d1.toDateString() === d2.toDateString();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -13,7 +13,7 @@ import {
   Chip,
   Divider,
   Stack,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Assessment as ReportIcon,
   FileDownload as DownloadIcon,
@@ -23,21 +23,21 @@ import {
   PieChart as PieChartIcon,
   BarChart as BarChartIcon,
   Timeline as TimelineIcon,
-} from "@mui/icons-material";
-import { getInboundScheduleItems } from "../../services/googleSheets/inboundScheduleService";
-import { getInboundDomesticItems } from "../../services/googleSheets/inboundDomesticService";
-import { InboundItem } from "./types/inbound";
-import { AdvancedDataTable, StatCard } from "../../shared/components/ui";
-import type { AdvancedTableColumn } from "../../shared/components/ui/AdvancedDataTable";
+} from '@mui/icons-material';
+import { getInboundScheduleItems } from '../../services/googleSheets/inboundScheduleService';
+import { getInboundDomesticItems } from '../../services/googleSheets/inboundDomesticService';
+import { InboundItem } from './types/inbound';
+import { AdvancedDataTable, StatCard } from '../../shared/components/ui';
+import type { AdvancedTableColumn } from '../../shared/components/ui/AdvancedDataTable';
 
 const InboundReports: React.FC = () => {
   // States
   const [inboundItems, setInboundItems] = useState<InboundItem[]>([]);
   const [domesticItems, setDomesticItems] = useState<InboundItem[]>([]);
-  const [reportType, setReportType] = useState<string>("summary");
-  const [dateFrom, setDateFrom] = useState<string>("");
-  const [dateTo, setDateTo] = useState<string>("");
-  const [selectedType, setSelectedType] = useState<string>("all");
+  const [reportType, setReportType] = useState<string>('summary');
+  const [dateFrom, setDateFrom] = useState<string>('');
+  const [dateTo, setDateTo] = useState<string>('');
+  const [selectedType, setSelectedType] = useState<string>('all');
 
   // Load data
   useEffect(() => {
@@ -51,17 +51,17 @@ const InboundReports: React.FC = () => {
         // Convert domestic items to InboundItem format
         const convertedDomesticData = domesticData.map((item) => ({
           ...item,
-          type: "domestic" as const,
+          type: 'domestic' as const,
           poNumbers: [],
           timeline: [],
           documentStatus: [],
-          estimatedArrival: item.estimatedArrival || "",
-          actualArrival: item.actualArrival || "",
-          pi: item.pi || "",
+          estimatedArrival: item.estimatedArrival || '',
+          actualArrival: item.actualArrival || '',
+          pi: item.pi || '',
         })) as InboundItem[];
         setDomesticItems(convertedDomesticData);
       } catch (error) {
-        console.error("Error loading data:", error);
+        console.error('Error loading data:', error);
       }
     };
 
@@ -74,93 +74,93 @@ const InboundReports: React.FC = () => {
   // Table columns configuration
   const columns: AdvancedTableColumn<InboundItem>[] = [
     {
-      id: "date",
-      label: "Ngày",
-      format: "date",
+      id: 'date',
+      label: 'Ngày',
+      format: 'date',
       minWidth: 100,
       sortable: true,
     },
     {
-      id: "supplier",
-      label: "Nhà cung cấp",
+      id: 'supplier',
+      label: 'Nhà cung cấp',
       minWidth: 150,
       sortable: true,
       searchable: true,
     },
     {
-      id: "type",
-      label: "Loại",
+      id: 'type',
+      label: 'Loại',
       minWidth: 80,
-      align: "center",
+      align: 'center',
       sortable: true,
       render: (value) => (
         <Chip
-          label={value === "international" ? "QT" : "QN"}
+          label={value === 'international' ? 'QT' : 'QN'}
           size="small"
-          color={value === "international" ? "primary" : "secondary"}
+          color={value === 'international' ? 'primary' : 'secondary'}
           variant="outlined"
           sx={{
             fontWeight: 600,
-            fontSize: "0.7rem",
-            textTransform: "uppercase",
+            fontSize: '0.7rem',
+            textTransform: 'uppercase',
           }}
         />
       ),
     },
     {
-      id: "product",
-      label: "Sản phẩm",
+      id: 'product',
+      label: 'Sản phẩm',
       minWidth: 180,
       sortable: true,
       searchable: true,
     },
     {
-      id: "category",
-      label: "Phân loại",
+      id: 'category',
+      label: 'Phân loại',
       minWidth: 120,
       sortable: true,
-      render: (value) => (value ? String(value) : "Chưa phân loại"),
+      render: (value) => (value ? String(value) : 'Chưa phân loại'),
     },
     {
-      id: "quantity",
-      label: "Số lượng",
-      format: "number",
+      id: 'quantity',
+      label: 'Số lượng',
+      format: 'number',
       minWidth: 100,
-      align: "right",
+      align: 'right',
       sortable: true,
     },
     {
-      id: "container",
-      label: "Container",
-      format: "number",
+      id: 'container',
+      label: 'Container',
+      format: 'number',
       minWidth: 80,
-      align: "center",
+      align: 'center',
       sortable: true,
     },
     {
-      id: "status",
-      label: "Trạng thái",
-      format: "status",
+      id: 'status',
+      label: 'Trạng thái',
+      format: 'status',
       minWidth: 120,
-      align: "center",
+      align: 'center',
       sortable: true,
       render: (value) => {
         const statusMap: Record<
           string,
           {
             label: string;
-            color: "success" | "warning" | "error" | "info" | "default";
+            color: 'success' | 'warning' | 'error' | 'info' | 'default';
           }
         > = {
-          completed: { label: "Hoàn thành", color: "success" },
-          "in-transit": { label: "Đang vận chuyển", color: "info" },
-          pending: { label: "Chờ xử lý", color: "warning" },
-          confirmed: { label: "Đã xác nhận", color: "info" },
-          arrived: { label: "Đã đến", color: "success" },
+          completed: { label: 'Hoàn thành', color: 'success' },
+          'in-transit': { label: 'Đang vận chuyển', color: 'info' },
+          pending: { label: 'Chờ xử lý', color: 'warning' },
+          confirmed: { label: 'Đã xác nhận', color: 'info' },
+          arrived: { label: 'Đã đến', color: 'success' },
         };
         const status = statusMap[String(value)] || {
-          label: "Chưa xác định",
-          color: "default",
+          label: 'Chưa xác định',
+          color: 'default',
         };
         return (
           <Chip
@@ -169,22 +169,22 @@ const InboundReports: React.FC = () => {
             size="small"
             sx={{
               fontWeight: 600,
-              textTransform: "uppercase",
-              fontSize: "0.7rem",
-              letterSpacing: "0.5px",
+              textTransform: 'uppercase',
+              fontSize: '0.7rem',
+              letterSpacing: '0.5px',
             }}
           />
         );
       },
     },
     {
-      id: "destination",
-      label: "Kho nhận",
+      id: 'destination',
+      label: 'Kho nhận',
       minWidth: 120,
       sortable: true,
       render: (value) => {
-        if (!value) return "Chưa có";
-        const warehouseName = String(value).split(" - ")[0];
+        if (!value) return 'Chưa có';
+        const warehouseName = String(value).split(' - ')[0];
         return warehouseName;
       },
     },
@@ -193,13 +193,13 @@ const InboundReports: React.FC = () => {
   // Filter data
   const filteredData = allItems.filter((item) => {
     // Filter by type
-    if (selectedType !== "all" && item.type !== selectedType) return false;
+    if (selectedType !== 'all' && item.type !== selectedType) return false;
 
     // Filter by date range
     if (dateFrom && dateTo) {
       const parseDate = (dateStr: string): Date => {
-        if (dateStr.includes("/")) {
-          const [day, month, year] = dateStr.split("/");
+        if (dateStr.includes('/')) {
+          const [day, month, year] = dateStr.split('/');
           return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
         }
         return new Date(dateStr);
@@ -218,24 +218,24 @@ const InboundReports: React.FC = () => {
   // Statistics
   const stats = {
     totalItems: filteredData.length,
-    international: filteredData.filter((item) => item.type === "international").length,
-    domestic: filteredData.filter((item) => item.type === "domestic").length,
+    international: filteredData.filter((item) => item.type === 'international').length,
+    domestic: filteredData.filter((item) => item.type === 'domestic').length,
     totalQuantity: filteredData.reduce((sum, item) => sum + (item.quantity || 0), 0),
     totalContainers: filteredData.reduce(
-      (sum, item) => sum + (parseInt(item.container?.toString() || "0") || 0),
+      (sum, item) => sum + (parseInt(item.container?.toString() || '0') || 0),
       0
     ),
-    completedItems: filteredData.filter((item) => item.status === "completed").length,
-    pendingItems: filteredData.filter((item) => item.status === "pending").length,
+    completedItems: filteredData.filter((item) => item.status === 'completed').length,
+    pendingItems: filteredData.filter((item) => item.status === 'pending').length,
   };
 
   return (
     <Box sx={{ p: 3 }}>
       {/* Header */}
-      <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-        <ReportIcon sx={{ fontSize: 40, color: "primary.main", mr: 2 }} />
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <ReportIcon sx={{ fontSize: 40, color: 'primary.main', mr: 2 }} />
         <Box>
-          <Typography variant="h4" sx={{ fontWeight: 700, color: "primary.main" }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>
             Báo cáo nhập hàng
           </Typography>
           <Typography variant="body1" color="text.secondary">
@@ -249,7 +249,7 @@ const InboundReports: React.FC = () => {
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
           🔍 Bộ lọc báo cáo
         </Typography>
-        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           <FormControl size="small" sx={{ minWidth: 150 }}>
             <InputLabel>Loại báo cáo</InputLabel>
             <Select
@@ -301,10 +301,10 @@ const InboundReports: React.FC = () => {
             variant="outlined"
             size="small"
             onClick={() => {
-              setReportType("summary");
-              setSelectedType("all");
-              setDateFrom("");
-              setDateTo("");
+              setReportType('summary');
+              setSelectedType('all');
+              setDateFrom('');
+              setDateTo('');
             }}
           >
             Đặt lại
@@ -342,7 +342,7 @@ const InboundReports: React.FC = () => {
             value={stats.totalQuantity.toLocaleString()}
             icon={<PieChartIcon />}
             color="success"
-            change={{ value: "+12% so với tháng trước", positive: true }}
+            change={{ value: '+12% so với tháng trước', positive: true }}
           />
         </Grid>
 
@@ -352,7 +352,7 @@ const InboundReports: React.FC = () => {
             value={stats.totalContainers}
             icon={<BarChartIcon />}
             color="info"
-            change={{ value: "+5% so với tháng trước", positive: true }}
+            change={{ value: '+5% so với tháng trước', positive: true }}
           />
         </Grid>
 
@@ -374,26 +374,26 @@ const InboundReports: React.FC = () => {
       <Paper sx={{ p: 2 }}>
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             mb: 2,
           }}
         >
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            📊{" "}
+            📊{' '}
             {(() => {
               switch (reportType) {
-                case "summary":
-                  return "Báo cáo tổng quan";
-                case "timeline":
-                  return "Báo cáo timeline";
-                case "documents":
-                  return "Báo cáo chứng từ";
-                case "performance":
-                  return "Báo cáo hiệu suất";
+                case 'summary':
+                  return 'Báo cáo tổng quan';
+                case 'timeline':
+                  return 'Báo cáo timeline';
+                case 'documents':
+                  return 'Báo cáo chứng từ';
+                case 'performance':
+                  return 'Báo cáo hiệu suất';
                 default:
-                  return "Báo cáo";
+                  return 'Báo cáo';
               }
             })()}
           </Typography>
@@ -427,19 +427,19 @@ const InboundReports: React.FC = () => {
       </Paper>
 
       {/* Active Filters */}
-      {(selectedType !== "all" || dateFrom || dateTo) && (
-        <Box sx={{ mt: 2, p: 2, bgcolor: "grey.50", borderRadius: 1 }}>
+      {(selectedType !== 'all' || dateFrom || dateTo) && (
+        <Box sx={{ mt: 2, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
           <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
             🏷️ Bộ lọc đang áp dụng:
           </Typography>
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-            {selectedType !== "all" && (
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+            {selectedType !== 'all' && (
               <Chip
-                label={`${selectedType === "international" ? "🌍 Quốc tế" : "🏠 Quốc nội"}`}
+                label={`${selectedType === 'international' ? '🌍 Quốc tế' : '🏠 Quốc nội'}`}
                 size="small"
                 color="primary"
                 variant="outlined"
-                onDelete={() => setSelectedType("all")}
+                onDelete={() => setSelectedType('all')}
               />
             )}
             {dateFrom && dateTo && (
@@ -449,8 +449,8 @@ const InboundReports: React.FC = () => {
                 color="info"
                 variant="outlined"
                 onDelete={() => {
-                  setDateFrom("");
-                  setDateTo("");
+                  setDateFrom('');
+                  setDateTo('');
                 }}
               />
             )}

@@ -21,9 +21,7 @@ type Props = {
   onMore?: (item: InboundItem) => void;
 };
 
-const getStatusLabel = (
-  status?: TimelineItem['status'] | DocumentStatusItem['status']
-): string => {
+const getStatusLabel = (status?: TimelineItem['status'] | DocumentStatusItem['status']): string => {
   if (!status) return 'Chờ xử lý';
   switch (status) {
     case 'completed':
@@ -39,14 +37,7 @@ const getStatusLabel = (
 
 const getStatusColor = (
   status?: TimelineItem['status'] | DocumentStatusItem['status']
-):
-  | 'default'
-  | 'primary'
-  | 'secondary'
-  | 'error'
-  | 'info'
-  | 'success'
-  | 'warning' => {
+): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' => {
   if (!status) return 'warning';
   switch (status) {
     case 'completed':
@@ -112,12 +103,7 @@ const getDelayStatus = (
   }
 };
 
-export default function InboundDetailCard({
-  item,
-  onEdit,
-  onDelete,
-  onMore,
-}: Props) {
+export default function InboundDetailCard({ item, onEdit, onDelete, onMore }: Props) {
   const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
 
   const formatVNDate = (value?: string): string => {
@@ -138,10 +124,7 @@ export default function InboundDetailCard({
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography
-            variant="subtitle1"
-            sx={{ fontWeight: 600, color: 'primary.main' }}
-          >
+          <Typography variant="subtitle1" sx={{ fontWeight: 600, color: 'primary.main' }}>
             {item.supplier || ''}
           </Typography>
           <Chip
@@ -153,13 +136,9 @@ export default function InboundDetailCard({
         </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Chip
-            label={getStatusLabel(
-              item.status as unknown as TimelineItem['status']
-            )}
+            label={getStatusLabel(item.status as unknown as TimelineItem['status'])}
             size="small"
-            color={getStatusColor(
-              item.status as unknown as TimelineItem['status']
-            )}
+            color={getStatusColor(item.status as unknown as TimelineItem['status'])}
             sx={{
               fontSize: '0.75rem',
               fontWeight: 600,
@@ -226,11 +205,7 @@ export default function InboundDetailCard({
             alignItems: 'center',
           }}
         >
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ fontSize: '0.75rem' }}
-          >
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
             📍 {item.origin} → {item.category}
           </Typography>
           <Typography
@@ -251,10 +226,7 @@ export default function InboundDetailCard({
 
       {/* Carrier & Packaging compact */}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mb: 1 }}>
-        <Typography
-          variant="body2"
-          sx={{ fontSize: '0.75rem', color: 'text.secondary' }}
-        >
+        <Typography variant="body2" sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>
           🚛 <strong>{item.carrier}</strong>
         </Typography>
 
@@ -297,20 +269,12 @@ export default function InboundDetailCard({
         />
       </Box>
 
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ fontSize: '0.75rem', mb: 0.5 }}
-      >
+      <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
         📍 <strong>Giao tới:</strong> {item.destination || 'Chưa có'}
       </Typography>
 
       {item.poNumbers && item.poNumbers.length > 0 && (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ fontSize: '0.75rem', mb: 0.5 }}
-        >
+        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem', mb: 0.5 }}>
           📋 <strong>PO:</strong> {item.poNumbers.join(', ')}
         </Typography>
       )}
@@ -334,17 +298,11 @@ export default function InboundDetailCard({
             mb: 0.5,
           }}
         >
-          <Typography
-            variant="body2"
-            sx={{ fontSize: '0.8rem', fontWeight: 600 }}
-          >
+          <Typography variant="body2" sx={{ fontSize: '0.8rem', fontWeight: 600 }}>
             📅 Ngày nhận hàng:
           </Typography>
           {(() => {
-            const delayStatus = getDelayStatus(
-              item.estimatedArrival,
-              item.actualArrival
-            );
+            const delayStatus = getDelayStatus(item.estimatedArrival, item.actualArrival);
             return (
               <Chip
                 label={`${delayStatus.icon} ${delayStatus.status}`}
@@ -360,11 +318,7 @@ export default function InboundDetailCard({
             );
           })()}
         </Box>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ fontSize: '0.75rem', ml: 1 }}
-        >
+        <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem', ml: 1 }}>
           <strong>Dự kiến:</strong> {formatVNDate(item.estimatedArrival)}
         </Typography>
         <Typography
@@ -381,11 +335,7 @@ export default function InboundDetailCard({
       </Box>
 
       {/* Ghi chú */}
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ fontSize: '0.8rem', mt: 1 }}
-      >
+      <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8rem', mt: 1 }}>
         <strong>Ghi chú:</strong> {item.notes || 'Chưa có'}
       </Typography>
 
@@ -408,11 +358,7 @@ export default function InboundDetailCard({
           >
             <strong>📋 Tiến độ & Chứng từ:</strong>
           </Typography>
-          <Typography
-            variant="body2"
-            color="primary.main"
-            sx={{ fontSize: '0.7rem' }}
-          >
+          <Typography variant="body2" color="primary.main" sx={{ fontSize: '0.7rem' }}>
             {showTechnicalDetails ? 'Thu gọn ▲' : 'Xem thêm ▼'}
           </Typography>
         </Box>
@@ -464,17 +410,11 @@ export default function InboundDetailCard({
                         </Typography>
                         {(() => {
                           // Không hiển thị delay status cho "Ngày tạo phiếu" vì không có estimated date
-                          if (
-                            t.name === 'Ngày tạo phiếu' ||
-                            t.name === 'Ngày nhập hàng'
-                          ) {
+                          if (t.name === 'Ngày tạo phiếu' || t.name === 'Ngày nhập hàng') {
                             return null;
                           }
 
-                          const delayStatus = getDelayStatus(
-                            t.estimatedDate,
-                            t.date
-                          );
+                          const delayStatus = getDelayStatus(t.estimatedDate, t.date);
                           return (
                             <Chip
                               label={`${delayStatus.icon} ${delayStatus.status}`}
@@ -494,19 +434,14 @@ export default function InboundDetailCard({
                         })()}
                       </Box>
                       <Box sx={{ display: 'flex', gap: 2, mt: 0.3 }}>
-                        <Typography
-                          variant="caption"
-                          sx={{ fontSize: '0.7rem' }}
-                        >
+                        <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
                           Dự kiến: <strong>{est}</strong>
                         </Typography>
                         <Typography
                           variant="caption"
                           sx={{
                             fontSize: '0.7rem',
-                            color: hasActual
-                              ? 'success.main'
-                              : 'text.secondary',
+                            color: hasActual ? 'success.main' : 'text.secondary',
                             fontWeight: hasActual ? 600 : 400,
                           }}
                         >
@@ -585,10 +520,7 @@ export default function InboundDetailCard({
                           {d.name}
                         </Typography>
                         {(() => {
-                          const delayStatus = getDelayStatus(
-                            d.estimatedDate,
-                            d.date
-                          );
+                          const delayStatus = getDelayStatus(d.estimatedDate, d.date);
                           return (
                             <Chip
                               label={`${delayStatus.icon} ${delayStatus.status}`}
@@ -608,19 +540,14 @@ export default function InboundDetailCard({
                         })()}
                       </Box>
                       <Box sx={{ display: 'flex', gap: 2, mt: 0.3 }}>
-                        <Typography
-                          variant="caption"
-                          sx={{ fontSize: '0.7rem' }}
-                        >
+                        <Typography variant="caption" sx={{ fontSize: '0.7rem' }}>
                           Dự kiến: <strong>{est}</strong>
                         </Typography>
                         <Typography
                           variant="caption"
                           sx={{
                             fontSize: '0.7rem',
-                            color: hasActual
-                              ? 'success.main'
-                              : 'text.secondary',
+                            color: hasActual ? 'success.main' : 'text.secondary',
                             fontWeight: hasActual ? 600 : 400,
                           }}
                         >
@@ -670,11 +597,7 @@ export default function InboundDetailCard({
           borderColor: 'grey.200',
         }}
       >
-        <Typography
-          variant="caption"
-          color="text.disabled"
-          sx={{ fontSize: '0.7rem' }}
-        >
+        <Typography variant="caption" color="text.disabled" sx={{ fontSize: '0.7rem' }}>
           ID: {item.id}
         </Typography>
         <Box sx={{ display: 'flex', gap: 0.5 }}>
@@ -682,20 +605,12 @@ export default function InboundDetailCard({
             <MoreVertIcon fontSize="small" />
           </IconButton>
           {onEdit && (
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() => onEdit(item)}
-            >
+            <IconButton size="small" color="primary" onClick={() => onEdit(item)}>
               <EditIcon fontSize="small" />
             </IconButton>
           )}
           {onDelete && (
-            <IconButton
-              size="small"
-              color="error"
-              onClick={() => onDelete(item)}
-            >
+            <IconButton size="small" color="error" onClick={() => onDelete(item)}>
               <DeleteIcon fontSize="small" />
             </IconButton>
           )}

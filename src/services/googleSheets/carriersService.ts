@@ -38,9 +38,7 @@ export class CarriersService extends BaseGoogleSheetsService {
     return Boolean(value);
   }
   async getCarriers(): Promise<Carrier[]> {
-    const carriers = await this.getRecords<Carrier>(
-      SHEETS_CONFIG.SHEETS.CARRIERS
-    );
+    const carriers = await this.getRecords<Carrier>(SHEETS_CONFIG.SHEETS.CARRIERS);
     // Normalize boolean values from Google Sheets
     return carriers.map((carrier) => ({
       ...carrier,
@@ -60,9 +58,7 @@ export class CarriersService extends BaseGoogleSheetsService {
 
   async getActiveCarriers(): Promise<Carrier[]> {
     const carriers = await this.getCarriers();
-    return carriers.filter((carrier) =>
-      this.normalizeBoolean(carrier.isActive)
-    );
+    return carriers.filter((carrier) => this.normalizeBoolean(carrier.isActive));
   }
 
   async getCarrierById(carrierId: string): Promise<Carrier | null> {
@@ -87,22 +83,19 @@ export class CarriersService extends BaseGoogleSheetsService {
     return carrier;
   }
 
-  async updateCarrier(
-    carrierId: string,
-    updates: Partial<Carrier>
-  ): Promise<Carrier> {
+  async updateCarrier(carrierId: string, updates: Partial<Carrier>): Promise<Carrier> {
     // Ensure boolean values are properly formatted for Google Sheets
     const formattedUpdates = { ...updates };
     if ('isActive' in formattedUpdates) {
       formattedUpdates.isActive = formattedUpdates.isActive ? 'TRUE' : 'FALSE';
     }
 
-    const updatedCarrier = await this.updateRecord(
+    const updatedCarrier = (await this.updateRecord(
       SHEETS_CONFIG.SHEETS.CARRIERS,
       carrierId,
       'carrierId',
       formattedUpdates as unknown as Record<string, unknown>
-    ) as unknown as Promise<Carrier>;
+    )) as unknown as Promise<Carrier>;
 
     // Return normalized data
     return {
@@ -112,11 +105,7 @@ export class CarriersService extends BaseGoogleSheetsService {
   }
 
   async deleteCarrier(carrierId: string): Promise<boolean> {
-    return this.deleteRecord(
-      SHEETS_CONFIG.SHEETS.CARRIERS,
-      carrierId,
-      'carrierId'
-    );
+    return this.deleteRecord(SHEETS_CONFIG.SHEETS.CARRIERS, carrierId, 'carrierId');
   }
 
   calculateShippingCost(
@@ -146,8 +135,6 @@ export class CarriersService extends BaseGoogleSheetsService {
     const fuelCost = baseCost * carrier.fuelSurcharge;
     const insuranceCost = baseCost * carrier.insuranceRate;
 
-    return Math.round(
-      baseCost + fuelCost + insuranceCost + carrier.remoteAreaFee
-    );
+    return Math.round(baseCost + fuelCost + insuranceCost + carrier.remoteAreaFee);
   }
 }

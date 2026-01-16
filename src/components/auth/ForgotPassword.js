@@ -4,7 +4,7 @@ import {
   Error as ErrorIcon,
   Security as SecurityIcon,
   Warning as WarningIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Alert,
   Box,
@@ -15,20 +15,20 @@ import {
   InputAdornment,
   TextField,
   Typography,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { motion } from "framer-motion";
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { useNotification } from "../../contexts/NotificationContext";
-import { logService } from "../../services/logService";
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNotification } from '../../contexts/NotificationContext';
+import { logService } from '../../services/logService';
 
 // Enhanced validation schema
 const validationSchema = {
   email: (value) => {
-    if (!value) return "Email là bắt buộc";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email không hợp lệ";
+    if (!value) return 'Email là bắt buộc';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Email không hợp lệ';
     return null;
   },
 };
@@ -36,18 +36,18 @@ const validationSchema = {
 // Security features
 const securityFeatures = [
   {
-    title: "Bảo mật cao",
-    description: "Mã hóa dữ liệu với tiêu chuẩn quốc tế",
+    title: 'Bảo mật cao',
+    description: 'Mã hóa dữ liệu với tiêu chuẩn quốc tế',
     icon: <SecurityIcon />,
   },
   {
-    title: "Khôi phục nhanh",
-    description: "Nhận email khôi phục trong vài phút",
+    title: 'Khôi phục nhanh',
+    description: 'Nhận email khôi phục trong vài phút',
     icon: <CheckCircleIcon />,
   },
   {
-    title: "Đáng tin cậy",
-    description: "Hệ thống đã được kiểm chứng",
+    title: 'Đáng tin cậy',
+    description: 'Hệ thống đã được kiểm chứng',
     icon: <SecurityIcon />,
   },
 ];
@@ -57,7 +57,7 @@ const ForgotPassword = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [formData, setFormData] = useState({
-    email: "",
+    email: '',
   });
   const [isEmailSent, setIsEmailSent] = useState(false);
   const [resetAttempts, setResetAttempts] = useState(0);
@@ -89,7 +89,7 @@ const ForgotPassword = () => {
 
       // Clear error when user starts typing
       if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: "" }));
+        setErrors((prev) => ({ ...prev, [field]: '' }));
       }
     },
     [errors]
@@ -136,7 +136,7 @@ const ForgotPassword = () => {
 
       if (result.success) {
         setIsEmailSent(true);
-        showSuccess("Email khôi phục mật khẩu đã được gửi!");
+        showSuccess('Email khôi phục mật khẩu đã được gửi!');
         setResetAttempts(0);
         setIsLocked(false);
       } else {
@@ -146,14 +146,14 @@ const ForgotPassword = () => {
         if (newAttempts >= 3) {
           setIsLocked(true);
           setLockoutTime(Date.now() + 300000); // 5 minutes
-          showWarning("Tài khoản bị khóa 5 phút do yêu cầu khôi phục quá nhiều lần");
+          showWarning('Tài khoản bị khóa 5 phút do yêu cầu khôi phục quá nhiều lần');
         } else {
-          showError(result.error || "Khôi phục mật khẩu thất bại");
+          showError(result.error || 'Khôi phục mật khẩu thất bại');
         }
       }
     } catch (error) {
-      logService.error("ForgotPassword", "Reset password error", error);
-      showError("Đã xảy ra lỗi khi khôi phục mật khẩu");
+      logService.error('ForgotPassword', 'Reset password error', error);
+      showError('Đã xảy ra lỗi khi khôi phục mật khẩu');
     } finally {
       setIsLoading(false);
     }
@@ -167,7 +167,7 @@ const ForgotPassword = () => {
           setIsLocked(false);
           setLockoutTime(0);
           setResetAttempts(0);
-          showSuccess("Tài khoản đã được mở khóa");
+          showSuccess('Tài khoản đã được mở khóa');
         }
       }, 1000);
 
@@ -192,7 +192,7 @@ const ForgotPassword = () => {
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
-      <Box sx={{ maxWidth: 500, mx: "auto", p: 2 }}>
+      <Box sx={{ maxWidth: 500, mx: 'auto', p: 2 }}>
         {/* Header */}
         <motion.div variants={itemVariants}>
           <Typography
@@ -204,9 +204,9 @@ const ForgotPassword = () => {
               mb: 2,
               fontWeight: 700,
               background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
             Quên mật khẩu?
@@ -230,8 +230,8 @@ const ForgotPassword = () => {
                   label="Email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => handleChange("email", e.target.value)}
-                  onBlur={() => handleBlur("email")}
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  onBlur={() => handleBlur('email')}
                   error={touched.email && Boolean(errors.email)}
                   helperText={touched.email && errors.email}
                   disabled={isLoading || isLocked}
@@ -243,9 +243,9 @@ const ForgotPassword = () => {
                     ),
                   }}
                   sx={{
-                    "& .MuiOutlinedInput-root": {
-                      transition: "all 0.2s",
-                      "&:hover": {
+                    '& .MuiOutlinedInput-root': {
+                      transition: 'all 0.2s',
+                      '&:hover': {
                         boxShadow: `0 0 0 2px ${theme.palette.primary.main}20`,
                       },
                     },
@@ -264,39 +264,39 @@ const ForgotPassword = () => {
                     mb: 2,
                     py: 1.5,
                     background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                    "&:hover": {
+                    '&:hover': {
                       background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                     },
-                    "&:disabled": {
+                    '&:disabled': {
                       background: theme.palette.action.disabledBackground,
                     },
                   }}
                 >
                   {isLoading ? (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <CircularProgress size={20} color="inherit" />
                       <Typography variant="body2">Đang gửi email...</Typography>
                     </Box>
                   ) : isLocked ? (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <WarningIcon />
                       <Typography variant="body2">Tài khoản bị khóa</Typography>
                     </Box>
                   ) : (
-                    "Gửi email khôi phục"
+                    'Gửi email khôi phục'
                   )}
                 </Button>
 
                 {/* Back to login */}
-                <Box sx={{ textAlign: "center", mt: 2 }}>
+                <Box sx={{ textAlign: 'center', mt: 2 }}>
                   <Button
                     variant="text"
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate('/login')}
                     disabled={isLoading || isLocked}
                     sx={{
-                      textDecoration: "none",
-                      "&:hover": {
-                        textDecoration: "underline",
+                      textDecoration: 'none',
+                      '&:hover': {
+                        textDecoration: 'underline',
                       },
                     }}
                   >
@@ -305,8 +305,8 @@ const ForgotPassword = () => {
                 </Box>
               </form>
             ) : (
-              <Box sx={{ textAlign: "center" }}>
-                <CheckCircleIcon sx={{ fontSize: 64, color: "success.main", mb: 2 }} />
+              <Box sx={{ textAlign: 'center' }}>
+                <CheckCircleIcon sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
                 <Typography variant="h6" gutterBottom>
                   Email đã được gửi!
                 </Typography>
@@ -316,10 +316,10 @@ const ForgotPassword = () => {
                 </Typography>
                 <Button
                   variant="contained"
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate('/login')}
                   sx={{
                     background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                    "&:hover": {
+                    '&:hover': {
                       background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                     },
                   }}
@@ -333,21 +333,21 @@ const ForgotPassword = () => {
 
         {/* Security features */}
         <motion.div variants={itemVariants}>
-          <Card sx={{ mt: 3, bgcolor: "background.paper" }}>
+          <Card sx={{ mt: 3, bgcolor: 'background.paper' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom align="center">
                 Tính năng bảo mật
               </Typography>
-              <Box sx={{ display: "flex", justifyContent: "center", gap: 4 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
                 {securityFeatures.map((feature, index) => (
-                  <Box key={index} sx={{ textAlign: "center", p: 2 }}>
+                  <Box key={index} sx={{ textAlign: 'center', p: 2 }}>
                     <Box
                       sx={{
-                        display: "inline-flex",
+                        display: 'inline-flex',
                         p: 1,
-                        borderRadius: "50%",
-                        bgcolor: "primary.main",
-                        color: "white",
+                        borderRadius: '50%',
+                        bgcolor: 'primary.main',
+                        color: 'white',
                         mb: 1,
                       }}
                     >
@@ -376,7 +376,7 @@ const ForgotPassword = () => {
             <Alert severity="warning" sx={{ mt: 2 }} icon={<WarningIcon />}>
               <Typography variant="body2">
                 Bạn đã yêu cầu khôi phục {resetAttempts}/3 lần.
-                {resetAttempts >= 2 && " Tài khoản sẽ bị khóa sau lần yêu cầu tiếp theo."}
+                {resetAttempts >= 2 && ' Tài khoản sẽ bị khóa sau lần yêu cầu tiếp theo.'}
               </Typography>
             </Alert>
           </motion.div>

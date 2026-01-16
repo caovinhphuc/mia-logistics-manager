@@ -3,7 +3,7 @@
  * API endpoints cho các chỉ số tùy chỉnh của MIA Logistics
  */
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
 // Import services (cần tạo sau)
@@ -15,7 +15,7 @@ const router = express.Router();
  * @desc    Lấy tổng quan vận chuyển logistics
  * @access  Private
  */
-router.get("/logistics-overview", async (req, res) => {
+router.get('/logistics-overview', async (req, res) => {
   try {
     // Mock data - thay thế bằng query thực từ database
     const overview = {
@@ -33,10 +33,10 @@ router.get("/logistics-overview", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error fetching logistics overview:", error);
+    console.error('Error fetching logistics overview:', error);
     res.status(500).json({
       success: false,
-      error: "Không thể lấy dữ liệu tổng quan",
+      error: 'Không thể lấy dữ liệu tổng quan',
     });
   }
 });
@@ -46,7 +46,7 @@ router.get("/logistics-overview", async (req, res) => {
  * @desc    Lấy các chỉ số vận chuyển
  * @access  Private
  */
-router.get("/shipment-metrics", async (req, res) => {
+router.get('/shipment-metrics', async (req, res) => {
   try {
     const metrics = {
       onTime: Math.floor(Math.random() * 100) + 800,
@@ -63,10 +63,10 @@ router.get("/shipment-metrics", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error fetching shipment metrics:", error);
+    console.error('Error fetching shipment metrics:', error);
     res.status(500).json({
       success: false,
-      error: "Không thể lấy dữ liệu vận chuyển",
+      error: 'Không thể lấy dữ liệu vận chuyển',
     });
   }
 });
@@ -76,32 +76,32 @@ router.get("/shipment-metrics", async (req, res) => {
  * @desc    Lấy hiệu suất nhà vận chuyển
  * @access  Private
  */
-router.get("/carrier-performance", async (req, res) => {
+router.get('/carrier-performance', async (req, res) => {
   try {
     const carriers = [
       {
-        name: "Viettel Post",
+        name: 'Viettel Post',
         deliveryRate: 95.2,
         avgTime: 2.1,
         totalShipments: 1234,
         rating: 4.5,
       },
       {
-        name: "GHN",
+        name: 'GHN',
         deliveryRate: 92.8,
         avgTime: 2.5,
         totalShipments: 987,
         rating: 4.3,
       },
       {
-        name: "GHTK",
+        name: 'GHTK',
         deliveryRate: 91.5,
         avgTime: 2.8,
         totalShipments: 756,
         rating: 4.2,
       },
       {
-        name: "Ninja Van",
+        name: 'Ninja Van',
         deliveryRate: 89.3,
         avgTime: 3.2,
         totalShipments: 543,
@@ -115,10 +115,10 @@ router.get("/carrier-performance", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error fetching carrier performance:", error);
+    console.error('Error fetching carrier performance:', error);
     res.status(500).json({
       success: false,
-      error: "Không thể lấy dữ liệu nhà vận chuyển",
+      error: 'Không thể lấy dữ liệu nhà vận chuyển',
     });
   }
 });
@@ -128,7 +128,7 @@ router.get("/carrier-performance", async (req, res) => {
  * @desc    Lấy chỉ số doanh thu
  * @access  Private
  */
-router.get("/revenue-metrics", async (req, res) => {
+router.get('/revenue-metrics', async (req, res) => {
   try {
     const revenue = {
       today: (Math.random() * 50000 + 20000).toFixed(0),
@@ -137,9 +137,9 @@ router.get("/revenue-metrics", async (req, res) => {
       thisYear: (Math.random() * 10000000 + 5000000).toFixed(0),
       growthRate: (Math.random() * 20 + 5).toFixed(1),
       topCustomers: [
-        { name: "Công ty TNHH ABC", revenue: 250000, orders: 45 },
-        { name: "Công ty XYZ", revenue: 180000, orders: 32 },
-        { name: "Doanh nghiệp DEF", revenue: 120000, orders: 28 },
+        { name: 'Công ty TNHH ABC', revenue: 250000, orders: 45 },
+        { name: 'Công ty XYZ', revenue: 180000, orders: 32 },
+        { name: 'Doanh nghiệp DEF', revenue: 120000, orders: 28 },
       ],
     };
 
@@ -149,10 +149,10 @@ router.get("/revenue-metrics", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error fetching revenue metrics:", error);
+    console.error('Error fetching revenue metrics:', error);
     res.status(500).json({
       success: false,
-      error: "Không thể lấy dữ liệu doanh thu",
+      error: 'Không thể lấy dữ liệu doanh thu',
     });
   }
 });
@@ -162,7 +162,7 @@ router.get("/revenue-metrics", async (req, res) => {
  * @desc    Lấy dữ liệu tối ưu hóa lộ trình
  * @access  Private
  */
-router.get("/route-optimization", async (req, res) => {
+router.get('/route-optimization', async (req, res) => {
   try {
     const optimization = {
       totalRoutes: 45,
@@ -180,10 +180,10 @@ router.get("/route-optimization", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error fetching route optimization:", error);
+    console.error('Error fetching route optimization:', error);
     res.status(500).json({
       success: false,
-      error: "Không thể lấy dữ liệu tối ưu hóa",
+      error: 'Không thể lấy dữ liệu tối ưu hóa',
     });
   }
 });
@@ -193,7 +193,7 @@ router.get("/route-optimization", async (req, res) => {
  * @desc    Lấy dữ liệu theo dõi thời gian thực
  * @access  Private
  */
-router.get("/real-time-tracking", async (req, res) => {
+router.get('/real-time-tracking', async (req, res) => {
   try {
     const tracking = {
       activeVehicles: Math.floor(Math.random() * 50) + 30,
@@ -201,8 +201,8 @@ router.get("/real-time-tracking", async (req, res) => {
       shipmentsInTransit: Math.floor(Math.random() * 200) + 150,
       avgSpeed: (Math.random() * 20 + 40).toFixed(1), // km/h
       alerts: [
-        { type: "delay", message: "Đơn #1234 trễ 30 phút", severity: "warning" },
-        { type: "traffic", message: "Tắc đường tại Quận 1", severity: "info" },
+        { type: 'delay', message: 'Đơn #1234 trễ 30 phút', severity: 'warning' },
+        { type: 'traffic', message: 'Tắc đường tại Quận 1', severity: 'info' },
       ],
     };
 
@@ -212,10 +212,10 @@ router.get("/real-time-tracking", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error fetching real-time tracking:", error);
+    console.error('Error fetching real-time tracking:', error);
     res.status(500).json({
       success: false,
-      error: "Không thể lấy dữ liệu theo dõi",
+      error: 'Không thể lấy dữ liệu theo dõi',
     });
   }
 });
@@ -225,21 +225,21 @@ router.get("/real-time-tracking", async (req, res) => {
  * @desc    Dự đoán nhu cầu vận chuyển (AI)
  * @access  Private
  */
-router.post("/predict-demand", async (req, res) => {
+router.post('/predict-demand', async (req, res) => {
   try {
     const { timeFrame, region, season } = req.body;
 
     // Mock AI prediction - thay bằng model thực
     const prediction = {
-      timeFrame: timeFrame || "next-week",
-      region: region || "all",
+      timeFrame: timeFrame || 'next-week',
+      region: region || 'all',
       predictedOrders: Math.floor(Math.random() * 500) + 300,
       confidence: (Math.random() * 20 + 75).toFixed(1),
-      trend: Math.random() > 0.5 ? "increasing" : "stable",
+      trend: Math.random() > 0.5 ? 'increasing' : 'stable',
       recommendations: [
-        "Chuẩn bị thêm 15 xe tải cho khu vực Quận 1, 7",
-        "Tăng nhân lực vào giờ cao điểm (9h-11h, 14h-16h)",
-        "Liên hệ thêm đối tác vận chuyển dự phòng",
+        'Chuẩn bị thêm 15 xe tải cho khu vực Quận 1, 7',
+        'Tăng nhân lực vào giờ cao điểm (9h-11h, 14h-16h)',
+        'Liên hệ thêm đối tác vận chuyển dự phòng',
       ],
     };
 
@@ -249,10 +249,10 @@ router.post("/predict-demand", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("Error predicting demand:", error);
+    console.error('Error predicting demand:', error);
     res.status(500).json({
       success: false,
-      error: "Không thể dự đoán nhu cầu",
+      error: 'Không thể dự đoán nhu cầu',
     });
   }
 });

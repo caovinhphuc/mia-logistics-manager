@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit } from '@mui/icons-material';
 import {
   IconButton,
   Paper,
@@ -8,14 +8,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from "@mui/material";
-import React from "react";
+} from '@mui/material';
+import React from 'react';
 
 interface DataTableColumn {
   id: string;
   label: string;
   minWidth?: number;
-  align?: "left" | "right" | "center";
+  align?: 'left' | 'right' | 'center';
   format?: (value: any) => React.ReactNode;
 }
 
@@ -35,15 +35,15 @@ const DataTable: React.FC<DataTableProps> = ({ columns, data, onEdit, onDelete }
             {columns.map((column) => (
               <TableCell
                 key={column.id}
-                align={column.align || "left"}
+                align={column.align || 'left'}
                 style={{ minWidth: column.minWidth }}
-                sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}
+                sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}
               >
                 {column.label}
               </TableCell>
             ))}
             {(onEdit || onDelete) && (
-              <TableCell align="center" sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}>
+              <TableCell align="center" sx={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
                 Thao tác
               </TableCell>
             )}
@@ -55,7 +55,7 @@ const DataTable: React.FC<DataTableProps> = ({ columns, data, onEdit, onDelete }
               {columns.map((column) => {
                 const value = row[column.id];
                 return (
-                  <TableCell key={column.id} align={column.align || "left"}>
+                  <TableCell key={column.id} align={column.align || 'left'}>
                     {column.format ? column.format(value) : value}
                   </TableCell>
                 );

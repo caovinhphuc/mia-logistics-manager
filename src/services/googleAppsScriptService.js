@@ -1,12 +1,12 @@
-import { googleAuthService } from "./googleAuthService";
-import { logService } from "./logService";
+import { googleAuthService } from './googleAuthService';
+import { logService } from './logService';
 
 const appsLogger = {
-  debug: (message, data) => logService.debug("GoogleAppsScriptService", message, data),
-  info: (message, data) => logService.info("GoogleAppsScriptService", message, data),
-  warn: (message, data) => logService.warn("GoogleAppsScriptService", message, data),
+  debug: (message, data) => logService.debug('GoogleAppsScriptService', message, data),
+  info: (message, data) => logService.info('GoogleAppsScriptService', message, data),
+  warn: (message, data) => logService.warn('GoogleAppsScriptService', message, data),
   error: (message, error, data) =>
-    logService.error("GoogleAppsScriptService", message, {
+    logService.error('GoogleAppsScriptService', message, {
       ...data,
       error: error instanceof Error ? { message: error.message, stack: error.stack } : error,
     }),
@@ -16,17 +16,17 @@ class GoogleAppsScriptService {
   constructor() {
     this.isConnected = false;
     this.scriptId = null;
-    this.apiUrl = "https://script.googleapis.com/v1";
+    this.apiUrl = 'https://script.googleapis.com/v1';
     this.webAppUrl = null;
     this.availableFunctions = [];
   }
 
   async initialize() {
     try {
-      appsLogger.debug("Initializing Google Apps Script Service");
+      appsLogger.debug('Initializing Google Apps Script Service');
       // Service will be connected when script ID is provided
     } catch (error) {
-      appsLogger.error("Google Apps Script initialization failed", error);
+      appsLogger.error('Google Apps Script initialization failed', error);
       throw error;
     }
   }
@@ -40,14 +40,14 @@ class GoogleAppsScriptService {
       const scriptInfo = await this.getScriptInfo();
 
       this.isConnected = true;
-      appsLogger.info("Connected to Apps Script", {
+      appsLogger.info('Connected to Apps Script', {
         scriptTitle: scriptInfo.title,
         scriptId,
       });
 
       return scriptInfo;
     } catch (error) {
-      appsLogger.error("Failed to connect to Google Apps Script", error, { scriptId });
+      appsLogger.error('Failed to connect to Google Apps Script', error, { scriptId });
       throw error;
     }
   }
@@ -72,10 +72,10 @@ class GoogleAppsScriptService {
       }
 
       const info = await response.json();
-      appsLogger.debug("Retrieved script info", { scriptId: this.scriptId });
+      appsLogger.debug('Retrieved script info', { scriptId: this.scriptId });
       return info;
     } catch (error) {
-      appsLogger.error("Failed to get script info", error, { scriptId: this.scriptId });
+      appsLogger.error('Failed to get script info', error, { scriptId: this.scriptId });
       throw error;
     }
   }
@@ -83,7 +83,7 @@ class GoogleAppsScriptService {
   async runFunction(functionName, parameters = []) {
     try {
       if (!this.isConnected) {
-        throw new Error("Not connected to Apps Script");
+        throw new Error('Not connected to Apps Script');
       }
 
       const headers = await googleAuthService.getAuthHeaders();
@@ -91,11 +91,11 @@ class GoogleAppsScriptService {
       const requestBody = {
         function: functionName,
         parameters,
-        devMode: process.env.NODE_ENV === "development",
+        devMode: process.env.NODE_ENV === 'development',
       };
 
       const response = await fetch(`${this.apiUrl}/scripts/${this.scriptId}:run`, {
-        method: "POST",
+        method: 'POST',
         headers,
         body: JSON.stringify(requestBody),
       });
@@ -110,7 +110,7 @@ class GoogleAppsScriptService {
         throw new Error(`Script error: ${result.error.details[0].errorMessage}`);
       }
 
-      appsLogger.info("Apps Script function executed", { functionName });
+      appsLogger.info('Apps Script function executed', { functionName });
 
       return result.response?.result;
     } catch (error) {
@@ -122,16 +122,16 @@ class GoogleAppsScriptService {
   async runWebAppFunction(functionName, parameters = {}) {
     try {
       if (!this.webAppUrl) {
-        throw new Error("Web App URL not configured");
+        throw new Error('Web App URL not configured');
       }
 
       const url = new URL(this.webAppUrl);
-      url.searchParams.append("function", functionName);
+      url.searchParams.append('function', functionName);
 
       const response = await fetch(url.toString(), {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(parameters),
       });
@@ -142,12 +142,12 @@ class GoogleAppsScriptService {
       // Kiểm tra xem response có phải HTML không (thường là trang đăng nhập hoặc lỗi)
       const trimmedText = responseText.trim();
       if (
-        trimmedText.startsWith("<!DOCTYPE") ||
-        trimmedText.startsWith("<html") ||
-        trimmedText.startsWith("<HTML")
+        trimmedText.startsWith('<!DOCTYPE') ||
+        trimmedText.startsWith('<html') ||
+        trimmedText.startsWith('<HTML')
       ) {
         throw new Error(
-          "HTML_RESPONSE: Google Apps Script trả về HTML thay vì JSON. Có thể Web App cần được cấu hình lại quyền truy cập (Execute as: Me, Who has access: Anyone)."
+          'HTML_RESPONSE: Google Apps Script trả về HTML thay vì JSON. Có thể Web App cần được cấu hình lại quyền truy cập (Execute as: Me, Who has access: Anyone).'
         );
       }
 
@@ -175,19 +175,19 @@ class GoogleAppsScriptService {
         );
       }
 
-      appsLogger.info("Web app function executed", { functionName });
+      appsLogger.info('Web app function executed', { functionName });
       return result;
     } catch (error) {
       appsLogger.error(`Failed to run web app function ${functionName}`, error);
 
       // Cải thiện error message cho các lỗi phổ biến
-      if (error.message.includes("HTML_RESPONSE") || error.message.includes("HTML")) {
+      if (error.message.includes('HTML_RESPONSE') || error.message.includes('HTML')) {
         throw new Error(
-          "❌ Google Apps Script trả về HTML thay vì JSON.\n" +
-            "Vui lòng kiểm tra:\n" +
+          '❌ Google Apps Script trả về HTML thay vì JSON.\n' +
+            'Vui lòng kiểm tra:\n' +
             "1. Web App đã được deploy với quyền 'Execute as: Me'\n" +
             "2. 'Who has access' được set là 'Anyone' hoặc 'Anyone with Google account'\n" +
-            "3. URL Web App đúng và có thể truy cập được"
+            '3. URL Web App đúng và có thể truy cập được'
         );
       }
 
@@ -198,29 +198,29 @@ class GoogleAppsScriptService {
   async getFunctions() {
     try {
       if (!this.isConnected) {
-        throw new Error("Not connected to Apps Script");
+        throw new Error('Not connected to Apps Script');
       }
 
       // Return predefined functions for MIA Logistics
       this.availableFunctions = [
-        "calculateDistance",
-        "optimizeRoute",
-        "geocodeAddress",
-        "reverseGeocode",
-        "getTrafficInfo",
-        "calculateDeliveryTime",
-        "validateAddress",
-        "getDirections",
-        "calculateFuelCost",
-        "optimizeMultipleRoutes",
+        'calculateDistance',
+        'optimizeRoute',
+        'geocodeAddress',
+        'reverseGeocode',
+        'getTrafficInfo',
+        'calculateDeliveryTime',
+        'validateAddress',
+        'getDirections',
+        'calculateFuelCost',
+        'optimizeMultipleRoutes',
       ];
 
-      appsLogger.debug("Retrieved Apps Script functions list", {
+      appsLogger.debug('Retrieved Apps Script functions list', {
         count: this.availableFunctions.length,
       });
       return this.availableFunctions;
     } catch (error) {
-      appsLogger.error("Failed to get functions", error);
+      appsLogger.error('Failed to get functions', error);
       throw error;
     }
   }
@@ -231,19 +231,19 @@ class GoogleAppsScriptService {
       const parameters = {
         origin,
         destination,
-        mode: options.mode || "DRIVING",
-        units: options.units || "METRIC",
+        mode: options.mode || 'DRIVING',
+        units: options.units || 'METRIC',
         avoidHighways: options.avoidHighways || false,
         avoidTolls: options.avoidTolls || false,
       };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("calculateDistance", parameters);
+        return await this.runWebAppFunction('calculateDistance', parameters);
       } else {
-        return await this.runFunction("calculateDistance", [parameters]);
+        return await this.runFunction('calculateDistance', [parameters]);
       }
     } catch (error) {
-      appsLogger.error("Distance calculation failed", error);
+      appsLogger.error('Distance calculation failed', error);
       throw error;
     }
   }
@@ -253,18 +253,18 @@ class GoogleAppsScriptService {
       const parameters = {
         waypoints,
         optimize: true,
-        mode: options.mode || "DRIVING",
+        mode: options.mode || 'DRIVING',
         avoidHighways: options.avoidHighways || false,
         avoidTolls: options.avoidTolls || false,
       };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("optimizeRoute", parameters);
+        return await this.runWebAppFunction('optimizeRoute', parameters);
       } else {
-        return await this.runFunction("optimizeRoute", [parameters]);
+        return await this.runFunction('optimizeRoute', [parameters]);
       }
     } catch (error) {
-      appsLogger.error("Route optimization failed", error);
+      appsLogger.error('Route optimization failed', error);
       throw error;
     }
   }
@@ -274,12 +274,12 @@ class GoogleAppsScriptService {
       const parameters = { address };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("geocodeAddress", parameters);
+        return await this.runWebAppFunction('geocodeAddress', parameters);
       } else {
-        return await this.runFunction("geocodeAddress", [address]);
+        return await this.runFunction('geocodeAddress', [address]);
       }
     } catch (error) {
-      appsLogger.error("Geocoding failed", error);
+      appsLogger.error('Geocoding failed', error);
       throw error;
     }
   }
@@ -289,12 +289,12 @@ class GoogleAppsScriptService {
       const parameters = { lat, lng };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("reverseGeocode", parameters);
+        return await this.runWebAppFunction('reverseGeocode', parameters);
       } else {
-        return await this.runFunction("reverseGeocode", [lat, lng]);
+        return await this.runFunction('reverseGeocode', [lat, lng]);
       }
     } catch (error) {
-      appsLogger.error("Reverse geocoding failed", error);
+      appsLogger.error('Reverse geocoding failed', error);
       throw error;
     }
   }
@@ -304,12 +304,12 @@ class GoogleAppsScriptService {
       const parameters = { origin, destination };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("getTrafficInfo", parameters);
+        return await this.runWebAppFunction('getTrafficInfo', parameters);
       } else {
-        return await this.runFunction("getTrafficInfo", [origin, destination]);
+        return await this.runFunction('getTrafficInfo', [origin, destination]);
       }
     } catch (error) {
-      appsLogger.error("Traffic info request failed", error);
+      appsLogger.error('Traffic info request failed', error);
       throw error;
     }
   }
@@ -320,17 +320,17 @@ class GoogleAppsScriptService {
         origin,
         destination,
         departureTime: options.departureTime || new Date().toISOString(),
-        mode: options.mode || "DRIVING",
-        trafficModel: options.trafficModel || "BEST_GUESS",
+        mode: options.mode || 'DRIVING',
+        trafficModel: options.trafficModel || 'BEST_GUESS',
       };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("calculateDeliveryTime", parameters);
+        return await this.runWebAppFunction('calculateDeliveryTime', parameters);
       } else {
-        return await this.runFunction("calculateDeliveryTime", [parameters]);
+        return await this.runFunction('calculateDeliveryTime', [parameters]);
       }
     } catch (error) {
-      appsLogger.error("Delivery time calculation failed", error);
+      appsLogger.error('Delivery time calculation failed', error);
       throw error;
     }
   }
@@ -340,12 +340,12 @@ class GoogleAppsScriptService {
       const parameters = { address };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("validateAddress", parameters);
+        return await this.runWebAppFunction('validateAddress', parameters);
       } else {
-        return await this.runFunction("validateAddress", [address]);
+        return await this.runFunction('validateAddress', [address]);
       }
     } catch (error) {
-      appsLogger.error("Address validation failed", error);
+      appsLogger.error('Address validation failed', error);
       throw error;
     }
   }
@@ -356,17 +356,17 @@ class GoogleAppsScriptService {
         origin,
         destination,
         waypoints,
-        mode: "DRIVING",
-        units: "METRIC",
+        mode: 'DRIVING',
+        units: 'METRIC',
       };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("getDirections", parameters);
+        return await this.runWebAppFunction('getDirections', parameters);
       } else {
-        return await this.runFunction("getDirections", [parameters]);
+        return await this.runFunction('getDirections', [parameters]);
       }
     } catch (error) {
-      appsLogger.error("Directions request failed", error);
+      appsLogger.error('Directions request failed', error);
       throw error;
     }
   }
@@ -380,12 +380,12 @@ class GoogleAppsScriptService {
       };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("calculateFuelCost", parameters);
+        return await this.runWebAppFunction('calculateFuelCost', parameters);
       } else {
-        return await this.runFunction("calculateFuelCost", [distance, fuelPrice, consumption]);
+        return await this.runFunction('calculateFuelCost', [distance, fuelPrice, consumption]);
       }
     } catch (error) {
-      appsLogger.error("Fuel cost calculation failed", error);
+      appsLogger.error('Fuel cost calculation failed', error);
       throw error;
     }
   }
@@ -400,12 +400,12 @@ class GoogleAppsScriptService {
       };
 
       if (this.webAppUrl) {
-        return await this.runWebAppFunction("optimizeMultipleRoutes", parameters);
+        return await this.runWebAppFunction('optimizeMultipleRoutes', parameters);
       } else {
-        return await this.runFunction("optimizeMultipleRoutes", [parameters]);
+        return await this.runFunction('optimizeMultipleRoutes', [parameters]);
       }
     } catch (error) {
-      appsLogger.error("Multiple routes optimization failed", error);
+      appsLogger.error('Multiple routes optimization failed', error);
       throw error;
     }
   }
@@ -417,36 +417,36 @@ class GoogleAppsScriptService {
       if (this.webAppUrl) {
         try {
           // Test với calculateDistance - một function phổ biến
-          const testResult = await this.calculateDistance("Ho Chi Minh City", "Hanoi");
+          const testResult = await this.calculateDistance('Ho Chi Minh City', 'Hanoi');
 
           if (testResult && (testResult.distance || testResult.error === undefined)) {
-            return { success: true, method: "webApp", result: testResult };
+            return { success: true, method: 'webApp', result: testResult };
           } else {
             return {
               success: false,
-              method: "webApp",
-              error: "Invalid response format",
+              method: 'webApp',
+              error: 'Invalid response format',
             };
           }
         } catch (error) {
           return {
             success: false,
-            method: "webApp",
+            method: 'webApp',
             error: error.message,
           };
         }
       } else if (this.isConnected && this.scriptId) {
         // Test bằng API nếu không có Web App URL
-        const result = await this.runFunction("testFunction", []);
-        return { success: true, method: "api", result };
+        const result = await this.runFunction('testFunction', []);
+        return { success: true, method: 'api', result };
       } else {
         return {
           success: false,
-          error: "Not connected to Apps Script. Please connect first.",
+          error: 'Not connected to Apps Script. Please connect first.',
         };
       }
     } catch (error) {
-      appsLogger.error("Apps Script connection test failed", error);
+      appsLogger.error('Apps Script connection test failed', error);
       return { success: false, error: error.message };
     }
   }
@@ -456,13 +456,13 @@ class GoogleAppsScriptService {
       const headers = await googleAuthService.getAuthHeaders();
 
       const deploymentConfig = {
-        versionNumber: "HEAD",
-        manifestFileName: "appsscript",
-        description: "MIA Logistics Manager Web App",
+        versionNumber: 'HEAD',
+        manifestFileName: 'appsscript',
+        description: 'MIA Logistics Manager Web App',
       };
 
       const response = await fetch(`${this.apiUrl}/projects/${this.scriptId}/deployments`, {
-        method: "POST",
+        method: 'POST',
         headers,
         body: JSON.stringify(deploymentConfig),
       });
@@ -472,10 +472,10 @@ class GoogleAppsScriptService {
       }
 
       const payload = await response.json();
-      appsLogger.info("Web app deployment created", { scriptId: this.scriptId });
+      appsLogger.info('Web app deployment created', { scriptId: this.scriptId });
       return payload;
     } catch (error) {
-      appsLogger.error("Web app deployment failed", error);
+      appsLogger.error('Web app deployment failed', error);
       throw error;
     }
   }

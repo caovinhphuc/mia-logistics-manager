@@ -35,7 +35,7 @@ export class DistanceService {
       return true;
     } catch (error) {
       // In production, this would handle actual errors
-      console.error("DistanceService.testConnectivity error:", error);
+      console.error('DistanceService.testConnectivity error:', error);
       return false;
     }
   }
@@ -52,18 +52,18 @@ export class DistanceService {
     try {
       return {
         distance: {
-          text: "15 km",
+          text: '15 km',
           value: 15000,
         },
         duration: {
-          text: "20 phút",
+          text: '20 phút',
           value: 1200,
         },
-        status: "OK",
+        status: 'OK',
       };
     } catch (error) {
       // In production, this would handle actual errors
-      console.error("DistanceService.calculateDistance error:", error);
+      console.error('DistanceService.calculateDistance error:', error);
       throw error;
     }
   }
@@ -78,17 +78,17 @@ export class DistanceService {
       // Mock implementation - trong production sẽ gọi Google Apps Script
       return waypoints.map(() => ({
         distance: {
-          text: "10 km",
+          text: '10 km',
           value: 10000,
         },
         duration: {
-          text: "15 phút",
+          text: '15 phút',
           value: 900,
         },
-        status: "OK",
+        status: 'OK',
       }));
     } catch (error) {
-      console.error("DistanceService.calculateRoute error:", error);
+      console.error('DistanceService.calculateRoute error:', error);
       throw error;
     }
   }
@@ -144,7 +144,7 @@ export class DistanceService {
       // Sử dụng thuật toán gần đúng cho TSP
       return waypoints;
     } catch (error) {
-      console.error("DistanceService.optimizeRoute error:", error);
+      console.error('DistanceService.optimizeRoute error:', error);
       throw error;
     }
   }
@@ -175,7 +175,7 @@ export class DistanceService {
 
       return nearest;
     } catch (error) {
-      console.error("DistanceService.findNearest error:", error);
+      console.error('DistanceService.findNearest error:', error);
       throw error;
     }
   }

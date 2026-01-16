@@ -8,8 +8,8 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
-import React from "react";
+} from '@mui/material';
+import React from 'react';
 
 // DataTable Component
 export const DataTable = ({
@@ -22,7 +22,7 @@ export const DataTable = ({
 }) => {
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", p: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
         <Typography>Đang tải...</Typography>
       </Box>
     );
@@ -34,11 +34,11 @@ export const DataTable = ({
         <TableHead>
           <TableRow>
             {columns.map((column) => (
-              <TableCell key={column.id} sx={{ fontWeight: "bold" }}>
+              <TableCell key={column.id} sx={{ fontWeight: 'bold' }}>
                 {column.label}
               </TableCell>
             ))}
-            {(onEdit || onDelete) && <TableCell sx={{ fontWeight: "bold" }}>Thao tác</TableCell>}
+            {(onEdit || onDelete) && <TableCell sx={{ fontWeight: 'bold' }}>Thao tác</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -47,7 +47,7 @@ export const DataTable = ({
               key={row.id || index}
               hover
               onClick={() => onRowClick?.(row)}
-              sx={{ cursor: onRowClick ? "pointer" : "default" }}
+              sx={{ cursor: onRowClick ? 'pointer' : 'default' }}
             >
               {columns.map((column) => (
                 <TableCell key={column.id}>
@@ -56,12 +56,12 @@ export const DataTable = ({
               ))}
               {(onEdit || onDelete) && (
                 <TableCell>
-                  <Box sx={{ display: "flex", gap: 1 }}>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
                     {onEdit && (
                       <Typography
                         variant="button"
                         color="primary"
-                        sx={{ cursor: "pointer" }}
+                        sx={{ cursor: 'pointer' }}
                         onClick={(e) => {
                           e.stopPropagation();
                           onEdit(row);
@@ -74,7 +74,7 @@ export const DataTable = ({
                       <Typography
                         variant="button"
                         color="error"
-                        sx={{ cursor: "pointer" }}
+                        sx={{ cursor: 'pointer' }}
                         onClick={(e) => {
                           e.stopPropagation();
                           onDelete(row);

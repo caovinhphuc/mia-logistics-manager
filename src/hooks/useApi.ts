@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import apiService from "../services/api";
+import { useCallback, useEffect, useState } from 'react';
+import apiService from '../services/api';
 
 interface UseApiState<T> {
   data: T | null;
@@ -33,7 +33,7 @@ export function useApi<T>(
       setState({ data, loading: false, error: null });
       onSuccess?.(data);
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || "Đã xảy ra lỗi";
+      const errorMessage = error.response?.data?.message || error.message || 'Đã xảy ra lỗi';
       setState({ data: null, loading: false, error: errorMessage });
       onError?.(errorMessage);
     }
@@ -87,7 +87,7 @@ export function useApiMutation<T, P = any>(
         onSuccess?.(data);
         return data;
       } catch (error: any) {
-        const errorMessage = error.response?.data?.message || error.message || "Đã xảy ra lỗi";
+        const errorMessage = error.response?.data?.message || error.message || 'Đã xảy ra lỗi';
         setState({ data: null, loading: false, error: errorMessage });
         onError?.(errorMessage);
         throw error;

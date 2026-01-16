@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Grid,
   Card,
@@ -11,13 +11,13 @@ import {
   IconButton,
   Checkbox,
   Tooltip,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Star as StarIcon,
   StarBorder as StarBorderIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 export interface EnhancedGridViewItem {
   id: string;
@@ -28,9 +28,9 @@ export interface EnhancedGridViewItem {
   avatarText?: string;
   status?: {
     label: string;
-    color: "success" | "error" | "warning" | "info" | "default";
+    color: 'success' | 'error' | 'warning' | 'info' | 'default';
   };
-  priority?: "high" | "medium" | "low";
+  priority?: 'high' | 'medium' | 'low';
   tags?: string[];
   info?: Array<{
     icon: React.ReactNode;
@@ -73,7 +73,7 @@ export function EnhancedGridView({
   items,
   title,
   subtitle,
-  emptyMessage = "Không có dữ liệu",
+  emptyMessage = 'Không có dữ liệu',
   onItemClick,
   selectable = false,
   selectedItems = [],
@@ -86,7 +86,7 @@ export function EnhancedGridView({
 }: EnhancedGridViewProps) {
   if (!items || items.length === 0) {
     return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
+      <Box sx={{ p: 4, textAlign: 'center' }}>
         <Typography variant="body1" color="text.secondary">
           {emptyMessage}
         </Typography>
@@ -134,12 +134,12 @@ export function EnhancedGridView({
           <Grid item xs={columns.xs} sm={columns.sm} md={columns.md} lg={columns.lg} key={item.id}>
             <Card
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                cursor: onItemClick ? "pointer" : "default",
-                "&:hover": onItemClick ? { boxShadow: 4 } : {},
-                position: "relative",
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                cursor: onItemClick ? 'pointer' : 'default',
+                '&:hover': onItemClick ? { boxShadow: 4 } : {},
+                position: 'relative',
               }}
               onClick={() => handleItemClick(item)}
             >
@@ -147,7 +147,7 @@ export function EnhancedGridView({
               {selectable && (
                 <Box
                   sx={{
-                    position: "absolute",
+                    position: 'absolute',
                     top: 8,
                     left: 8,
                     zIndex: 1,
@@ -166,7 +166,7 @@ export function EnhancedGridView({
               {showFavorites && (
                 <Box
                   sx={{
-                    position: "absolute",
+                    position: 'absolute',
                     top: 8,
                     right: 8,
                     zIndex: 1,
@@ -178,7 +178,7 @@ export function EnhancedGridView({
                 >
                   <IconButton size="small">
                     {item.isFavorite ? (
-                      <StarIcon sx={{ color: "warning.main" }} />
+                      <StarIcon sx={{ color: 'warning.main' }} />
                     ) : (
                       <StarBorderIcon />
                     )}
@@ -187,7 +187,7 @@ export function EnhancedGridView({
               )}
 
               <CardContent sx={{ flexGrow: 1, pt: selectable || showFavorites ? 4 : 2 }}>
-                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                   <Avatar sx={{ mr: 2, width: 48, height: 48 }}>
                     {item.avatarText || item.title.charAt(0).toUpperCase()}
                   </Avatar>
@@ -238,12 +238,12 @@ export function EnhancedGridView({
                       <Box
                         key={index}
                         sx={{
-                          display: "flex",
-                          alignItems: "center",
+                          display: 'flex',
+                          alignItems: 'center',
                           mb: 0.5,
                         }}
                       >
-                        <Box sx={{ mr: 1, color: "text.secondary" }}>{info.icon}</Box>
+                        <Box sx={{ mr: 1, color: 'text.secondary' }}>{info.icon}</Box>
                         <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
                           {info.label}:
                         </Typography>
@@ -261,8 +261,8 @@ export function EnhancedGridView({
                       <Box
                         key={index}
                         sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
+                          display: 'flex',
+                          justifyContent: 'space-between',
                           mb: 0.5,
                         }}
                       >

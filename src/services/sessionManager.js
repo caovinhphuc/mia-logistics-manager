@@ -3,9 +3,9 @@
  * Quản lý phiên đăng nhập thông minh với timeout và extension
  */
 
-const SESSION_KEY = "mia_session";
-const SESSION_WARNING_KEY = "mia_session_warning";
-const LAST_ACTIVITY_KEY = "mia_last_activity";
+const SESSION_KEY = 'mia_session';
+const SESSION_WARNING_KEY = 'mia_session_warning';
+const LAST_ACTIVITY_KEY = 'mia_last_activity';
 
 class SessionManager {
   constructor() {
@@ -34,7 +34,7 @@ class SessionManager {
     localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
 
     this.startMonitoring();
-    this.notifyListeners("session_initialized", sessionData);
+    this.notifyListeners('session_initialized', sessionData);
   }
 
   /**
@@ -58,7 +58,7 @@ class SessionManager {
 
       return session;
     } catch (error) {
-      console.error("Error getting session:", error);
+      console.error('Error getting session:', error);
       return null;
     }
   }
@@ -81,7 +81,7 @@ class SessionManager {
       session.lastActivity = Date.now();
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
       localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
-      this.notifyListeners("activity_updated", session);
+      this.notifyListeners('activity_updated', session);
     }
   }
 
@@ -140,7 +140,7 @@ class SessionManager {
     if (!session) return false;
 
     if (!this.canExtendSession()) {
-      console.log("Session extension not allowed at this time");
+      console.log('Session extension not allowed at this time');
       return false;
     }
 
@@ -149,7 +149,7 @@ class SessionManager {
     localStorage.setItem(SESSION_KEY, JSON.stringify(session));
     localStorage.setItem(LAST_ACTIVITY_KEY, Date.now().toString());
 
-    this.notifyListeners("session_extended", session);
+    this.notifyListeners('session_extended', session);
     return true;
   }
 
@@ -161,7 +161,7 @@ class SessionManager {
     localStorage.removeItem(SESSION_WARNING_KEY);
     localStorage.removeItem(LAST_ACTIVITY_KEY);
     this.stopMonitoring();
-    this.notifyListeners("session_cleared", null);
+    this.notifyListeners('session_cleared', null);
   }
 
   /**
@@ -169,8 +169,8 @@ class SessionManager {
    * @param {string} path - Path to redirect to
    */
   storeRedirectPath(path) {
-    if (path && path !== "/login") {
-      sessionStorage.setItem("redirect_after_login", path);
+    if (path && path !== '/login') {
+      sessionStorage.setItem('redirect_after_login', path);
     }
   }
 
@@ -179,9 +179,9 @@ class SessionManager {
    * @returns {string|null} Redirect path or null
    */
   getRedirectPath() {
-    const path = sessionStorage.getItem("redirect_after_login");
+    const path = sessionStorage.getItem('redirect_after_login');
     if (path) {
-      sessionStorage.removeItem("redirect_after_login");
+      sessionStorage.removeItem('redirect_after_login');
     }
     return path;
   }
@@ -196,7 +196,7 @@ class SessionManager {
       const session = this.getCurrentSession();
 
       if (!session) {
-        this.notifyListeners("session_expired", null);
+        this.notifyListeners('session_expired', null);
         return;
       }
 
@@ -204,17 +204,17 @@ class SessionManager {
 
       // Check if should show warning
       if (this.shouldShowWarning() && !localStorage.getItem(SESSION_WARNING_KEY)) {
-        localStorage.setItem(SESSION_WARNING_KEY, "true");
-        this.notifyListeners("show_warning", { remaining });
+        localStorage.setItem(SESSION_WARNING_KEY, 'true');
+        this.notifyListeners('show_warning', { remaining });
       }
 
       // Notify about remaining time
-      this.notifyListeners("session_tick", { remaining });
+      this.notifyListeners('session_tick', { remaining });
 
       // Check if session expired
       if (remaining <= 0) {
         this.clearSession();
-        this.notifyListeners("session_expired", null);
+        this.notifyListeners('session_expired', null);
       }
     }, this.checkInterval);
   }
@@ -250,7 +250,7 @@ class SessionManager {
       try {
         callback(event, data);
       } catch (error) {
-        console.error("Error in session listener:", error);
+        console.error('Error in session listener:', error);
       }
     });
   }

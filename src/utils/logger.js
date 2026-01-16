@@ -7,8 +7,8 @@
 
 class Logger {
   constructor() {
-    this.isDev = process.env.NODE_ENV === "development";
-    this.isTest = process.env.NODE_ENV === "test";
+    this.isDev = process.env.NODE_ENV === 'development';
+    this.isTest = process.env.NODE_ENV === 'test';
     this.enableConsole = this.isDev || this.isTest;
   }
 
@@ -19,15 +19,15 @@ class Logger {
    */
   error(message, data = {}) {
     const logData = {
-      level: "ERROR",
+      level: 'ERROR',
       message,
       data,
       timestamp: new Date().toISOString(),
-      url: window?.location?.href || "server",
+      url: window?.location?.href || 'server',
     };
 
     if (this.enableConsole) {
-      console.error("🚨 ERROR:", message, data);
+      console.error('🚨 ERROR:', message, data);
     }
 
     // Send to monitoring service in production
@@ -43,14 +43,14 @@ class Logger {
    */
   warn(message, data = {}) {
     const logData = {
-      level: "WARN",
+      level: 'WARN',
       message,
       data,
       timestamp: new Date().toISOString(),
     };
 
     if (this.enableConsole) {
-      console.warn("⚠️ WARN:", message, data);
+      console.warn('⚠️ WARN:', message, data);
     }
 
     if (!this.isDev) {
@@ -65,7 +65,7 @@ class Logger {
    */
   info(message, data = {}) {
     if (this.enableConsole) {
-      console.info("ℹ️ INFO:", message, data);
+      console.info('ℹ️ INFO:', message, data);
     }
   }
 
@@ -76,7 +76,7 @@ class Logger {
    */
   success(message, data = {}) {
     if (this.enableConsole) {
-      console.log("✅ SUCCESS:", message, data);
+      console.log('✅ SUCCESS:', message, data);
     }
   }
 
@@ -87,7 +87,7 @@ class Logger {
    */
   debug(message, data = {}) {
     if (this.isDev) {
-      console.log("🐛 DEBUG:", message, data);
+      console.log('🐛 DEBUG:', message, data);
     }
   }
 
@@ -99,7 +99,7 @@ class Logger {
    */
   api(method, url, options = {}) {
     if (this.isDev) {
-      console.log("🌐 API:", method, url, options);
+      console.log('🌐 API:', method, url, options);
     }
   }
 
@@ -118,11 +118,11 @@ class Logger {
     };
 
     if (this.enableConsole) {
-      console.log("⚡ PERF:", `${operation} took ${duration}ms`, data);
+      console.log('⚡ PERF:', `${operation} took ${duration}ms`, data);
     }
 
     // Always send performance data for monitoring
-    this.sendToMonitoring({ level: "PERFORMANCE", ...logData });
+    this.sendToMonitoring({ level: 'PERFORMANCE', ...logData });
   }
 
   /**
@@ -133,7 +133,7 @@ class Logger {
     try {
       // Send to your monitoring service (e.g., Sentry, LogRocket, etc.)
       // For now, store in localStorage as fallback
-      const logs = JSON.parse(localStorage.getItem("mia_logs") || "[]");
+      const logs = JSON.parse(localStorage.getItem('mia_logs') || '[]');
       logs.push(logData);
 
       // Keep only last 100 logs
@@ -141,10 +141,10 @@ class Logger {
         logs.splice(0, logs.length - 100);
       }
 
-      localStorage.setItem("mia_logs", JSON.stringify(logs));
+      localStorage.setItem('mia_logs', JSON.stringify(logs));
     } catch (error) {
       // Fallback to console if monitoring fails
-      console.error("Failed to send log to monitoring:", error);
+      console.error('Failed to send log to monitoring:', error);
     }
   }
 
@@ -154,7 +154,7 @@ class Logger {
    */
   getLogs() {
     try {
-      return JSON.parse(localStorage.getItem("mia_logs") || "[]");
+      return JSON.parse(localStorage.getItem('mia_logs') || '[]');
     } catch (error) {
       return [];
     }
@@ -165,9 +165,9 @@ class Logger {
    */
   clearLogs() {
     try {
-      localStorage.removeItem("mia_logs");
+      localStorage.removeItem('mia_logs');
     } catch (error) {
-      console.error("Failed to clear logs:", error);
+      console.error('Failed to clear logs:', error);
     }
   }
 
@@ -227,7 +227,7 @@ export const log = {
 };
 
 // Development helpers
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   // Add logger to window for debugging
   window.logger = logger;
   window.log = log;

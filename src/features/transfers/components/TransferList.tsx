@@ -14,6 +14,6 @@
  * - Export functionality
  */
 
-import TransferList from "../../../components/transfers/components/TransferList";
+import TransferList from '../../../components/transfers/components/TransferList';
 
 export default TransferList;

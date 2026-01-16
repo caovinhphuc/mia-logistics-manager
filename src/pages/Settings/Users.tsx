@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -22,8 +22,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+} from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
 
 interface User {
   id: string;
@@ -48,11 +48,11 @@ const Users: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<User | null>(null);
   const [formData, setFormData] = useState({
-    email: "",
-    fullName: "",
-    roleId: "",
-    status: "active",
-    password: "",
+    email: '',
+    fullName: '',
+    roleId: '',
+    status: 'active',
+    password: '',
   });
 
   useEffect(() => {
@@ -63,11 +63,11 @@ const Users: React.FC = () => {
     try {
       setLoading(true);
       const [usersRes, rolesRes] = await Promise.all([
-        fetch("http://localhost:5050/api/auth/users"),
-        fetch("http://localhost:5050/api/roles"),
+        fetch('http://localhost:3100/api/auth/users'),
+        fetch('http://localhost:3100/api/roles'),
       ]);
 
-      if (!usersRes.ok || !rolesRes.ok) throw new Error("Không thể tải dữ liệu");
+      if (!usersRes.ok || !rolesRes.ok) throw new Error('Không thể tải dữ liệu');
 
       const [usersData, rolesData] = await Promise.all([usersRes.json(), rolesRes.json()]);
 
@@ -75,7 +75,7 @@ const Users: React.FC = () => {
       setRoles(rolesData);
       setError(null);
     } catch (err: any) {
-      setError(err.message || "Không thể tải dữ liệu");
+      setError(err.message || 'Không thể tải dữ liệu');
     } finally {
       setLoading(false);
     }
@@ -91,20 +91,20 @@ const Users: React.FC = () => {
           status: formData.status,
         };
 
-        const response = await fetch(`http://localhost:5050/api/auth/users/${editing.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch(`http://localhost:3100/api/auth/users/${editing.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
         });
 
         if (!response.ok) {
           const err = await response.json();
-          throw new Error(err.error || "Không thể cập nhật người dùng");
+          throw new Error(err.error || 'Không thể cập nhật người dùng');
         }
       } else {
         // Register new user
         if (!formData.email || !formData.password) {
-          setError("Email và mật khẩu là bắt buộc");
+          setError('Email và mật khẩu là bắt buộc');
           return;
         }
 
@@ -116,50 +116,50 @@ const Users: React.FC = () => {
           status: formData.status,
         };
 
-        const response = await fetch("http://localhost:5050/api/auth/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('http://localhost:3100/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
         });
 
         if (!response.ok) {
           const err = await response.json();
-          throw new Error(err.error || "Không thể tạo người dùng");
+          throw new Error(err.error || 'Không thể tạo người dùng');
         }
       }
 
       setOpen(false);
       setEditing(null);
-      setFormData({ email: "", fullName: "", roleId: "", status: "active", password: "" });
+      setFormData({ email: '', fullName: '', roleId: '', status: 'active', password: '' });
       loadData();
     } catch (err: any) {
-      setError(err.message || "Không thể lưu người dùng");
+      setError(err.message || 'Không thể lưu người dùng');
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa người dùng này?")) return;
+    if (!window.confirm('Bạn có chắc chắn muốn xóa người dùng này?')) return;
     try {
-      const response = await fetch(`http://localhost:5050/api/auth/users/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "inactive" }),
+      const response = await fetch(`http://localhost:3100/api/auth/users/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'inactive' }),
       });
-      if (!response.ok) throw new Error("Không thể xóa người dùng");
+      if (!response.ok) throw new Error('Không thể xóa người dùng');
       loadData();
     } catch (err: any) {
-      setError(err.message || "Không thể xóa người dùng");
+      setError(err.message || 'Không thể xóa người dùng');
     }
   };
 
   const handleEdit = (user: User) => {
     setEditing(user);
     setFormData({
-      email: user.email || "",
-      fullName: user.fullName || "",
-      roleId: user.roleId || "",
-      status: user.status || "active",
-      password: "",
+      email: user.email || '',
+      fullName: user.fullName || '',
+      roleId: user.roleId || '',
+      status: user.status || 'active',
+      password: '',
     });
     setOpen(true);
   };
@@ -178,7 +178,7 @@ const Users: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" component="h1">
           Quản lý Người dùng
         </Typography>
@@ -228,14 +228,14 @@ const Users: React.FC = () => {
                       px: 1.5,
                       py: 0.5,
                       borderRadius: 1,
-                      display: "inline-block",
-                      bgcolor: user.status === "active" ? "success.light" : "grey.300",
-                      color: user.status === "active" ? "success.dark" : "grey.700",
-                      fontSize: "0.75rem",
+                      display: 'inline-block',
+                      bgcolor: user.status === 'active' ? 'success.light' : 'grey.300',
+                      color: user.status === 'active' ? 'success.dark' : 'grey.700',
+                      fontSize: '0.75rem',
                       fontWeight: 600,
                     }}
                   >
-                    {user.status === "active" ? "Hoạt động" : "Tạm dừng"}
+                    {user.status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
                   </Box>
                 </TableCell>
                 <TableCell align="right">
@@ -257,14 +257,14 @@ const Users: React.FC = () => {
         onClose={() => {
           setOpen(false);
           setEditing(null);
-          setFormData({ email: "", fullName: "", roleId: "", status: "active", password: "" });
+          setFormData({ email: '', fullName: '', roleId: '', status: 'active', password: '' });
         }}
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>{editing ? "Sửa người dùng" : "Thêm người dùng mới"}</DialogTitle>
+        <DialogTitle>{editing ? 'Sửa người dùng' : 'Thêm người dùng mới'}</DialogTitle>
         <DialogContent>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 2 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
             <TextField
               label="Email"
               type="email"
@@ -323,13 +323,13 @@ const Users: React.FC = () => {
             onClick={() => {
               setOpen(false);
               setEditing(null);
-              setFormData({ email: "", fullName: "", roleId: "", status: "active", password: "" });
+              setFormData({ email: '', fullName: '', roleId: '', status: 'active', password: '' });
             }}
           >
             Hủy
           </Button>
           <Button onClick={handleSubmit} variant="contained">
-            {editing ? "Cập nhật" : "Tạo"}
+            {editing ? 'Cập nhật' : 'Tạo'}
           </Button>
         </DialogActions>
       </Dialog>

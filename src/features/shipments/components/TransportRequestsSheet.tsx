@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Paper,
@@ -23,7 +23,7 @@ import {
   List,
   ListItem,
   ListItemText,
-} from "@mui/material";
+} from '@mui/material';
 import {
   StatusChip,
   ActionButton,
@@ -32,40 +32,40 @@ import {
   GridView,
   GridViewItem,
   Checkbox,
-} from "../../../components/ui";
-import { getStatusLabel } from "../../../components/ui/statusUtils";
-import { useTransportRequestPDF } from "../../../hooks/useTransportRequestPDF";
-import { logService } from "../../../services/logService";
+} from '../../../components/ui';
+import { getStatusLabel } from '../../../components/ui/statusUtils';
+import { useTransportRequestPDF } from '../../../hooks/useTransportRequestPDF';
+import { logService } from '../../../services/logService';
 
 // Helper: tách danh sách transfer_id và tạo URL In Seri
 const parseTransferIds = (value: string | undefined): string[] => {
   if (!value) return [];
   return value
-    .split(",")
+    .split(',')
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 };
 
 const buildSerialPrintUrl = (ids: string[]): string => {
-  if (!ids || ids.length === 0) return "https://one.tga.com.vn/so/serials/printOut/?id=";
-  const joined = ids.map((id) => encodeURIComponent(id)).join(",");
+  if (!ids || ids.length === 0) return 'https://one.tga.com.vn/so/serials/printOut/?id=';
+  const joined = ids.map((id) => encodeURIComponent(id)).join(',');
   return `https://one.tga.com.vn/so/serials/printOut/?id=${joined}`;
 };
 
 // Build URL In Phiếu CK: https://one.tga.com.vn/so/ckprint/picking?id=1910608,1910605
 const buildPickingPrintUrl = (ids: string[]): string => {
-  if (!ids || ids.length === 0) return "https://one.tga.com.vn/so/ckprint/picking?id=";
+  if (!ids || ids.length === 0) return 'https://one.tga.com.vn/so/ckprint/picking?id=';
   const joined = ids
     .map((id) => id.trim())
     .filter(Boolean)
-    .join(",");
+    .join(',');
   return `https://one.tga.com.vn/so/ckprint/picking?id=${joined}`;
 };
 
 const sheetLogger = (message: string, ...details: unknown[]) => {
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== 'production') {
     const payload = details.length ? { details } : {};
-    logService.debug("TransportRequestsSheet", message, payload);
+    logService.debug('TransportRequestsSheet', message, payload);
   }
 };
 
@@ -201,52 +201,52 @@ export interface TransportRequest {
 }
 
 const formatNumber = (value: number | string | undefined): string => {
-  if (value === undefined || value === null) return "-";
+  if (value === undefined || value === null) return '-';
   const num = Number(value);
   if (isNaN(num)) return String(value);
-  return num.toLocaleString("vi-VN");
+  return num.toLocaleString('vi-VN');
 };
 
 const formatDate = (dateString?: string): string => {
-  if (!dateString) return "—";
+  if (!dateString) return '—';
   try {
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) return "—";
-    return date.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
+    if (isNaN(date.getTime())) return '—';
+    return date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
     });
   } catch {
-    return "—";
+    return '—';
   }
 };
 
-const normalizeKey = (key: string) => key.toLowerCase().replace(/[^a-z0-9]/g, "");
+const normalizeKey = (key: string) => key.toLowerCase().replace(/[^a-z0-9]/g, '');
 
 const FIELD_ALIASES: Record<string, string[]> = {
-  requestId: ["request_id", "masochuyen", "mayeucau", "transportid"],
-  requestCode: ["ordercode", "documentcode", "code", "masochuyen"],
-  transferId: ["transfer_id", "transfercode"],
-  createdAt: ["created_at", "createddate", "createdtime", "ngaytao"],
-  pickupAddress: ["pickup", "pickup_location", "diachilayhang", "diemnguon"],
-  carrierName: ["carrier", "carrier_name", "nhavanchuyen", "transportpartner"],
-  carrierId: ["carrier_id"],
-  carrierContact: ["carrier_contact", "contactperson", "nguoilienhe"],
-  carrierPhone: ["carrier_phone", "phone", "sdt", "hotline"],
-  carrierEmail: ["carrier_email", "email"],
-  vehicleType: ["vehicle", "vehicle_name", "loaixe", "phuongtien"],
-  pricingMethod: ["pricing", "phuongthuc", "phuongthuctinhgia"],
-  department: ["phongban", "department_name"],
-  serviceArea: ["khuvuc", "service_zone", "area"],
-  estimatedCost: ["estimated_cost", "chiphi", "chiphiuoctinh", "costestimate"],
-  totalDistance: ["distance", "total_distance", "tongquangduong", "khoangcach"],
-  totalProducts: ["soluong", "productcount", "tongdonhang", "total_product"],
-  totalPackages: ["sokien", "tongkien", "packagecount", "packages_total"],
-  totalVolumeM3: ["tongkhoi", "khoiluong", "totalvolume", "total_cbm"],
-  status: ["transportstatus", "trangthai", "statuslabel", "ttvanchuyen"],
-  note: ["ghichu", "ghichuvanchuyen"],
-  totalOrderCount: ["ordercount", "total_orders", "tongsohoadon"],
+  requestId: ['request_id', 'masochuyen', 'mayeucau', 'transportid'],
+  requestCode: ['ordercode', 'documentcode', 'code', 'masochuyen'],
+  transferId: ['transfer_id', 'transfercode'],
+  createdAt: ['created_at', 'createddate', 'createdtime', 'ngaytao'],
+  pickupAddress: ['pickup', 'pickup_location', 'diachilayhang', 'diemnguon'],
+  carrierName: ['carrier', 'carrier_name', 'nhavanchuyen', 'transportpartner'],
+  carrierId: ['carrier_id'],
+  carrierContact: ['carrier_contact', 'contactperson', 'nguoilienhe'],
+  carrierPhone: ['carrier_phone', 'phone', 'sdt', 'hotline'],
+  carrierEmail: ['carrier_email', 'email'],
+  vehicleType: ['vehicle', 'vehicle_name', 'loaixe', 'phuongtien'],
+  pricingMethod: ['pricing', 'phuongthuc', 'phuongthuctinhgia'],
+  department: ['phongban', 'department_name'],
+  serviceArea: ['khuvuc', 'service_zone', 'area'],
+  estimatedCost: ['estimated_cost', 'chiphi', 'chiphiuoctinh', 'costestimate'],
+  totalDistance: ['distance', 'total_distance', 'tongquangduong', 'khoangcach'],
+  totalProducts: ['soluong', 'productcount', 'tongdonhang', 'total_product'],
+  totalPackages: ['sokien', 'tongkien', 'packagecount', 'packages_total'],
+  totalVolumeM3: ['tongkhoi', 'khoiluong', 'totalvolume', 'total_cbm'],
+  status: ['transportstatus', 'trangthai', 'statuslabel', 'ttvanchuyen'],
+  note: ['ghichu', 'ghichuvanchuyen'],
+  totalOrderCount: ['ordercount', 'total_orders', 'tongsohoadon'],
 };
 
 const normalizeRecord = (record: Record<string, unknown>) => {
@@ -265,7 +265,7 @@ const getNormalizedValue = (record: Record<string, unknown>, field: string) => {
     const normalizedKey = normalizeKey(candidate);
     if (Object.prototype.hasOwnProperty.call(record, normalizedKey)) {
       const value = record[normalizedKey];
-      if (value !== undefined && value !== null && value !== "") {
+      if (value !== undefined && value !== null && value !== '') {
         return value;
       }
       if (fallback === undefined) {
@@ -277,33 +277,33 @@ const getNormalizedValue = (record: Record<string, unknown>, field: string) => {
   return fallback;
 };
 
-const toStringSafe = (value: unknown, fallback = ""): string => {
+const toStringSafe = (value: unknown, fallback = ''): string => {
   if (value === undefined || value === null) return fallback;
-  if (typeof value === "string") return value.trim() || fallback;
-  if (typeof value === "number" && isNaN(value)) return fallback;
+  if (typeof value === 'string') return value.trim() || fallback;
+  if (typeof value === 'number' && isNaN(value)) return fallback;
   return String(value);
 };
 
 const toNumberSafe = (value: unknown): number => {
   if (value === undefined || value === null) return 0;
-  if (typeof value === "number") {
+  if (typeof value === 'number') {
     return Number.isFinite(value) ? value : 0;
   }
-  if (typeof value === "string") {
+  if (typeof value === 'string') {
     const trimmed = value.trim();
     if (!trimmed) return 0;
-    const cleaned = trimmed.replace(/\s+/g, "");
-    const hasComma = cleaned.includes(",");
-    const hasDot = cleaned.includes(".");
+    const cleaned = trimmed.replace(/\s+/g, '');
+    const hasComma = cleaned.includes(',');
+    const hasDot = cleaned.includes('.');
     let normalized = cleaned;
 
     if (hasComma && !hasDot) {
-      normalized = cleaned.replace(/,/g, ".");
+      normalized = cleaned.replace(/,/g, '.');
     } else {
-      normalized = cleaned.replace(/,/g, "");
+      normalized = cleaned.replace(/,/g, '');
     }
 
-    normalized = normalized.replace(/[^0-9.-]/g, "");
+    normalized = normalized.replace(/[^0-9.-]/g, '');
     const parsed = Number(normalized);
     return Number.isNaN(parsed) ? 0 : parsed;
   }
@@ -323,16 +323,16 @@ const getStopDetails = (row: TransportRequest): StopDetail[] => {
     const transferIds = row[`stop${i}TransferIds` as keyof TransportRequest] as string;
     const distance = row[`distance${i}` as keyof TransportRequest] as number;
 
-    if (address && address.trim() !== "") {
+    if (address && address.trim() !== '') {
       stops.push({
         stopNumber: i,
         address,
-        mn: mn || "—",
-        products: products || "—",
+        mn: mn || '—',
+        products: products || '—',
         volume: volume || 0,
         packages: packages || 0,
         orderCount: orderCount || 0,
-        transferIds: transferIds || "—",
+        transferIds: transferIds || '—',
         distance: distance || 0,
       });
     }
@@ -351,8 +351,8 @@ const TransportRequestsSheet: React.FC = () => {
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
-    severity: "success" | "error" | "info";
-  }>({ open: false, message: "", severity: "info" });
+    severity: 'success' | 'error' | 'info';
+  }>({ open: false, message: '', severity: 'info' });
 
   const [detailDialog, setDetailDialog] = useState<{
     open: boolean;
@@ -362,7 +362,7 @@ const TransportRequestsSheet: React.FC = () => {
     item: null,
   });
 
-  const [view, setView] = useState<"table" | "grid">("table");
+  const [view, setView] = useState<'table' | 'grid'>('table');
 
   const pagedData = useMemo(
     () => transportRequests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
@@ -373,7 +373,7 @@ const TransportRequestsSheet: React.FC = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "/api/transport-requests?spreadsheetId=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As"
+        '/api/transport-requests?spreadsheetId=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As'
       );
 
       if (!response.ok) {
@@ -384,35 +384,35 @@ const TransportRequestsSheet: React.FC = () => {
       const mappedData: TransportRequest[] = data.map(
         (item: Record<string, unknown>, index: number) => {
           const normalized = normalizeRecord(item);
-          const rawRequestId = toStringSafe(getNormalizedValue(normalized, "requestId"));
-          const fallbackRequestCode = toStringSafe(getNormalizedValue(normalized, "requestCode"));
-          const fallbackTransferId = toStringSafe(getNormalizedValue(normalized, "transferId"));
+          const rawRequestId = toStringSafe(getNormalizedValue(normalized, 'requestId'));
+          const fallbackRequestCode = toStringSafe(getNormalizedValue(normalized, 'requestCode'));
+          const fallbackTransferId = toStringSafe(getNormalizedValue(normalized, 'transferId'));
           const stableId =
             rawRequestId || fallbackRequestCode || fallbackTransferId || `request-${index}`;
 
           const result: TransportRequest = {
             requestId: stableId,
-            requestCode: toStringSafe(getNormalizedValue(normalized, "requestCode")),
-            transferId: toStringSafe(getNormalizedValue(normalized, "transferId")),
-            createdAt: toStringSafe(getNormalizedValue(normalized, "createdAt")),
-            pickupAddress: toStringSafe(getNormalizedValue(normalized, "pickupAddress")),
-            carrierName: toStringSafe(getNormalizedValue(normalized, "carrierName")),
-            carrierId: toStringSafe(getNormalizedValue(normalized, "carrierId")),
-            carrierContact: toStringSafe(getNormalizedValue(normalized, "carrierContact")),
-            carrierPhone: toStringSafe(getNormalizedValue(normalized, "carrierPhone")),
-            carrierEmail: toStringSafe(getNormalizedValue(normalized, "carrierEmail")),
-            vehicleType: toStringSafe(getNormalizedValue(normalized, "vehicleType")),
-            pricingMethod: toStringSafe(getNormalizedValue(normalized, "pricingMethod")),
-            department: toStringSafe(getNormalizedValue(normalized, "department")),
-            serviceArea: toStringSafe(getNormalizedValue(normalized, "serviceArea")),
-            note: toStringSafe(getNormalizedValue(normalized, "note")),
-            totalProducts: toStringSafe(getNormalizedValue(normalized, "totalProducts")),
-            status: toStringSafe(getNormalizedValue(normalized, "status"), "pending") || "pending",
-            estimatedCost: toNumberSafe(getNormalizedValue(normalized, "estimatedCost")),
-            totalDistance: toNumberSafe(getNormalizedValue(normalized, "totalDistance")),
-            totalPackages: toNumberSafe(getNormalizedValue(normalized, "totalPackages")),
-            totalVolumeM3: toNumberSafe(getNormalizedValue(normalized, "totalVolumeM3")),
-            totalOrderCount: toNumberSafe(getNormalizedValue(normalized, "totalOrderCount")),
+            requestCode: toStringSafe(getNormalizedValue(normalized, 'requestCode')),
+            transferId: toStringSafe(getNormalizedValue(normalized, 'transferId')),
+            createdAt: toStringSafe(getNormalizedValue(normalized, 'createdAt')),
+            pickupAddress: toStringSafe(getNormalizedValue(normalized, 'pickupAddress')),
+            carrierName: toStringSafe(getNormalizedValue(normalized, 'carrierName')),
+            carrierId: toStringSafe(getNormalizedValue(normalized, 'carrierId')),
+            carrierContact: toStringSafe(getNormalizedValue(normalized, 'carrierContact')),
+            carrierPhone: toStringSafe(getNormalizedValue(normalized, 'carrierPhone')),
+            carrierEmail: toStringSafe(getNormalizedValue(normalized, 'carrierEmail')),
+            vehicleType: toStringSafe(getNormalizedValue(normalized, 'vehicleType')),
+            pricingMethod: toStringSafe(getNormalizedValue(normalized, 'pricingMethod')),
+            department: toStringSafe(getNormalizedValue(normalized, 'department')),
+            serviceArea: toStringSafe(getNormalizedValue(normalized, 'serviceArea')),
+            note: toStringSafe(getNormalizedValue(normalized, 'note')),
+            totalProducts: toStringSafe(getNormalizedValue(normalized, 'totalProducts')),
+            status: toStringSafe(getNormalizedValue(normalized, 'status'), 'pending') || 'pending',
+            estimatedCost: toNumberSafe(getNormalizedValue(normalized, 'estimatedCost')),
+            totalDistance: toNumberSafe(getNormalizedValue(normalized, 'totalDistance')),
+            totalPackages: toNumberSafe(getNormalizedValue(normalized, 'totalPackages')),
+            totalVolumeM3: toNumberSafe(getNormalizedValue(normalized, 'totalVolumeM3')),
+            totalOrderCount: toNumberSafe(getNormalizedValue(normalized, 'totalOrderCount')),
           };
 
           const setField = (key: keyof TransportRequest, value: unknown) => {
@@ -460,25 +460,25 @@ const TransportRequestsSheet: React.FC = () => {
       );
 
       // Debug: Kiểm tra dữ liệu MN được lấy từ sheet
-      sheetLogger("Raw data from API", data[0]);
-      sheetLogger("Mapped data (first item)", mappedData[0]);
+      sheetLogger('Raw data from API', data[0]);
+      sheetLogger('Mapped data (first item)', mappedData[0]);
 
       // Kiểm tra các cột MN
       if (mappedData.length > 0) {
         const firstItem = mappedData[0];
-        sheetLogger("MN fields check");
+        sheetLogger('MN fields check');
         for (let i = 1; i <= 10; i++) {
           const mnKey = `stop${i}MN` as keyof TransportRequest;
           const mnValue = firstItem[mnKey];
-          sheetLogger(`MN field ${mnKey}`, mnValue ?? "null/undefined");
+          sheetLogger(`MN field ${mnKey}`, mnValue ?? 'null/undefined');
         }
 
         // Kiểm tra các cột OrderCount
-        sheetLogger("OrderCount fields check");
+        sheetLogger('OrderCount fields check');
         for (let i = 1; i <= 10; i++) {
           const orderCountKey = `stop${i}OrderCount` as keyof TransportRequest;
           const orderCountValue = firstItem[orderCountKey];
-          sheetLogger(`OrderCount field ${orderCountKey}`, orderCountValue ?? "null/undefined");
+          sheetLogger(`OrderCount field ${orderCountKey}`, orderCountValue ?? 'null/undefined');
         }
       }
 
@@ -486,8 +486,8 @@ const TransportRequestsSheet: React.FC = () => {
     } catch (error) {
       setSnackbar({
         open: true,
-        message: `Lỗi tải dữ liệu: ${error instanceof Error ? error.message : "Unknown error"}`,
-        severity: "error",
+        message: `Lỗi tải dữ liệu: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        severity: 'error',
       });
     } finally {
       setLoading(false);
@@ -504,7 +504,7 @@ const TransportRequestsSheet: React.FC = () => {
       setSnackbar({
         open: true,
         message: `Lỗi tạo PDF: ${pdfError}`,
-        severity: "error",
+        severity: 'error',
       });
     }
   }, [pdfError]);
@@ -543,83 +543,83 @@ const TransportRequestsSheet: React.FC = () => {
   const gridItems: GridViewItem[] = useMemo(() => {
     return pagedData.map((row) => ({
       id: row.requestId,
-      title: row.requestId || "—",
+      title: row.requestId || '—',
       subtitle: formatDate(row.createdAt),
       status: {
-        active: row.status === "in_transit",
-        label: getStatusLabel(row.status || "pending"),
-        color: row.status === "in_transit" ? "success" : "default",
+        active: row.status === 'in_transit',
+        label: getStatusLabel(row.status || 'pending'),
+        color: row.status === 'in_transit' ? 'success' : 'default',
       },
       details: [
         {
-          label: "Điểm nguồn",
-          value: row.pickupAddress || "—",
+          label: 'Điểm nguồn',
+          value: row.pickupAddress || '—',
         },
         {
-          label: "Nhà VC",
-          value: row.carrierName || "—",
+          label: 'Nhà VC',
+          value: row.carrierName || '—',
         },
         {
-          label: "Loại xe",
-          value: row.vehicleType || "—",
+          label: 'Loại xe',
+          value: row.vehicleType || '—',
         },
         {
-          label: "Khoảng cách",
+          label: 'Khoảng cách',
           value: `${formatNumber(row.totalDistance)} km`,
         },
         {
-          label: "Sản phẩm",
-          value: row.totalProducts || "—",
+          label: 'Sản phẩm',
+          value: row.totalProducts || '—',
         },
         {
-          label: "Kiện",
+          label: 'Kiện',
           value: formatNumber(row.totalPackages),
         },
         {
-          label: "Khối",
+          label: 'Khối',
           value: `${formatNumber(row.totalVolumeM3)} m³`,
         },
         {
-          label: "Ước tính",
+          label: 'Ước tính',
           value: `${formatNumber(row.estimatedCost)} VND`,
         },
       ],
       sections: [
         {
-          title: "Thông tin vận chuyển",
+          title: 'Thông tin vận chuyển',
           items: [
             {
-              label: "Phòng ban",
-              value: row.department || "—",
+              label: 'Phòng ban',
+              value: row.department || '—',
             },
             {
-              label: "Khu vực",
-              value: row.serviceArea || "—",
+              label: 'Khu vực',
+              value: row.serviceArea || '—',
             },
             {
-              label: "Phương thức tính",
-              value: row.pricingMethod || "—",
+              label: 'Phương thức tính',
+              value: row.pricingMethod || '—',
             },
             {
-              label: "Ghi chú",
-              value: row.note || "—",
+              label: 'Ghi chú',
+              value: row.note || '—',
             },
           ],
         },
         {
-          title: "Chi tiết đơn hàng",
+          title: 'Chi tiết đơn hàng',
           items: [
             {
-              label: "Mã chuyển kho",
-              value: row.transferId || "—",
+              label: 'Mã chuyển kho',
+              value: row.transferId || '—',
             },
             {
-              label: "Mã yêu cầu",
-              value: row.requestCode || "—",
+              label: 'Mã yêu cầu',
+              value: row.requestCode || '—',
             },
             {
-              label: "Trạng thái",
-              value: getStatusLabel(row.status || "pending"),
+              label: 'Trạng thái',
+              value: getStatusLabel(row.status || 'pending'),
             },
           ],
         },
@@ -627,31 +627,31 @@ const TransportRequestsSheet: React.FC = () => {
           title: `Điểm dừng ${stop.stopNumber}`,
           items: [
             {
-              label: "Địa chỉ",
+              label: 'Địa chỉ',
               value: stop.address,
             },
             {
-              label: "Sản phẩm",
+              label: 'Sản phẩm',
               value: stop.products,
             },
             {
-              label: "Khối lượng",
+              label: 'Khối lượng',
               value: `${formatNumber(stop.volume)} m³`,
             },
             {
-              label: "Kiện hàng",
+              label: 'Kiện hàng',
               value: formatNumber(stop.packages),
             },
             {
-              label: "Số đơn hàng",
+              label: 'Số đơn hàng',
               value: formatNumber(stop.orderCount),
             },
             {
-              label: "Mã chuyển kho",
+              label: 'Mã chuyển kho',
               value: stop.transferIds,
             },
             {
-              label: "Khoảng cách",
+              label: 'Khoảng cách',
               value: `${formatNumber(stop.distance)} km`,
             },
           ],
@@ -663,7 +663,7 @@ const TransportRequestsSheet: React.FC = () => {
       },
       actions: [
         {
-          label: "Xem chi tiết",
+          label: 'Xem chi tiết',
           icon: <ActionIcons.view />,
           onClick: (item) => {
             const selectedItem = transportRequests.find((req) => req.requestId === item.id);
@@ -674,15 +674,15 @@ const TransportRequestsSheet: React.FC = () => {
               });
             }
           },
-          color: "primary" as const,
-          variant: "contained" as const,
+          color: 'primary' as const,
+          variant: 'contained' as const,
         },
         {
-          label: isGeneratingPDF ? "Đang tạo PDF..." : "Xuất PDF",
+          label: isGeneratingPDF ? 'Đang tạo PDF...' : 'Xuất PDF',
           icon: isGeneratingPDF ? <CircularProgress size={16} /> : <ActionIcons.pdf />,
           onClick: () => generatePDF(row),
-          color: "secondary" as const,
-          variant: "outlined" as const,
+          color: 'secondary' as const,
+          variant: 'outlined' as const,
         },
       ],
     }));
@@ -698,10 +698,10 @@ const TransportRequestsSheet: React.FC = () => {
         <Stack direction="row" spacing={1}>
           <ActionButton
             variant="secondary"
-            onClick={() => setView(view === "table" ? "grid" : "table")}
-            startIcon={view === "table" ? <ViewIcons.grid /> : <ViewIcons.list />}
+            onClick={() => setView(view === 'table' ? 'grid' : 'table')}
+            startIcon={view === 'table' ? <ViewIcons.grid /> : <ViewIcons.list />}
           >
-            {view === "table" ? "Chế độ Grid" : "Chế độ Bảng"}
+            {view === 'table' ? 'Chế độ Grid' : 'Chế độ Bảng'}
           </ActionButton>
           <ActionButton
             variant="primary"
@@ -714,81 +714,81 @@ const TransportRequestsSheet: React.FC = () => {
         </Stack>
       </Toolbar>
 
-      {view === "table" ? (
-        <Paper sx={{ overflow: "hidden", bgcolor: "background.paper" }}>
+      {view === 'table' ? (
+        <Paper sx={{ overflow: 'hidden', bgcolor: 'background.paper' }}>
           <TableContainer
             sx={{
               maxHeight: 600,
-              bgcolor: "background.paper",
-              overflow: "auto",
+              bgcolor: 'background.paper',
+              overflow: 'auto',
             }}
           >
             <Table
               size="medium"
               stickyHeader
               sx={{
-                tableLayout: "auto",
-                bgcolor: "background.paper",
-                "& .MuiTableHead-root th": {
+                tableLayout: 'auto',
+                bgcolor: 'background.paper',
+                '& .MuiTableHead-root th': {
                   fontWeight: 700,
-                  fontSize: "0.68rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.3px",
-                  color: "text.secondary",
-                  backgroundColor: "grey.50",
+                  fontSize: '0.68rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.3px',
+                  color: 'text.secondary',
+                  backgroundColor: 'grey.50',
                   px: 0.5,
                   py: 0.75,
                 },
-                "& .MuiTableBody-root td": {
-                  fontSize: "0.78rem",
-                  whiteSpace: "normal",
-                  overflow: "visible",
-                  textOverflow: "clip",
+                '& .MuiTableBody-root td': {
+                  fontSize: '0.78rem',
+                  whiteSpace: 'normal',
+                  overflow: 'visible',
+                  textOverflow: 'clip',
                   px: 0.5,
                   py: 0.75,
                 },
-                "& .MuiTableBody-root .MuiChip-root": {
-                  fontSize: "0.72rem",
+                '& .MuiTableBody-root .MuiChip-root': {
+                  fontSize: '0.72rem',
                   height: 22,
                 },
-                "& .MuiTableCell-root": {
-                  minWidth: "fit-content",
+                '& .MuiTableCell-root': {
+                  minWidth: 'fit-content',
                 },
                 // Styling cho TableRow để có khoảng cách đẹp
-                "& .MuiTableRow-root": {
-                  "&:hover": {
-                    bgcolor: "grey.50",
-                    "& .MuiTableCell-root": {
-                      borderBottom: "1px solid",
-                      borderColor: "grey.300",
+                '& .MuiTableRow-root': {
+                  '&:hover': {
+                    bgcolor: 'grey.50',
+                    '& .MuiTableCell-root': {
+                      borderBottom: '1px solid',
+                      borderColor: 'grey.300',
                     },
                   },
-                  "& .MuiTableCell-root": {
-                    borderBottom: "1px solid",
-                    borderColor: "grey.100",
+                  '& .MuiTableCell-root': {
+                    borderBottom: '1px solid',
+                    borderColor: 'grey.100',
                   },
                 },
                 // Override CSS cho cột TT Vận chuyển để hiển thị đẹp như trong TransferList
-                "& .MuiTableBody-root td:last-child .MuiChip-root": {
-                  width: "auto",
-                  minWidth: "fit-content",
-                  height: "24px",
-                  fontSize: "0.75rem",
+                '& .MuiTableBody-root td:last-child .MuiChip-root': {
+                  width: 'auto',
+                  minWidth: 'fit-content',
+                  height: '24px',
+                  fontSize: '0.75rem',
                   fontWeight: 500,
-                  borderRadius: "12px",
-                  borderWidth: "1px",
-                  "&:hover": {
-                    transform: "scale(1.02)",
-                    transition: "transform 0.2s ease-in-out",
+                  borderRadius: '12px',
+                  borderWidth: '1px',
+                  '&:hover': {
+                    transform: 'scale(1.02)',
+                    transition: 'transform 0.2s ease-in-out',
                   },
                 },
-                "& .MuiTableBody-root td:last-child .MuiChip-label": {
-                  overflow: "visible",
-                  textOverflow: "clip",
-                  whiteSpace: "normal",
-                  paddingLeft: "6px",
-                  paddingRight: "6px",
-                  fontSize: "0.75rem",
+                '& .MuiTableBody-root td:last-child .MuiChip-label': {
+                  overflow: 'visible',
+                  textOverflow: 'clip',
+                  whiteSpace: 'normal',
+                  paddingLeft: '6px',
+                  paddingRight: '6px',
+                  fontSize: '0.75rem',
                   fontWeight: 500,
                   lineHeight: 1.2,
                 },
@@ -830,7 +830,7 @@ const TransportRequestsSheet: React.FC = () => {
                       key={row.requestId}
                       selected={isItemSelected}
                       onClick={() => handleClick(row.requestId)}
-                      sx={{ cursor: "pointer" }}
+                      sx={{ cursor: 'pointer' }}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -842,23 +842,23 @@ const TransportRequestsSheet: React.FC = () => {
                         />
                       </TableCell>
                       {/* <TableCell>{row.requestId}</TableCell> */}
-                      <TableCell>{row.requestId || "-"}</TableCell>
+                      <TableCell>{row.requestId || '-'}</TableCell>
                       {/* <TableCell>{row.transferId || '-'}</TableCell> */}
-                      <TableCell>{row.createdAt || "-"}</TableCell>
-                      <TableCell>{row.carrierName || "-"}</TableCell>
-                      <TableCell>{row.vehicleType || "-"}</TableCell>
+                      <TableCell>{row.createdAt || '-'}</TableCell>
+                      <TableCell>{row.carrierName || '-'}</TableCell>
+                      <TableCell>{row.vehicleType || '-'}</TableCell>
                       <TableCell align="right">{formatNumber(row.estimatedCost || 0)}</TableCell>
                       <TableCell align="right">{formatNumber(row.totalDistance || 0)}</TableCell>
-                      <TableCell align="right">{row.totalProducts || "-"}</TableCell>
+                      <TableCell align="right">{row.totalProducts || '-'}</TableCell>
                       <TableCell align="right">{formatNumber(row.totalPackages)}</TableCell>
                       <TableCell align="right">{formatNumber(row.totalVolumeM3)}</TableCell>
-                      <TableCell>{row.department || "-"}</TableCell>
-                      <TableCell>{row.serviceArea || "-"}</TableCell>
-                      <TableCell>{row.pricingMethod || "-"}</TableCell>
+                      <TableCell>{row.department || '-'}</TableCell>
+                      <TableCell>{row.serviceArea || '-'}</TableCell>
+                      <TableCell>{row.pricingMethod || '-'}</TableCell>
                       <TableCell>
                         <StatusChip
-                          status={row.status || "pending"}
-                          label={getStatusLabel(row.status || "pending")}
+                          status={row.status || 'pending'}
+                          label={getStatusLabel(row.status || 'pending')}
                         />
                       </TableCell>
                     </TableRow>
@@ -945,7 +945,7 @@ const TransportRequestsSheet: React.FC = () => {
                     }
                   }
                   const url = buildSerialPrintUrl(ids);
-                  window.open(url, "_blank");
+                  window.open(url, '_blank');
                 }}
               >
                 In Seri
@@ -964,7 +964,7 @@ const TransportRequestsSheet: React.FC = () => {
                     }
                   }
                   const url = buildPickingPrintUrl(ids);
-                  window.open(url, "_blank");
+                  window.open(url, '_blank');
                 }}
               >
                 In Phiếu CK
@@ -976,7 +976,7 @@ const TransportRequestsSheet: React.FC = () => {
           {detailDialog.item && (
             <Box sx={{ mt: 2 }}>
               {/* Thông tin cơ bản */}
-              <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
+              <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                 Thông tin cơ bản
               </Typography>
               <List dense>
@@ -995,7 +995,7 @@ const TransportRequestsSheet: React.FC = () => {
                 <ListItem>
                   <ListItemText
                     primary="Trạng thái"
-                    secondary={getStatusLabel(detailDialog.item.status || "pending")}
+                    secondary={getStatusLabel(detailDialog.item.status || 'pending')}
                   />
                 </ListItem>
                 <ListItem>
@@ -1017,7 +1017,7 @@ const TransportRequestsSheet: React.FC = () => {
                       getStopDetails(detailDialog.item)
                         .map((s) => s.transferIds)
                         .filter((x) => x && x.trim().length > 0)
-                        .join(", ") || "—"
+                        .join(', ') || '—'
                     }
                   />
                 </ListItem>
@@ -1032,7 +1032,7 @@ const TransportRequestsSheet: React.FC = () => {
               <Divider sx={{ my: 2 }} />
 
               {/* Thông tin chi tiết */}
-              <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
+              <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                 Thông tin chi tiết
               </Typography>
               <List dense>
@@ -1071,7 +1071,7 @@ const TransportRequestsSheet: React.FC = () => {
               <Divider sx={{ my: 2 }} />
 
               {/* Thông tin các điểm dừng */}
-              <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
+              <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                 Thông tin các điểm dừng
               </Typography>
               {detailDialog.item &&
@@ -1088,7 +1088,7 @@ const TransportRequestsSheet: React.FC = () => {
                         onClick={() => {
                           const ids = parseTransferIds(stop.transferIds);
                           const url = buildSerialPrintUrl(ids);
-                          window.open(url, "_blank");
+                          window.open(url, '_blank');
                         }}
                       >
                         In Seri
@@ -1100,7 +1100,7 @@ const TransportRequestsSheet: React.FC = () => {
                         onClick={() => {
                           const ids = parseTransferIds(stop.transferIds);
                           const url = buildPickingPrintUrl(ids);
-                          window.open(url, "_blank");
+                          window.open(url, '_blank');
                         }}
                       >
                         In Phiếu CK
@@ -1164,7 +1164,7 @@ const TransportRequestsSheet: React.FC = () => {
         <Alert
           onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
           severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {snackbar.message}
         </Alert>

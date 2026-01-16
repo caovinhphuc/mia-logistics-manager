@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Typography, Paper, Grid, Divider } from "@mui/material";
-import { AttachMoney, DirectionsCar, Person } from "@mui/icons-material";
+import React from 'react';
+import { Box, Typography, Paper, Grid, Divider } from '@mui/material';
+import { AttachMoney, DirectionsCar, Person } from '@mui/icons-material';
 
 interface CostCalculationDetailsProps {
   calculation: {
@@ -19,9 +19,9 @@ export const CostCalculationDetails: React.FC<CostCalculationDetailsProps> = ({ 
   }
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
     }).format(amount);
   };
 
@@ -34,7 +34,7 @@ export const CostCalculationDetails: React.FC<CostCalculationDetailsProps> = ({ 
 
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
             <DirectionsCar color="primary" sx={{ mr: 1 }} />
             <Typography variant="body2" color="text.secondary">
               Khoảng cách: {calculation.distance.toFixed(2)} km
@@ -43,7 +43,7 @@ export const CostCalculationDetails: React.FC<CostCalculationDetailsProps> = ({ 
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
             <AttachMoney color="success" sx={{ mr: 1 }} />
             <Typography variant="body2" color="text.secondary">
               Chi phí cơ bản: {formatCurrency(calculation.baseCost)}
@@ -58,7 +58,7 @@ export const CostCalculationDetails: React.FC<CostCalculationDetailsProps> = ({ 
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Person color="info" sx={{ mr: 1 }} />
             <Typography variant="body2" color="text.secondary">
               Chi phí tài xế: {formatCurrency(calculation.driverCost)}
@@ -68,15 +68,15 @@ export const CostCalculationDetails: React.FC<CostCalculationDetailsProps> = ({ 
 
         <Grid item xs={12}>
           <Divider sx={{ my: 1 }} />
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="h6" color="primary">
               Tổng chi phí:
             </Typography>
-            <Typography variant="h5" color="primary" sx={{ fontWeight: "bold" }}>
+            <Typography variant="h5" color="primary" sx={{ fontWeight: 'bold' }}>
               {formatCurrency(calculation.totalCost)}
             </Typography>
           </Box>
-          <Typography variant="body2" color="text.secondary" sx={{ textAlign: "right" }}>
+          <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'right' }}>
             ({formatCurrency(calculation.costPerKm)}/km)
           </Typography>
         </Grid>

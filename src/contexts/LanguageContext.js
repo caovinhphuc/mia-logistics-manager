@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useReducer, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Language state structure
 const initialState = {
-  language: "vi",
+  language: 'vi',
   availableLanguages: [
-    { code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
-    { code: "en", name: "English", flag: "🇺🇸" },
+    { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
   ],
   loading: false,
   rtl: false,
@@ -14,9 +14,9 @@ const initialState = {
 
 // Language actions
 const LANGUAGE_ACTIONS = {
-  SET_LANGUAGE: "SET_LANGUAGE",
-  SET_LOADING: "SET_LOADING",
-  SET_RTL: "SET_RTL",
+  SET_LANGUAGE: 'SET_LANGUAGE',
+  SET_LOADING: 'SET_LOADING',
+  SET_RTL: 'SET_RTL',
 };
 
 // Language reducer
@@ -47,10 +47,10 @@ const LanguageProvider = ({ children }) => {
   // Đảm bảo i18n luôn khởi tạo với Tiếng Việt ngay từ đầu
   useEffect(() => {
     if (!i18n.language || !state.availableLanguages.find((lang) => lang.code === i18n.language)) {
-      i18n.changeLanguage("vi");
-      localStorage.setItem("mia-language", "vi");
-      document.documentElement.lang = "vi";
-      dispatch({ type: LANGUAGE_ACTIONS.SET_LANGUAGE, payload: "vi" });
+      i18n.changeLanguage('vi');
+      localStorage.setItem('mia-language', 'vi');
+      document.documentElement.lang = 'vi';
+      dispatch({ type: LANGUAGE_ACTIONS.SET_LANGUAGE, payload: 'vi' });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -63,13 +63,13 @@ const LanguageProvider = ({ children }) => {
       dispatch({ type: LANGUAGE_ACTIONS.SET_LANGUAGE, payload: languageCode });
 
       // Save to localStorage
-      localStorage.setItem("mia-language", languageCode);
+      localStorage.setItem('mia-language', languageCode);
 
       // Update document language
       document.documentElement.lang = languageCode;
 
       // Check if RTL is needed (for future Arabic/Hebrew support)
-      const rtlLanguages = ["ar", "he", "fa"];
+      const rtlLanguages = ['ar', 'he', 'fa'];
       dispatch({
         type: LANGUAGE_ACTIONS.SET_RTL,
         payload: rtlLanguages.includes(languageCode),
@@ -77,7 +77,7 @@ const LanguageProvider = ({ children }) => {
 
       dispatch({ type: LANGUAGE_ACTIONS.SET_LOADING, payload: false });
     } catch (error) {
-      console.error("Language change failed:", error);
+      console.error('Language change failed:', error);
       dispatch({ type: LANGUAGE_ACTIONS.SET_LOADING, payload: false });
     }
   };
@@ -86,57 +86,57 @@ const LanguageProvider = ({ children }) => {
     return state.availableLanguages.find((lang) => lang.code === state.language);
   };
 
-  const formatCurrency = (amount, currency = "VND") => {
+  const formatCurrency = (amount, currency = 'VND') => {
     const options = {
-      style: "currency",
+      style: 'currency',
       currency: currency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     };
 
-    if (state.language === "vi") {
+    if (state.language === 'vi') {
       // Vietnamese formatting
-      return new Intl.NumberFormat("vi-VN", options).format(amount);
+      return new Intl.NumberFormat('vi-VN', options).format(amount);
     } else {
       // English formatting
-      return new Intl.NumberFormat("en-US", options).format(amount);
+      return new Intl.NumberFormat('en-US', options).format(amount);
     }
   };
 
   const formatNumber = (number) => {
-    if (state.language === "vi") {
-      return new Intl.NumberFormat("vi-VN").format(number);
+    if (state.language === 'vi') {
+      return new Intl.NumberFormat('vi-VN').format(number);
     } else {
-      return new Intl.NumberFormat("en-US").format(number);
+      return new Intl.NumberFormat('en-US').format(number);
     }
   };
 
   const formatDate = (date, options = {}) => {
     const defaultOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
       ...options,
     };
 
-    if (state.language === "vi") {
-      return new Intl.DateTimeFormat("vi-VN", defaultOptions).format(new Date(date));
+    if (state.language === 'vi') {
+      return new Intl.DateTimeFormat('vi-VN', defaultOptions).format(new Date(date));
     } else {
-      return new Intl.DateTimeFormat("en-US", defaultOptions).format(new Date(date));
+      return new Intl.DateTimeFormat('en-US', defaultOptions).format(new Date(date));
     }
   };
 
   const formatTime = (date, options = {}) => {
     const defaultOptions = {
-      hour: "2-digit",
-      minute: "2-digit",
+      hour: '2-digit',
+      minute: '2-digit',
       ...options,
     };
 
-    if (state.language === "vi") {
-      return new Intl.DateTimeFormat("vi-VN", defaultOptions).format(new Date(date));
+    if (state.language === 'vi') {
+      return new Intl.DateTimeFormat('vi-VN', defaultOptions).format(new Date(date));
     } else {
-      return new Intl.DateTimeFormat("en-US", defaultOptions).format(new Date(date));
+      return new Intl.DateTimeFormat('en-US', defaultOptions).format(new Date(date));
     }
   };
 
@@ -158,12 +158,12 @@ const LanguageProvider = ({ children }) => {
 
   // Initialize language from localStorage or browser
   useEffect(() => {
-    const savedLanguage = localStorage.getItem("mia-language");
+    const savedLanguage = localStorage.getItem('mia-language');
 
     // Luôn ưu tiên Tiếng Việt nếu không có savedLanguage hoặc savedLanguage không hợp lệ
     const availableCodes = state.availableLanguages.map((lang) => lang.code);
     const initialLanguage =
-      savedLanguage && availableCodes.includes(savedLanguage) ? savedLanguage : "vi";
+      savedLanguage && availableCodes.includes(savedLanguage) ? savedLanguage : 'vi';
 
     // Đảm bảo i18n và state đồng bộ với Tiếng Việt
     if (initialLanguage !== i18n.language) {
@@ -172,7 +172,7 @@ const LanguageProvider = ({ children }) => {
 
     if (initialLanguage !== state.language) {
       dispatch({ type: LANGUAGE_ACTIONS.SET_LANGUAGE, payload: initialLanguage });
-      localStorage.setItem("mia-language", initialLanguage);
+      localStorage.setItem('mia-language', initialLanguage);
       document.documentElement.lang = initialLanguage;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -185,7 +185,7 @@ const LanguageProvider = ({ children }) => {
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error("useLanguage must be used within a LanguageProvider");
+    throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
 };

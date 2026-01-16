@@ -1,5 +1,5 @@
-import React from "react";
-import { SvgIconProps } from "@mui/material";
+import React from 'react';
+import { SvgIconProps } from '@mui/material';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -11,20 +11,20 @@ import {
   Visibility as ViewIcon,
   PictureAsPdf as PdfIcon,
   Print as PrintIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
-interface ActionIconsProps extends Omit<SvgIconProps, "children"> {
+interface ActionIconsProps extends Omit<SvgIconProps, 'children'> {
   name:
-    | "edit"
-    | "delete"
-    | "add"
-    | "refresh"
-    | "search"
-    | "filter"
-    | "more"
-    | "view"
-    | "pdf"
-    | "print";
+    | 'edit'
+    | 'delete'
+    | 'add'
+    | 'refresh'
+    | 'search'
+    | 'filter'
+    | 'more'
+    | 'view'
+    | 'pdf'
+    | 'print';
 }
 
 const iconMap = {

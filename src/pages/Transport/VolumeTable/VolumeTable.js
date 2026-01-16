@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
   TableRow,
   Button,
   Grid,
@@ -17,7 +17,7 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import AddIcon from '@mui/icons-material/Add';
@@ -28,7 +28,7 @@ const VolumeTable = () => {
     width: '',
     height: '',
     weight: '',
-    unit: 'cm'
+    unit: 'cm',
   });
 
   // Bảng khối tương đối mẫu
@@ -37,12 +37,12 @@ const VolumeTable = () => {
     { range: '51 - 100kg', rate: 1.2, description: 'Hàng trung bình' },
     { range: '101 - 200kg', rate: 1.5, description: 'Hàng nặng' },
     { range: '201 - 500kg', rate: 1.8, description: 'Hàng rất nặng' },
-    { range: '> 500kg', rate: 2.0, description: 'Hàng siêu nặng' }
+    { range: '> 500kg', rate: 2.0, description: 'Hàng siêu nặng' },
   ];
 
   const calculateVolume = () => {
     const { length, width, height, weight, unit } = calculator;
-    
+
     if (!length || !width || !height || !weight) {
       alert('Vui lòng nhập đầy đủ thông tin');
       return;
@@ -91,11 +91,7 @@ Kết quả tính toán:
             Bảng khối tương đối
           </Typography>
         </Box>
-        <Button 
-          variant="contained" 
-          startIcon={<AddIcon />}
-          sx={{ px: 3, py: 1.5 }}
-        >
+        <Button variant="contained" startIcon={<AddIcon />} sx={{ px: 3, py: 1.5 }}>
           Thêm mức giá
         </Button>
       </Box>
@@ -108,7 +104,7 @@ Kết quả tính toán:
               <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
                 Máy tính khối tương đối
               </Typography>
-              
+
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <TextField
@@ -116,7 +112,7 @@ Kết quả tính toán:
                     label="Dài"
                     type="number"
                     value={calculator.length}
-                    onChange={(e) => setCalculator({...calculator, length: e.target.value})}
+                    onChange={(e) => setCalculator({ ...calculator, length: e.target.value })}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -125,7 +121,7 @@ Kết quả tính toán:
                     label="Rộng"
                     type="number"
                     value={calculator.width}
-                    onChange={(e) => setCalculator({...calculator, width: e.target.value})}
+                    onChange={(e) => setCalculator({ ...calculator, width: e.target.value })}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -134,7 +130,7 @@ Kết quả tính toán:
                     label="Cao"
                     type="number"
                     value={calculator.height}
-                    onChange={(e) => setCalculator({...calculator, height: e.target.value})}
+                    onChange={(e) => setCalculator({ ...calculator, height: e.target.value })}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -142,7 +138,7 @@ Kết quả tính toán:
                     <InputLabel>Đơn vị</InputLabel>
                     <Select
                       value={calculator.unit}
-                      onChange={(e) => setCalculator({...calculator, unit: e.target.value})}
+                      onChange={(e) => setCalculator({ ...calculator, unit: e.target.value })}
                       label="Đơn vị"
                     >
                       <MenuItem value="cm">Centimet (cm)</MenuItem>
@@ -156,16 +152,11 @@ Kết quả tính toán:
                     label="Trọng lượng thực (kg)"
                     type="number"
                     value={calculator.weight}
-                    onChange={(e) => setCalculator({...calculator, weight: e.target.value})}
+                    onChange={(e) => setCalculator({ ...calculator, weight: e.target.value })}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button 
-                    fullWidth 
-                    variant="contained" 
-                    onClick={calculateVolume}
-                    sx={{ py: 1.5 }}
-                  >
+                  <Button fullWidth variant="contained" onClick={calculateVolume} sx={{ py: 1.5 }}>
                     Tính toán
                   </Button>
                 </Grid>
@@ -181,7 +172,7 @@ Kết quả tính toán:
               <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
                 Hướng dẫn tính toán
               </Typography>
-              
+
               <Box mb={2}>
                 <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 1 }}>
                   Công thức tính:
@@ -222,7 +213,7 @@ Kết quả tính toán:
           <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
             Bảng hệ số khối tương đối
           </Typography>
-          
+
           <TableContainer>
             <Table>
               <TableHead>

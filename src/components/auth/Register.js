@@ -6,7 +6,7 @@ import {
   Security as SecurityIcon,
   Visibility,
   VisibilityOff,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -21,49 +21,49 @@ import {
   Link,
   TextField,
   Typography,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { motion } from "framer-motion";
-import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { useNotification } from "../../contexts/NotificationContext";
-import { logService } from "../../services/logService";
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useNotification } from '../../contexts/NotificationContext';
+import { logService } from '../../services/logService';
 
 // Enhanced validation schema
 const validationSchema = {
   username: (value) => {
-    if (!value) return "Tên người dùng là bắt buộc";
-    if (value.length < 3) return "Tên người dùng phải có ít nhất 3 ký tự";
+    if (!value) return 'Tên người dùng là bắt buộc';
+    if (value.length < 3) return 'Tên người dùng phải có ít nhất 3 ký tự';
     if (!/^[a-zA-Z0-9_]+$/.test(value))
-      return "Tên người dùng chỉ được chứa chữ cái, số và dấu gạch dưới";
+      return 'Tên người dùng chỉ được chứa chữ cái, số và dấu gạch dưới';
     return null;
   },
   email: (value) => {
-    if (!value) return "Email là bắt buộc";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Email không hợp lệ";
+    if (!value) return 'Email là bắt buộc';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Email không hợp lệ';
     return null;
   },
   password: (value) => {
-    if (!value) return "Mật khẩu là bắt buộc";
-    if (value.length < 8) return "Mật khẩu phải có ít nhất 8 ký tự";
+    if (!value) return 'Mật khẩu là bắt buộc';
+    if (value.length < 8) return 'Mật khẩu phải có ít nhất 8 ký tự';
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value))
-      return "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số";
+      return 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số';
     return null;
   },
   confirmPassword: (value, password) => {
-    if (!value) return "Xác nhận mật khẩu là bắt buộc";
-    if (value !== password) return "Mật khẩu xác nhận không khớp";
+    if (!value) return 'Xác nhận mật khẩu là bắt buộc';
+    if (value !== password) return 'Mật khẩu xác nhận không khớp';
     return null;
   },
   fullName: (value) => {
-    if (!value) return "Họ tên là bắt buộc";
-    if (value.length < 2) return "Họ tên phải có ít nhất 2 ký tự";
+    if (!value) return 'Họ tên là bắt buộc';
+    if (value.length < 2) return 'Họ tên phải có ít nhất 2 ký tự';
     return null;
   },
   phone: (value) => {
-    if (!value) return "Số điện thoại là bắt buộc";
-    if (!/^[0-9+\-\s()]+$/.test(value)) return "Số điện thoại không hợp lệ";
+    if (!value) return 'Số điện thoại là bắt buộc';
+    if (!/^[0-9+\-\s()]+$/.test(value)) return 'Số điện thoại không hợp lệ';
     return null;
   },
 };
@@ -71,18 +71,18 @@ const validationSchema = {
 // Security features
 const securityFeatures = [
   {
-    title: "Bảo mật cao",
-    description: "Mã hóa dữ liệu với tiêu chuẩn quốc tế",
+    title: 'Bảo mật cao',
+    description: 'Mã hóa dữ liệu với tiêu chuẩn quốc tế',
     icon: <SecurityIcon />,
   },
   {
-    title: "Dễ sử dụng",
-    description: "Giao diện thân thiện và trực quan",
+    title: 'Dễ sử dụng',
+    description: 'Giao diện thân thiện và trực quan',
     icon: <CheckCircleIcon />,
   },
   {
-    title: "Đáng tin cậy",
-    description: "Hệ thống đã được kiểm chứng",
+    title: 'Đáng tin cậy',
+    description: 'Hệ thống đã được kiểm chứng',
     icon: <PersonIcon />,
   },
 ];
@@ -94,12 +94,12 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    fullName: "",
-    phone: "",
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    fullName: '',
+    phone: '',
     agreeToTerms: false,
   });
 
@@ -150,7 +150,7 @@ const Register = () => {
 
       // Clear error when user starts typing
       if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: "" }));
+        setErrors((prev) => ({ ...prev, [field]: '' }));
       }
     },
     [errors]
@@ -189,7 +189,7 @@ const Register = () => {
     }
 
     if (!formData.agreeToTerms) {
-      showError("Vui lòng đồng ý với điều khoản sử dụng");
+      showError('Vui lòng đồng ý với điều khoản sử dụng');
       return;
     }
 
@@ -205,18 +205,18 @@ const Register = () => {
       });
 
       if (result.success) {
-        logService.info("Register", "Registration successful", {
+        logService.info('Register', 'Registration successful', {
           email: formData.email,
           username: formData.username,
         });
-        showSuccess("Đăng ký thành công! Vui lòng đăng nhập.");
-        navigate("/login");
+        showSuccess('Đăng ký thành công! Vui lòng đăng nhập.');
+        navigate('/login');
       } else {
-        showError(result.error || "Đăng ký thất bại");
+        showError(result.error || 'Đăng ký thất bại');
       }
     } catch (error) {
-      logService.error("Register", "Register error", error);
-      showError("Đã xảy ra lỗi khi đăng ký");
+      logService.error('Register', 'Register error', error);
+      showError('Đã xảy ra lỗi khi đăng ký');
     } finally {
       setIsLoading(false);
     }
@@ -239,7 +239,7 @@ const Register = () => {
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
-      <Box sx={{ maxWidth: 600, mx: "auto", p: 2 }}>
+      <Box sx={{ maxWidth: 600, mx: 'auto', p: 2 }}>
         {/* Header */}
         <motion.div variants={itemVariants}>
           <Typography
@@ -251,9 +251,9 @@ const Register = () => {
               mb: 2,
               fontWeight: 700,
               background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
             Tạo tài khoản mới
@@ -277,8 +277,8 @@ const Register = () => {
                     name="username"
                     label="Tên người dùng"
                     value={formData.username}
-                    onChange={(e) => handleChange("username", e.target.value)}
-                    onBlur={() => handleBlur("username")}
+                    onChange={(e) => handleChange('username', e.target.value)}
+                    onBlur={() => handleBlur('username')}
                     error={touched.username && Boolean(errors.username)}
                     helperText={touched.username && errors.username}
                     disabled={isLoading}
@@ -301,8 +301,8 @@ const Register = () => {
                     label="Email"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => handleChange("email", e.target.value)}
-                    onBlur={() => handleBlur("email")}
+                    onChange={(e) => handleChange('email', e.target.value)}
+                    onBlur={() => handleBlur('email')}
                     error={touched.email && Boolean(errors.email)}
                     helperText={touched.email && errors.email}
                     disabled={isLoading}
@@ -324,8 +324,8 @@ const Register = () => {
                     name="fullName"
                     label="Họ và tên"
                     value={formData.fullName}
-                    onChange={(e) => handleChange("fullName", e.target.value)}
-                    onBlur={() => handleBlur("fullName")}
+                    onChange={(e) => handleChange('fullName', e.target.value)}
+                    onBlur={() => handleBlur('fullName')}
                     error={touched.fullName && Boolean(errors.fullName)}
                     helperText={touched.fullName && errors.fullName}
                     disabled={isLoading}
@@ -347,8 +347,8 @@ const Register = () => {
                     name="phone"
                     label="Số điện thoại"
                     value={formData.phone}
-                    onChange={(e) => handleChange("phone", e.target.value)}
-                    onBlur={() => handleBlur("phone")}
+                    onChange={(e) => handleChange('phone', e.target.value)}
+                    onBlur={() => handleBlur('phone')}
                     error={touched.phone && Boolean(errors.phone)}
                     helperText={touched.phone && errors.phone}
                     disabled={isLoading}
@@ -369,10 +369,10 @@ const Register = () => {
                     id="password"
                     name="password"
                     label="Mật khẩu"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     value={formData.password}
-                    onChange={(e) => handleChange("password", e.target.value)}
-                    onBlur={() => handleBlur("password")}
+                    onChange={(e) => handleChange('password', e.target.value)}
+                    onBlur={() => handleBlur('password')}
                     error={touched.password && Boolean(errors.password)}
                     helperText={touched.password && errors.password}
                     disabled={isLoading}
@@ -405,10 +405,10 @@ const Register = () => {
                     id="confirmPassword"
                     name="confirmPassword"
                     label="Xác nhận mật khẩu"
-                    type={showConfirmPassword ? "text" : "password"}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
-                    onChange={(e) => handleChange("confirmPassword", e.target.value)}
-                    onBlur={() => handleBlur("confirmPassword")}
+                    onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                    onBlur={() => handleBlur('confirmPassword')}
                     error={touched.confirmPassword && Boolean(errors.confirmPassword)}
                     helperText={touched.confirmPassword && errors.confirmPassword}
                     disabled={isLoading}
@@ -441,17 +441,17 @@ const Register = () => {
                   <input
                     type="checkbox"
                     checked={formData.agreeToTerms}
-                    onChange={(e) => handleChange("agreeToTerms", e.target.checked)}
+                    onChange={(e) => handleChange('agreeToTerms', e.target.checked)}
                     disabled={isLoading}
                   />
                 }
                 label={
                   <Typography variant="body2">
-                    Tôi đồng ý với{" "}
+                    Tôi đồng ý với{' '}
                     <Link href="#" color="primary">
                       Điều khoản sử dụng
-                    </Link>{" "}
-                    và{" "}
+                    </Link>{' '}
+                    và{' '}
                     <Link href="#" color="primary">
                       Chính sách bảo mật
                     </Link>
@@ -472,21 +472,21 @@ const Register = () => {
                   mb: 2,
                   py: 1.5,
                   background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`,
-                  "&:hover": {
+                  '&:hover': {
                     background: `linear-gradient(45deg, ${theme.palette.primary.dark}, ${theme.palette.primary.main})`,
                   },
-                  "&:disabled": {
+                  '&:disabled': {
                     background: theme.palette.action.disabledBackground,
                   },
                 }}
               >
                 {isLoading ? (
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <CircularProgress size={20} color="inherit" />
                     <Typography variant="body2">Đang đăng ký...</Typography>
                   </Box>
                 ) : (
-                  "Đăng ký"
+                  'Đăng ký'
                 )}
               </Button>
 
@@ -498,18 +498,18 @@ const Register = () => {
               </Divider>
 
               {/* Login link */}
-              <Box sx={{ textAlign: "center" }}>
+              <Box sx={{ textAlign: 'center' }}>
                 <Typography variant="body2" color="text.secondary">
-                  Đã có tài khoản?{" "}
+                  Đã có tài khoản?{' '}
                   <Link
                     component="button"
                     variant="body2"
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate('/login')}
                     disabled={isLoading}
                     sx={{
-                      textDecoration: "none",
-                      "&:hover": {
-                        textDecoration: "underline",
+                      textDecoration: 'none',
+                      '&:hover': {
+                        textDecoration: 'underline',
                       },
                     }}
                   >
@@ -523,7 +523,7 @@ const Register = () => {
 
         {/* Security features */}
         <motion.div variants={itemVariants}>
-          <Card sx={{ mt: 3, bgcolor: "background.paper" }}>
+          <Card sx={{ mt: 3, bgcolor: 'background.paper' }}>
             <CardContent>
               <Typography variant="h6" gutterBottom align="center">
                 Tính năng bảo mật
@@ -531,14 +531,14 @@ const Register = () => {
               <Grid container spacing={2}>
                 {securityFeatures.map((feature, index) => (
                   <Grid item xs={12} sm={4} key={index}>
-                    <Box sx={{ textAlign: "center", p: 2 }}>
+                    <Box sx={{ textAlign: 'center', p: 2 }}>
                       <Box
                         sx={{
-                          display: "inline-flex",
+                          display: 'inline-flex',
                           p: 1,
-                          borderRadius: "50%",
-                          bgcolor: "primary.main",
-                          color: "white",
+                          borderRadius: '50%',
+                          bgcolor: 'primary.main',
+                          color: 'white',
                           mb: 1,
                         }}
                       >

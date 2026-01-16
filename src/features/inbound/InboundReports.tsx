@@ -219,21 +219,15 @@ const InboundReports: React.FC = () => {
   // Statistics
   const stats = {
     totalItems: filteredData.length,
-    international: filteredData.filter((item) => item.type === 'international')
-      .length,
+    international: filteredData.filter((item) => item.type === 'international').length,
     domestic: filteredData.filter((item) => item.type === 'domestic').length,
-    totalQuantity: filteredData.reduce(
-      (sum, item) => sum + (item.quantity || 0),
-      0
-    ),
+    totalQuantity: filteredData.reduce((sum, item) => sum + (item.quantity || 0), 0),
     totalContainers: filteredData.reduce(
       (sum, item) => sum + (parseInt(item.container?.toString() || '0') || 0),
       0
     ),
-    completedItems: filteredData.filter((item) => item.status === 'completed')
-      .length,
-    pendingItems: filteredData.filter((item) => item.status === 'pending')
-      .length,
+    completedItems: filteredData.filter((item) => item.status === 'completed').length,
+    pendingItems: filteredData.filter((item) => item.status === 'pending').length,
   };
 
   return (
@@ -242,10 +236,7 @@ const InboundReports: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <ReportIcon sx={{ fontSize: 40, color: 'primary.main', mr: 2 }} />
         <Box>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 700, color: 'primary.main' }}
-          >
+          <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>
             Báo cáo nhập hàng
           </Typography>
           <Typography variant="body1" color="text.secondary">
@@ -369,10 +360,7 @@ const InboundReports: React.FC = () => {
         <Grid item xs={6} md={3}>
           <StatCard
             title="Tỷ lệ hoàn thành"
-            value={`${(
-              (stats.completedItems / (stats.totalItems || 1)) *
-              100
-            ).toFixed(1)}%`}
+            value={`${((stats.completedItems / (stats.totalItems || 1)) * 100).toFixed(1)}%`}
             icon={<TimelineIcon />}
             color="warning"
             change={{
@@ -414,11 +402,7 @@ const InboundReports: React.FC = () => {
             <Button variant="outlined" size="small" startIcon={<PrintIcon />}>
               In báo cáo
             </Button>
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<DownloadIcon />}
-            >
+            <Button variant="contained" size="small" startIcon={<DownloadIcon />}>
               Xuất Excel
             </Button>
           </Box>
@@ -443,11 +427,7 @@ const InboundReports: React.FC = () => {
               <Button variant="outlined" size="small" startIcon={<PrintIcon />}>
                 In báo cáo
               </Button>
-              <Button
-                variant="contained"
-                size="small"
-                startIcon={<DownloadIcon />}
-              >
+              <Button variant="contained" size="small" startIcon={<DownloadIcon />}>
                 Xuất Excel
               </Button>
             </Stack>

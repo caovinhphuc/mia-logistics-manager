@@ -52,7 +52,7 @@ function createContentSecurityPolicy() {
       style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
       font-src 'self' fonts.gstatic.com data:;
       img-src 'self' data: *.googleapis.com *.google.com *.gstatic.com;
-      connect-src 'self' *.googleapis.com *.google.com *.gstatic.com;
+      connect-src 'self' http://localhost:3100 http://localhost:3000 *.googleapis.com *.google.com *.gstatic.com;
       frame-src 'self' *.google.com;
       object-src 'none';
       base-uri 'self';
@@ -97,7 +97,7 @@ add_header Content-Security-Policy "
   style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
   font-src 'self' fonts.gstatic.com data:;
   img-src 'self' data: *.googleapis.com *.google.com *.gstatic.com;
-  connect-src 'self' *.googleapis.com *.google.com *.gstatic.com;
+  connect-src 'self' http://localhost:3100 http://localhost:3000 *.googleapis.com *.google.com *.gstatic.com;
   frame-src 'self' *.google.com;
   object-src 'none';
   base-uri 'self';
@@ -122,7 +122,7 @@ Header always set Content-Security-Policy "
   style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
   font-src 'self' fonts.gstatic.com data:;
   img-src 'self' data: *.googleapis.com *.google.com *.gstatic.com;
-  connect-src 'self' *.googleapis.com *.google.com *.gstatic.com;
+  connect-src 'self' http://localhost:3100 http://localhost:3000 *.googleapis.com *.google.com *.gstatic.com;
   frame-src 'self' *.google.com;
   object-src 'none';
   base-uri 'self';

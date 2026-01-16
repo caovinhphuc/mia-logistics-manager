@@ -1,9 +1,6 @@
 // Validation utility functions
 
-export const validateRequired = (
-  value: unknown,
-  fieldName: string
-): string | null => {
+export const validateRequired = (value: unknown, fieldName: string): string | null => {
   if (!value || (typeof value === 'string' && value.trim() === '')) {
     return `${fieldName} là bắt buộc`;
   }
@@ -26,10 +23,7 @@ export const validatePhone = (phone: string): string | null => {
   return null;
 };
 
-export const validateNumber = (
-  value: unknown,
-  fieldName: string
-): string | null => {
+export const validateNumber = (value: unknown, fieldName: string): string | null => {
   if (value !== null && value !== undefined && value !== '') {
     const num = Number(value);
     if (isNaN(num)) {
@@ -42,10 +36,7 @@ export const validateNumber = (
   return null;
 };
 
-export const validatePositiveNumber = (
-  value: unknown,
-  fieldName: string
-): string | null => {
+export const validatePositiveNumber = (value: unknown, fieldName: string): string | null => {
   if (value !== null && value !== undefined && value !== '') {
     const num = Number(value);
     if (isNaN(num)) {
@@ -58,10 +49,7 @@ export const validatePositiveNumber = (
   return null;
 };
 
-export const validateDate = (
-  date: unknown,
-  fieldName: string
-): string | null => {
+export const validateDate = (date: unknown, fieldName: string): string | null => {
   if (date && typeof date === 'string') {
     const dateObj = new Date(date);
     if (isNaN(dateObj.getTime())) {
@@ -71,10 +59,7 @@ export const validateDate = (
   return null;
 };
 
-export const validateFutureDate = (
-  date: string,
-  fieldName: string
-): string | null => {
+export const validateFutureDate = (date: string, fieldName: string): string | null => {
   if (date) {
     const dateObj = new Date(date);
     const today = new Date();

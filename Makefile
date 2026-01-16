@@ -147,15 +147,15 @@ backup-full:
 # Maintenance
 health:
 	@echo "🏥 Checking service health..."
-	curl -s http://localhost:5050/api/health | jq . || echo "Backend not running"
+	curl -s http://localhost:3100/api/health | jq . || echo "Backend not running"
 
 health-all:
 	@echo "🏥 Checking all services..."
 	@echo "Frontend (port 3000):"
 	@curl -s http://localhost:3000 > /dev/null && echo "✅ Running" || echo "❌ Not running"
 	@echo ""
-	@echo "Backend (port 5050):"
-	@curl -s http://localhost:5050/api/health | jq . || echo "❌ Not running"
+	@echo "Backend (port 3100):"
+	@curl -s http://localhost:3100/api/health | jq . || echo "❌ Not running"
 
 logs:
 	@echo "📋 Viewing logs..."
@@ -204,7 +204,7 @@ docker-build:
 
 docker-run:
 	@echo "🐳 Running Docker container..."
-	docker run -p 3000:3000 -p 5050:5050 mia-logistics-manager
+	docker run -p 3000:3000 -p 3100:3100 mia-logistics-manager
 
 # Git shortcuts
 git-status:

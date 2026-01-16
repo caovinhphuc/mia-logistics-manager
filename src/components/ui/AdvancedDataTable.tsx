@@ -1,2 +1,1 @@
-export * from "../../shared/components/ui/AdvancedDataTable";
-
+export * from '../../shared/components/ui/AdvancedDataTable';

@@ -1,8 +1,8 @@
-import { apiClient } from "../../../services/api/client";
-import type { Customers, CustomersFormData, CustomersFilterParams } from "../types";
+import { apiClient } from '../../../services/api/client';
+import type { Customers, CustomersFormData, CustomersFilterParams } from '../types';
 
 export class CustomersService {
-  private static BASE_URL = "/customers";
+  private static BASE_URL = '/customers';
 
   /**
    * Get all customers

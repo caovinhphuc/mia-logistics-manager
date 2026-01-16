@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   GridView as GridIcon,
   ViewList as ListIcon,
@@ -12,7 +12,7 @@ import {
   MoreVert as MoreIcon,
   CalendarToday as CalendarIcon,
   ExpandMore as ExpandIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 interface ViewIconsProps {
   grid: React.ComponentType;
@@ -24,20 +24,20 @@ export const ViewIcons: ViewIconsProps = {
   list: ListIcon,
 };
 
-interface IconProps extends Omit<IconButtonProps, "children"> {
+interface IconProps extends Omit<IconButtonProps, 'children'> {
   name:
-    | "view"
-    | "edit"
-    | "delete"
-    | "add"
-    | "refresh"
-    | "search"
-    | "filter"
-    | "more"
-    | "grid"
-    | "list"
-    | "calendar"
-    | "expand";
+    | 'view'
+    | 'edit'
+    | 'delete'
+    | 'add'
+    | 'refresh'
+    | 'search'
+    | 'filter'
+    | 'more'
+    | 'grid'
+    | 'list'
+    | 'calendar'
+    | 'expand';
 }
 
 const iconMap = {

@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Typography,
-  Grid,
-  IconButton,
-  Tooltip,
-  Paper,
-} from '@mui/material';
+import { Box, Typography, Grid, IconButton, Tooltip, Paper } from '@mui/material';
 import {
   CalendarMonth as CalendarIcon,
   ArrowBackIos as ArrowBackIcon,
@@ -20,11 +13,7 @@ import {
   Inventory as InventoryIcon,
 } from '@mui/icons-material';
 import { InboundItem } from '../../types/inbound';
-import {
-  getDaysInMonth,
-  getFirstDayOfMonth,
-  getWeekDays,
-} from '../../utils/dateUtils';
+import { getDaysInMonth, getFirstDayOfMonth, getWeekDays } from '../../utils/dateUtils';
 import { getStatusLabel } from '../../utils/statusUtils';
 
 interface CalendarViewProps {
@@ -34,30 +23,19 @@ interface CalendarViewProps {
   onDateClick: (date: Date) => void;
   onPrevMonth: () => void;
   onNextMonth: () => void;
-  onCalendarMenuOpen: (
-    event: React.MouseEvent<HTMLElement>,
-    date: Date
-  ) => void;
-  onItemMenuOpen?: (
-    event: React.MouseEvent<HTMLElement>,
-    item: InboundItem
-  ) => void;
+  onCalendarMenuOpen: (event: React.MouseEvent<HTMLElement>, date: Date) => void;
+  onItemMenuOpen?: (event: React.MouseEvent<HTMLElement>, item: InboundItem) => void;
 }
 
 const getCategoryIcon = (category?: string) => {
   const cat = (category || '').toLowerCase();
-  if (cat.includes('vali'))
-    return <LuggageIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
-  if (cat.includes('balo'))
-    return <BackpackIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
-  if (cat.includes('quà'))
-    return <GiftIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  if (cat.includes('vali')) return <LuggageIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  if (cat.includes('balo')) return <BackpackIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
+  if (cat.includes('quà')) return <GiftIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
   if (cat.includes('phụ kiện sửa'))
     return <HandymanIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
   if (cat.includes('phụ kiện'))
-    return (
-      <TravelExploreIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />
-    );
+    return <TravelExploreIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
   if (cat.includes('nguyên vật liệu'))
     return <InventoryIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
   return <LuggageIcon sx={{ fontSize: '0.7rem', color: 'info.main' }} />;
@@ -118,11 +96,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
       if (receiveDate.includes('/')) {
         // Handle dd/MM/yyyy format
         const [day, month, year] = receiveDate.split('/');
-        parsedDate = new Date(
-          parseInt(year),
-          parseInt(month) - 1,
-          parseInt(day)
-        );
+        parsedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
       } else {
         // Handle yyyy-MM-dd format
         parsedDate = new Date(receiveDate);
@@ -141,10 +115,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
           mb: 2,
         }}
       >
-        <Typography
-          variant="subtitle1"
-          sx={{ fontWeight: 700, letterSpacing: 0.2 }}
-        >
+        <Typography variant="subtitle1" sx={{ fontWeight: 700, letterSpacing: 0.2 }}>
           Lịch nhập hàng -{' '}
           {currentDate.toLocaleDateString('vi-VN', {
             month: 'long',
@@ -165,10 +136,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
       <Grid container sx={{ mb: 1 }}>
         {weekDays.map((w) => (
           <Grid key={w} item xs={12 / 7} sx={{ px: 1 }}>
-            <Typography
-              variant="caption"
-              sx={{ color: 'text.secondary', fontWeight: 600 }}
-            >
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
               {w}
             </Typography>
           </Grid>
@@ -181,28 +149,17 @@ const CalendarView: React.FC<CalendarViewProps> = ({
           const dayNumber = i - firstDay + 1;
           const isValid = dayNumber > 0 && dayNumber <= daysInMonth;
           const cellDate = isValid
-            ? new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth(),
-                dayNumber
-              )
+            ? new Date(currentDate.getFullYear(), currentDate.getMonth(), dayNumber)
             : null;
-          const isToday =
-            !!cellDate && cellDate.toDateString() === new Date().toDateString();
+          const isToday = !!cellDate && cellDate.toDateString() === new Date().toDateString();
           const isSelected =
-            !!cellDate &&
-            !!selectedDate &&
-            cellDate.toDateString() === selectedDate.toDateString();
+            !!cellDate && !!selectedDate && cellDate.toDateString() === selectedDate.toDateString();
           const dayItems = cellDate ? getItemsForDate(cellDate) : [];
 
           return (
             <Grid key={i} item xs={12 / 7} sx={{ p: 0.5 }}>
               <Tooltip
-                title={
-                  cellDate
-                    ? `Click để xem chi tiết (${dayItems.length} lô hàng)`
-                    : ''
-                }
+                title={cellDate ? `Click để xem chi tiết (${dayItems.length} lô hàng)` : ''}
                 placement="top"
               >
                 <Box
@@ -212,11 +169,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                     height: 96,
                     border: '1px solid',
                     borderColor: 'grey.300',
-                    bgcolor: isSelected
-                      ? 'primary.50'
-                      : isToday
-                        ? 'warning.50'
-                        : 'white',
+                    bgcolor: isSelected ? 'primary.50' : isToday ? 'warning.50' : 'white',
                     position: 'relative',
                     display: 'flex',
                     flexDirection: 'column',
@@ -247,9 +200,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                           {dayItems.slice(0, 2).map((it) => (
                             <Box
                               key={it.id}
-                              onClick={(e) =>
-                                onItemMenuOpen && onItemMenuOpen(e, it)
-                              }
+                              onClick={(e) => onItemMenuOpen && onItemMenuOpen(e, it)}
                               sx={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -273,8 +224,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                                       ? 'warning.main'
                                       : it.status === 'confirmed'
                                         ? 'info.main'
-                                        : it.status === 'arrived' ||
-                                            it.status === 'completed'
+                                        : it.status === 'arrived' || it.status === 'completed'
                                           ? 'success.main'
                                           : 'grey.500',
                                   flexShrink: 0,
@@ -333,13 +283,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({
                           '&:hover': { opacity: 1, bgcolor: 'grey.200' },
                           borderRadius: 1,
                         }}
-                        onClick={(e) =>
-                          cellDate && onCalendarMenuOpen(e, cellDate)
-                        }
+                        onClick={(e) => cellDate && onCalendarMenuOpen(e, cellDate)}
                       >
-                        <MoreVertIcon
-                          sx={{ fontSize: '0.85rem', color: 'grey.600' }}
-                        />
+                        <MoreVertIcon sx={{ fontSize: '0.85rem', color: 'grey.600' }} />
                       </Box>
                     </>
                   )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -15,26 +15,26 @@ import {
   CircularProgress,
   Alert,
   Stack,
-} from "@mui/material";
+} from '@mui/material';
 import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Refresh as RefreshIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 // Import service
 import {
   getInboundScheduleItems,
   deleteInboundScheduleItem,
-} from "../../services/googleSheets/inboundScheduleService";
+} from '../../services/googleSheets/inboundScheduleService';
 
 // Logging service (avoids console.* to satisfy eslint no-console)
 // Use relative import to avoid alias resolution issues during webpack build
-import { logService } from "../../services/logService";
+import { logService } from '../../services/logService';
 
 // Import types
-import type { InboundScheduleItem } from "./types/inbound";
+import type { InboundScheduleItem } from './types/inbound';
 
 const InboundSchedule: React.FC = () => {
   const [items, setItems] = useState<InboundScheduleItem[]>([]);
@@ -46,13 +46,13 @@ const InboundSchedule: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      logService.info("INBOUND_SCHEDULE", "Loading data from Google Sheets...");
+      logService.info('INBOUND_SCHEDULE', 'Loading data from Google Sheets...');
       const data = await getInboundScheduleItems();
-      logService.debug("INBOUND_SCHEDULE", "Loaded items", { count: data.length });
+      logService.debug('INBOUND_SCHEDULE', 'Loaded items', { count: data.length });
       setItems(data);
     } catch (err: any) {
-      logService.logError("INBOUND_SCHEDULE", err, { action: "loadData" });
-      setError(err.message || "Không thể tải dữ liệu. Vui lòng thử lại.");
+      logService.logError('INBOUND_SCHEDULE', err, { action: 'loadData' });
+      setError(err.message || 'Không thể tải dữ liệu. Vui lòng thử lại.');
     } finally {
       setLoading(false);
     }
@@ -65,56 +65,56 @@ const InboundSchedule: React.FC = () => {
   // Status helpers
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "success";
-      case "in-transit":
-        return "info";
-      case "arrived":
-        return "success";
-      case "confirmed":
-        return "primary";
-      case "pending":
-        return "warning";
-      case "cancelled":
-        return "error";
+      case 'completed':
+        return 'success';
+      case 'in-transit':
+        return 'info';
+      case 'arrived':
+        return 'success';
+      case 'confirmed':
+        return 'primary';
+      case 'pending':
+        return 'warning';
+      case 'cancelled':
+        return 'error';
       default:
-        return "default";
+        return 'default';
     }
   };
 
   const getStatusLabel = (status: string) => {
     const labels: Record<string, string> = {
-      pending: "Chờ xử lý",
-      confirmed: "Đã xác nhận",
-      "in-transit": "Đang vận chuyển",
-      arrived: "Đã đến",
-      completed: "Hoàn thành",
-      cancelled: "Đã hủy",
+      pending: 'Chờ xử lý',
+      confirmed: 'Đã xác nhận',
+      'in-transit': 'Đang vận chuyển',
+      arrived: 'Đã đến',
+      completed: 'Hoàn thành',
+      cancelled: 'Đã hủy',
     };
     return labels[status] || status;
   };
 
   const getPurposeLabel = (purpose: string) => {
-    return purpose === "online" ? "Online" : "Offline";
+    return purpose === 'online' ? 'Online' : 'Offline';
   };
 
   // Handle delete
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa?")) return;
+    if (!window.confirm('Bạn có chắc chắn muốn xóa?')) return;
 
     try {
       await deleteInboundScheduleItem(id);
       await loadData();
     } catch (err: any) {
-      logService.logError("INBOUND_SCHEDULE", err, { action: "delete", id });
-      setError(err.message || "Không thể xóa dữ liệu.");
+      logService.logError('INBOUND_SCHEDULE', err, { action: 'delete', id });
+      setError(err.message || 'Không thể xóa dữ liệu.');
     }
   };
 
   return (
     <Box sx={{ p: 3 }}>
       {/* Header */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" fontWeight={600}>
           Lịch trình nhập hàng
         </Typography>
@@ -125,12 +125,12 @@ const InboundSchedule: React.FC = () => {
             onClick={loadData}
             disabled={loading}
           >
-            {loading ? "Đang tải..." : "Làm mới"}
+            {loading ? 'Đang tải...' : 'Làm mới'}
           </Button>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => alert("Chức năng đang phát triển")}
+            onClick={() => alert('Chức năng đang phát triển')}
           >
             Thêm lịch nhập
           </Button>
@@ -145,7 +145,7 @@ const InboundSchedule: React.FC = () => {
       )}
 
       {/* Stats */}
-      <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
         <Paper sx={{ p: 2, flex: 1 }}>
           <Typography variant="h6" fontWeight={600}>
             {items.length}
@@ -156,7 +156,7 @@ const InboundSchedule: React.FC = () => {
         </Paper>
         <Paper sx={{ p: 2, flex: 1 }}>
           <Typography variant="h6" fontWeight={600}>
-            {items.filter((i) => i.status === "in-transit").length}
+            {items.filter((i) => i.status === 'in-transit').length}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Đang vận chuyển
@@ -164,7 +164,7 @@ const InboundSchedule: React.FC = () => {
         </Paper>
         <Paper sx={{ p: 2, flex: 1 }}>
           <Typography variant="h6" fontWeight={600}>
-            {items.filter((i) => i.status === "completed").length}
+            {items.filter((i) => i.status === 'completed').length}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Hoàn thành
@@ -184,7 +184,7 @@ const InboundSchedule: React.FC = () => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow sx={{ bgcolor: "grey.100" }}>
+            <TableRow sx={{ bgcolor: 'grey.100' }}>
               <TableCell>
                 <strong>ID</strong>
               </TableCell>
@@ -252,7 +252,7 @@ const InboundSchedule: React.FC = () => {
                   <TableCell>{item.origin}</TableCell>
                   <TableCell>{item.destination}</TableCell>
                   <TableCell>{item.product}</TableCell>
-                  <TableCell>{item.quantity.toLocaleString("vi-VN")}</TableCell>
+                  <TableCell>{item.quantity.toLocaleString('vi-VN')}</TableCell>
                   <TableCell>{item.container}</TableCell>
                   <TableCell>
                     <Chip
@@ -265,7 +265,7 @@ const InboundSchedule: React.FC = () => {
                   <TableCell>{getPurposeLabel(item.purpose)}</TableCell>
                   <TableCell>{item.receiveTime}</TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={() => alert("Edit: " + item.id)}>
+                    <IconButton size="small" onClick={() => alert('Edit: ' + item.id)}>
                       <EditIcon fontSize="small" />
                     </IconButton>
                     <IconButton size="small" onClick={() => handleDelete(item.id)}>
@@ -280,8 +280,8 @@ const InboundSchedule: React.FC = () => {
       </TableContainer>
 
       {/* Debug Info */}
-      {process.env.NODE_ENV === "development" && (
-        <Box sx={{ mt: 3, p: 2, bgcolor: "grey.100", borderRadius: 1 }}>
+      {process.env.NODE_ENV === 'development' && (
+        <Box sx={{ mt: 3, p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
           <Typography variant="caption" fontWeight={600}>
             🔍 Debug Info:
           </Typography>
@@ -289,7 +289,7 @@ const InboundSchedule: React.FC = () => {
             Total items: {items.length}
           </Typography>
           <Typography variant="caption" display="block">
-            Loading: {loading ? "Yes" : "No"}
+            Loading: {loading ? 'Yes' : 'No'}
           </Typography>
           {error && (
             <Typography variant="caption" display="block" color="error">

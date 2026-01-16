@@ -1,10 +1,10 @@
-import { MyLocation, Refresh } from "@mui/icons-material";
-import { Box, Button, ButtonGroup, Chip, Grid, Paper, Typography } from "@mui/material";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { proxyLocationsService } from "../../services/proxyLocationsService";
+import { MyLocation, Refresh } from '@mui/icons-material';
+import { Box, Button, ButtonGroup, Chip, Grid, Paper, Typography } from '@mui/material';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { useEffect, useState } from 'react';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { proxyLocationsService } from '../../services/proxyLocationsService';
 
 // Custom icons cho các loại địa điểm
 const createCustomIcon = (color, icon) => {
@@ -25,7 +25,7 @@ const createCustomIcon = (color, icon) => {
         ${icon}
       </div>
     `,
-    className: "custom-icon",
+    className: 'custom-icon',
     iconSize: [30, 30],
     iconAnchor: [15, 15],
     popupAnchor: [0, -15],
@@ -36,10 +36,10 @@ const InteractiveMap = () => {
   const [locations, setLocations] = useState([]);
   const [filteredLocations, setFilteredLocations] = useState([]);
   const [activeFilters, setActiveFilters] = useState([
-    "warehouse",
-    "carrier",
-    "delivery_point",
-    "pickup_point",
+    'warehouse',
+    'carrier',
+    'delivery_point',
+    'pickup_point',
   ]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,18 +50,18 @@ const InteractiveMap = () => {
 
   // Icons cho các loại địa điểm
   const locationIcons = {
-    warehouse: createCustomIcon("#2196f3", "🏢"),
-    carrier: createCustomIcon("#4caf50", "🚛"),
-    delivery_point: createCustomIcon("#ff9800", "📦"),
-    pickup_point: createCustomIcon("#9c27b0", "📍"),
+    warehouse: createCustomIcon('#2196f3', '🏢'),
+    carrier: createCustomIcon('#4caf50', '🚛'),
+    delivery_point: createCustomIcon('#ff9800', '📦'),
+    pickup_point: createCustomIcon('#9c27b0', '📍'),
   };
 
   // Labels cho các loại địa điểm
   const locationLabels = {
-    warehouse: "Kho hàng",
-    carrier: "Nhà vận chuyển",
-    delivery_point: "Điểm giao hàng",
-    pickup_point: "Điểm lấy hàng",
+    warehouse: 'Kho hàng',
+    carrier: 'Nhà vận chuyển',
+    delivery_point: 'Điểm giao hàng',
+    pickup_point: 'Điểm lấy hàng',
   };
 
   // Load dữ liệu địa điểm
@@ -103,8 +103,8 @@ const InteractiveMap = () => {
         }
       }
     } catch (err) {
-      console.error("Lỗi tải dữ liệu địa điểm:", err);
-      setError("Không thể tải dữ liệu địa điểm");
+      console.error('Lỗi tải dữ liệu địa điểm:', err);
+      setError('Không thể tải dữ liệu địa điểm');
     } finally {
       setLoading(false);
     }
@@ -119,7 +119,7 @@ const InteractiveMap = () => {
 
   // Reset filters
   const resetFilters = () => {
-    setActiveFilters(["warehouse", "carrier", "delivery_point", "pickup_point"]);
+    setActiveFilters(['warehouse', 'carrier', 'delivery_point', 'pickup_point']);
   };
 
   // Get current location
@@ -131,7 +131,7 @@ const InteractiveMap = () => {
           setZoom(12);
         },
         (error) => {
-          console.error("Lỗi lấy vị trí hiện tại:", error);
+          console.error('Lỗi lấy vị trí hiện tại:', error);
         }
       );
     }
@@ -168,7 +168,7 @@ const InteractiveMap = () => {
         </Typography>
       )}
       <Typography variant="body2" color="text.secondary">
-        🟢 {location.status === "active" ? "Hoạt động" : "Tạm dừng"}
+        🟢 {location.status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
       </Typography>
     </Box>
   );
@@ -177,10 +177,10 @@ const InteractiveMap = () => {
     return (
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "500px",
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '500px',
         }}
       >
         <Typography>Đang tải dữ liệu địa điểm...</Typography>
@@ -192,11 +192,11 @@ const InteractiveMap = () => {
     return (
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "500px",
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '500px',
           gap: 2,
         }}
       >
@@ -209,20 +209,20 @@ const InteractiveMap = () => {
   }
 
   return (
-    <Box sx={{ position: "relative", height: "500px", width: "100%" }}>
+    <Box sx={{ position: 'relative', height: '500px', width: '100%' }}>
       {/* Map Controls */}
       <Box
         sx={{
-          position: "absolute",
+          position: 'absolute',
           top: 10,
           right: 10,
           zIndex: 1000,
-          display: "flex",
-          flexDirection: "column",
+          display: 'flex',
+          flexDirection: 'column',
           gap: 1,
         }}
       >
-        <Paper sx={{ p: 1, display: "flex", flexDirection: "column", gap: 1 }}>
+        <Paper sx={{ p: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
           <Typography variant="subtitle2" gutterBottom>
             Bộ lọc địa điểm
           </Typography>
@@ -230,13 +230,13 @@ const InteractiveMap = () => {
             {Object.entries(locationLabels).map(([type, label]) => (
               <Button
                 key={type}
-                variant={activeFilters.includes(type) ? "contained" : "outlined"}
+                variant={activeFilters.includes(type) ? 'contained' : 'outlined'}
                 startIcon={<span>{locationIcons[type].options.html.match(/>(.*?)</)?.[1]}</span>}
                 onClick={() => toggleFilter(type)}
                 sx={{
-                  justifyContent: "flex-start",
-                  fontSize: "0.75rem",
-                  minWidth: "120px",
+                  justifyContent: 'flex-start',
+                  fontSize: '0.75rem',
+                  minWidth: '120px',
                 }}
               >
                 {label}
@@ -252,7 +252,7 @@ const InteractiveMap = () => {
           variant="contained"
           startIcon={<MyLocation />}
           onClick={getCurrentLocation}
-          sx={{ alignSelf: "flex-end" }}
+          sx={{ alignSelf: 'flex-end' }}
         >
           Vị trí tôi
         </Button>
@@ -261,7 +261,7 @@ const InteractiveMap = () => {
       {/* Statistics Panel */}
       <Box
         sx={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 10,
           left: 10,
           zIndex: 1000,
@@ -292,7 +292,7 @@ const InteractiveMap = () => {
       <MapContainer
         center={mapCenter}
         zoom={zoom}
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: '100%', width: '100%' }}
         zoomControl={true}
         scrollWheelZoom={true}
       >
@@ -311,7 +311,9 @@ const InteractiveMap = () => {
               position={[location.latitude, location.longitude]}
               icon={locationIcons[location.type]}
               eventHandlers={{
-                click: () => console.log("Location clicked:", location),
+                click: () => {
+                  // console.log("Location clicked:", location);
+                },
               }}
             >
               <Popup>{renderPopupContent(location)}</Popup>

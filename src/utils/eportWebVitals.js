@@ -2,7 +2,7 @@
 
 export const getCLS = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
-    import("web-vitals").then(({ getCLS }) => {
+    import('web-vitals').then(({ getCLS }) => {
       getCLS(onPerfEntry);
     });
   }
@@ -10,7 +10,7 @@ export const getCLS = (onPerfEntry) => {
 
 export const getFID = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
-    import("web-vitals").then(({ getFID }) => {
+    import('web-vitals').then(({ getFID }) => {
       getFID(onPerfEntry);
     });
   }
@@ -18,7 +18,7 @@ export const getFID = (onPerfEntry) => {
 
 export const getFCP = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
-    import("web-vitals").then(({ getFCP }) => {
+    import('web-vitals').then(({ getFCP }) => {
       getFCP(onPerfEntry);
     });
   }
@@ -26,7 +26,7 @@ export const getFCP = (onPerfEntry) => {
 
 export const getLCP = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
-    import("web-vitals").then(({ getLCP }) => {
+    import('web-vitals').then(({ getLCP }) => {
       getLCP(onPerfEntry);
     });
   }
@@ -34,7 +34,7 @@ export const getLCP = (onPerfEntry) => {
 
 export const getTTFB = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {
-    import("web-vitals").then(({ getTTFB }) => {
+    import('web-vitals').then(({ getTTFB }) => {
       getTTFB(onPerfEntry);
     });
   }

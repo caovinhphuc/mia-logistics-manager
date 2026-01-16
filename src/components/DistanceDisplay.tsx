@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Typography, Paper, Chip } from "@mui/material";
-import { Directions, Schedule, Route } from "@mui/icons-material";
+import React from 'react';
+import { Box, Typography, Paper, Chip } from '@mui/material';
+import { Directions, Schedule, Route } from '@mui/icons-material';
 
 interface DistanceDisplayProps {
   calculation: {
@@ -17,14 +17,14 @@ export const DistanceDisplay: React.FC<DistanceDisplayProps> = ({ calculation })
 
   return (
     <Paper sx={{ p: 2, mt: 1 }}>
-      <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
         <Route color="primary" sx={{ mr: 1 }} />
         <Typography variant="subtitle2" color="primary">
           Thông tin tuyến đường
         </Typography>
       </Box>
 
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, alignItems: "center" }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
         <Chip
           icon={<Directions />}
           label={`${calculation.distance.toFixed(1)} km`}

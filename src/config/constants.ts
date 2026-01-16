@@ -1,6 +1,6 @@
 // Application Constants
-export const APP_NAME = "MIA.vn Logistics";
-export const APP_VERSION = "1.0.0";
+export const APP_NAME = 'MIA.vn Logistics';
+export const APP_VERSION = '1.0.0';
 
 // Volumetric weight factors
 export const DIM_FACTOR_ROAD = 333;

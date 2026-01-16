@@ -1,7 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 // Base API configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || "/api";
+const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
 
 class ApiService {
   private api: AxiosInstance;
@@ -11,7 +11,7 @@ class ApiService {
       baseURL: API_BASE_URL,
       timeout: 10000,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -23,7 +23,7 @@ class ApiService {
     this.api.interceptors.request.use(
       (config) => {
         // Add auth token if available
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem('authToken');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
@@ -43,9 +43,9 @@ class ApiService {
         // Handle common errors
         if (error.response?.status === 401) {
           // Handle unauthorized
-          localStorage.removeItem("authToken");
-          localStorage.removeItem("user");
-          window.location.href = "/login";
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user');
+          window.location.href = '/login';
         }
 
         return Promise.reject(error);
@@ -81,22 +81,22 @@ class ApiService {
 
   // Authentication endpoints
   async login(credentials: { email: string; password: string }) {
-    return this.post<{ token: string; user: any }>("/auth/login", credentials);
+    return this.post<{ token: string; user: any }>('/auth/login', credentials);
   }
 
   async logout() {
-    return this.post("/auth/logout");
+    return this.post('/auth/logout');
   }
 
   // Locations endpoints
   async getLocations(spreadsheetId?: string) {
     const params = spreadsheetId ? { spreadsheetId } : {};
-    return this.get<any[]>("/locations", { params });
+    return this.get<any[]>('/locations', { params });
   }
 
   async createLocation(location: any, spreadsheetId?: string) {
     const params = spreadsheetId ? { spreadsheetId } : {};
-    return this.post("/locations", location, { params });
+    return this.post('/locations', location, { params });
   }
 
   async updateLocation(id: string, location: any, spreadsheetId?: string) {
@@ -111,11 +111,11 @@ class ApiService {
 
   // Carriers endpoints
   async getCarriers() {
-    return this.get<any[]>("/carriers");
+    return this.get<any[]>('/carriers');
   }
 
   async createCarrier(carrier: any) {
-    return this.post("/carriers", carrier);
+    return this.post('/carriers', carrier);
   }
 
   async updateCarrier(id: string, carrier: any) {
@@ -128,11 +128,11 @@ class ApiService {
 
   // Shipments endpoints
   async getShipments() {
-    return this.get<any[]>("/shipments");
+    return this.get<any[]>('/shipments');
   }
 
   async createShipment(shipment: any) {
-    return this.post("/shipments", shipment);
+    return this.post('/shipments', shipment);
   }
 
   async updateShipment(id: string, shipment: any) {
@@ -145,13 +145,13 @@ class ApiService {
 
   // Maps endpoints
   async getDistance(origin: string, destination: string) {
-    return this.get<{ distance: number }>("/maps/distance", {
+    return this.get<{ distance: number }>('/maps/distance', {
       params: { origin, destination },
     });
   }
 
   async geocodeAddress(address: string) {
-    return this.get<{ lat: number; lng: number }>("/maps/geocode", {
+    return this.get<{ lat: number; lng: number }>('/maps/geocode', {
       params: { address },
     });
   }

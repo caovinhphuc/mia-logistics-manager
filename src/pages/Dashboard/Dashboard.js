@@ -2,15 +2,7 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PeopleIcon from '@mui/icons-material/People';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
-import {
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  Grid,
-  Paper,
-  Typography,
-} from '@mui/material';
+import { Box, Card, CardContent, Chip, Grid, Paper, Typography } from '@mui/material';
 
 const StatCard = ({ title, value, icon, color, trend }) => (
   <Card sx={{ height: '100%', boxShadow: 2 }}>
@@ -33,9 +25,7 @@ const StatCard = ({ title, value, icon, color, trend }) => (
             />
           )}
         </Box>
-        <Box sx={{ color, fontSize: 40 }}>
-          {icon}
-        </Box>
+        <Box sx={{ color, fontSize: 40 }}>{icon}</Box>
       </Box>
     </CardContent>
   </Card>
@@ -82,16 +72,25 @@ const Dashboard = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Đã giao': return 'success';
-      case 'Đang vận chuyển': return 'primary';
-      case 'Chuẩn bị': return 'warning';
-      default: return 'default';
+      case 'Đã giao':
+        return 'success';
+      case 'Đang vận chuyển':
+        return 'primary';
+      case 'Chuẩn bị':
+        return 'warning';
+      default:
+        return 'default';
     }
   };
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{ fontWeight: 'bold', color: '#333' }}
+      >
         Tổng quan hệ thống
       </Typography>
 

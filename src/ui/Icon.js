@@ -1,7 +1,7 @@
-import { SvgIcon } from "@mui/material";
+import { SvgIcon } from '@mui/material';
 
 // Icon Component - Wrapper cho các icon
-export const Icon = ({ name: _name, size = 24, color = "inherit", ...props }) => {
+export const Icon = ({ name: _name, size = 24, color = 'inherit', ...props }) => {
   // Có thể mở rộng để support nhiều icon sets
   return (
     <SvgIcon sx={{ fontSize: size, color }} {...props}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,9 +9,9 @@ import {
   Box,
   LinearProgress,
   Alert,
-} from "@mui/material";
-import { Timer as TimerIcon } from "@mui/icons-material";
-import sessionManager from "../../services/sessionManager";
+} from '@mui/material';
+import { Timer as TimerIcon } from '@mui/icons-material';
+import sessionManager from '../../services/sessionManager';
 
 /**
  * Session Timeout Warning Dialog
@@ -25,21 +25,21 @@ const SessionTimeoutWarning = () => {
   useEffect(() => {
     const handleSessionEvent = (event, data) => {
       switch (event) {
-        case "show_warning":
+        case 'show_warning':
           setOpen(true);
           setRemainingTime(data.remaining);
           setCanExtend(sessionManager.canExtendSession());
           break;
 
-        case "session_tick":
+        case 'session_tick':
           if (open) {
             setRemainingTime(data.remaining);
             setCanExtend(sessionManager.canExtendSession());
           }
           break;
 
-        case "session_expired":
-        case "session_cleared":
+        case 'session_expired':
+        case 'session_cleared':
           setOpen(false);
           break;
 
@@ -60,14 +60,14 @@ const SessionTimeoutWarning = () => {
   const handleLogout = () => {
     sessionManager.clearSession();
     setOpen(false);
-    window.location.href = "/login";
+    window.location.href = '/login';
   };
 
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const progress = (remainingTime / (5 * 60 * 1000)) * 100; // 5 minutes warning period
@@ -82,12 +82,12 @@ const SessionTimeoutWarning = () => {
       fullWidth
       PaperProps={{
         sx: {
-          animation: "pulse 2s infinite",
-          "@keyframes pulse": {
-            "0%, 100%": {
+          animation: 'pulse 2s infinite',
+          '@keyframes pulse': {
+            '0%, 100%': {
               opacity: 1,
             },
-            "50%": {
+            '50%': {
               opacity: 0.8,
             },
           },
@@ -113,18 +113,18 @@ const SessionTimeoutWarning = () => {
           <LinearProgress
             variant="determinate"
             value={progress}
-            color={progress < 20 ? "error" : "warning"}
+            color={progress < 20 ? 'error' : 'warning'}
             sx={{ height: 8, borderRadius: 4 }}
           />
-          <Typography variant="h4" align="center" sx={{ mt: 2, fontWeight: "bold" }}>
+          <Typography variant="h4" align="center" sx={{ mt: 2, fontWeight: 'bold' }}>
             {formatTime(remainingTime)}
           </Typography>
         </Box>
 
         <Typography variant="body2" color="text.secondary">
           {canExtend
-            ? "Bạn có thể gia hạn phiên đăng nhập để tiếp tục làm việc."
-            : "Hãy lưu công việc của bạn trước khi phiên đăng nhập hết hạn."}
+            ? 'Bạn có thể gia hạn phiên đăng nhập để tiếp tục làm việc.'
+            : 'Hãy lưu công việc của bạn trước khi phiên đăng nhập hết hạn.'}
         </Typography>
       </DialogContent>
 

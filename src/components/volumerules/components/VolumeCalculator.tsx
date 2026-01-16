@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   Box,
@@ -13,8 +13,8 @@ import {
   Paper,
   Divider,
   Chip,
-} from "@mui/material";
-import { hasPermission } from "../../../shared/utils/auth";
+} from '@mui/material';
+import { hasPermission } from '../../../shared/utils/auth';
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
@@ -24,11 +24,11 @@ import {
   Edit as EditIcon,
   Close as CloseIcon,
   Inventory as InventoryIcon,
-} from "@mui/icons-material";
-import { InputAdornment } from "@mui/material";
-import { ModernPageLayout } from "../../../shared/components/layout";
-import { DataTable } from "../../../shared/components/ui";
-import { DataTableColumn } from "../../../shared/components/ui/DataTable";
+} from '@mui/icons-material';
+import { InputAdornment } from '@mui/material';
+import { ModernPageLayout } from '../../../shared/components/layout';
+import { DataTable } from '../../../shared/components/ui';
+import { DataTableColumn } from '../../../shared/components/ui/DataTable';
 
 type VolumeRule = {
   id: string; // Khóa duy nhất (ví dụ: S, M, L, BAG_S,...)
@@ -37,32 +37,32 @@ type VolumeRule = {
   description?: string; // Diễn giải
 };
 
-const STORAGE_KEY = "volume_rules_v1";
-const SHEET_ID = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+const STORAGE_KEY = 'volume_rules_v1';
+const SHEET_ID = '18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As';
 
 const defaultRules: VolumeRule[] = [
-  { id: "S", name: "Size S", unitVolume: 0, description: "" },
-  { id: "M", name: "Size M", unitVolume: 0, description: "" },
-  { id: "L", name: "Size L", unitVolume: 0, description: "" },
-  { id: "BAG_S", name: "Bao nhỏ", unitVolume: 0, description: "" },
-  { id: "BAG_M", name: "Bao trung", unitVolume: 0, description: "" },
-  { id: "BAG_L", name: "Bao lớn", unitVolume: 0, description: "" },
-  { id: "OTHER", name: "Khác", unitVolume: 0, description: "" },
+  { id: 'S', name: 'Size S', unitVolume: 0, description: '' },
+  { id: 'M', name: 'Size M', unitVolume: 0, description: '' },
+  { id: 'L', name: 'Size L', unitVolume: 0, description: '' },
+  { id: 'BAG_S', name: 'Bao nhỏ', unitVolume: 0, description: '' },
+  { id: 'BAG_M', name: 'Bao trung', unitVolume: 0, description: '' },
+  { id: 'BAG_L', name: 'Bao lớn', unitVolume: 0, description: '' },
+  { id: 'OTHER', name: 'Khác', unitVolume: 0, description: '' },
 ];
 
 const VolumeCalculator: React.FC = () => {
   const [editMode, setEditMode] = useState(false);
   const parseLocaleNumber = (v: unknown): number => {
-    const s = String(v ?? "").trim();
+    const s = String(v ?? '').trim();
     if (!s) return 0;
     // Pattern like 1.234,56 → remove thousands dots, replace comma with dot
     if (/^\d{1,3}(\.\d{3})*(,\d+)?$/.test(s)) {
-      const normalized = s.replace(/\./g, "").replace(",", ".");
+      const normalized = s.replace(/\./g, '').replace(',', '.');
       const n = Number(normalized);
       return Number.isFinite(n) ? n : 0;
     }
     // General case: replace single comma with dot
-    const normalized = s.replace(",", ".");
+    const normalized = s.replace(',', '.');
     const n = Number(normalized);
     return Number.isFinite(n) ? n : 0;
   };
@@ -72,8 +72,8 @@ const VolumeCalculator: React.FC = () => {
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
-    severity: "success" | "info" | "error";
-  }>({ open: false, message: "", severity: "info" });
+    severity: 'success' | 'info' | 'error';
+  }>({ open: false, message: '', severity: 'info' });
 
   useEffect(() => {
     try {
@@ -97,10 +97,10 @@ const VolumeCalculator: React.FC = () => {
         if (!res.ok) return;
         const data = (await res.json()) as Array<Record<string, unknown>>;
         const mapped: VolumeRule[] = data.map((r) => ({
-          id: String(r.id || ""),
-          name: String(r.name || ""),
+          id: String(r.id || ''),
+          name: String(r.name || ''),
           unitVolume: parseLocaleNumber(r.unitVolume),
-          description: String(r.description || ""),
+          description: String(r.description || ''),
         }));
         setRules(mapped);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(mapped));
@@ -113,13 +113,13 @@ const VolumeCalculator: React.FC = () => {
   const handleRuleChange = (index: number, field: keyof VolumeRule, value: string) => {
     setRules((prev) => {
       const next = [...prev];
-      if (field === "unitVolume") {
+      if (field === 'unitVolume') {
         next[index] = { ...next[index], unitVolume: Number(value) || 0 };
-      } else if (field === "id") {
+      } else if (field === 'id') {
         next[index] = { ...next[index], id: value };
-      } else if (field === "name") {
+      } else if (field === 'name') {
         next[index] = { ...next[index], name: value };
-      } else if (field === "description") {
+      } else if (field === 'description') {
         next[index] = { ...next[index], description: value };
       }
       return next;
@@ -131,9 +131,9 @@ const VolumeCalculator: React.FC = () => {
       ...prev,
       {
         id: `R${Date.now()}`,
-        name: "Quy cách mới",
+        name: 'Quy cách mới',
         unitVolume: 0,
-        description: "",
+        description: '',
       },
     ]);
   };
@@ -147,11 +147,11 @@ const VolumeCalculator: React.FC = () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(rules));
       setSnackbar({
         open: true,
-        message: "Đã lưu cấu hình bảng tính khối",
-        severity: "success",
+        message: 'Đã lưu cấu hình bảng tính khối',
+        severity: 'success',
       });
     } catch {
-      setSnackbar({ open: true, message: "Lưu thất bại", severity: "error" });
+      setSnackbar({ open: true, message: 'Lưu thất bại', severity: 'error' });
     }
   };
 
@@ -160,23 +160,23 @@ const VolumeCalculator: React.FC = () => {
       const res = await fetch(
         `/api/settings/volume-rules?spreadsheetId=${encodeURIComponent(SHEET_ID)}`,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ rules }),
         }
       );
-      if (!res.ok) throw new Error("Sync failed");
+      if (!res.ok) throw new Error('Sync failed');
       await refreshFromSheet();
       setSnackbar({
         open: true,
-        message: "Đã ghi đè lên Google Sheet",
-        severity: "success",
+        message: 'Đã ghi đè lên Google Sheet',
+        severity: 'success',
       });
     } catch {
       setSnackbar({
         open: true,
-        message: "Ghi đè thất bại",
-        severity: "error",
+        message: 'Ghi đè thất bại',
+        severity: 'error',
       });
     }
   };
@@ -186,26 +186,26 @@ const VolumeCalculator: React.FC = () => {
       const res = await fetch(
         `/api/settings/volume-rules?spreadsheetId=${encodeURIComponent(SHEET_ID)}`
       );
-      if (!res.ok) throw new Error("reload failed");
+      if (!res.ok) throw new Error('reload failed');
       const data = (await res.json()) as Array<Record<string, unknown>>;
       const mapped: VolumeRule[] = data.map((r) => ({
-        id: String(r.id || ""),
-        name: String(r.name || ""),
+        id: String(r.id || ''),
+        name: String(r.name || ''),
         unitVolume: parseLocaleNumber(r.unitVolume),
-        description: String(r.description || ""),
+        description: String(r.description || ''),
       }));
       setRules(mapped);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(mapped));
       setSnackbar({
         open: true,
-        message: "Đã làm mới từ Google Sheet",
-        severity: "success",
+        message: 'Đã làm mới từ Google Sheet',
+        severity: 'success',
       });
     } catch {
       setSnackbar({
         open: true,
-        message: "Không kết nối được Sheet",
-        severity: "error",
+        message: 'Không kết nối được Sheet',
+        severity: 'error',
       });
     }
   };
@@ -230,73 +230,73 @@ const VolumeCalculator: React.FC = () => {
   const columns: DataTableColumn<VolumeRule>[] = useMemo(
     () => [
       {
-        id: "id" as keyof VolumeRule,
-        label: "ID",
+        id: 'id' as keyof VolumeRule,
+        label: 'ID',
         width: 160,
         render: (row: VolumeRule) => (
           <TextField
             fullWidth
             size="small"
             value={row.id}
-            disabled={!editMode || !hasPermission("shipments", "update")}
+            disabled={!editMode || !hasPermission('shipments', 'update')}
             onChange={(e) =>
               handleRuleChange(
                 rules.findIndex((r) => r.id === row.id),
-                "id",
+                'id',
                 e.target.value
               )
             }
             sx={{
-              "& .MuiInputBase-root.Mui-disabled": {
-                backgroundColor: "#fafafa",
-                color: "text.secondary",
+              '& .MuiInputBase-root.Mui-disabled': {
+                backgroundColor: '#fafafa',
+                color: 'text.secondary',
               },
             }}
           />
         ),
       },
       {
-        id: "name" as keyof VolumeRule,
-        label: "Tên",
+        id: 'name' as keyof VolumeRule,
+        label: 'Tên',
         render: (row: VolumeRule) => (
           <TextField
             fullWidth
             size="small"
             value={row.name}
-            disabled={!editMode || !hasPermission("shipments", "update")}
+            disabled={!editMode || !hasPermission('shipments', 'update')}
             onChange={(e) =>
               handleRuleChange(
                 rules.findIndex((r) => r.id === row.id),
-                "name",
+                'name',
                 e.target.value
               )
             }
             sx={{
-              "& .MuiInputBase-root.Mui-disabled": {
-                backgroundColor: "#fafafa",
-                color: "text.secondary",
+              '& .MuiInputBase-root.Mui-disabled': {
+                backgroundColor: '#fafafa',
+                color: 'text.secondary',
               },
             }}
           />
         ),
       },
       {
-        id: "unitVolume" as keyof VolumeRule,
-        label: "1 kiện = khối (m3)",
+        id: 'unitVolume' as keyof VolumeRule,
+        label: '1 kiện = khối (m3)',
         width: 160,
-        align: "left" as const,
+        align: 'left' as const,
         render: (row: VolumeRule) => (
           <TextField
             fullWidth
             size="small"
             type="number"
-            inputProps={{ step: "0.001" }}
+            inputProps={{ step: '0.001' }}
             value={row.unitVolume}
-            disabled={!editMode || !hasPermission("shipments", "update")}
+            disabled={!editMode || !hasPermission('shipments', 'update')}
             onChange={(e) =>
               handleRuleChange(
                 rules.findIndex((r) => r.id === row.id),
-                "unitVolume",
+                'unitVolume',
                 e.target.value
               )
             }
@@ -304,40 +304,40 @@ const VolumeCalculator: React.FC = () => {
               endAdornment: <InputAdornment position="end">m3</InputAdornment>,
             }}
             sx={{
-              "& input": { textAlign: "right" },
-              "MuiInputBase-root.Mui-disabled": {
-                backgroundColor: "#fafafa",
-                color: "text.secondary",
+              '& input': { textAlign: 'right' },
+              'MuiInputBase-root.Mui-disabled': {
+                backgroundColor: '#fafafa',
+                color: 'text.secondary',
               },
             }}
           />
         ),
       },
       {
-        id: "description" as keyof VolumeRule,
-        label: "Diễn giải",
+        id: 'description' as keyof VolumeRule,
+        label: 'Diễn giải',
         render: (row: VolumeRule) => (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <TextField
               fullWidth
               size="small"
-              value={row.description || ""}
-              disabled={!editMode || !hasPermission("shipments", "update")}
+              value={row.description || ''}
+              disabled={!editMode || !hasPermission('shipments', 'update')}
               onChange={(e) =>
                 handleRuleChange(
                   rules.findIndex((r) => r.id === row.id),
-                  "description",
+                  'description',
                   e.target.value
                 )
               }
               sx={{
-                "& .MuiInputBase-root.Mui-disabled": {
-                  backgroundColor: "#fafafa",
-                  color: "text.secondary",
+                '& .MuiInputBase-root.Mui-disabled': {
+                  backgroundColor: '#fafafa',
+                  color: 'text.secondary',
                 },
               }}
             />
-            {editMode && hasPermission("shipments", "delete") && (
+            {editMode && hasPermission('shipments', 'delete') && (
               <Tooltip title="Xóa dòng">
                 <IconButton
                   color="error"
@@ -357,7 +357,7 @@ const VolumeCalculator: React.FC = () => {
   return (
     <ModernPageLayout title="BẢNG TÍNH KHỐI" subtitle="Quy tắc quy đổi khối lượng vận chuyển">
       <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
-        {hasPermission("shipments", "view") && (
+        {hasPermission('shipments', 'view') && (
           <Button
             variant="outlined"
             size="small"
@@ -368,7 +368,7 @@ const VolumeCalculator: React.FC = () => {
           </Button>
         )}
         {!editMode ? (
-          hasPermission("shipments", "update") && (
+          hasPermission('shipments', 'update') && (
             <Button
               variant="contained"
               size="small"
@@ -383,12 +383,12 @@ const VolumeCalculator: React.FC = () => {
             <Button variant="outlined" size="small" startIcon={<CloseIcon />} onClick={cancelEdit}>
               Hủy
             </Button>
-            {hasPermission("shipments", "update") && (
+            {hasPermission('shipments', 'update') && (
               <Button variant="outlined" size="small" startIcon={<SaveIcon />} onClick={saveConfig}>
                 Lưu cục bộ
               </Button>
             )}
-            {hasPermission("shipments", "update") && (
+            {hasPermission('shipments', 'update') && (
               <Button
                 variant="contained"
                 color="success"
@@ -421,35 +421,35 @@ const VolumeCalculator: React.FC = () => {
               </Box>
             </Stack>
 
-            {hasPermission("shipments", "view") && (
+            {hasPermission('shipments', 'view') && (
               <DataTable
                 columns={columns}
                 data={rules}
                 rowsPerPageOptions={[5, 10, 25]}
                 defaultRowsPerPage={10}
                 emptyMessage={
-                  editMode ? "Chưa có quy tắc nào. Thêm dòng để bắt đầu." : "Không có dữ liệu"
+                  editMode ? 'Chưa có quy tắc nào. Thêm dòng để bắt đầu.' : 'Không có dữ liệu'
                 }
                 getRowId={(row) => row.id}
               />
             )}
-            {editMode && hasPermission("shipments", "update") && (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 1 }}>
+            {editMode && hasPermission('shipments', 'update') && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
                 <Button
                   variant="outlined"
                   startIcon={<AddIcon />}
                   onClick={addRow}
                   sx={{
-                    borderStyle: "dashed",
+                    borderStyle: 'dashed',
                     borderRadius: 2,
-                    textTransform: "none",
+                    textTransform: 'none',
                   }}
                 >
                   Thêm dòng
                 </Button>
               </Box>
             )}
-            {!hasPermission("shipments", "view") && (
+            {!hasPermission('shipments', 'view') && (
               <Alert severity="warning" sx={{ mt: 2 }}>
                 Bạn không có quyền xem cài đặt này
               </Alert>
@@ -458,9 +458,9 @@ const VolumeCalculator: React.FC = () => {
         </Grid>
 
         {/* Máy tính khối lượng */}
-        {hasPermission("shipments", "view") && (
+        {hasPermission('shipments', 'view') && (
           <Grid item xs={12} lg={4}>
-            <Paper elevation={2} sx={{ p: 3, borderRadius: 2, height: "fit-content" }}>
+            <Paper elevation={2} sx={{ p: 3, borderRadius: 2, height: 'fit-content' }}>
               <Stack direction="row" alignItems="center" spacing={2} sx={{ mb: 3 }}>
                 <CalcIcon color="success" />
                 <Box>
@@ -502,7 +502,7 @@ const VolumeCalculator: React.FC = () => {
                       ),
                     }}
                     sx={{
-                      "& .MuiOutlinedInput-root": {
+                      '& .MuiOutlinedInput-root': {
                         borderRadius: 2,
                       },
                     }}
@@ -515,14 +515,14 @@ const VolumeCalculator: React.FC = () => {
               <Box
                 sx={{
                   p: 2,
-                  backgroundColor: "success.50",
+                  backgroundColor: 'success.50',
                   borderRadius: 2,
-                  border: "1px solid",
-                  borderColor: "success.200",
+                  border: '1px solid',
+                  borderColor: 'success.200',
                 }}
               >
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600, color: "success.main" }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 600, color: 'success.main' }}>
                     Tổng khối lượng
                   </Typography>
                   <Typography variant="h4" color="success.main" sx={{ fontWeight: 700 }}>
@@ -540,7 +540,7 @@ const VolumeCalculator: React.FC = () => {
         autoHideDuration={3000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
       >
-        <Alert severity={snackbar.severity} sx={{ width: "100%" }}>
+        <Alert severity={snackbar.severity} sx={{ width: '100%' }}>
           {snackbar.message}
         </Alert>
       </Snackbar>

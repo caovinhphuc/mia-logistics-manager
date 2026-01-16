@@ -1,4 +1,4 @@
-import { Save, Tune } from "@mui/icons-material";
+import { Save, Tune } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -14,19 +14,19 @@ import {
   Switch,
   TextField,
   Typography,
-} from "@mui/material";
-import { useState } from "react";
+} from '@mui/material';
+import { useState } from 'react';
 
 const GeneralSettings = () => {
   const [settings, setSettings] = useState({
-    companyName: "MIA Logistics",
-    companyAddress: "",
-    companyPhone: "",
-    companyEmail: "kho.1@mia.vn",
+    companyName: 'MIA Logistics',
+    companyAddress: '',
+    companyPhone: '',
+    companyEmail: 'kho.1@mia.vn',
     preferences: {
-      language: "vi",
-      currency: "VND",
-      dateFormat: "DD/MM/YYYY",
+      language: 'vi',
+      currency: 'VND',
+      dateFormat: 'DD/MM/YYYY',
       darkMode: false,
       autoSave: true,
     },
@@ -43,7 +43,7 @@ const GeneralSettings = () => {
       ...prev,
       preferences: {
         ...prev.preferences,
-        [key]: event.target.type === "checkbox" ? event.target.checked : event.target.value,
+        [key]: event.target.type === 'checkbox' ? event.target.checked : event.target.value,
       },
     }));
   };
@@ -52,8 +52,8 @@ const GeneralSettings = () => {
     <Container maxWidth="lg">
       <Box sx={{ py: 4 }}>
         {/* Header */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
-          <Tune sx={{ mr: 2, fontSize: 32, color: "primary.main" }} />
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+          <Tune sx={{ mr: 2, fontSize: 32, color: 'primary.main' }} />
           <Typography variant="h4" component="h1" sx={{ fontWeight: 600 }}>
             Cài đặt chung
           </Typography>
@@ -126,7 +126,7 @@ const GeneralSettings = () => {
                       <InputLabel>Ngôn ngữ</InputLabel>
                       <Select
                         value={settings.preferences.language}
-                        onChange={handlePreferenceChange("language")}
+                        onChange={handlePreferenceChange('language')}
                         label="Ngôn ngữ"
                       >
                         <MenuItem value="vi">Tiếng Việt</MenuItem>
@@ -139,7 +139,7 @@ const GeneralSettings = () => {
                       <InputLabel>Định dạng ngày</InputLabel>
                       <Select
                         value={settings.preferences.dateFormat}
-                        onChange={handlePreferenceChange("dateFormat")}
+                        onChange={handlePreferenceChange('dateFormat')}
                         label="Định dạng ngày"
                       >
                         <MenuItem value="DD/MM/YYYY">DD/MM/YYYY</MenuItem>
@@ -153,7 +153,7 @@ const GeneralSettings = () => {
                       <InputLabel>Tiền tệ</InputLabel>
                       <Select
                         value={settings.preferences.currency}
-                        onChange={handlePreferenceChange("currency")}
+                        onChange={handlePreferenceChange('currency')}
                         label="Tiền tệ"
                       >
                         <MenuItem value="VND">VNĐ</MenuItem>
@@ -162,12 +162,12 @@ const GeneralSettings = () => {
                     </FormControl>
                   </Grid>
                   <Grid item xs={12}>
-                    <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
+                    <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
                       <FormControlLabel
                         control={
                           <Switch
                             checked={settings.preferences.darkMode}
-                            onChange={handlePreferenceChange("darkMode")}
+                            onChange={handlePreferenceChange('darkMode')}
                           />
                         }
                         label="Chế độ tối"
@@ -176,7 +176,7 @@ const GeneralSettings = () => {
                         control={
                           <Switch
                             checked={settings.preferences.autoSave}
-                            onChange={handlePreferenceChange("autoSave")}
+                            onChange={handlePreferenceChange('autoSave')}
                           />
                         }
                         label="Tự động lưu"
@@ -190,7 +190,7 @@ const GeneralSettings = () => {
 
           {/* Save Button */}
           <Grid item xs={12}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
               <Button variant="outlined">Hủy bỏ</Button>
               <Button variant="contained" startIcon={<Save />} onClick={handleSave}>
                 Lưu cài đặt

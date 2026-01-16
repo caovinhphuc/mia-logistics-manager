@@ -1,93 +1,93 @@
 //App.js
-import React, { Suspense, useEffect } from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { Box, CircularProgress, Backdrop } from "@mui/material";
-import { Helmet } from "react-helmet-async";
+import React, { Suspense, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Box, CircularProgress, Backdrop } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 
 // Import contexts
-import { useAuth } from "./contexts/AuthContext";
-import { useTheme } from "./contexts/ThemeContext";
-import { useLanguage } from "./contexts/LanguageContext";
-import useActivityMonitor from "./hooks/useActivityMonitor";
-import SessionTimeoutWarning from "./components/auth/SessionTimeoutWarning";
+import { useAuth } from './contexts/AuthContext';
+import { useTheme } from './contexts/ThemeContext';
+import { useLanguage } from './contexts/LanguageContext';
+import useActivityMonitor from './hooks/useActivityMonitor';
+import SessionTimeoutWarning from './components/auth/SessionTimeoutWarning';
 
 // Import layout components
-import MainLayout from "./components/layout/MainLayout";
-import AuthLayout from "./components/layout/AuthLayout";
+import MainLayout from './components/layout/MainLayout';
+import AuthLayout from './components/layout/AuthLayout';
 
 // Import lazy-loaded pages
-const Dashboard = React.lazy(() => import("./components/dashboard/Dashboard"));
-const Login = React.lazy(() => import("./components/auth/Login"));
-const TransportManagement = React.lazy(() => import("./pages/Transport/TransportManagement"));
-const WarehouseManagement = React.lazy(() => import("./components/warehouses/WarehouseManagement"));
-const PartnerManagement = React.lazy(() => import("./components/partners/PartnerManagement"));
-const MapView = React.lazy(() => import("./components/maps/MapView"));
+const Dashboard = React.lazy(() => import('./components/dashboard/Dashboard'));
+const Login = React.lazy(() => import('./components/auth/Login'));
+const TransportManagement = React.lazy(() => import('./pages/Transport/TransportManagement'));
+const WarehouseManagement = React.lazy(() => import('./components/warehouses/WarehouseManagement'));
+const PartnerManagement = React.lazy(() => import('./components/partners/PartnerManagement'));
+const MapView = React.lazy(() => import('./components/maps/MapView'));
 const NotificationCenter = React.lazy(
-  () => import("./components/notifications/NotificationCenter")
+  () => import('./components/notifications/NotificationCenter')
 );
-const ReportsCenter = React.lazy(() => import("./components/reports/ReportsCenter"));
-const Profile = React.lazy(() => import("./components/auth/Profile"));
-const Settings = React.lazy(() => import("./components/settings/Settings"));
-const NotFound = React.lazy(() => import("./components/notfound/NotFound"));
+const ReportsCenter = React.lazy(() => import('./components/reports/ReportsCenter'));
+const Profile = React.lazy(() => import('./components/auth/Profile'));
+const Settings = React.lazy(() => import('./components/settings/Settings'));
+const NotFound = React.lazy(() => import('./components/notfound/NotFound'));
 
 // Import Inbound Components
-const InboundDomestic = React.lazy(() => import("./components/inbound/InboundDomestic"));
-const InboundInternational = React.lazy(() => import("./components/inbound/InboundInternational"));
+const InboundDomestic = React.lazy(() => import('./components/inbound/InboundDomestic'));
+const InboundInternational = React.lazy(() => import('./components/inbound/InboundInternational'));
 // Use advanced, production-ready InboundSchedule (backup version)
-const InboundSchedule = React.lazy(() => import("./components/inbound-backup/InboundSchedule"));
-const InboundReports = React.lazy(() => import("./components/inbound/InboundReports"));
+const InboundSchedule = React.lazy(() => import('./components/inbound-backup/InboundSchedule'));
+const InboundReports = React.lazy(() => import('./components/inbound/InboundReports'));
 
 // Import Carriers (features-based)
-const CarriersManagement = React.lazy(() => import("./features/carriers/components/CarriersList"));
+const CarriersManagement = React.lazy(() => import('./features/carriers/components/CarriersList'));
 
 // Import Transfers Components
 const TransfersManagement = React.lazy(
-  () => import("./features/transfers/components/TransferList")
+  () => import('./features/transfers/components/TransferList')
 );
 
 // Import Transport Components
 const VolumeCalculator = React.lazy(
-  () => import("./components/volumerules/components/VolumeCalculator")
+  () => import('./components/volumerules/components/VolumeCalculator')
 );
-const LocationsList = React.lazy(() => import("./features/locations/components/LocationsList"));
-const TransportRoutes = React.lazy(() => import("./pages/Transport/Routes"));
+const LocationsList = React.lazy(() => import('./features/locations/components/LocationsList'));
+const TransportRoutes = React.lazy(() => import('./pages/Transport/Routes'));
 const TransportRequestsSheet = React.lazy(
-  () => import("./features/shipments/components/TransportRequestsSheet")
+  () => import('./features/shipments/components/TransportRequestsSheet')
 );
-const Vehicles = React.lazy(() => import("./pages/Transport/Vehicles"));
-const PendingDelivery = React.lazy(() => import("./features/shipments/components/PendingDelivery"));
+const Vehicles = React.lazy(() => import('./pages/Transport/Vehicles'));
+const PendingDelivery = React.lazy(() => import('./features/shipments/components/PendingDelivery'));
 
 // Import Warehouse Components
-const Inventory = React.lazy(() => import("./pages/Warehouse/Inventory"));
-const WarehouseOrders = React.lazy(() => import("./pages/Warehouse/Orders"));
-const WarehouseLocations = React.lazy(() => import("./pages/Warehouse/Locations"));
-const WarehouseTransfers = React.lazy(() => import("./pages/Warehouse/WarehouseTransfers"));
+const Inventory = React.lazy(() => import('./pages/Warehouse/Inventory'));
+const WarehouseOrders = React.lazy(() => import('./pages/Warehouse/Orders'));
+const WarehouseLocations = React.lazy(() => import('./pages/Warehouse/Locations'));
+const WarehouseTransfers = React.lazy(() => import('./pages/Warehouse/WarehouseTransfers'));
 
 // Import Partners Components
-const Suppliers = React.lazy(() => import("./pages/Partners/Suppliers"));
-const Customers = React.lazy(() => import("./pages/Partners/Customers"));
-const Contracts = React.lazy(() => import("./pages/Partners/Contracts"));
+const Suppliers = React.lazy(() => import('./pages/Partners/Suppliers'));
+const Customers = React.lazy(() => import('./pages/Partners/Customers'));
+const Contracts = React.lazy(() => import('./pages/Partners/Contracts'));
 
 // Import Reports Components
-const Analytics = React.lazy(() => import("./pages/Reports/Analytics"));
-const Financial = React.lazy(() => import("./pages/Reports/Financial"));
-const Performance = React.lazy(() => import("./pages/Reports/Performance"));
+const Analytics = React.lazy(() => import('./pages/Reports/Analytics'));
+const Financial = React.lazy(() => import('./pages/Reports/Financial'));
+const Performance = React.lazy(() => import('./pages/Reports/Performance'));
 
 // Import Settings Components
-const General = React.lazy(() => import("./pages/Settings/General"));
-const Api = React.lazy(() => import("./pages/Settings/Api"));
-const Security = React.lazy(() => import("./pages/Settings/Security"));
-const System = React.lazy(() => import("./pages/Settings/System"));
-const Roles = React.lazy(() => import("./pages/Settings/Roles"));
-const Permissions = React.lazy(() => import("./pages/Settings/Permissions"));
-const Users = React.lazy(() => import("./pages/Settings/Users"));
+const General = React.lazy(() => import('./pages/Settings/General'));
+const Api = React.lazy(() => import('./pages/Settings/Api'));
+const Security = React.lazy(() => import('./pages/Settings/Security'));
+const System = React.lazy(() => import('./pages/Settings/System'));
+const Roles = React.lazy(() => import('./pages/Settings/Roles'));
+const Permissions = React.lazy(() => import('./pages/Settings/Permissions'));
+const Users = React.lazy(() => import('./pages/Settings/Users'));
 
 // Import Employees Component
-const Employees = React.lazy(() => import("./pages/Employees/Employees"));
+const Employees = React.lazy(() => import('./pages/Employees/Employees'));
 
 // Loading component
-const LoadingScreen = ({ message = "Đang tải..." }) => (
-  <Backdrop open={true} sx={{ color: "#fff", zIndex: 9999 }}>
+const LoadingScreen = ({ message = 'Đang tải...' }) => (
+  <Backdrop open={true} sx={{ color: '#fff', zIndex: 9999 }}>
     <Box display="flex" flexDirection="column" alignItems="center">
       <CircularProgress color="inherit" size={60} />
       <Box mt={2} fontSize="16px">
@@ -113,7 +113,7 @@ const ProtectedRoute = ({ children, requiredRoles = [] }) => {
   // Check role permissions
   if (requiredRoles.length > 0 && user?.role) {
     const hasRequiredRole = requiredRoles.some(
-      (role) => user.role === role || user.role === "admin"
+      (role) => user.role === role || user.role === 'admin'
     );
 
     if (!hasRequiredRole) {
@@ -134,7 +134,7 @@ const PublicRoute = ({ children }) => {
   }
 
   if (isAuthenticated) {
-    const from = location.state?.from?.pathname || "/dashboard";
+    const from = location.state?.from?.pathname || '/dashboard';
     return <Navigate to={from} replace />;
   }
 
@@ -153,49 +153,49 @@ const App = () => {
   // Update document title based on route
   useEffect(() => {
     const titles = {
-      "/": "Trang chủ",
-      "/dashboard": "Bảng điều khiển",
-      "/transport": "Quản lý vận chuyển",
-      "/warehouse": "Quản lý kho",
-      "/partners": "Quản lý đối tác",
-      "/maps": "Bản đồ",
-      "/notifications": "Thông báo",
-      "/reports": "Báo cáo",
-      "/profile": "Hồ sơ cá nhân",
-      "/settings": "Cài đặt",
-      "/login": "Đăng nhập",
-      "/inbound-domestic": "Nhập hàng quốc nội",
-      "/inbound-international": "Nhập hàng quốc tế",
-      "/inbound-schedule": "Lịch trình nhập hàng",
-      "/inbound-reports": "Báo cáo nhập hàng",
-      "/carriers": "Quản lý nhà vận chuyển",
-      "/transport/volume-rules": "Quy tắc tính khối",
-      "/transport/locations-saved": "Địa điểm lưu",
-      "/transport/requests": "Đề nghị vận chuyển",
-      "/transport/routes": "Quản lý tuyến đường",
-      "/transport/vehicles": "Quản lý phương tiện",
-      "/transport/pending-delivery": "Chờ chuyển giao",
-      "/warehouse/inventory": "Quản lý tồn kho",
-      "/warehouse/orders": "Quản lý đơn hàng kho",
-      "/warehouse/locations": "Vị trí kho",
-      "/warehouse/transfers": "Phiếu chuyển kho",
-      "/partners/suppliers": "Quản lý nhà cung cấp",
-      "/partners/customers": "Quản lý khách hàng",
-      "/partners/contracts": "Quản lý hợp đồng",
-      "/reports/analytics": "Phân tích dữ liệu",
-      "/reports/financial": "Báo cáo tài chính",
-      "/reports/performance": "Báo cáo hiệu suất",
-      "/settings/general": "Cài đặt chung",
-      "/settings/api": "Tích hợp API",
-      "/settings/security": "Bảo mật hệ thống",
-      "/settings/system": "Cài đặt hệ thống",
-      "/settings/roles": "Quản lý vai trò",
-      "/settings/permissions": "Quản lý quyền hạn",
-      "/settings/users": "Quản lý người dùng",
-      "/employees": "Quản lý nhân sự",
+      '/': 'Trang chủ',
+      '/dashboard': 'Bảng điều khiển',
+      '/transport': 'Quản lý vận chuyển',
+      '/warehouse': 'Quản lý kho',
+      '/partners': 'Quản lý đối tác',
+      '/maps': 'Bản đồ',
+      '/notifications': 'Thông báo',
+      '/reports': 'Báo cáo',
+      '/profile': 'Hồ sơ cá nhân',
+      '/settings': 'Cài đặt',
+      '/login': 'Đăng nhập',
+      '/inbound-domestic': 'Nhập hàng quốc nội',
+      '/inbound-international': 'Nhập hàng quốc tế',
+      '/inbound-schedule': 'Lịch trình nhập hàng',
+      '/inbound-reports': 'Báo cáo nhập hàng',
+      '/carriers': 'Quản lý nhà vận chuyển',
+      '/transport/volume-rules': 'Quy tắc tính khối',
+      '/transport/locations-saved': 'Địa điểm lưu',
+      '/transport/requests': 'Đề nghị vận chuyển',
+      '/transport/routes': 'Quản lý tuyến đường',
+      '/transport/vehicles': 'Quản lý phương tiện',
+      '/transport/pending-delivery': 'Chờ chuyển giao',
+      '/warehouse/inventory': 'Quản lý tồn kho',
+      '/warehouse/orders': 'Quản lý đơn hàng kho',
+      '/warehouse/locations': 'Vị trí kho',
+      '/warehouse/transfers': 'Phiếu chuyển kho',
+      '/partners/suppliers': 'Quản lý nhà cung cấp',
+      '/partners/customers': 'Quản lý khách hàng',
+      '/partners/contracts': 'Quản lý hợp đồng',
+      '/reports/analytics': 'Phân tích dữ liệu',
+      '/reports/financial': 'Báo cáo tài chính',
+      '/reports/performance': 'Báo cáo hiệu suất',
+      '/settings/general': 'Cài đặt chung',
+      '/settings/api': 'Tích hợp API',
+      '/settings/security': 'Bảo mật hệ thống',
+      '/settings/system': 'Cài đặt hệ thống',
+      '/settings/roles': 'Quản lý vai trò',
+      '/settings/permissions': 'Quản lý quyền hạn',
+      '/settings/users': 'Quản lý người dùng',
+      '/employees': 'Quản lý nhân sự',
     };
 
-    const currentTitle = titles[location.pathname] || "MIA Logistics Manager";
+    const currentTitle = titles[location.pathname] || 'MIA Logistics Manager';
     document.title = `${currentTitle} - MIA Logistics Manager`;
   }, [location.pathname]);
 
@@ -203,7 +203,7 @@ const App = () => {
     <>
       <Helmet>
         <html lang={language} />
-        <meta name="theme-color" content={isDarkMode ? "#121212" : "#1976d2"} />
+        <meta name="theme-color" content={isDarkMode ? '#121212' : '#1976d2'} />
         <meta
           name="description"
           content="MIA Logistics Manager - Hệ thống quản lý vận chuyển chuyên nghiệp"
@@ -253,7 +253,7 @@ const App = () => {
           <Route
             path="/transport/*"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "operator"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'operator']}>
                 <MainLayout>
                   <TransportManagement />
                 </MainLayout>
@@ -264,7 +264,7 @@ const App = () => {
           <Route
             path="/warehouse/*"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "warehouse_staff"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'warehouse_staff']}>
                 <MainLayout>
                   <WarehouseManagement />
                 </MainLayout>
@@ -275,7 +275,7 @@ const App = () => {
           <Route
             path="/partners/*"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "operator"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'operator']}>
                 <MainLayout>
                   <PartnerManagement />
                 </MainLayout>
@@ -308,7 +308,7 @@ const App = () => {
           <Route
             path="/reports/*"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <ReportsCenter />
                 </MainLayout>
@@ -330,7 +330,7 @@ const App = () => {
           <Route
             path="/settings"
             element={
-              <ProtectedRoute requiredRoles={["admin"]}>
+              <ProtectedRoute requiredRoles={['admin']}>
                 <MainLayout>
                   <Settings />
                 </MainLayout>
@@ -342,7 +342,7 @@ const App = () => {
           <Route
             path="/inbound-domestic"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "warehouse_staff"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'warehouse_staff']}>
                 <MainLayout>
                   <InboundDomestic />
                 </MainLayout>
@@ -353,7 +353,7 @@ const App = () => {
           <Route
             path="/inbound-international"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "warehouse_staff"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'warehouse_staff']}>
                 <MainLayout>
                   <InboundInternational />
                 </MainLayout>
@@ -364,7 +364,7 @@ const App = () => {
           <Route
             path="/inbound-schedule"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "warehouse_staff"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'warehouse_staff']}>
                 <MainLayout>
                   <InboundSchedule />
                 </MainLayout>
@@ -375,7 +375,7 @@ const App = () => {
           <Route
             path="/inbound-reports"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <InboundReports />
                 </MainLayout>
@@ -387,7 +387,7 @@ const App = () => {
           <Route
             path="/carriers"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "operator"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'operator']}>
                 <MainLayout>
                   <CarriersManagement />
                 </MainLayout>
@@ -399,7 +399,7 @@ const App = () => {
           <Route
             path="/transfers"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "warehouse_staff"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'warehouse_staff']}>
                 <MainLayout>
                   <TransfersManagement />
                 </MainLayout>
@@ -410,7 +410,7 @@ const App = () => {
           <Route
             path="/transport/requests"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "operator"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'operator']}>
                 <MainLayout>
                   <TransportRequestsSheet />
                 </MainLayout>
@@ -421,7 +421,7 @@ const App = () => {
           <Route
             path="/transport/volume-rules"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "operator"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'operator']}>
                 <MainLayout>
                   <VolumeCalculator />
                 </MainLayout>
@@ -432,7 +432,7 @@ const App = () => {
           <Route
             path="/transport/locations-saved"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "operator"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'operator']}>
                 <MainLayout>
                   <LocationsList />
                 </MainLayout>
@@ -443,7 +443,7 @@ const App = () => {
           <Route
             path="/transport/routes"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <TransportRoutes />
                 </MainLayout>
@@ -454,7 +454,7 @@ const App = () => {
           <Route
             path="/transport/vehicles"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <Vehicles />
                 </MainLayout>
@@ -465,7 +465,7 @@ const App = () => {
           <Route
             path="/transport/pending-delivery"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "operator"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'operator']}>
                 <MainLayout>
                   <PendingDelivery />
                 </MainLayout>
@@ -477,7 +477,7 @@ const App = () => {
           <Route
             path="/warehouse/inventory"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "warehouse_staff"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'warehouse_staff']}>
                 <MainLayout>
                   <Inventory />
                 </MainLayout>
@@ -488,7 +488,7 @@ const App = () => {
           <Route
             path="/warehouse/orders"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <WarehouseOrders />
                 </MainLayout>
@@ -499,7 +499,7 @@ const App = () => {
           <Route
             path="/warehouse/locations"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <WarehouseLocations />
                 </MainLayout>
@@ -510,7 +510,7 @@ const App = () => {
           <Route
             path="/warehouse/transfers"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "warehouse_staff"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'warehouse_staff']}>
                 <MainLayout>
                   <WarehouseTransfers />
                 </MainLayout>
@@ -522,7 +522,7 @@ const App = () => {
           <Route
             path="/partners/suppliers"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <Suppliers />
                 </MainLayout>
@@ -533,7 +533,7 @@ const App = () => {
           <Route
             path="/partners/customers"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "operator"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'operator']}>
                 <MainLayout>
                   <Customers />
                 </MainLayout>
@@ -544,7 +544,7 @@ const App = () => {
           <Route
             path="/partners/contracts"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <Contracts />
                 </MainLayout>
@@ -556,7 +556,7 @@ const App = () => {
           <Route
             path="/reports/analytics"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <Analytics />
                 </MainLayout>
@@ -567,7 +567,7 @@ const App = () => {
           <Route
             path="/reports/financial"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <Financial />
                 </MainLayout>
@@ -578,7 +578,7 @@ const App = () => {
           <Route
             path="/reports/performance"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager']}>
                 <MainLayout>
                   <Performance />
                 </MainLayout>
@@ -590,7 +590,7 @@ const App = () => {
           <Route
             path="/settings/general"
             element={
-              <ProtectedRoute requiredRoles={["admin"]}>
+              <ProtectedRoute requiredRoles={['admin']}>
                 <MainLayout>
                   <General />
                 </MainLayout>
@@ -601,7 +601,7 @@ const App = () => {
           <Route
             path="/settings/api"
             element={
-              <ProtectedRoute requiredRoles={["admin"]}>
+              <ProtectedRoute requiredRoles={['admin']}>
                 <MainLayout>
                   <Api />
                 </MainLayout>
@@ -612,7 +612,7 @@ const App = () => {
           <Route
             path="/settings/security"
             element={
-              <ProtectedRoute requiredRoles={["admin"]}>
+              <ProtectedRoute requiredRoles={['admin']}>
                 <MainLayout>
                   <Security />
                 </MainLayout>
@@ -623,7 +623,7 @@ const App = () => {
           <Route
             path="/settings/system"
             element={
-              <ProtectedRoute requiredRoles={["admin"]}>
+              <ProtectedRoute requiredRoles={['admin']}>
                 <MainLayout>
                   <System />
                 </MainLayout>
@@ -634,7 +634,7 @@ const App = () => {
           <Route
             path="/settings/roles"
             element={
-              <ProtectedRoute requiredRoles={["admin"]}>
+              <ProtectedRoute requiredRoles={['admin']}>
                 <MainLayout>
                   <Roles />
                 </MainLayout>
@@ -645,7 +645,7 @@ const App = () => {
           <Route
             path="/settings/permissions"
             element={
-              <ProtectedRoute requiredRoles={["admin"]}>
+              <ProtectedRoute requiredRoles={['admin']}>
                 <MainLayout>
                   <Permissions />
                 </MainLayout>
@@ -656,7 +656,7 @@ const App = () => {
           <Route
             path="/settings/users"
             element={
-              <ProtectedRoute requiredRoles={["admin"]}>
+              <ProtectedRoute requiredRoles={['admin']}>
                 <MainLayout>
                   <Users />
                 </MainLayout>
@@ -668,7 +668,7 @@ const App = () => {
           <Route
             path="/employees"
             element={
-              <ProtectedRoute requiredRoles={["admin", "manager", "hr"]}>
+              <ProtectedRoute requiredRoles={['admin', 'manager', 'hr']}>
                 <MainLayout>
                   <Employees />
                 </MainLayout>

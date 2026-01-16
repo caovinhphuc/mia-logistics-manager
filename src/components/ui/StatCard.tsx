@@ -1,2 +1,1 @@
-export * from "../../shared/components/ui/StatCard";
-
+export * from '../../shared/components/ui/StatCard';

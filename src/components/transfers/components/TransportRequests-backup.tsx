@@ -16,7 +16,7 @@ import {
   ArrowDropDown,
   Business,
   Public,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -54,18 +54,18 @@ import {
   Alert,
   Tabs,
   Tab,
-} from "@mui/material";
-import { StatusChip, Checkbox } from "../../../shared/components/ui";
-import Menu from "@mui/material/Menu";
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useCarriers } from "../../carriers/hooks/useCarriers";
+} from '@mui/material';
+import { StatusChip, Checkbox } from '../../../shared/components/ui';
+import Menu from '@mui/material/Menu';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useCarriers } from '../../carriers/hooks/useCarriers';
 
-import { useTransportCostCalculation } from "../../../hooks/useTransportCostCalculation";
-import { CostCalculationDetails } from "../../../components/CostCalculationDetails";
-import { useDistanceCalculation } from "../../../hooks/useDistanceCalculation";
-import { DistanceDisplay } from "../../../components/DistanceDisplay";
-import { getSession } from "../../../shared/utils/auth";
-import AutocompleteAddress from "../../../shared/components/AutocompleteAddress";
+import { useTransportCostCalculation } from '../../../hooks/useTransportCostCalculation';
+import { CostCalculationDetails } from '../../../components/CostCalculationDetails';
+import { useDistanceCalculation } from '../../../hooks/useDistanceCalculation';
+import { DistanceDisplay } from '../../../components/DistanceDisplay';
+import { getSession } from '../../../shared/utils/auth';
+import AutocompleteAddress from '../../../shared/components/AutocompleteAddress';
 
 interface Transfer {
   transfer_id: string;
@@ -101,7 +101,7 @@ interface Location {
   category: string;
   subcategory: string;
   address: string;
-  status: "active" | "inactive";
+  status: 'active' | 'inactive';
   ward: string;
   district: string;
   province: string;
@@ -117,7 +117,7 @@ interface Carrier {
   phone: string;
   address: string;
   serviceAreas: string;
-  pricingMethod: "PER_KM" | "PER_TRIP" | "PER_M3";
+  pricingMethod: 'PER_KM' | 'PER_TRIP' | 'PER_M3';
   baseRate: string;
   perKmRate: string;
   perM3Rate: string;
@@ -136,34 +136,34 @@ interface Carrier {
   updatedAt: string;
 }
 
-type PricingMethodForm = "perKm" | "perTrip" | "perM3";
+type PricingMethodForm = 'perKm' | 'perTrip' | 'perM3';
 
-const PRICING_METHOD_FORM_TO_SHEET: Record<PricingMethodForm, "PER_KM" | "PER_TRIP" | "PER_M3"> = {
-  perKm: "PER_KM",
-  perTrip: "PER_TRIP",
-  perM3: "PER_M3",
+const PRICING_METHOD_FORM_TO_SHEET: Record<PricingMethodForm, 'PER_KM' | 'PER_TRIP' | 'PER_M3'> = {
+  perKm: 'PER_KM',
+  perTrip: 'PER_TRIP',
+  perM3: 'PER_M3',
 };
 
 const PRICING_METHOD_SHEET_TO_FORM: Record<string, PricingMethodForm> = {
-  PER_KM: "perKm",
-  PER_TRIP: "perTrip",
-  PER_M3: "perM3",
+  PER_KM: 'perKm',
+  PER_TRIP: 'perTrip',
+  PER_M3: 'perM3',
 };
 
 const safeParseNumber = (value: unknown): number => {
-  if (value === null || value === undefined || value === "") return 0;
+  if (value === null || value === undefined || value === '') return 0;
   const stringValue = String(value).trim();
-  if (stringValue === "") return 0;
+  if (stringValue === '') return 0;
 
-  const cleanedValue = stringValue.replace(/[^\d.,-]/g, "");
-  if (cleanedValue === "") return 0;
+  const cleanedValue = stringValue.replace(/[^\d.,-]/g, '');
+  if (cleanedValue === '') return 0;
 
-  if (cleanedValue.includes(",")) {
-    const parts = cleanedValue.split(",");
+  if (cleanedValue.includes(',')) {
+    const parts = cleanedValue.split(',');
     if (parts.length === 2 && parts[1].length <= 2) {
-      return Number(cleanedValue.replace(",", ".")) || 0;
+      return Number(cleanedValue.replace(',', '.')) || 0;
     }
-    return Number(cleanedValue.replace(/,/g, "")) || 0;
+    return Number(cleanedValue.replace(/,/g, '')) || 0;
   }
 
   return Number(cleanedValue) || 0;
@@ -336,7 +336,7 @@ interface DeliveryPoint {
 }
 
 const TransportRequests: React.FC = () => {
-  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+  const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
   const [loading, setLoading] = useState(false);
   const [transfers, setTransfers] = useState<Transfer[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
@@ -352,48 +352,48 @@ const TransportRequests: React.FC = () => {
 
       // If isActive is a timestamp (contains 'T' or is a date), consider it as active
       if (
-        isActiveString.includes("T") ||
-        isActiveString.includes("-") ||
-        isActiveString.includes(":")
+        isActiveString.includes('T') ||
+        isActiveString.includes('-') ||
+        isActiveString.includes(':')
       ) {
         return true;
       }
 
-      return isActiveString === "TRUE" || isActiveString === "1" || isActive === true;
+      return isActiveString === 'TRUE' || isActiveString === '1' || isActive === true;
     });
   }, [carriersData]);
 
   // New transport request form state
   const [newTransportForm, setNewTransportForm] = useState({
     // Thông tin cơ bản
-    pickupLocation: "",
+    pickupLocation: '',
     selectedTransfers: new Set<string>(),
-    status: "in_transit",
-    note: "",
+    status: 'in_transit',
+    note: '',
 
     // New transport request fields
-    originId: "",
+    originId: '',
     destinationIds: [] as string[],
 
     // Thông tin vận chuyển
-    carrierName: "",
-    carrierId: "",
-    pricingMethod: "perKm" as "perKm" | "perM3" | "perTrip",
-    vehicleType: "",
+    carrierName: '',
+    carrierId: '',
+    pricingMethod: 'perKm' as 'perKm' | 'perM3' | 'perTrip',
+    vehicleType: '',
     estimatedCost: 0,
 
     // Thông tin tài xế
-    driverId: "",
-    driverName: "",
-    driverPhone: "",
-    driverLicense: "",
+    driverId: '',
+    driverName: '',
+    driverPhone: '',
+    driverLicense: '',
 
     // Hình ảnh và phòng ban
-    loadingImages: "",
-    department: "",
+    loadingImages: '',
+    department: '',
 
     // Định giá và phí phụ
-    serviceArea: "",
+    serviceArea: '',
     pricePerKm: 0,
     pricePerM3: 0,
     pricePerTrip: 0,
@@ -422,7 +422,7 @@ const TransportRequests: React.FC = () => {
       (transfer as any).requestId ||
       transfer.requestCode ||
       transfer.orderCode ||
-      ""
+      ''
     );
   }, []);
   const getTransferKey = useCallback(
@@ -442,17 +442,17 @@ const TransportRequests: React.FC = () => {
   };
   // Nhóm carriers theo tên (đặt sớm để tránh lỗi TDZ khi các hook khác sử dụng)
   const groupedCarriers = useMemo(() => {
-    console.log("🔄 Frontend: Grouping carriers, total carriers:", carriers?.length || 0);
+    console.log('🔄 Frontend: Grouping carriers, total carriers:', carriers?.length || 0);
     const groups: { [key: string]: Carrier[] } = {};
 
     if (!Array.isArray(carriers)) {
-      console.error("❌ Frontend: carriers is not an array:", carriers);
+      console.error('❌ Frontend: carriers is not an array:', carriers);
       return groups;
     }
 
     carriers.forEach((carrier) => {
       if (!carrier || !carrier.name) {
-        console.warn("⚠️ Frontend: Skipping carrier with missing name:", carrier);
+        console.warn('⚠️ Frontend: Skipping carrier with missing name:', carrier);
         return;
       }
       if (!groups[carrier.name]) {
@@ -460,7 +460,7 @@ const TransportRequests: React.FC = () => {
       }
       groups[carrier.name].push(carrier);
     });
-    console.log("✅ Frontend: Grouped carriers:", Object.keys(groups));
+    console.log('✅ Frontend: Grouped carriers:', Object.keys(groups));
     return groups;
   }, [carriers]);
 
@@ -523,7 +523,7 @@ const TransportRequests: React.FC = () => {
       const finalCarrier = bestMatch ?? candidates[0];
       if (!finalCarrier) return null;
 
-      const formPricingMethod = PRICING_METHOD_SHEET_TO_FORM[finalCarrier.pricingMethod] || "perKm";
+      const formPricingMethod = PRICING_METHOD_SHEET_TO_FORM[finalCarrier.pricingMethod] || 'perKm';
 
       const pricing = {
         pricePerKm: safeParseNumber(finalCarrier.perKmRate),
@@ -589,32 +589,32 @@ const TransportRequests: React.FC = () => {
   const validateRealTime = useCallback(
     (field: string, value: string): string | undefined => {
       switch (field) {
-        case "driverPhone":
-          if (!value.trim()) return "Số điện thoại tài xế là bắt buộc";
+        case 'driverPhone':
+          if (!value.trim()) return 'Số điện thoại tài xế là bắt buộc';
           if (!validateVietnamesePhone(value))
-            return "Số điện thoại không đúng định dạng Việt Nam (VD: 0901234567)";
+            return 'Số điện thoại không đúng định dạng Việt Nam (VD: 0901234567)';
           return undefined;
-        case "vehiclePlate":
+        case 'vehiclePlate':
           if (value.trim() && !validateVehiclePlate(value)) {
-            return "Biển số xe không đúng định dạng (VD: 51A12345)";
+            return 'Biển số xe không đúng định dạng (VD: 51A12345)';
           }
           return undefined;
-        case "driverName":
-          if (!value.trim()) return "Tên tài xế là bắt buộc";
-          if (value.trim().length < 2) return "Tên tài xế phải có ít nhất 2 ký tự";
+        case 'driverName':
+          if (!value.trim()) return 'Tên tài xế là bắt buộc';
+          if (value.trim().length < 2) return 'Tên tài xế phải có ít nhất 2 ký tự';
           return undefined;
-        case "department":
-          if (!value.trim()) return "Phòng ban là bắt buộc";
+        case 'department':
+          if (!value.trim()) return 'Phòng ban là bắt buộc';
           return undefined;
-        case "serviceArea":
-          if (!value.trim()) return "Khu vực phục vụ là bắt buộc";
+        case 'serviceArea':
+          if (!value.trim()) return 'Khu vực phục vụ là bắt buộc';
           return undefined;
-        case "pricingMethod":
-          if (!value.trim()) return "Phương thức tính tiền là bắt buộc";
+        case 'pricingMethod':
+          if (!value.trim()) return 'Phương thức tính tiền là bắt buộc';
           return undefined;
-        case "vehicleType":
+        case 'vehicleType':
           if (shouldShowVehicleType(newTransportForm.pricingMethod) && !value.trim()) {
-            return "Loại xe là bắt buộc cho phương thức tính giá này";
+            return 'Loại xe là bắt buộc cho phương thức tính giá này';
           }
           return undefined;
         default:
@@ -635,11 +635,11 @@ const TransportRequests: React.FC = () => {
       setNewTransportForm((prev) => ({
         ...prev,
         carrierName,
-        vehicleType: "",
-        serviceArea: "",
+        vehicleType: '',
+        serviceArea: '',
         ...applyCarrierMatchToForm(prev, match, {
-          pricingMethod: match?.formPricingMethod || prev.pricingMethod || "perKm",
-          carrierId: match?.carrier?.carrierId || "",
+          pricingMethod: match?.formPricingMethod || prev.pricingMethod || 'perKm',
+          carrierId: match?.carrier?.carrierId || '',
         }),
       }));
     },
@@ -654,7 +654,7 @@ const TransportRequests: React.FC = () => {
 
   const handlePricingMethodChange = useCallback(
     (sheetMethod: string) => {
-      const formMethod = PRICING_METHOD_SHEET_TO_FORM[sheetMethod] || "perKm";
+      const formMethod = PRICING_METHOD_SHEET_TO_FORM[sheetMethod] || 'perKm';
       const match = findCarrierPricing(newTransportForm.carrierName, {
         pricingMethod: formMethod,
         vehicleType: newTransportForm.vehicleType,
@@ -664,13 +664,13 @@ const TransportRequests: React.FC = () => {
       setNewTransportForm((prev) => ({
         ...prev,
         pricingMethod: formMethod,
-        vehicleType: "",
+        vehicleType: '',
         ...applyCarrierMatchToForm(prev, match, {
           pricingMethod: formMethod,
         }),
       }));
 
-      const error = validateRealTime("pricingMethod", formMethod);
+      const error = validateRealTime('pricingMethod', formMethod);
       setValidationErrors((prev) => ({
         ...prev,
         pricingMethod: error,
@@ -700,7 +700,7 @@ const TransportRequests: React.FC = () => {
         ...applyCarrierMatchToForm(prev, match),
       }));
 
-      const error = validateRealTime("vehicleType", vehicleType);
+      const error = validateRealTime('vehicleType', vehicleType);
       setValidationErrors((prev) => ({
         ...prev,
         vehicleType: error,
@@ -785,10 +785,10 @@ const TransportRequests: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState({
-    search: "",
-    status: "",
-    vehicleType: "",
-    customerName: "",
+    search: '',
+    status: '',
+    vehicleType: '',
+    customerName: '',
   });
 
   // Request ID management states
@@ -801,7 +801,7 @@ const TransportRequests: React.FC = () => {
   // New transport request dropdown states
   const [newTransportMenuAnchor, setNewTransportMenuAnchor] = useState<null | HTMLElement>(null);
   const [newTransportDialogOpen, setNewTransportDialogOpen] = useState(false);
-  const [newTransportType, setNewTransportType] = useState<"system" | "external" | null>(null);
+  const [newTransportType, setNewTransportType] = useState<'system' | 'external' | null>(null);
 
   const [creatingTransportRequest, setCreatingTransportRequest] = useState(false);
 
@@ -815,15 +815,15 @@ const TransportRequests: React.FC = () => {
   const [packageCounts, setPackageCounts] = useState<Record<string, number>>({});
 
   // States for new transport request fields
-  const [transportStatus, setTransportStatus] = useState("Chờ xác nhận");
-  const [shippingStatus, setShippingStatus] = useState("Đã báo kiện");
-  const [department, setDepartment] = useState("");
+  const [transportStatus, setTransportStatus] = useState('Chờ xác nhận');
+  const [shippingStatus, setShippingStatus] = useState('Đã báo kiện');
+  const [department, setDepartment] = useState('');
   const [requestDate, setRequestDate] = useState(() => {
     const now = new Date();
-    return `${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString().padStart(2, "0")}/${now.getFullYear()}`;
+    return `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
   });
-  const [hasLuggage, setHasLuggage] = useState("Không vali");
-  const [createdBy, setCreatedBy] = useState("");
+  const [hasLuggage, setHasLuggage] = useState('Không vali');
+  const [createdBy, setCreatedBy] = useState('');
   const [productQuantity, setProductQuantity] = useState(0);
   const [isProductQuantityManuallySet, setIsProductQuantityManuallySet] = useState(false);
 
@@ -843,93 +843,93 @@ const TransportRequests: React.FC = () => {
   >(() =>
     Array.from({ length: 1 }, (_, i) => ({
       id: i + 1,
-      address: "",
-      customerName: "",
-      customerPhone: "",
-      productName: "",
+      address: '',
+      customerName: '',
+      customerPhone: '',
+      productName: '',
       productQuantity: 0,
       productWeight: 0,
       productVolume: 0,
-      notes: "",
+      notes: '',
     }))
   );
 
   // Danh sách phòng ban
   const departments = [
-    { id: "store", name: "Cửa hàng", icon: "🏪" },
-    { id: "operations", name: "Vận hành", icon: "⚙️" },
-    { id: "b2b", name: "B2B", icon: "🏢" },
-    { id: "warranty", name: "Bảo hành", icon: "🔧" },
-    { id: "marketing", name: "Marketing", icon: "📢" },
-    { id: "logistics", name: "Kho vận", icon: "📦" },
-    { id: "hr", name: "Nhân sự", icon: "👥" },
-    { id: "it", name: "IT", icon: "💻" },
-    { id: "merchandise", name: "Ngành hàng", icon: "📋" },
-    { id: "livestream", name: "Livestream", icon: "📺" },
-    { id: "bod", name: "BOD", icon: "👑" },
-    { id: "other", name: "Khác", icon: "🔄" },
+    { id: 'store', name: 'Cửa hàng', icon: '🏪' },
+    { id: 'operations', name: 'Vận hành', icon: '⚙️' },
+    { id: 'b2b', name: 'B2B', icon: '🏢' },
+    { id: 'warranty', name: 'Bảo hành', icon: '🔧' },
+    { id: 'marketing', name: 'Marketing', icon: '📢' },
+    { id: 'logistics', name: 'Kho vận', icon: '📦' },
+    { id: 'hr', name: 'Nhân sự', icon: '👥' },
+    { id: 'it', name: 'IT', icon: '💻' },
+    { id: 'merchandise', name: 'Ngành hàng', icon: '📋' },
+    { id: 'livestream', name: 'Livestream', icon: '📺' },
+    { id: 'bod', name: 'BOD', icon: '👑' },
+    { id: 'other', name: 'Khác', icon: '🔄' },
   ];
 
   // State cho snackbar thông báo
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
-    severity: "success" | "error" | "warning" | "info";
+    severity: 'success' | 'error' | 'warning' | 'info';
   }>({
     open: false,
-    message: "",
-    severity: "info",
+    message: '',
+    severity: 'info',
   });
 
   // State cho dialog thêm điểm nguồn
   const [showAddLocationDialog, setShowAddLocationDialog] = useState(false);
-  const [addLocationType, setAddLocationType] = useState<"system" | "temporary" | null>(null);
+  const [addLocationType, setAddLocationType] = useState<'system' | 'temporary' | null>(null);
   const [savingLocation, setSavingLocation] = useState(false);
 
   // Constants cho form thêm điểm nguồn hệ thống
   const AVATAR_OPTIONS = [
-    { value: "🏢", label: "🏢 Tòa nhà" },
-    { value: "🏪", label: "🏪 Cửa hàng" },
-    { value: "🏭", label: "🏭 Nhà máy" },
-    { value: "🏠", label: "🏠 Nhà ở" },
-    { value: "🏢", label: "🏢 Văn phòng" },
-    { value: "🏬", label: "🏬 Trung tâm thương mại" },
-    { value: "🏗️", label: "🏗️ Công trường" },
-    { value: "🚚", label: "🚚 Kho vận" },
+    { value: '🏢', label: '🏢 Tòa nhà' },
+    { value: '🏪', label: '🏪 Cửa hàng' },
+    { value: '🏭', label: '🏭 Nhà máy' },
+    { value: '🏠', label: '🏠 Nhà ở' },
+    { value: '🏢', label: '🏢 Văn phòng' },
+    { value: '🏬', label: '🏬 Trung tâm thương mại' },
+    { value: '🏗️', label: '🏗️ Công trường' },
+    { value: '🚚', label: '🚚 Kho vận' },
   ];
 
   const CATEGORY_OPTIONS = [
-    "Kho hàng",
-    "Cửa hàng",
-    "Nhà máy",
-    "Văn phòng",
-    "Trung tâm thương mại",
-    "Công trường",
-    "Kho vận",
-    "Khác",
+    'Kho hàng',
+    'Cửa hàng',
+    'Nhà máy',
+    'Văn phòng',
+    'Trung tâm thương mại',
+    'Công trường',
+    'Kho vận',
+    'Khác',
   ];
 
-  const PROVINCE_OPTIONS = ["TP. Hồ Chí Minh", "Hà Nội", "Đà Nẵng", "Cần Thơ", "Hải Phòng", "Khác"];
+  const PROVINCE_OPTIONS = ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng', 'Khác'];
 
   // State cho form thêm điểm nguồn hệ thống
   const [newSystemLocation, setNewSystemLocation] = useState({
-    code: "",
-    avatar: "🏢",
-    category: "Cửa hàng",
-    subcategory: "",
-    address: "",
-    ward: "",
-    district: "",
-    province: "TP. Hồ Chí Minh",
-    note: "",
+    code: '',
+    avatar: '🏢',
+    category: 'Cửa hàng',
+    subcategory: '',
+    address: '',
+    ward: '',
+    district: '',
+    province: 'TP. Hồ Chí Minh',
+    note: '',
   });
 
   // State cho form thêm điểm nguồn tạm
   const [newTemporaryLocation, setNewTemporaryLocation] = useState({
-    address: "",
-    ward: "",
-    district: "",
-    province: "",
+    address: '',
+    ward: '',
+    district: '',
+    province: '',
   });
 
   // State cho việc quản lý điểm dừng
@@ -954,11 +954,11 @@ const TransportRequests: React.FC = () => {
   const [pricingNotification, setPricingNotification] = useState<{
     show: boolean;
     message: string;
-    type: "info" | "success" | "warning";
+    type: 'info' | 'success' | 'warning';
   }>({
     show: false,
-    message: "",
-    type: "info",
+    message: '',
+    type: 'info',
   });
 
   // Sử dụng custom hook cho việc tính khoảng cách
@@ -974,29 +974,29 @@ const TransportRequests: React.FC = () => {
 
   // Utility functions
   const getVietnamTime = (): Date => {
-    return new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
+    return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
   };
 
   // Validation functions
   const validateVietnamesePhone = (phone: string): boolean => {
     // Format: 0xx-xxx-xxxx hoặc 0xxxxxxxxx
     const phoneRegex = /^0[3|5|7|8|9][0-9]{8}$/;
-    return phoneRegex.test(phone.replace(/[-\s]/g, ""));
+    return phoneRegex.test(phone.replace(/[-\s]/g, ''));
   };
 
   const validateVehiclePlate = (plate: string): boolean => {
     // Format: 51A-12345 hoặc 51A12345 (biển số Việt Nam)
     const plateRegex = /^[0-9]{2}[A-Z][0-9]{4,5}$/;
-    return plateRegex.test(plate.replace(/[-\s]/g, "").toUpperCase());
+    return plateRegex.test(plate.replace(/[-\s]/g, '').toUpperCase());
   };
 
   // Helper function to format numbers with thousand separators
   const formatNumber = (value: number | string): string => {
-    const numValue = typeof value === "string" ? Number(value) || 0 : value;
+    const numValue = typeof value === 'string' ? Number(value) || 0 : value;
 
     // Ensure consistent formatting for Vietnamese locale
     // Vietnamese uses dots as thousand separators and commas as decimal separators
-    return numValue.toLocaleString("vi-VN", {
+    return numValue.toLocaleString('vi-VN', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     });
@@ -1004,10 +1004,10 @@ const TransportRequests: React.FC = () => {
 
   // Helper function to format decimal numbers with Vietnamese locale
   const formatDecimal = (value: number | string, decimals: number = 1): string => {
-    const numValue = typeof value === "string" ? Number(value) || 0 : value;
+    const numValue = typeof value === 'string' ? Number(value) || 0 : value;
 
     // Format with Vietnamese locale (dots for thousands, commas for decimals)
-    return numValue.toLocaleString("vi-VN", {
+    return numValue.toLocaleString('vi-VN', {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });
@@ -1016,10 +1016,10 @@ const TransportRequests: React.FC = () => {
   // Helper function to parse formatted number back to number
   const parseFormattedNumber = (value: string): number => {
     // Remove all non-digit characters except decimal point, comma, and minus sign
-    const cleanedValue = value.replace(/[^\d.,-]/g, "");
+    const cleanedValue = value.replace(/[^\d.,-]/g, '');
 
     // If empty, return 0
-    if (!cleanedValue || cleanedValue === "-") {
+    if (!cleanedValue || cleanedValue === '-') {
       return 0;
     }
 
@@ -1033,46 +1033,46 @@ const TransportRequests: React.FC = () => {
     if (commaCount > 1 || dotCount > 1) {
       // Multiple separators - treat as thousand separators
       // Remove all separators and parse as whole number
-      const normalizedValue = cleanedValue.replace(/[.,]/g, "");
+      const normalizedValue = cleanedValue.replace(/[.,]/g, '');
       return Number(normalizedValue) || 0;
     }
 
     // Single separator case
-    if (cleanedValue.includes(",") && cleanedValue.includes(".")) {
+    if (cleanedValue.includes(',') && cleanedValue.includes('.')) {
       // Both separators present - determine which is decimal
-      const lastComma = cleanedValue.lastIndexOf(",");
-      const lastDot = cleanedValue.lastIndexOf(".");
+      const lastComma = cleanedValue.lastIndexOf(',');
+      const lastDot = cleanedValue.lastIndexOf('.');
 
       if (lastComma > lastDot) {
         // Comma is decimal separator
-        const normalizedValue = cleanedValue.replace(/\./g, "").replace(",", ".");
+        const normalizedValue = cleanedValue.replace(/\./g, '').replace(',', '.');
         return Number(normalizedValue) || 0;
       } else {
         // Dot is decimal separator
-        const normalizedValue = cleanedValue.replace(/,/g, "");
+        const normalizedValue = cleanedValue.replace(/,/g, '');
         return Number(normalizedValue) || 0;
       }
-    } else if (cleanedValue.includes(",")) {
+    } else if (cleanedValue.includes(',')) {
       // Only comma - check if it's decimal or thousand separator
-      const parts = cleanedValue.split(",");
+      const parts = cleanedValue.split(',');
       if (parts.length === 2 && parts[1].length <= 2) {
         // Likely decimal separator
-        const normalizedValue = cleanedValue.replace(",", ".");
+        const normalizedValue = cleanedValue.replace(',', '.');
         return Number(normalizedValue) || 0;
       } else {
         // Likely thousand separator
-        const normalizedValue = cleanedValue.replace(/,/g, "");
+        const normalizedValue = cleanedValue.replace(/,/g, '');
         return Number(normalizedValue) || 0;
       }
-    } else if (cleanedValue.includes(".")) {
+    } else if (cleanedValue.includes('.')) {
       // Only dot - check if it's decimal or thousand separator
-      const parts = cleanedValue.split(".");
+      const parts = cleanedValue.split('.');
       if (parts.length === 2 && parts[1].length <= 2) {
         // Likely decimal separator
         return Number(cleanedValue) || 0;
       } else {
         // Likely thousand separator
-        const normalizedValue = cleanedValue.replace(/\./g, "");
+        const normalizedValue = cleanedValue.replace(/\./g, '');
         return Number(normalizedValue) || 0;
       }
     }
@@ -1132,8 +1132,8 @@ const TransportRequests: React.FC = () => {
       if (currentStopCount >= 10) {
         setSnackbar({
           open: true,
-          message: "⚠️ Đã đạt tối đa 10 điểm dừng. Không thể thêm điểm dừng mới!",
-          severity: "warning",
+          message: '⚠️ Đã đạt tối đa 10 điểm dừng. Không thể thêm điểm dừng mới!',
+          severity: 'warning',
         });
         return;
       }
@@ -1144,7 +1144,7 @@ const TransportRequests: React.FC = () => {
       // Tìm tất cả phiếu có cùng địa chỉ
       const allTransfersForAddress = transfers.filter((t) => t.deliveryAddress === address);
 
-      console.log("🔍 DEBUG - Creating stopPoint:", {
+      console.log('🔍 DEBUG - Creating stopPoint:', {
         newStopKey,
         address,
         allTransfersForAddress: allTransfersForAddress.map((t) => ({
@@ -1176,19 +1176,19 @@ const TransportRequests: React.FC = () => {
   // Tính chi phí ước tính dựa trên dữ liệu sheet
   // Note: getSelectedCarrierInfo will be defined after groupedCarriers
   const calculateEstimatedCost = useCallback(() => {
-    console.log("🔍 calculateEstimatedCost called");
+    console.log('🔍 calculateEstimatedCost called');
 
     // Get carrier info inline to avoid dependency on getSelectedCarrierInfo
     if (!newTransportForm.carrierName || !newTransportForm.pricingMethod) {
-      console.log("❌ No carrier found, returning 0");
+      console.log('❌ No carrier found, returning 0');
       return 0;
     }
 
     // Map form format to sheet format for comparison
     const pricingMethodMap: { [key: string]: string } = {
-      perKm: "PER_KM",
-      perM3: "PER_M3",
-      perTrip: "PER_TRIP",
+      perKm: 'PER_KM',
+      perM3: 'PER_M3',
+      perTrip: 'PER_TRIP',
     };
     const sheetPricingMethod =
       pricingMethodMap[newTransportForm.pricingMethod] || newTransportForm.pricingMethod;
@@ -1199,9 +1199,9 @@ const TransportRequests: React.FC = () => {
         c.pricingMethod === sheetPricingMethod &&
         (!newTransportForm.vehicleType || c.vehicleTypes === newTransportForm.vehicleType)
     );
-    console.log("🔍 carrier:", carrier);
+    console.log('🔍 carrier:', carrier);
     if (!carrier) {
-      console.log("❌ No carrier found, returning 0");
+      console.log('❌ No carrier found, returning 0');
       return 0;
     }
 
@@ -1213,7 +1213,7 @@ const TransportRequests: React.FC = () => {
     const totalStops = selectedStopPoints.size;
 
     // Sử dụng pricing method từ form (đã là form format)
-    const hookPricingMethod = newTransportForm.pricingMethod || "perKm";
+    const hookPricingMethod = newTransportForm.pricingMethod || 'perKm';
 
     // Tính tổng khoảng cách từ stopPointDistances
     const totalDistance = Object.values(stopPointDistances).reduce(
@@ -1221,14 +1221,14 @@ const TransportRequests: React.FC = () => {
       0
     );
 
-    console.log("🔍 DEBUG - Cost calculation inputs:");
-    console.log("  - totalDistance from stopPointDistances:", totalDistance);
-    console.log("  - stopPointDistances:", stopPointDistances);
-    console.log("  - totalStops:", totalStops);
-    console.log("  - totalVolume:", totalVolume);
-    console.log("  - pricingMethod:", hookPricingMethod);
-    console.log("  - baseRate:", newTransportForm.baseRate);
-    console.log("  - pricePerKm:", newTransportForm.pricePerKm);
+    console.log('🔍 DEBUG - Cost calculation inputs:');
+    console.log('  - totalDistance from stopPointDistances:', totalDistance);
+    console.log('  - stopPointDistances:', stopPointDistances);
+    console.log('  - totalStops:', totalStops);
+    console.log('  - totalVolume:', totalVolume);
+    console.log('  - pricingMethod:', hookPricingMethod);
+    console.log('  - baseRate:', newTransportForm.baseRate);
+    console.log('  - pricePerKm:', newTransportForm.pricePerKm);
 
     // Sử dụng hook để tính toán
     const costBreakdown = calculateCost({
@@ -1274,15 +1274,15 @@ const TransportRequests: React.FC = () => {
     requestId: string;
     rowIndex: number;
   }> => {
-    const SHEET_ID = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+    const SHEET_ID = '18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As';
 
     try {
       const response = await fetch(
         `/api/transport-requests/generate-id?spreadsheetId=${encodeURIComponent(SHEET_ID)}`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
@@ -1296,7 +1296,7 @@ const TransportRequests: React.FC = () => {
       const data = await response.json();
 
       if (!data.requestId || !data.rowIndex) {
-        throw new Error("Invalid response: missing requestId or rowIndex");
+        throw new Error('Invalid response: missing requestId or rowIndex');
       }
 
       return {
@@ -1304,7 +1304,7 @@ const TransportRequests: React.FC = () => {
         rowIndex: data.rowIndex,
       };
     } catch (error) {
-      console.error("Error generating request ID:", error);
+      console.error('Error generating request ID:', error);
       throw error;
     }
   };
@@ -1319,7 +1319,7 @@ const TransportRequests: React.FC = () => {
 
       // Validate response
       if (!requestId || !rowIndex) {
-        throw new Error("Không thể tạo mã yêu cầu. Vui lòng thử lại.");
+        throw new Error('Không thể tạo mã yêu cầu. Vui lòng thử lại.');
       }
 
       // Save to state
@@ -1329,34 +1329,34 @@ const TransportRequests: React.FC = () => {
       // Reset form to initial state
       setNewTransportForm({
         // Thông tin cơ bản
-        pickupLocation: "",
+        pickupLocation: '',
         selectedTransfers: new Set<string>(),
-        status: "in_transit",
-        note: "",
+        status: 'in_transit',
+        note: '',
 
         // New transport request fields
-        originId: "",
+        originId: '',
         destinationIds: [],
 
         // Thông tin vận chuyển
-        carrierName: "",
-        carrierId: "",
-        pricingMethod: "perKm" as "perKm" | "perM3" | "perTrip",
-        vehicleType: "",
+        carrierName: '',
+        carrierId: '',
+        pricingMethod: 'perKm' as 'perKm' | 'perM3' | 'perTrip',
+        vehicleType: '',
         estimatedCost: 0,
 
         // Thông tin tài xế
-        driverId: "",
-        driverName: "",
-        driverPhone: "",
-        driverLicense: "",
+        driverId: '',
+        driverName: '',
+        driverPhone: '',
+        driverLicense: '',
 
         // Hình ảnh và phòng ban
-        loadingImages: "",
-        department: "",
+        loadingImages: '',
+        department: '',
 
         // Định giá và phí phụ
-        serviceArea: "",
+        serviceArea: '',
         pricePerKm: 0,
         pricePerM3: 0,
         pricePerTrip: 0,
@@ -1375,16 +1375,16 @@ const TransportRequests: React.FC = () => {
       setSnackbar({
         open: true,
         message: `✅ Đã tạo mã yêu cầu mới: ${requestId}`,
-        severity: "success",
+        severity: 'success',
       });
     } catch (error) {
-      console.error("Failed to create new request:", error);
+      console.error('Failed to create new request:', error);
 
       // Show error message using snackbar
       setSnackbar({
         open: true,
-        message: `❌ Lỗi: ${error instanceof Error ? error.message : "Không thể tạo yêu cầu mới. Vui lòng thử lại."}`,
-        severity: "error",
+        message: `❌ Lỗi: ${error instanceof Error ? error.message : 'Không thể tạo yêu cầu mới. Vui lòng thử lại.'}`,
+        severity: 'error',
       });
 
       // Reset state on error
@@ -1405,7 +1405,7 @@ const TransportRequests: React.FC = () => {
       const response = await fetch(
         `/api/transport-requests/${requestId}?spreadsheetId=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As`,
         {
-          method: "DELETE",
+          method: 'DELETE',
           signal: controller.signal,
         }
       );
@@ -1418,7 +1418,7 @@ const TransportRequests: React.FC = () => {
 
         // If it's a quota error, we'll just log it and continue
         // The user said they can still load data despite quota errors
-        if (response.status === 429 || errorData.error?.includes("Quota exceeded")) {
+        if (response.status === 429 || errorData.error?.includes('Quota exceeded')) {
           // Quota limit reached, but continuing (user confirmed data still loads)
           return; // Silently continue
         }
@@ -1428,16 +1428,16 @@ const TransportRequests: React.FC = () => {
 
       console.log(`✅ Đã xóa transport request: ${requestId}`);
     } catch (error) {
-      if (error.name === "AbortError") {
+      if (error.name === 'AbortError') {
         console.warn(`⏰ DELETE request timeout for ${requestId}`);
         // For timeout, we'll continue since the request might still be processing
         return;
       }
 
-      console.error("Error deleting transport request:", error);
+      console.error('Error deleting transport request:', error);
 
       // For range parsing errors (Google Sheets API issues), continue silently
-      if (error.message.includes("Unable to parse range")) {
+      if (error.message.includes('Unable to parse range')) {
         console.log(`💡 Sheet API issue, but continuing (likely quota/range issue)`);
         return;
       }
@@ -1461,34 +1461,34 @@ const TransportRequests: React.FC = () => {
     // Reset form state
     setNewTransportForm({
       // Thông tin cơ bản
-      pickupLocation: "",
+      pickupLocation: '',
       selectedTransfers: new Set<string>(),
-      status: "in_transit",
-      note: "",
+      status: 'in_transit',
+      note: '',
 
       // New transport request fields
-      originId: "",
+      originId: '',
       destinationIds: [],
 
       // Thông tin vận chuyển
-      carrierName: "",
-      carrierId: "",
-      pricingMethod: "perKm" as "perKm" | "perM3" | "perTrip",
-      vehicleType: "",
+      carrierName: '',
+      carrierId: '',
+      pricingMethod: 'perKm' as 'perKm' | 'perM3' | 'perTrip',
+      vehicleType: '',
       estimatedCost: 0,
 
       // Thông tin tài xế
-      driverId: "",
-      driverName: "",
-      driverPhone: "",
-      driverLicense: "",
+      driverId: '',
+      driverName: '',
+      driverPhone: '',
+      driverLicense: '',
 
       // Hình ảnh và phòng ban
-      loadingImages: "",
-      department: "",
+      loadingImages: '',
+      department: '',
 
       // Định giá và phí phụ
-      serviceArea: "",
+      serviceArea: '',
       pricePerKm: 0,
       pricePerM3: 0,
       pricePerTrip: 0,
@@ -1521,12 +1521,12 @@ const TransportRequests: React.FC = () => {
           await deleteTransportRequest(requestToDelete);
           console.log(`✅ Đã xóa thành công request ${requestToDelete}`);
         } catch (error) {
-          console.error("❌ Lỗi khi xóa request:", error);
-          console.log("💡 Có thể cần xóa thủ công trên sheet nếu cần");
+          console.error('❌ Lỗi khi xóa request:', error);
+          console.log('💡 Có thể cần xóa thủ công trên sheet nếu cần');
         }
       }, 500); // Wait 500ms for dialog to fully close
     } else {
-      console.log("ℹ️ Không có request nào cần xóa", {
+      console.log('ℹ️ Không có request nào cần xóa', {
         requestToDelete,
         isNewRequest,
       });
@@ -1537,26 +1537,26 @@ const TransportRequests: React.FC = () => {
   const fetchTransfers = async () => {
     setLoading(true);
     try {
-      const SHEET_ID = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+      const SHEET_ID = '18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As';
       const response = await fetch(`/api/transfers?spreadsheetId=${encodeURIComponent(SHEET_ID)}`);
       if (response.ok) {
         const data = await response.json();
         const filtered = (Array.isArray(data) ? data : [])
           .filter((item) => {
-            const status = String(item.transportStatus || item.TransportStatus || "")
+            const status = String(item.transportStatus || item.TransportStatus || '')
               .trim()
               .toLowerCase();
-            return status === "chờ chuyển giao";
+            return status === 'chờ chuyển giao';
           })
           .map((item) => {
             if (!item) return item;
             const normalizeNumber = (value: unknown) => {
-              if (typeof value === "number") return value;
-              if (typeof value !== "string") return Number(value) || 0;
-              const clean = value.replace(/\./g, "").replace(",", ".");
+              if (typeof value === 'number') return value;
+              if (typeof value !== 'string') return Number(value) || 0;
+              const clean = value.replace(/\./g, '').replace(',', '.');
               return Number(clean) || 0;
             };
-            const normalizeString = (value: unknown, fallback = "") =>
+            const normalizeString = (value: unknown, fallback = '') =>
               (value == null ? fallback : String(value)).trim();
 
             const totalPackages = normalizeNumber(item.totalPackages);
@@ -1573,16 +1573,16 @@ const TransportRequests: React.FC = () => {
               id: normalizeString(item.transfer_id) || normalizeString(item.id),
               requestCode: normalizeString(item.orderCode),
               transferId: normalizeString(item.transfer_id) || normalizeString(item.id),
-              customerName: normalizeString(item.employee, "Không xác định"),
+              customerName: normalizeString(item.employee, 'Không xác định'),
               customerPhone: normalizeString(item.customerPhone),
               pickupLocation: normalizeString(item.source),
               deliveryLocation: normalizeString(item.dest),
-              pickupAddress: normalizeString(item.source) || "Kho Trung Tâm",
+              pickupAddress: normalizeString(item.source) || 'Kho Trung Tâm',
               deliveryAddress,
               requestDate: normalizeString(item.date),
               pickupDate: normalizeString(item.date),
               deliveryDate: normalizeString(item.date),
-              cargoType: normalizeString(item.hasVali, "Hàng hóa"),
+              cargoType: normalizeString(item.hasVali, 'Hàng hóa'),
               status: normalizeString(item.transportStatus),
               note: normalizeString(item.note),
               source_id: normalizeString(item.source_id),
@@ -1624,11 +1624,11 @@ const TransportRequests: React.FC = () => {
         throw new Error(`API error: ${response.status} ${response.statusText}`);
       }
     } catch (error) {
-      console.error("❌ Lỗi khi load dữ liệu từ sheet Transfers:", error);
+      console.error('❌ Lỗi khi load dữ liệu từ sheet Transfers:', error);
       setSnackbar({
         open: true,
-        message: `Lỗi load dữ liệu: ${error instanceof Error ? error.message : "Unknown error"}`,
-        severity: "error",
+        message: `Lỗi load dữ liệu: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        severity: 'error',
       });
     } finally {
       setLoading(false);
@@ -1638,23 +1638,23 @@ const TransportRequests: React.FC = () => {
   // Fetch locations
   const fetchLocations = async () => {
     try {
-      console.log("🔄 Fetching locations for distance calculation...");
-      const response = await fetch("/api/locations");
+      console.log('🔄 Fetching locations for distance calculation...');
+      const response = await fetch('/api/locations');
       if (response.ok) {
         const data = await response.json();
         setLocations(data);
         console.log(`✅ Locations loaded: ${data.length} locations`);
       } else {
-        console.error("❌ Failed to fetch locations:", response.status);
+        console.error('❌ Failed to fetch locations:', response.status);
       }
     } catch (error) {
-      console.error("❌ Error fetching locations:", error);
+      console.error('❌ Error fetching locations:', error);
     }
   };
 
   // Filter active locations only
   const activeLocations = useMemo(() => {
-    const filtered = locations.filter((location) => location.status === "active");
+    const filtered = locations.filter((location) => location.status === 'active');
     console.log(`📍 Locations: ${locations.length} total, ${filtered.length} active`);
     return filtered;
   }, [locations]);
@@ -1672,9 +1672,9 @@ const TransportRequests: React.FC = () => {
   const formatFullAddress = useCallback(
     (address?: string, ward?: string, district?: string, province?: string) => {
       const parts = [address, ward, district, province]
-        .map((part) => (part || "").trim())
+        .map((part) => (part || '').trim())
         .filter(Boolean);
-      return parts.join(", ");
+      return parts.join(', ');
     },
     []
   );
@@ -1683,29 +1683,29 @@ const TransportRequests: React.FC = () => {
   const sortedActiveLocations = useMemo(() => {
     const sorted = [...activeLocations].sort((a, b) => {
       // Priority 1: Kho trung tâm (KTT) lên đầu - tỷ lệ sử dụng cao nhất
-      const aIsCentral = a.code.includes("KTT");
-      const bIsCentral = b.code.includes("KTT");
+      const aIsCentral = a.code.includes('KTT');
+      const bIsCentral = b.code.includes('KTT');
 
       if (aIsCentral && !bIsCentral) return -1;
       if (!aIsCentral && bIsCentral) return 1;
 
       // Priority 2: Cửa hàng - tỷ lệ sử dụng cao
-      const aIsStore = a.category === "Cửa hàng";
-      const bIsStore = b.category === "Cửa hàng";
+      const aIsStore = a.category === 'Cửa hàng';
+      const bIsStore = b.category === 'Cửa hàng';
 
       if (aIsStore && !bIsStore) return -1;
       if (!aIsStore && bIsStore) return 1;
 
       // Priority 3: Kho hàng hệ thống - tỷ lệ sử dụng thấp
-      const aIsWarehouse = a.category === "Kho hàng hệ thống";
-      const bIsWarehouse = b.category === "Kho hàng hệ thống";
+      const aIsWarehouse = a.category === 'Kho hàng hệ thống';
+      const bIsWarehouse = b.category === 'Kho hàng hệ thống';
 
       if (aIsWarehouse && !bIsWarehouse) return -1;
       if (!aIsWarehouse && bIsWarehouse) return 1;
 
       // Priority 4: Hội chợ - tỷ lệ sử dụng thấp nhất
-      const aIsFair = a.category === "Hội chợ";
-      const bIsFair = b.category === "Hội chợ";
+      const aIsFair = a.category === 'Hội chợ';
+      const bIsFair = b.category === 'Hội chợ';
 
       if (aIsFair && !bIsFair) return -1;
       if (!aIsFair && bIsFair) return 1;
@@ -1732,10 +1732,10 @@ const TransportRequests: React.FC = () => {
       category: string,
       extra?: Partial<Location>
     ) => {
-      const rawCode = (fallbackCode || "").trim();
+      const rawCode = (fallbackCode || '').trim();
       if (!rawCode) return;
 
-      const normalizedId = (rawId != null ? String(rawId).trim() : "") || rawCode;
+      const normalizedId = (rawId != null ? String(rawId).trim() : '') || rawCode;
 
       const existingSystemLocation = locationById.get(normalizedId);
       if (existingSystemLocation) {
@@ -1756,21 +1756,21 @@ const TransportRequests: React.FC = () => {
         id: normalizedId,
         code: rawCode,
         address: addressCandidate || rawCode,
-        category: category || "Điểm từ phiếu chờ chuyển giao",
-        subcategory: "",
-        avatar: "🚚",
-        status: "active",
-        ward: extra?.ward || "",
-        district: extra?.district || "",
-        province: extra?.province || "",
-        note: extra?.note || "Sinh tự động từ phiếu chờ chuyển giao",
+        category: category || 'Điểm từ phiếu chờ chuyển giao',
+        subcategory: '',
+        avatar: '🚚',
+        status: 'active',
+        ward: extra?.ward || '',
+        district: extra?.district || '',
+        province: extra?.province || '',
+        note: extra?.note || 'Sinh tự động từ phiếu chờ chuyển giao',
       });
     };
 
     transfers.forEach((transfer) => {
       const sourceId = transfer.source_id;
       const systemSource = sourceId ? locationById.get(String(sourceId).trim()) : undefined;
-      const sourceLabel = (transfer.source || systemSource?.code || "").trim();
+      const sourceLabel = (transfer.source || systemSource?.code || '').trim();
       const sourceAddress =
         systemSource?.address ||
         formatFullAddress(
@@ -1782,19 +1782,19 @@ const TransportRequests: React.FC = () => {
 
       addLocationFromTransfer(
         sourceId,
-        sourceLabel || "Điểm nguồn chưa rõ",
-        sourceAddress || sourceLabel || "Điểm nguồn chưa rõ",
-        systemSource?.category || "Điểm nguồn (phiếu chờ chuyển giao)",
+        sourceLabel || 'Điểm nguồn chưa rõ',
+        sourceAddress || sourceLabel || 'Điểm nguồn chưa rõ',
+        systemSource?.category || 'Điểm nguồn (phiếu chờ chuyển giao)',
         {
-          ward: systemSource?.ward || transfer.ward || "",
-          district: systemSource?.district || transfer.district || "",
-          province: systemSource?.province || transfer.province || "",
+          ward: systemSource?.ward || transfer.ward || '',
+          district: systemSource?.district || transfer.district || '',
+          province: systemSource?.province || transfer.province || '',
         }
       );
 
       const destId = transfer.dest_id;
       const systemDest = destId ? locationById.get(String(destId).trim()) : undefined;
-      const destLabel = (transfer.dest || systemDest?.code || "").trim();
+      const destLabel = (transfer.dest || systemDest?.code || '').trim();
       const destAddress =
         systemDest?.address ||
         formatFullAddress(
@@ -1806,13 +1806,13 @@ const TransportRequests: React.FC = () => {
 
       addLocationFromTransfer(
         destId,
-        destLabel || "Điểm đích chưa rõ",
-        destAddress || destLabel || "Điểm đích chưa rõ",
-        systemDest?.category || "Điểm đích (phiếu chờ chuyển giao)",
+        destLabel || 'Điểm đích chưa rõ',
+        destAddress || destLabel || 'Điểm đích chưa rõ',
+        systemDest?.category || 'Điểm đích (phiếu chờ chuyển giao)',
         {
-          ward: systemDest?.ward || transfer.ward || "",
-          district: systemDest?.district || transfer.district || "",
-          province: systemDest?.province || transfer.province || "",
+          ward: systemDest?.ward || transfer.ward || '',
+          district: systemDest?.district || transfer.district || '',
+          province: systemDest?.province || transfer.province || '',
         }
       );
     });
@@ -1849,7 +1849,7 @@ const TransportRequests: React.FC = () => {
     const groups: Record<string, Location[]> = {};
 
     selectableLocations.forEach((location) => {
-      const category = location.category || "Khác";
+      const category = location.category || 'Khác';
       if (!groups[category]) {
         groups[category] = [];
       }
@@ -1867,8 +1867,8 @@ const TransportRequests: React.FC = () => {
   }, [selectableLocations]);
 
   const formatLocationLabel = useCallback((location: Location) => {
-    const code = (location.code || "").trim();
-    let address = (location.address || "").trim();
+    const code = (location.code || '').trim();
+    let address = (location.address || '').trim();
 
     if (code && address) {
       const normalizedCode = code.toLowerCase();
@@ -1883,7 +1883,7 @@ const TransportRequests: React.FC = () => {
       ) {
         address = address
           .slice(code.length)
-          .replace(/^[\s\-–,]+/, "")
+          .replace(/^[\s\-–,]+/, '')
           .trim();
       } else if (normalizedAddress.startsWith(normalizedCode)) {
         address = address.slice(code.length).trim();
@@ -1892,7 +1892,7 @@ const TransportRequests: React.FC = () => {
 
     if (code && address) return `${code} - ${address}`;
     if (code) return code;
-    return address || "";
+    return address || '';
   }, []);
 
   // Auto-select pickup location based on selected transfers
@@ -1927,7 +1927,7 @@ const TransportRequests: React.FC = () => {
         (transfer.source_id && String(transfer.source_id).trim()) ||
         transfer.pickupLocation ||
         transfer.source ||
-        "";
+        '';
       if (pickupLocationKey) {
         pickupCounts[pickupLocationKey] = (pickupCounts[pickupLocationKey] || 0) + 1;
       }
@@ -2015,31 +2015,31 @@ const TransportRequests: React.FC = () => {
   );
 
   // Functions xử lý thêm điểm nguồn
-  const handleAddLocationTypeSelect = (type: "system" | "temporary") => {
+  const handleAddLocationTypeSelect = (type: 'system' | 'temporary') => {
     setAddLocationType(type);
   };
 
   const handleSaveSystemLocation = async () => {
     if (!newSystemLocation.code?.trim()) {
-      alert("Vui lòng nhập mã địa điểm");
+      alert('Vui lòng nhập mã địa điểm');
       return;
     }
 
     setSavingLocation(true);
     try {
-      const SHEET_ID = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+      const SHEET_ID = '18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As';
       const url = `/api/locations?spreadsheetId=${encodeURIComponent(SHEET_ID)}`;
 
       const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           code: newSystemLocation.code,
-          avatar: "🏢",
+          avatar: '🏢',
           category: newSystemLocation.category,
           subcategory: newSystemLocation.subcategory,
           address: newSystemLocation.address,
-          status: "active",
+          status: 'active',
           ward: newSystemLocation.ward,
           district: newSystemLocation.district,
           province: newSystemLocation.province,
@@ -2066,14 +2066,14 @@ const TransportRequests: React.FC = () => {
         setShowAddLocationDialog(false);
         setAddLocationType(null);
 
-        alert("✅ Đã thêm điểm nguồn mới vào hệ thống");
+        alert('✅ Đã thêm điểm nguồn mới vào hệ thống');
       } else {
         const error = await response.json();
-        alert(`Lỗi: ${error.error || "Không thể lưu địa điểm"}`);
+        alert(`Lỗi: ${error.error || 'Không thể lưu địa điểm'}`);
       }
     } catch (error) {
-      console.error("❌ Error saving system location:", error);
-      alert("❌ Lỗi kết nối server");
+      console.error('❌ Error saving system location:', error);
+      alert('❌ Lỗi kết nối server');
     } finally {
       setSavingLocation(false);
     }
@@ -2085,15 +2085,15 @@ const TransportRequests: React.FC = () => {
       const tempLocation: Location = {
         id: `temp-${getVietnamTime().getTime()}`,
         code: `TEMP-${getVietnamTime().getTime()}`,
-        avatar: "",
-        category: "Điểm tạm",
-        subcategory: "",
+        avatar: '',
+        category: 'Điểm tạm',
+        subcategory: '',
         address: newTemporaryLocation.address,
-        status: "active",
+        status: 'active',
         ward: newTemporaryLocation.ward,
         district: newTemporaryLocation.district,
         province: newTemporaryLocation.province,
-        note: "Điểm nguồn tạm thời cho chuyến này",
+        note: 'Điểm nguồn tạm thời cho chuyến này',
       };
 
       // Add to local state temporarily (not saved to sheet)
@@ -2109,10 +2109,10 @@ const TransportRequests: React.FC = () => {
       setShowAddLocationDialog(false);
       setAddLocationType(null);
 
-      alert("✅ Đã thêm điểm nguồn tạm thời");
+      alert('✅ Đã thêm điểm nguồn tạm thời');
     } catch (error) {
-      console.error("❌ Error creating temporary location:", error);
-      alert("❌ Lỗi khi tạo điểm nguồn tạm. Vui lòng thử lại.");
+      console.error('❌ Error creating temporary location:', error);
+      alert('❌ Lỗi khi tạo điểm nguồn tạm. Vui lòng thử lại.');
     }
   };
 
@@ -2120,21 +2120,21 @@ const TransportRequests: React.FC = () => {
     setShowAddLocationDialog(false);
     setAddLocationType(null);
     setNewSystemLocation({
-      code: "",
-      avatar: "🏢",
-      category: "Cửa hàng",
-      subcategory: "",
-      address: "",
-      ward: "",
-      district: "",
-      province: "TP. Hồ Chí Minh",
-      note: "",
+      code: '',
+      avatar: '🏢',
+      category: 'Cửa hàng',
+      subcategory: '',
+      address: '',
+      ward: '',
+      district: '',
+      province: 'TP. Hồ Chí Minh',
+      note: '',
     });
     setNewTemporaryLocation({
-      address: "",
-      ward: "",
-      district: "",
-      province: "",
+      address: '',
+      ward: '',
+      district: '',
+      province: '',
     });
   };
 
@@ -2185,15 +2185,15 @@ const TransportRequests: React.FC = () => {
   // Filter data - Filter trực tiếp trên Transfer data
   const filteredRequests = transfers.filter((transfer) => {
     const matchesSearch =
-      (transfer.orderCode || "").toLowerCase().includes(filters.search.toLowerCase()) ||
-      (transfer.employee || "").toLowerCase().includes(filters.search.toLowerCase()) ||
-      (transfer.source || "").toLowerCase().includes(filters.search.toLowerCase()) ||
-      (transfer.dest || "").toLowerCase().includes(filters.search.toLowerCase());
+      (transfer.orderCode || '').toLowerCase().includes(filters.search.toLowerCase()) ||
+      (transfer.employee || '').toLowerCase().includes(filters.search.toLowerCase()) ||
+      (transfer.source || '').toLowerCase().includes(filters.search.toLowerCase()) ||
+      (transfer.dest || '').toLowerCase().includes(filters.search.toLowerCase());
     const matchesStatus = !filters.status || transfer.transportStatus === filters.status;
     const matchesVehicleType = !filters.vehicleType; // Transfer không có vehicleType
     const matchesCustomerName =
       !filters.customerName ||
-      (transfer.employee || "").toLowerCase().includes(filters.customerName.toLowerCase());
+      (transfer.employee || '').toLowerCase().includes(filters.customerName.toLowerCase());
 
     return matchesSearch && matchesStatus && matchesVehicleType && matchesCustomerName;
   });
@@ -2236,7 +2236,7 @@ const TransportRequests: React.FC = () => {
     const transfersToShow = filteredTransfers.length > 0 ? filteredTransfers : transfers;
 
     transfersToShow.forEach((request) => {
-      const address = request.deliveryAddress || "Địa chỉ không xác định";
+      const address = request.deliveryAddress || 'Địa chỉ không xác định';
       if (!deliveryMap.has(address)) {
         deliveryMap.set(address, {
           address,
@@ -2272,63 +2272,63 @@ const TransportRequests: React.FC = () => {
       return;
     }
 
-    console.log("🔍 Calculating distances...");
+    console.log('🔍 Calculating distances...');
 
     // Đảm bảo locations đã được load
     if (!locations || locations.length === 0) {
-      console.log("🔄 Locations chưa được load, đang fetch...");
+      console.log('🔄 Locations chưa được load, đang fetch...');
       await fetchLocations();
       return; // Sẽ được gọi lại sau khi locations được load
     }
 
-    console.log("🔍 Calculating distances with locations:", locations.length);
+    console.log('🔍 Calculating distances with locations:', locations.length);
 
     // Use the hook's calculateStopDistances function
     await calculateStopDistances(stopPoints, newTransportForm.pickupLocation);
 
-    console.log("✅ Distance calculation initiated");
+    console.log('✅ Distance calculation initiated');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newTransportForm.pickupLocation, selectedStopPoints.size]);
 
   // Test Google Apps Script connectivity
   const testGoogleAppsScript = async () => {
-    console.log("🧪 Testing Google Apps Script connectivity...");
+    console.log('🧪 Testing Google Apps Script connectivity...');
     setSnackbar({
       open: true,
-      message: "🔄 Đang kiểm tra kết nối Google Apps Script...",
-      severity: "info",
+      message: '🔄 Đang kiểm tra kết nối Google Apps Script...',
+      severity: 'info',
     });
 
     try {
-      const { DistanceService } = await import("../../../services/distanceService");
+      const { DistanceService } = await import('../../../services/distanceService');
       const isConnected = await DistanceService.testConnectivity();
 
       if (isConnected) {
         setSnackbar({
           open: true,
-          message: "✅ Google Apps Script hoạt động bình thường!",
-          severity: "success",
+          message: '✅ Google Apps Script hoạt động bình thường!',
+          severity: 'success',
         });
       } else {
         setSnackbar({
           open: true,
-          message: "❌ Google Apps Script không thể kết nối. Vui lòng kiểm tra cấu hình.",
-          severity: "error",
+          message: '❌ Google Apps Script không thể kết nối. Vui lòng kiểm tra cấu hình.',
+          severity: 'error',
         });
       }
     } catch (error) {
-      console.error("❌ Test failed:", error);
+      console.error('❌ Test failed:', error);
       setSnackbar({
         open: true,
-        message: `❌ Lỗi kiểm tra: ${error instanceof Error ? error.message : "Unknown error"}`,
-        severity: "error",
+        message: `❌ Lỗi kiểm tra: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        severity: 'error',
       });
     }
   };
 
   const handleDelete = async (request: TransportRequest) => {
     const identifier =
-      request.id || request.transfer_id || request.requestId || request.requestCode || "";
+      request.id || request.transfer_id || request.requestId || request.requestCode || '';
     if (!identifier) return;
 
     const confirmText = `Bạn có chắc muốn xoá yêu cầu vận chuyển ${identifier}?\n\nHành động này không thể hoàn tác.`;
@@ -2339,12 +2339,12 @@ const TransportRequests: React.FC = () => {
     try {
       const response = await fetch(
         `/api/transport-requests/${encodeURIComponent(identifier)}?spreadsheetId=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As`,
-        { method: "DELETE" }
+        { method: 'DELETE' }
       );
 
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
-        throw new Error(data?.error || "Delete failed");
+        throw new Error(data?.error || 'Delete failed');
       }
 
       // Remove from UI
@@ -2358,14 +2358,14 @@ const TransportRequests: React.FC = () => {
       setSnackbar({
         open: true,
         message: `✅ Đã xóa yêu cầu vận chuyển ${identifier} thành công`,
-        severity: "success",
+        severity: 'success',
       });
     } catch (error) {
-      console.error("Error deleting transport request:", error);
+      console.error('Error deleting transport request:', error);
       setSnackbar({
         open: true,
-        message: `❌ Lỗi khi xóa yêu cầu: ${error instanceof Error ? error.message : "Unknown error"}`,
-        severity: "error",
+        message: `❌ Lỗi khi xóa yêu cầu: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        severity: 'error',
       });
     } finally {
       setDeletingId(null);
@@ -2390,13 +2390,13 @@ const TransportRequests: React.FC = () => {
     setNewTransportMenuAnchor(null);
   };
 
-  const handleNewTransportTypeSelect = (type: "system" | "external") => {
+  const handleNewTransportTypeSelect = (type: 'system' | 'external') => {
     setNewTransportType(type);
     setNewTransportDialogOpen(true);
     handleNewTransportMenuClose();
 
     // Load volume rules for "Từ hệ thống"
-    if (type === "system") {
+    if (type === 'system') {
       loadVolumeRules();
     }
   };
@@ -2407,35 +2407,35 @@ const TransportRequests: React.FC = () => {
     setDestinationSelectOpen(false);
     setNewTransportForm((prev) => ({
       ...prev,
-      originId: "",
+      originId: '',
       destinationIds: [],
-      note: "",
+      note: '',
     }));
     // Reset package counts
     setPackageCounts({});
     // Reset new fields
-    setTransportStatus("Chờ xác nhận");
-    setShippingStatus("Đã báo kiện");
-    setDepartment("");
+    setTransportStatus('Chờ xác nhận');
+    setShippingStatus('Đã báo kiện');
+    setDepartment('');
     setRequestDate(() => {
       const now = new Date();
-      return `${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1).toString().padStart(2, "0")}/${now.getFullYear()}`;
+      return `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()}`;
     });
-    setHasLuggage("Không vali");
+    setHasLuggage('Không vali');
     setProductQuantity(0);
     setIsProductQuantityManuallySet(false);
     // Reset external destinations
     setExternalDestinations(() =>
       Array.from({ length: 1 }, (_, i) => ({
         id: i + 1,
-        address: "",
-        customerName: "",
-        customerPhone: "",
-        productName: "",
+        address: '',
+        customerName: '',
+        customerPhone: '',
+        productName: '',
         productQuantity: 0,
         productWeight: 0,
         productVolume: 0,
-        notes: "",
+        notes: '',
       }))
     );
   };
@@ -2454,7 +2454,7 @@ const TransportRequests: React.FC = () => {
       isLocationInSystem(id)
     );
 
-    if (newTransportType === "system") {
+    if (newTransportType === 'system') {
       // Từ hệ thống: điểm đi và tất cả điểm đến phải trong Locations
       return (
         originInSystem && allDestinationsInSystem && newTransportForm.destinationIds.length > 0
@@ -2468,21 +2468,21 @@ const TransportRequests: React.FC = () => {
   // Load volume rules for package reporting
   const loadVolumeRules = async () => {
     try {
-      const response = await fetch("/api/settings/volume-rules");
+      const response = await fetch('/api/settings/volume-rules');
       if (response.ok) {
         const data = await response.json();
         const mapped = data.map((r: any) => ({
-          id: String(r.id || ""),
-          name: String(r.name || ""),
+          id: String(r.id || ''),
+          name: String(r.name || ''),
           unitVolume: parseFloat(r.unitVolume) || 0,
         }));
         setVolumeRules(mapped);
-        console.log("Loaded volume rules:", mapped);
+        console.log('Loaded volume rules:', mapped);
       } else {
-        console.error("Failed to load volume rules:", response.status);
+        console.error('Failed to load volume rules:', response.status);
       }
     } catch (error) {
-      console.error("Error loading volume rules:", error);
+      console.error('Error loading volume rules:', error);
     }
   };
 
@@ -2492,14 +2492,14 @@ const TransportRequests: React.FC = () => {
     if (!department) {
       setSnackbar({
         open: true,
-        message: "Vui lòng chọn phòng ban sử dụng",
-        severity: "error",
+        message: 'Vui lòng chọn phòng ban sử dụng',
+        severity: 'error',
       });
       return;
     }
 
     // Validation cho số lượng sản phẩm (chỉ cho "Từ hệ thống")
-    if (newTransportType === "system") {
+    if (newTransportType === 'system') {
       const totalPackages = Object.values(packageCounts).reduce(
         (sum, count) => sum + (count || 0),
         0
@@ -2508,19 +2508,19 @@ const TransportRequests: React.FC = () => {
         setSnackbar({
           open: true,
           message: `Số lượng sản phẩm (${productQuantity}) phải lớn hơn hoặc bằng tổng số kiện (${totalPackages})`,
-          severity: "error",
+          severity: 'error',
         });
         return;
       }
     }
 
     // Validation cho "Từ hệ thống"
-    if (newTransportType === "system") {
+    if (newTransportType === 'system') {
       if (!newTransportForm.originId || newTransportForm.destinationIds.length === 0) {
         setSnackbar({
           open: true,
-          message: "Vui lòng chọn đầy đủ điểm đi và điểm đến",
-          severity: "error",
+          message: 'Vui lòng chọn đầy đủ điểm đi và điểm đến',
+          severity: 'error',
         });
         return;
       }
@@ -2528,21 +2528,21 @@ const TransportRequests: React.FC = () => {
       if (newTransportForm.originId === newTransportForm.destinationIds[0]) {
         setSnackbar({
           open: true,
-          message: "Điểm đi và điểm đến không được trùng nhau",
-          severity: "error",
+          message: 'Điểm đi và điểm đến không được trùng nhau',
+          severity: 'error',
         });
         return;
       }
     }
 
     // Validation cho "Ngoài hệ thống"
-    if (newTransportType === "external") {
-      const filledDestinations = externalDestinations.filter((dest) => dest.address.trim() !== "");
+    if (newTransportType === 'external') {
+      const filledDestinations = externalDestinations.filter((dest) => dest.address.trim() !== '');
       if (filledDestinations.length === 0) {
         setSnackbar({
           open: true,
-          message: "Vui lòng nhập địa chỉ điểm đến",
-          severity: "error",
+          message: 'Vui lòng nhập địa chỉ điểm đến',
+          severity: 'error',
         });
         return;
       }
@@ -2552,20 +2552,20 @@ const TransportRequests: React.FC = () => {
       setSnackbar({
         open: true,
         message:
-          newTransportType === "system"
-            ? "Tất cả địa điểm phải nằm trong hệ thống (Locations sheet)"
-            : "Ít nhất 1 địa điểm phải nằm ngoài hệ thống",
-        severity: "warning",
+          newTransportType === 'system'
+            ? 'Tất cả địa điểm phải nằm trong hệ thống (Locations sheet)'
+            : 'Ít nhất 1 địa điểm phải nằm ngoài hệ thống',
+        severity: 'warning',
       });
       return;
     }
 
     setCreatingTransportRequest(true);
     try {
-      const response = await fetch("/api/transport-proposals", {
-        method: "POST",
+      const response = await fetch('/api/transport-proposals', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           type: newTransportType,
@@ -2581,7 +2581,7 @@ const TransportRequests: React.FC = () => {
           createdBy,
           productQuantity,
           // Package information for "Từ hệ thống"
-          ...(newTransportType === "system" && {
+          ...(newTransportType === 'system' && {
             packages: packageCounts,
             totalPackages: Object.values(packageCounts).reduce(
               (sum, count) => sum + (count || 0),
@@ -2593,8 +2593,8 @@ const TransportRequests: React.FC = () => {
             }, 0),
           }),
           // External destinations for "Ngoài hệ thống"
-          ...(newTransportType === "external" && {
-            externalDestinations: externalDestinations.filter((dest) => dest.address.trim() !== ""),
+          ...(newTransportType === 'external' && {
+            externalDestinations: externalDestinations.filter((dest) => dest.address.trim() !== ''),
           }),
         }),
       });
@@ -2602,19 +2602,19 @@ const TransportRequests: React.FC = () => {
       if (response.ok) {
         setSnackbar({
           open: true,
-          message: "Đề nghị vận chuyển đã được tạo thành công!",
-          severity: "success",
+          message: 'Đề nghị vận chuyển đã được tạo thành công!',
+          severity: 'success',
         });
         handleNewTransportDialogClose();
       } else {
-        throw new Error("Failed to create transport proposal");
+        throw new Error('Failed to create transport proposal');
       }
     } catch (error) {
-      console.error("Error creating transport proposal:", error);
+      console.error('Error creating transport proposal:', error);
       setSnackbar({
         open: true,
-        message: "Không thể tạo đề nghị vận chuyển. Vui lòng thử lại.",
-        severity: "error",
+        message: 'Không thể tạo đề nghị vận chuyển. Vui lòng thử lại.',
+        severity: 'error',
       });
     } finally {
       setCreatingTransportRequest(false);
@@ -2623,44 +2623,44 @@ const TransportRequests: React.FC = () => {
 
   function getStatusLabel(status?: string): string {
     if (!status) {
-      return "Chờ chuyển giao";
+      return 'Chờ chuyển giao';
     }
 
-    switch ((status || "").toLowerCase()) {
+    switch ((status || '').toLowerCase()) {
       // === TRẠNG THÁI PHIẾU (4 loại) ===
-      case "đề nghị chuyển kho":
-      case "xuất chuyển kho":
-      case "nhập chuyển kho":
-      case "đã hủy":
+      case 'đề nghị chuyển kho':
+      case 'xuất chuyển kho':
+      case 'nhập chuyển kho':
+      case 'đã hủy':
         return status;
 
       // === TRẠNG THÁI VẬN CHUYỂN (9 loại) ===
-      case "pending":
-      case "chờ xử lý":
-        return "Chờ chuyển giao";
-      case "chờ báo kiện":
-        return "Chờ báo kiện";
-      case "chờ chuyển giao":
-        return "Chờ chuyển giao";
-      case "in_transit":
-      case "đang thực hiện":
-      case "đang chuyển giao":
-      case "đang vận chuyển":
-        return "Đang chuyển giao";
-      case "delivered":
-      case "đã giao hàng":
-      case "đã chuyển giao":
-        return "Đã giao hàng";
-      case "confirmed":
-      case "đã xác nhận":
-        return "Đã xác nhận";
-      case "chờ xác nhận":
-        return "Chờ xác nhận";
-      case "completed":
-      case "hoàn thành":
-        return "Hoàn thành";
-      case "cancelled":
-        return "Đã hủy";
+      case 'pending':
+      case 'chờ xử lý':
+        return 'Chờ chuyển giao';
+      case 'chờ báo kiện':
+        return 'Chờ báo kiện';
+      case 'chờ chuyển giao':
+        return 'Chờ chuyển giao';
+      case 'in_transit':
+      case 'đang thực hiện':
+      case 'đang chuyển giao':
+      case 'đang vận chuyển':
+        return 'Đang chuyển giao';
+      case 'delivered':
+      case 'đã giao hàng':
+      case 'đã chuyển giao':
+        return 'Đã giao hàng';
+      case 'confirmed':
+      case 'đã xác nhận':
+        return 'Đã xác nhận';
+      case 'chờ xác nhận':
+        return 'Chờ xác nhận';
+      case 'completed':
+      case 'hoàn thành':
+        return 'Hoàn thành';
+      case 'cancelled':
+        return 'Đã hủy';
 
       default:
         return status;
@@ -2669,33 +2669,33 @@ const TransportRequests: React.FC = () => {
 
   const getPricingMethodLabel = (method: string) => {
     switch (method) {
-      case "PER_KM":
-        return "Theo km";
-      case "PER_TRIP":
-        return "Theo chuyến";
-      case "PER_M3":
-        return "Theo khối";
+      case 'PER_KM':
+        return 'Theo km';
+      case 'PER_TRIP':
+        return 'Theo chuyến';
+      case 'PER_M3':
+        return 'Theo khối';
       default:
         return method;
     }
   };
 
   const shouldShowVehicleType = (pricingMethod: string) => {
-    return pricingMethod !== "PER_M3"; // Không hiển thị loại xe nếu tính theo khối
+    return pricingMethod !== 'PER_M3'; // Không hiển thị loại xe nếu tính theo khối
   };
 
   // Lấy danh sách phương thức tính tiền của nhà vận chuyển đã chọn
   const getPricingMethodsForCarrier = (carrierName: string) => {
-    console.log("🔍 Debug getPricingMethodsForCarrier:", carrierName);
-    console.log("🔍 Debug groupedCarriers:", groupedCarriers);
+    console.log('🔍 Debug getPricingMethodsForCarrier:', carrierName);
+    console.log('🔍 Debug groupedCarriers:', groupedCarriers);
 
     if (!groupedCarriers[carrierName]) {
-      console.log("❌ No carriers found for:", carrierName);
+      console.log('❌ No carriers found for:', carrierName);
       return [];
     }
 
     const methods = [...new Set(groupedCarriers[carrierName].map((c) => c.pricingMethod))];
-    console.log("✅ Available pricing methods for", carrierName, ":", methods);
+    console.log('✅ Available pricing methods for', carrierName, ':', methods);
     return methods;
   };
 
@@ -2705,9 +2705,9 @@ const TransportRequests: React.FC = () => {
 
     // Map form format to sheet format for comparison
     const pricingMethodMap: { [key: string]: string } = {
-      perKm: "PER_KM",
-      perM3: "PER_M3",
-      perTrip: "PER_TRIP",
+      perKm: 'PER_KM',
+      perM3: 'PER_M3',
+      perTrip: 'PER_TRIP',
     };
 
     const sheetPricingMethod = pricingMethodMap[pricingMethod] || pricingMethod;
@@ -2717,27 +2717,27 @@ const TransportRequests: React.FC = () => {
     );
 
     console.log(
-      "🔍 Frontend: Getting vehicle types for",
+      '🔍 Frontend: Getting vehicle types for',
       carrierName,
       pricingMethod,
-      "(sheet format:",
+      '(sheet format:',
       sheetPricingMethod,
-      ")"
+      ')'
     );
-    console.log("📋 Frontend: Carriers with method:", carriersWithMethod.length);
+    console.log('📋 Frontend: Carriers with method:', carriersWithMethod.length);
 
     const vehicleTypes = carriersWithMethod
       .map((c) => c.vehicleTypes)
       .filter((type) => {
         // Filter out empty, null, undefined, "0", "null", "undefined"
-        if (!type || type === "0" || type === "null" || type === "undefined") {
+        if (!type || type === '0' || type === 'null' || type === 'undefined') {
           return false;
         }
         return true;
       })
       .filter((type, index, arr) => arr.indexOf(type) === index); // Loại bỏ trùng lặp
 
-    console.log("✅ Frontend: Extracted vehicle types:", vehicleTypes);
+    console.log('✅ Frontend: Extracted vehicle types:', vehicleTypes);
 
     return vehicleTypes;
   };
@@ -2748,9 +2748,9 @@ const TransportRequests: React.FC = () => {
 
     // Map form format to sheet format for comparison
     const pricingMethodMap: { [key: string]: string } = {
-      perKm: "PER_KM",
-      perM3: "PER_M3",
-      perTrip: "PER_TRIP",
+      perKm: 'PER_KM',
+      perM3: 'PER_M3',
+      perTrip: 'PER_TRIP',
     };
 
     const sheetPricingMethod = pricingMethodMap[pricingMethod] || pricingMethod;
@@ -2762,11 +2762,11 @@ const TransportRequests: React.FC = () => {
 
       // If isActive is a timestamp (contains 'T' or is a date), consider it as active
       const isActiveCarrier =
-        isActiveString.includes("T") ||
-        isActiveString.includes("-") ||
-        isActiveString.includes(":") ||
-        isActiveString === "TRUE" ||
-        isActiveString === "1";
+        isActiveString.includes('T') ||
+        isActiveString.includes('-') ||
+        isActiveString.includes(':') ||
+        isActiveString === 'TRUE' ||
+        isActiveString === '1';
 
       return (
         carrier.name === carrierName &&
@@ -2792,41 +2792,41 @@ const TransportRequests: React.FC = () => {
     const messages: string[] = [];
 
     const hasPickup = !!newTransportForm.pickupLocation;
-    if (!hasPickup) messages.push("Thiếu: Điểm nguồn");
+    if (!hasPickup) messages.push('Thiếu: Điểm nguồn');
 
     const hasCarrier = !!newTransportForm.carrierName;
-    if (!hasCarrier) messages.push("Thiếu: Nhà vận chuyển");
+    if (!hasCarrier) messages.push('Thiếu: Nhà vận chuyển');
 
     const hasMethod = !!newTransportForm.pricingMethod;
-    if (!hasMethod) messages.push("Thiếu: Phương thức tính tiền");
+    if (!hasMethod) messages.push('Thiếu: Phương thức tính tiền');
 
     const hasVehicle = !!newTransportForm.vehicleType;
-    if (!hasVehicle) messages.push("Thiếu: Loại xe");
+    if (!hasVehicle) messages.push('Thiếu: Loại xe');
 
     const hasServiceArea = !!newTransportForm.serviceArea;
-    if (!hasServiceArea) messages.push("Thiếu: Khu vực phục vụ");
+    if (!hasServiceArea) messages.push('Thiếu: Khu vực phục vụ');
 
     const hasDepartment = !!newTransportForm.department;
-    if (!hasDepartment) messages.push("Thiếu: Phòng ban phục vụ");
+    if (!hasDepartment) messages.push('Thiếu: Phòng ban phục vụ');
 
     const stopCount = selectedStopPoints ? selectedStopPoints.size : 0;
-    if (!(stopCount > 0)) messages.push("Điểm dừng phải > 0");
+    if (!(stopCount > 0)) messages.push('Điểm dừng phải > 0');
 
     const selected = transfers.filter((t, idx) => isTransferSelected(t, idx));
     const transferCount = newTransportForm.selectedTransfers.size || 0;
-    if (!(transferCount > 0)) messages.push("Số phiếu điểm dừng phải > 0");
+    if (!(transferCount > 0)) messages.push('Số phiếu điểm dừng phải > 0');
 
     const totalPackagesSelected = selected.reduce((sum, t) => sum + (t.totalPackages || 0), 0);
-    if (!(totalPackagesSelected > 0)) messages.push("Số kiện phải > 0");
+    if (!(totalPackagesSelected > 0)) messages.push('Số kiện phải > 0');
 
     const totalVolumeSelected = selected.reduce((sum, t) => sum + (t.volume || 0 || 0), 0);
-    if (!(totalVolumeSelected > 0)) messages.push("Số khối (m³) phải > 0");
+    if (!(totalVolumeSelected > 0)) messages.push('Số khối (m³) phải > 0');
 
     const distanceOk =
-      newTransportForm.pricingMethod === "perKm"
+      newTransportForm.pricingMethod === 'perKm'
         ? Object.values(stopPointDistances).reduce((sum, distance) => sum + distance, 0) > 0
         : true;
-    if (!distanceOk) messages.push("Chiều dài quãng đường (km) phải > 0");
+    if (!distanceOk) messages.push('Chiều dài quãng đường (km) phải > 0');
 
     return { ok: messages.length === 0, messages };
   };
@@ -2837,7 +2837,7 @@ const TransportRequests: React.FC = () => {
       setSnackbar({
         open: true,
         message: 'Chưa có mã yêu cầu. Hãy bấm "Đặt xe mới" trước.',
-        severity: "warning",
+        severity: 'warning',
       });
       return;
     }
@@ -2847,8 +2847,8 @@ const TransportRequests: React.FC = () => {
     if (stopCount === 0) {
       setSnackbar({
         open: true,
-        message: "⚠️ Vui lòng chọn ít nhất 1 điểm dừng để tạo đề nghị vận chuyển!",
-        severity: "warning",
+        message: '⚠️ Vui lòng chọn ít nhất 1 điểm dừng để tạo đề nghị vận chuyển!',
+        severity: 'warning',
       });
       return;
     }
@@ -2856,8 +2856,8 @@ const TransportRequests: React.FC = () => {
     if (stopCount > 10) {
       setSnackbar({
         open: true,
-        message: "⚠️ Số điểm dừng vượt quá giới hạn (tối đa 10 điểm). Vui lòng giảm số điểm dừng!",
-        severity: "warning",
+        message: '⚠️ Số điểm dừng vượt quá giới hạn (tối đa 10 điểm). Vui lòng giảm số điểm dừng!',
+        severity: 'warning',
       });
       return;
     }
@@ -2866,8 +2866,8 @@ const TransportRequests: React.FC = () => {
     if (!v.ok) {
       setSnackbar({
         open: true,
-        message: `Thiếu thông tin: ${v.messages.join(" • ")}`,
-        severity: "warning",
+        message: `Thiếu thông tin: ${v.messages.join(' • ')}`,
+        severity: 'warning',
       });
       return;
     }
@@ -2877,8 +2877,8 @@ const TransportRequests: React.FC = () => {
     // Hiển thị thông báo đang xử lý
     setSnackbar({
       open: true,
-      message: "🔄 Đang xử lý yêu cầu vận chuyển...",
-      severity: "info",
+      message: '🔄 Đang xử lý yêu cầu vận chuyển...',
+      severity: 'info',
     });
 
     // Đảm bảo khoảng cách đã được tính xong (chỉ nếu chưa tính)
@@ -2887,7 +2887,7 @@ const TransportRequests: React.FC = () => {
       newTransportForm.pickupLocation &&
       Object.keys(stopPointDistances).length === 0
     ) {
-      console.log("🔄 Đang tính khoảng cách...");
+      console.log('🔄 Đang tính khoảng cách...');
       await calculateStopPointDistances();
     }
 
@@ -2899,9 +2899,9 @@ const TransportRequests: React.FC = () => {
 
       // Lấy địa chỉ điểm nguồn nếu có
       const pickup =
-        locationLookup.get(newTransportForm.pickupLocation || "") ||
+        locationLookup.get(newTransportForm.pickupLocation || '') ||
         locations.find((loc) => loc.id === newTransportForm.pickupLocation);
-      const pickupAddress = pickup ? `${pickup.code} - ${pickup.address}` : "";
+      const pickupAddress = pickup ? `${pickup.code} - ${pickup.address}` : '';
 
       // Lấy địa chỉ, mã nguồn (MN), số kiện, khối lượng, khoảng cách, số phiếu, sản phẩm và transfer_ids các điểm dừng từ stopPoints
       const stopAddresses: Record<string, string> = {};
@@ -2912,8 +2912,8 @@ const TransportRequests: React.FC = () => {
       const stopOrderCounts: Record<string, number> = {};
       const stopProducts: Record<string, string> = {};
       const stopTransferIds: Record<string, string> = {};
-      console.log("🔍 DEBUG - stopPoints:", stopPoints);
-      console.log("🔍 DEBUG - selectedStopPoints:", Array.from(selectedStopPoints));
+      console.log('🔍 DEBUG - stopPoints:', stopPoints);
+      console.log('🔍 DEBUG - selectedStopPoints:', Array.from(selectedStopPoints));
 
       Array.from(selectedStopPoints).forEach((stopKey, index) => {
         const stopPoint = stopPoints[stopKey];
@@ -2928,7 +2928,7 @@ const TransportRequests: React.FC = () => {
 
           // Lấy mã nguồn (MN) từ tiêu đề điểm dừng
           // Ví dụ: "MIA23/MIA Đà Nẵng - 447 Lê Duẩn" => lấy "MIA23"
-          let mnCode = "";
+          let mnCode = '';
           if (stopPoint.address) {
             // Tìm mã MN trong địa chỉ (thường có format: MIA23/... hoặc MIA23 - ...)
             const mnMatch = stopPoint.address.match(/^([A-Z]+\d+)/);
@@ -2943,7 +2943,7 @@ const TransportRequests: React.FC = () => {
                   (stopPoint.address && loc.address && stopPoint.address.includes(loc.address)) ||
                   (stopPoint.address && loc.address && loc.address.includes(stopPoint.address))
               );
-              mnCode = matchingLocation?.code || "";
+              mnCode = matchingLocation?.code || '';
               console.log(`🔍 DEBUG - Fallback MN from locations: ${mnCode}`);
             }
           }
@@ -3021,7 +3021,7 @@ const TransportRequests: React.FC = () => {
               });
               return t.transferId || t.id;
             })
-            .join(", ");
+            .join(', ');
           stopTransferIds[`stop${index + 1}TransferIds`] = transferIdsForStop;
 
           console.log(`🔍 DEBUG - Stop ${index + 1} transfer IDs: ${transferIdsForStop}`);
@@ -3029,16 +3029,16 @@ const TransportRequests: React.FC = () => {
       });
 
       // Debug: Log dữ liệu khoảng cách, số phiếu, sản phẩm và mã nguồn
-      console.log("🔍 DEBUG - stopDistances:", stopDistances);
-      console.log("🔍 DEBUG - stopOrderCounts:", stopOrderCounts);
-      console.log("🔍 DEBUG - stopProducts:", stopProducts);
-      console.log("🔍 DEBUG - stopTransferIds:", stopTransferIds);
-      console.log("🔍 DEBUG - stopMNs:", stopMNs);
+      console.log('🔍 DEBUG - stopDistances:', stopDistances);
+      console.log('🔍 DEBUG - stopOrderCounts:', stopOrderCounts);
+      console.log('🔍 DEBUG - stopProducts:', stopProducts);
+      console.log('🔍 DEBUG - stopTransferIds:', stopTransferIds);
+      console.log('🔍 DEBUG - stopMNs:', stopMNs);
       console.log(
-        "🔍 DEBUG - MN Mapping Summary:",
+        '🔍 DEBUG - MN Mapping Summary:',
         Object.entries(stopMNs).map(([key, value]) => `${key}: ${value}`)
       );
-      console.log("🔍 DEBUG - selectedStopPoints:", Array.from(selectedStopPoints));
+      console.log('🔍 DEBUG - selectedStopPoints:', Array.from(selectedStopPoints));
 
       // Tính tổng khoảng cách
       const totalDistance = Object.values(stopDistances).reduce(
@@ -3055,16 +3055,16 @@ const TransportRequests: React.FC = () => {
         return sum + productCount;
       }, 0);
 
-      console.log("🔍 DEBUG - totalDistance:", totalDistance);
-      console.log("🔍 DEBUG - totalOrderCount:", totalOrderCount);
-      console.log("🔍 DEBUG - totalProducts:", totalProducts);
+      console.log('🔍 DEBUG - totalDistance:', totalDistance);
+      console.log('🔍 DEBUG - totalOrderCount:', totalOrderCount);
+      console.log('🔍 DEBUG - totalProducts:', totalProducts);
 
       const selectedCarrierInfo = getSelectedCarrierInfo();
 
       const pricingMethodMap: Record<string, string> = {
-        perKm: "PER_KM",
-        perM3: "PER_M3",
-        perTrip: "PER_TRIP",
+        perKm: 'PER_KM',
+        perM3: 'PER_M3',
+        perTrip: 'PER_TRIP',
       };
 
       const payload: Record<string, unknown> = {
@@ -3091,12 +3091,12 @@ const TransportRequests: React.FC = () => {
         totalProducts: totalProducts.toString(),
         // Thêm transfer_ids các điểm dừng
         ...stopTransferIds,
-        pricingMethod: newTransportForm.pricingMethod || "",
-        carrierName: newTransportForm.carrierName || "",
-        carrierId: newTransportForm.carrierId || "",
-        vehicleType: newTransportForm.vehicleType || "",
-        department: newTransportForm.department || "",
-        serviceArea: newTransportForm.serviceArea || "",
+        pricingMethod: newTransportForm.pricingMethod || '',
+        carrierName: newTransportForm.carrierName || '',
+        carrierId: newTransportForm.carrierId || '',
+        vehicleType: newTransportForm.vehicleType || '',
+        department: newTransportForm.department || '',
+        serviceArea: newTransportForm.serviceArea || '',
         pricePerKm: newTransportForm.pricePerKm || 0,
         pricePerM3: newTransportForm.pricePerM3 || 0,
         pricePerTrip: newTransportForm.pricePerTrip || 0,
@@ -3109,24 +3109,24 @@ const TransportRequests: React.FC = () => {
         totalPackages,
         totalVolumeM3: Number(totalVolume.toFixed(2)),
         totalDistance: Number(totalDistance.toFixed(2)),
-        status: "in_transit",
-        note: newTransportForm.note || "",
-        carrierContact: selectedCarrierInfo?.contactPerson || "",
-        carrierPhone: selectedCarrierInfo?.phone || "",
-        carrierEmail: selectedCarrierInfo?.email || "",
+        status: 'in_transit',
+        note: newTransportForm.note || '',
+        carrierContact: selectedCarrierInfo?.contactPerson || '',
+        carrierPhone: selectedCarrierInfo?.phone || '',
+        carrierEmail: selectedCarrierInfo?.email || '',
       };
 
       payload.pricingMethod =
-        pricingMethodMap[newTransportForm.pricingMethod] || newTransportForm.pricingMethod || "";
+        pricingMethodMap[newTransportForm.pricingMethod] || newTransportForm.pricingMethod || '';
       if (selectedCarrierInfo) {
         payload.carrierId = selectedCarrierInfo.carrierId || payload.carrierId;
         payload.carrierName = selectedCarrierInfo.name || payload.carrierName;
       }
 
       // Debug: Log payload cuối cùng (chỉ trong development)
-      if (process.env.NODE_ENV === "development") {
-        console.log("🔍 DEBUG - Final payload:", payload);
-        console.log("🔍 DEBUG - Distance fields in payload:", {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔍 DEBUG - Final payload:', payload);
+        console.log('🔍 DEBUG - Distance fields in payload:', {
           distance1: payload.distance1,
           distance2: payload.distance2,
           distance3: payload.distance3,
@@ -3134,7 +3134,7 @@ const TransportRequests: React.FC = () => {
           distance5: payload.distance5,
           totalDistance: payload.totalDistance,
         });
-        console.log("🔍 DEBUG - OrderCount fields in payload:", {
+        console.log('🔍 DEBUG - OrderCount fields in payload:', {
           stop1OrderCount: payload.stop1OrderCount,
           stop2OrderCount: payload.stop2OrderCount,
           stop3OrderCount: payload.stop3OrderCount,
@@ -3142,14 +3142,14 @@ const TransportRequests: React.FC = () => {
           stop5OrderCount: payload.stop5OrderCount,
           totalOrderCount: payload.totalOrderCount,
         });
-        console.log("🔍 DEBUG - TransferIds fields in payload:", {
+        console.log('🔍 DEBUG - TransferIds fields in payload:', {
           stop1TransferIds: payload.stop1TransferIds,
           stop2TransferIds: payload.stop2TransferIds,
           stop3TransferIds: payload.stop3TransferIds,
           stop4TransferIds: payload.stop4TransferIds,
           stop5TransferIds: payload.stop5TransferIds,
         });
-        console.log("🔍 DEBUG - Products fields in payload:", {
+        console.log('🔍 DEBUG - Products fields in payload:', {
           stop1Products: payload.stop1Products,
           stop2Products: payload.stop2Products,
           stop3Products: payload.stop3Products,
@@ -3166,17 +3166,17 @@ const TransportRequests: React.FC = () => {
       const res = await fetch(
         `/api/transport-requests/${currentRequestId}?spreadsheetId=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As`,
         {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         }
       );
 
-      let errorMsg = "";
+      let errorMsg = '';
       if (!res.ok) {
         try {
           const data = await res.json();
-          errorMsg = data?.error || "";
+          errorMsg = data?.error || '';
         } catch {
           // ignore
         }
@@ -3193,24 +3193,24 @@ const TransportRequests: React.FC = () => {
           fetch(
             `/api/transfers/${encodeURIComponent(tid)}?spreadsheetId=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As`,
             {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ transportStatus: "Đang chuyển giao" }),
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ transportStatus: 'Đang chuyển giao' }),
             }
           )
             .then(() => ({ id: tid, ok: true }))
             .catch((e) => ({ id: tid, ok: false, error: String(e) }))
         );
         Promise.allSettled(updatePromises).then((results) => {
-          if (process.env.NODE_ENV === "development") {
-            console.log("🔄 Update transfers status results:", results);
+          if (process.env.NODE_ENV === 'development') {
+            console.log('🔄 Update transfers status results:', results);
           }
           // Làm mới danh sách nguồn để phản ánh trạng thái mới
           fetchTransfers().catch(() => undefined);
         });
       } catch (e) {
-        if (process.env.NODE_ENV === "development") {
-          console.warn("⚠️ Không thể cập nhật trạng thái transfers:", e);
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('⚠️ Không thể cập nhật trạng thái transfers:', e);
         }
       }
 
@@ -3225,10 +3225,10 @@ const TransportRequests: React.FC = () => {
 • Tổng khoảng cách: ${formatDecimal(totalDistance, 1)} km
 • Tổng phiếu: ${totalOrderCount} phiếu
 
-🚚 Nhà vận chuyển: ${newTransportForm.carrierName || "Chưa chọn"}
-🚛 Loại xe: ${newTransportForm.vehicleType || "Chưa chọn"}
-🌍 Khu vực phục vụ: ${newTransportForm.serviceArea || "Chưa chọn"}
-🏢 Phòng ban: ${newTransportForm.department || "Chưa chọn"}
+🚚 Nhà vận chuyển: ${newTransportForm.carrierName || 'Chưa chọn'}
+🚛 Loại xe: ${newTransportForm.vehicleType || 'Chưa chọn'}
+🌍 Khu vực phục vụ: ${newTransportForm.serviceArea || 'Chưa chọn'}
+🏢 Phòng ban: ${newTransportForm.department || 'Chưa chọn'}
 💰 Chi phí ước tính: ${formatNumber(estimatedCost)} VND
 
 📋 Chi tiết điểm dừng:
@@ -3254,21 +3254,21 @@ ${Array.from(selectedStopPoints)
       (sum, t) => sum + (parseInt(t.totalProducts) || 0),
       0
     );
-    return `• ${stopPoint?.address || "Không xác định"} (${formatDecimal(distance, 1)} km, ${packagesForStop} kiện, ${productsForStop} sản phẩm, ${formatDecimal(volumeForStop, 2)} m³)`;
+    return `• ${stopPoint?.address || 'Không xác định'} (${formatDecimal(distance, 1)} km, ${packagesForStop} kiện, ${productsForStop} sản phẩm, ${formatDecimal(volumeForStop, 2)} m³)`;
   })
-  .join("\n")}`;
+  .join('\n')}`;
 
       setSnackbar({
         open: true,
         message: successMessage,
-        severity: "success",
+        severity: 'success',
       });
 
       // Gửi thông báo Telegram (non-blocking)
       try {
-        fetch("/api/notifications/telegram", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        fetch('/api/notifications/telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: successMessage }),
         }).catch(() => {});
       } catch {}
@@ -3280,11 +3280,11 @@ ${Array.from(selectedStopPoints)
       // Reload danh sách (không cần await để không block UI)
       fetchTransfers().catch(console.error);
     } catch (e) {
-      console.error("Submit transport request error:", e);
+      console.error('Submit transport request error:', e);
       setSnackbar({
         open: true,
-        message: `❌ Lưu thất bại: ${e instanceof Error ? e.message : "Thử lại sau"}`,
-        severity: "error",
+        message: `❌ Lưu thất bại: ${e instanceof Error ? e.message : 'Thử lại sau'}`,
+        severity: 'error',
       });
     } finally {
       setSubmittingRequest(false);
@@ -3318,10 +3318,10 @@ ${Array.from(selectedStopPoints)
             Bộ lọc
           </Button>
           <Button
-            onClick={() => setViewMode(viewMode === "table" ? "grid" : "table")}
-            startIcon={viewMode === "table" ? <GridViewIcon /> : <ViewList />}
+            onClick={() => setViewMode(viewMode === 'table' ? 'grid' : 'table')}
+            startIcon={viewMode === 'table' ? <GridViewIcon /> : <ViewList />}
           >
-            {viewMode === "table" ? "Grid" : "Bảng"}
+            {viewMode === 'table' ? 'Grid' : 'Bảng'}
           </Button>
 
           <Button
@@ -3330,7 +3330,7 @@ ${Array.from(selectedStopPoints)
             disabled={generatingId}
             startIcon={generatingId ? <CircularProgress size={16} /> : <AddCircle />}
           >
-            {generatingId ? "Đang tạo..." : "Đặt xe mới"}
+            {generatingId ? 'Đang tạo...' : 'Đặt xe mới'}
           </Button>
 
           <Button
@@ -3352,10 +3352,10 @@ ${Array.from(selectedStopPoints)
             <Button
               onClick={() =>
                 setFilters({
-                  search: "",
-                  status: "",
-                  vehicleType: "",
-                  customerName: "",
+                  search: '',
+                  status: '',
+                  vehicleType: '',
+                  customerName: '',
                 })
               }
               startIcon={<Clear />}
@@ -3438,80 +3438,80 @@ ${Array.from(selectedStopPoints)
         open={Boolean(newTransportMenuAnchor)}
         onClose={handleNewTransportMenuClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
+          vertical: 'top',
+          horizontal: 'left',
         }}
       >
-        <MenuItem onClick={() => handleNewTransportTypeSelect("system")}>
+        <MenuItem onClick={() => handleNewTransportTypeSelect('system')}>
           <Business sx={{ mr: 1 }} />
           Từ hệ thống
         </MenuItem>
-        <MenuItem onClick={() => handleNewTransportTypeSelect("external")}>
+        <MenuItem onClick={() => handleNewTransportTypeSelect('external')}>
           <Public sx={{ mr: 1 }} />
           Ngoài hệ thống
         </MenuItem>
       </Menu>
 
       {/* Table View */}
-      {viewMode === "table" && (
+      {viewMode === 'table' && (
         <TableContainer
           component={Paper}
           sx={{
             mt: 1.5,
             borderRadius: 2,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            border: "1px solid #e0e0e0",
-            overflowX: "auto",
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            border: '1px solid #e0e0e0',
+            overflowX: 'auto',
           }}
         >
           <Table
             sx={{
-              width: "100%",
-              tableLayout: "auto",
-              "& .MuiTableRow-root:nth-of-type(even)": {
-                backgroundColor: "#f8f9fa",
+              width: '100%',
+              tableLayout: 'auto',
+              '& .MuiTableRow-root:nth-of-type(even)': {
+                backgroundColor: '#f8f9fa',
               },
-              "& .MuiTableRow-root:hover": {
-                backgroundColor: "#e3f2fd",
-                transition: "background-color 0.2s ease",
-                transform: "translateY(-1px)",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+              '& .MuiTableRow-root:hover': {
+                backgroundColor: '#e3f2fd',
+                transition: 'background-color 0.2s ease',
+                transform: 'translateY(-1px)',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
               },
-              "& .MuiTableCell-root": {
-                borderBottom: "1px solid #e0e0e0",
-                padding: "6px 4px",
-                fontSize: "0.65rem",
-                transition: "all 0.2s ease",
+              '& .MuiTableCell-root': {
+                borderBottom: '1px solid #e0e0e0',
+                padding: '6px 4px',
+                fontSize: '0.65rem',
+                transition: 'all 0.2s ease',
               },
-              "& .address-cell": {
-                whiteSpace: "normal",
-                textOverflow: "unset",
-                overflow: "visible",
+              '& .address-cell': {
+                whiteSpace: 'normal',
+                textOverflow: 'unset',
+                overflow: 'visible',
                 lineHeight: 1.2,
               },
-              "& .MuiTableHead .MuiTableRow-root": {
-                backgroundColor: "grey.50",
+              '& .MuiTableHead .MuiTableRow-root': {
+                backgroundColor: 'grey.50',
               },
-              "& .MuiTableHead .MuiTableCell-root": {
-                backgroundColor: "grey.50",
+              '& .MuiTableHead .MuiTableCell-root': {
+                backgroundColor: 'grey.50',
                 fontWeight: 600,
-                fontSize: "0.6rem",
-                color: "grey.700",
-                borderBottom: "2px solid",
-                borderBottomColor: "primary.main",
-                padding: "6px 4px",
-                textTransform: "uppercase",
-                letterSpacing: "0.2px",
+                fontSize: '0.6rem',
+                color: 'grey.700',
+                borderBottom: '2px solid',
+                borderBottomColor: 'primary.main',
+                padding: '6px 4px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.2px',
               },
             }}
           >
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox" sx={{ width: "40px" }}>
+                <TableCell padding="checkbox" sx={{ width: '40px' }}>
                   <Checkbox
                     indeterminate={
                       selectedItems.size > 0 && selectedItems.size < paginatedRequests.length
@@ -3523,16 +3523,16 @@ ${Array.from(selectedStopPoints)
                     onChange={(e) => handleSelectAll(e.target.checked)}
                   />
                 </TableCell>
-                <TableCell sx={{ width: "140px" }}>Mã yêu cầu</TableCell>
-                <TableCell sx={{ display: "none" }}>Nhân viên</TableCell>
-                <TableCell sx={{ width: "180px" }}>Điểm đi</TableCell>
-                <TableCell sx={{ width: "220px" }}>Điểm đến</TableCell>
-                <TableCell sx={{ width: "80px" }}>Ngày</TableCell>
-                <TableCell sx={{ width: "100px" }}>Kiện</TableCell>
-                <TableCell sx={{ width: "80px" }}>SL</TableCell>
-                <TableCell sx={{ width: "90px" }}>Khối (m³)</TableCell>
-                <TableCell sx={{ width: "120px" }}>TT Vận chuyển</TableCell>
-                <TableCell sx={{ width: "80px" }}>Thao tác</TableCell>
+                <TableCell sx={{ width: '140px' }}>Mã yêu cầu</TableCell>
+                <TableCell sx={{ display: 'none' }}>Nhân viên</TableCell>
+                <TableCell sx={{ width: '180px' }}>Điểm đi</TableCell>
+                <TableCell sx={{ width: '220px' }}>Điểm đến</TableCell>
+                <TableCell sx={{ width: '80px' }}>Ngày</TableCell>
+                <TableCell sx={{ width: '100px' }}>Kiện</TableCell>
+                <TableCell sx={{ width: '80px' }}>SL</TableCell>
+                <TableCell sx={{ width: '90px' }}>Khối (m³)</TableCell>
+                <TableCell sx={{ width: '120px' }}>TT Vận chuyển</TableCell>
+                <TableCell sx={{ width: '80px' }}>Thao tác</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -3540,124 +3540,124 @@ ${Array.from(selectedStopPoints)
                 const rowKey = getTransferKey(request, index);
                 const identifier = getTransferIdentifier(request);
                 const selectionId = identifier || rowKey;
-                const statusValue = request.status || request.transportStatus || "";
+                const statusValue = request.status || request.transportStatus || '';
                 const statusLabel = getStatusLabel(statusValue);
                 return (
                   <TableRow key={rowKey}>
-                    <TableCell padding="checkbox" sx={{ width: "40px" }}>
+                    <TableCell padding="checkbox" sx={{ width: '40px' }}>
                       <Checkbox
                         checked={selectedItems.has(selectionId)}
                         onChange={(e) => handleSelectItem(selectionId, e.target.checked)}
                       />
                     </TableCell>
-                    <TableCell sx={{ width: "140px" }}>
-                      <Typography variant="subtitle2" sx={{ fontSize: "0.65rem", fontWeight: 600 }}>
+                    <TableCell sx={{ width: '140px' }}>
+                      <Typography variant="subtitle2" sx={{ fontSize: '0.65rem', fontWeight: 600 }}>
                         {request.requestCode}
                       </Typography>
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ fontSize: "0.55rem" }}
+                        sx={{ fontSize: '0.55rem' }}
                       >
                         ID: {request.transferId || request.id}
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ display: "none" }}>
+                    <TableCell sx={{ display: 'none' }}>
                       <Box>
                         <Typography variant="body2">{request.customerName}</Typography>
                         <Typography variant="caption" color="text.secondary">
-                          {request.customerPhone || "Chưa có số điện thoại"}
+                          {request.customerPhone || 'Chưa có số điện thoại'}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell sx={{ width: "180px" }}>
+                    <TableCell sx={{ width: '180px' }}>
                       <Box>
-                        <Typography variant="body2" sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
+                        <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
                           {request.pickupLocation}
                         </Typography>
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ fontSize: "0.55rem" }}
+                          sx={{ fontSize: '0.55rem' }}
                         >
                           {request.pickupAddress}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell className="address-cell" sx={{ width: "220px" }}>
+                    <TableCell className="address-cell" sx={{ width: '220px' }}>
                       <Box>
-                        <Typography variant="body2" sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
+                        <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
                           {request.deliveryLocation}
                         </Typography>
                         <Typography
                           variant="caption"
                           color="text.secondary"
-                          sx={{ fontSize: "0.55rem" }}
+                          sx={{ fontSize: '0.55rem' }}
                         >
                           {request.deliveryAddress}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell sx={{ width: "80px" }}>
-                      <Typography sx={{ fontSize: "0.65rem" }}>{request.requestDate}</Typography>
+                    <TableCell sx={{ width: '80px' }}>
+                      <Typography sx={{ fontSize: '0.65rem' }}>{request.requestDate}</Typography>
                     </TableCell>
-                    <TableCell sx={{ width: "100px" }}>
-                      <Typography variant="body2" sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
+                    <TableCell sx={{ width: '100px' }}>
+                      <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
                         {request.totalPackages} kiện
                       </Typography>
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ fontSize: "0.55rem" }}
+                        sx={{ fontSize: '0.55rem' }}
                       >
-                        S: {request.packageDetails?.pkgS || 0} | M:{" "}
+                        S: {request.packageDetails?.pkgS || 0} | M:{' '}
                         {request.packageDetails?.pkgM || 0} | L: {request.packageDetails?.pkgL || 0}
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ width: "80px" }}>
-                      <Typography variant="body2" sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
-                        {request.totalProducts || "N/A"}
+                    <TableCell sx={{ width: '80px' }}>
+                      <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
+                        {request.totalProducts || 'N/A'}
                       </Typography>
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ fontSize: "0.55rem" }}
+                        sx={{ fontSize: '0.55rem' }}
                       >
                         Sản phẩm
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ width: "90px" }}>
-                      <Typography variant="body2" sx={{ fontSize: "0.65rem", fontWeight: 500 }}>
-                        {request.volume || (0)?.toFixed(2) || "0.00"} m³
+                    <TableCell sx={{ width: '90px' }}>
+                      <Typography variant="body2" sx={{ fontSize: '0.65rem', fontWeight: 500 }}>
+                        {request.volume || (0)?.toFixed(2) || '0.00'} m³
                       </Typography>
                     </TableCell>
 
-                    <TableCell sx={{ width: "120px" }} align="center">
+                    <TableCell sx={{ width: '120px' }} align="center">
                       <Typography
                         sx={{
-                          fontSize: "0.65rem",
+                          fontSize: '0.65rem',
                           fontWeight: 500,
-                          color: "primary.main",
-                          backgroundColor: "primary.50",
-                          border: "1px solid",
-                          borderColor: "primary.main",
+                          color: 'primary.main',
+                          backgroundColor: 'primary.50',
+                          border: '1px solid',
+                          borderColor: 'primary.main',
                           borderRadius: 1,
                           px: 0.5,
                           py: 0.25,
-                          textAlign: "center",
-                          display: "inline-block",
-                          minWidth: "fit-content",
-                          maxWidth: "100%",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
+                          textAlign: 'center',
+                          display: 'inline-block',
+                          minWidth: 'fit-content',
+                          maxWidth: '100%',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
                         }}
                       >
                         {(() => {
                           console.log(
-                            "🔍 Debug - request.status:",
+                            '🔍 Debug - request.status:',
                             request.status || request.transportStatus,
-                            "getStatusLabel result:",
+                            'getStatusLabel result:',
                             statusLabel
                           );
                           return statusLabel;
@@ -3665,7 +3665,7 @@ ${Array.from(selectedStopPoints)
                       </Typography>
                     </TableCell>
 
-                    <TableCell align="right" sx={{ width: "80px" }}>
+                    <TableCell align="right" sx={{ width: '80px' }}>
                       <IconButton onClick={(e) => handleOpenRowMenu(e, request)} size="small">
                         <MoreVert fontSize="small" />
                       </IconButton>
@@ -3713,24 +3713,24 @@ ${Array.from(selectedStopPoints)
       )}
 
       {/* Grid View */}
-      {viewMode === "grid" && (
+      {viewMode === 'grid' && (
         <Grid container spacing={2}>
           {paginatedRequests.map((request, index) => {
             const rowKey = getTransferKey(request, index);
-            const statusValue = request.status || request.transportStatus || "";
+            const statusValue = request.status || request.transportStatus || '';
             const statusLabel = getStatusLabel(statusValue);
             return (
               <Grid item xs={12} sm={6} md={4} lg={3} key={rowKey}>
                 <Card
                   sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    "&:hover": {
-                      boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
-                      transform: "translateY(-2px)",
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    '&:hover': {
+                      boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                      transform: 'translateY(-2px)',
                     },
-                    transition: "all 0.3s ease",
+                    transition: 'all 0.3s ease',
                   }}
                 >
                   <CardContent sx={{ flexGrow: 1 }}>
@@ -3750,7 +3750,7 @@ ${Array.from(selectedStopPoints)
                         {request.customerName}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {request.customerPhone || "Chưa có số điện thoại"}
+                        {request.customerPhone || 'Chưa có số điện thoại'}
                       </Typography>
                     </Box>
 
@@ -3775,12 +3775,12 @@ ${Array.from(selectedStopPoints)
                       <Box display="flex" alignItems="center" mb={1}>
                         <StatusChip
                           label={statusLabel}
-                          status={statusValue || "pending"}
+                          status={statusValue || 'pending'}
                           sx={{
-                            fontSize: "0.7rem",
+                            fontSize: '0.7rem',
                             fontWeight: 600,
-                            minWidth: "80px",
-                            bgcolor: "white",
+                            minWidth: '80px',
+                            bgcolor: 'white',
                           }}
                         />
                       </Box>
@@ -3791,14 +3791,14 @@ ${Array.from(selectedStopPoints)
                         </Typography>
                       </Box>
                       <Typography variant="caption" color="text.secondary">
-                        S: {request.packageDetails?.pkgS || 0} | M:{" "}
+                        S: {request.packageDetails?.pkgS || 0} | M:{' '}
                         {request.packageDetails?.pkgM || 0} | L: {request.packageDetails?.pkgL || 0}
                       </Typography>
                     </Box>
 
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                       <Typography variant="body2" color="primary">
-                        {request.volume || (0)?.toFixed(2) || "0.00"} m³
+                        {request.volume || (0)?.toFixed(2) || '0.00'} m³
                       </Typography>
                       <Box display="flex" gap={0.5}>
                         <IconButton
@@ -3839,10 +3839,10 @@ ${Array.from(selectedStopPoints)
       >
         <DialogTitle>
           {editing
-            ? "Chỉnh sửa yêu cầu vận chuyển"
+            ? 'Chỉnh sửa yêu cầu vận chuyển'
             : currentRequestId
               ? `Đặt xe vận chuyển mới - ${currentRequestId}`
-              : "Đặt xe vận chuyển mới"}
+              : 'Đặt xe vận chuyển mới'}
         </DialogTitle>
         <DialogContent>
           {editing ? (
@@ -3850,7 +3850,7 @@ ${Array.from(selectedStopPoints)
           ) : (
             <Box>
               {/* Tabs */}
-              <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
                 <Tabs
                   value={activeTab}
                   onChange={(event, newValue) => setActiveTab(newValue)}
@@ -3893,20 +3893,20 @@ ${Array.from(selectedStopPoints)
                                 variant="caption"
                                 sx={{
                                   ml: 1,
-                                  color: "white",
+                                  color: 'white',
                                   fontWeight: 600,
-                                  backgroundColor: "info.main",
+                                  backgroundColor: 'info.main',
                                   px: 1.5,
                                   py: 0.3,
                                   borderRadius: 1.5,
-                                  fontSize: "0.75rem",
-                                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                                  fontSize: '0.75rem',
+                                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                                 }}
                               >
                                 {Object.values(groupedLocations).reduce(
                                   (total, locations) => total + locations.length,
                                   0
-                                )}{" "}
+                                )}{' '}
                                 lựa chọn
                               </Typography>
                             </InputLabel>
@@ -3923,8 +3923,8 @@ ${Array.from(selectedStopPoints)
                                   <ListSubheader
                                     key={`header-${category}`}
                                     sx={{
-                                      fontWeight: "bold",
-                                      color: "primary.main",
+                                      fontWeight: 'bold',
+                                      color: 'primary.main',
                                     }}
                                   >
                                     {category}
@@ -3941,7 +3941,7 @@ ${Array.from(selectedStopPoints)
                               <Typography
                                 variant="caption"
                                 color="error"
-                                sx={{ mt: 0.5, display: "block" }}
+                                sx={{ mt: 0.5, display: 'block' }}
                               >
                                 {validationErrors.pickupLocation}
                               </Typography>
@@ -3956,17 +3956,17 @@ ${Array.from(selectedStopPoints)
                               setAddLocationType(null);
                             }}
                             sx={{
-                              border: "1px solid",
-                              borderColor: "primary.main",
-                              borderRadius: "8px",
-                              width: "40px",
-                              height: "40px",
-                              "&:hover": {
-                                backgroundColor: "primary.main",
-                                color: "white",
-                                transform: "scale(1.05)",
+                              border: '1px solid',
+                              borderColor: 'primary.main',
+                              borderRadius: '8px',
+                              width: '40px',
+                              height: '40px',
+                              '&:hover': {
+                                backgroundColor: 'primary.main',
+                                color: 'white',
+                                transform: 'scale(1.05)',
                               },
-                              transition: "all 0.2s ease-in-out",
+                              transition: 'all 0.2s ease-in-out',
                             }}
                           >
                             <AddIcon />
@@ -3989,14 +3989,14 @@ ${Array.from(selectedStopPoints)
                               variant="caption"
                               sx={{
                                 ml: 1,
-                                color: "white",
+                                color: 'white',
                                 fontWeight: 600,
-                                backgroundColor: "warning.main",
+                                backgroundColor: 'warning.main',
                                 px: 1.5,
                                 py: 0.3,
                                 borderRadius: 1.5,
-                                fontSize: "0.75rem",
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                                fontSize: '0.75rem',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                               }}
                             >
                               {Object.keys(groupedCarriers).length} lựa chọn
@@ -4029,17 +4029,17 @@ ${Array.from(selectedStopPoints)
                                 variant="caption"
                                 sx={{
                                   ml: 1,
-                                  color: "white",
+                                  color: 'white',
                                   fontWeight: 600,
-                                  backgroundColor: "secondary.main",
+                                  backgroundColor: 'secondary.main',
                                   px: 1.5,
                                   py: 0.3,
                                   borderRadius: 1.5,
-                                  fontSize: "0.75rem",
-                                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                                  fontSize: '0.75rem',
+                                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                                 }}
                               >
-                                {getPricingMethodsForCarrier(newTransportForm.carrierName).length}{" "}
+                                {getPricingMethodsForCarrier(newTransportForm.carrierName).length}{' '}
                                 lựa chọn
                               </Typography>
                             )}
@@ -4048,7 +4048,7 @@ ${Array.from(selectedStopPoints)
                             value={
                               newTransportForm.pricingMethod
                                 ? PRICING_METHOD_FORM_TO_SHEET[newTransportForm.pricingMethod]
-                                : ""
+                                : ''
                             }
                             onChange={(e) => handlePricingMethodChange(String(e.target.value))}
                             label="Phương thức tính tiền"
@@ -4057,7 +4057,7 @@ ${Array.from(selectedStopPoints)
                               const methods = getPricingMethodsForCarrier(
                                 newTransportForm.carrierName
                               );
-                              console.log("🔍 Debug: Rendering pricing methods:", methods);
+                              console.log('🔍 Debug: Rendering pricing methods:', methods);
                               return methods.map((method) => (
                                 <MenuItem key={method} value={method}>
                                   {getPricingMethodLabel(method)}
@@ -4081,14 +4081,14 @@ ${Array.from(selectedStopPoints)
                                 variant="caption"
                                 sx={{
                                   ml: 1,
-                                  color: "white",
+                                  color: 'white',
                                   fontWeight: 600,
-                                  backgroundColor: "error.main",
+                                  backgroundColor: 'error.main',
                                   px: 1.5,
                                   py: 0.3,
                                   borderRadius: 1.5,
-                                  fontSize: "0.75rem",
-                                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                                  fontSize: '0.75rem',
+                                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                                 }}
                               >
                                 {
@@ -4096,7 +4096,7 @@ ${Array.from(selectedStopPoints)
                                     newTransportForm.carrierName,
                                     newTransportForm.pricingMethod
                                   ).length
-                                }{" "}
+                                }{' '}
                                 lựa chọn
                               </Typography>
                             </InputLabel>
@@ -4118,7 +4118,7 @@ ${Array.from(selectedStopPoints)
                               <Typography
                                 variant="caption"
                                 color="error"
-                                sx={{ mt: 0.5, display: "block" }}
+                                sx={{ mt: 0.5, display: 'block' }}
                               >
                                 {validationErrors.vehicleType}
                               </Typography>
@@ -4139,14 +4139,14 @@ ${Array.from(selectedStopPoints)
                                 variant="caption"
                                 sx={{
                                   ml: 1,
-                                  color: "white",
+                                  color: 'white',
                                   fontWeight: 600,
-                                  backgroundColor: "success.main",
+                                  backgroundColor: 'success.main',
                                   px: 1.5,
                                   py: 0.3,
                                   borderRadius: 1.5,
-                                  fontSize: "0.75rem",
-                                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                                  fontSize: '0.75rem',
+                                  boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
                                 }}
                               >
                                 {
@@ -4154,7 +4154,7 @@ ${Array.from(selectedStopPoints)
                                     newTransportForm.carrierName,
                                     newTransportForm.pricingMethod
                                   ).length
-                                }{" "}
+                                }{' '}
                                 lựa chọn
                               </Typography>
                             )}
@@ -4180,7 +4180,7 @@ ${Array.from(selectedStopPoints)
                             <Typography
                               variant="caption"
                               color="error"
-                              sx={{ mt: 0.5, display: "block" }}
+                              sx={{ mt: 0.5, display: 'block' }}
                             >
                               {validationErrors.serviceArea}
                             </Typography>
@@ -4209,7 +4209,7 @@ ${Array.from(selectedStopPoints)
                           <Typography variant="body2">
                             <strong>Thông tin nhà vận chuyển:</strong>
                             <br />
-                            Liên hệ: {getSelectedCarrierInfo()?.contactPerson} -{" "}
+                            Liên hệ: {getSelectedCarrierInfo()?.contactPerson} -{' '}
                             {getSelectedCarrierInfo()?.phone}
                             <br />
                             Email: {getSelectedCarrierInfo()?.email}
@@ -4245,8 +4245,8 @@ ${Array.from(selectedStopPoints)
                         mb={2}
                         color="primary"
                         sx={{
-                          borderBottom: "2px solid",
-                          borderColor: "primary.main",
+                          borderBottom: '2px solid',
+                          borderColor: 'primary.main',
                           pb: 1,
                         }}
                       >
@@ -4286,7 +4286,7 @@ ${Array.from(selectedStopPoints)
                             <Typography
                               variant="caption"
                               color="error"
-                              sx={{ mt: 0.5, display: "block" }}
+                              sx={{ mt: 0.5, display: 'block' }}
                             >
                               {validationErrors.driverName}
                             </Typography>
@@ -4307,7 +4307,7 @@ ${Array.from(selectedStopPoints)
                               }));
 
                               // Real-time validation
-                              const error = validateRealTime("driverPhone", value);
+                              const error = validateRealTime('driverPhone', value);
                               setValidationErrors((prev) => ({
                                 ...prev,
                                 driverPhone: error,
@@ -4319,7 +4319,7 @@ ${Array.from(selectedStopPoints)
                             <Typography
                               variant="caption"
                               color="error"
-                              sx={{ mt: 0.5, display: "block" }}
+                              sx={{ mt: 0.5, display: 'block' }}
                             >
                               {validationErrors.driverPhone}
                             </Typography>
@@ -4350,8 +4350,8 @@ ${Array.from(selectedStopPoints)
                         mb={2}
                         color="primary"
                         sx={{
-                          borderBottom: "2px solid",
-                          borderColor: "primary.main",
+                          borderBottom: '2px solid',
+                          borderColor: 'primary.main',
                           pb: 1,
                         }}
                       >
@@ -4388,7 +4388,7 @@ ${Array.from(selectedStopPoints)
                                 }));
 
                                 // Real-time validation
-                                const error = validateRealTime("department", value);
+                                const error = validateRealTime('department', value);
                                 setValidationErrors((prev) => ({
                                   ...prev,
                                   department: error,
@@ -4414,7 +4414,7 @@ ${Array.from(selectedStopPoints)
                             <Typography
                               variant="caption"
                               color="error"
-                              sx={{ mt: 0.5, display: "block" }}
+                              sx={{ mt: 0.5, display: 'block' }}
                             >
                               {validationErrors.department}
                             </Typography>
@@ -4431,8 +4431,8 @@ ${Array.from(selectedStopPoints)
                         mb={2}
                         color="primary"
                         sx={{
-                          borderBottom: "2px solid",
-                          borderColor: "primary.main",
+                          borderBottom: '2px solid',
+                          borderColor: 'primary.main',
                           pb: 1,
                         }}
                       >
@@ -4459,15 +4459,15 @@ ${Array.from(selectedStopPoints)
                       <Box
                         sx={{
                           mb: 2,
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
                         }}
                       >
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ fontStyle: "italic" }}
+                          sx={{ fontStyle: 'italic' }}
                         >
                           💡 Thông số định giá sẽ được tự động cập nhật khi bạn chọn Nhà vận chuyển,
                           Phương thức tính tiền và Loại xe. Khu vực phục vụ sẽ hiển thị các lựa chọn
@@ -4477,7 +4477,7 @@ ${Array.from(selectedStopPoints)
 
                       <Grid container spacing={2}>
                         {/* Giá/km - chỉ hiển thị khi phương thức là 'perKm' */}
-                        {newTransportForm.pricingMethod === "perKm" && (
+                        {newTransportForm.pricingMethod === 'perKm' && (
                           <Grid item xs={12} md={6}>
                             <TextField
                               fullWidth
@@ -4485,10 +4485,10 @@ ${Array.from(selectedStopPoints)
                               value={formatNumber(newTransportForm.pricePerKm)}
                               onChange={(e) => {
                                 const inputValue = e.target.value;
-                                console.log("🔍 Debug pricePerKm - Input:", inputValue);
+                                console.log('🔍 Debug pricePerKm - Input:', inputValue);
 
                                 // Allow empty input for better UX
-                                if (inputValue === "" || inputValue === "₫") {
+                                if (inputValue === '' || inputValue === '₫') {
                                   setNewTransportForm((prev) => ({
                                     ...prev,
                                     pricePerKm: 0,
@@ -4497,7 +4497,7 @@ ${Array.from(selectedStopPoints)
                                 }
 
                                 const parsedValue = parseFormattedNumber(inputValue);
-                                console.log("🔍 Debug pricePerKm - Parsed:", parsedValue);
+                                console.log('🔍 Debug pricePerKm - Parsed:', parsedValue);
 
                                 setNewTransportForm((prev) => ({
                                   ...prev,
@@ -4513,7 +4513,7 @@ ${Array.from(selectedStopPoints)
                         )}
 
                         {/* Giá/khối - chỉ hiển thị khi phương thức là 'perM3' */}
-                        {newTransportForm.pricingMethod === "perM3" && (
+                        {newTransportForm.pricingMethod === 'perM3' && (
                           <Grid item xs={12} md={6}>
                             <TextField
                               fullWidth
@@ -4521,10 +4521,10 @@ ${Array.from(selectedStopPoints)
                               value={formatNumber(newTransportForm.pricePerM3)}
                               onChange={(e) => {
                                 const inputValue = e.target.value;
-                                console.log("🔍 Debug pricePerM3 - Input:", inputValue);
+                                console.log('🔍 Debug pricePerM3 - Input:', inputValue);
 
                                 // Allow empty input for better UX
-                                if (inputValue === "" || inputValue === "₫") {
+                                if (inputValue === '' || inputValue === '₫') {
                                   setNewTransportForm((prev) => ({
                                     ...prev,
                                     pricePerM3: 0,
@@ -4533,7 +4533,7 @@ ${Array.from(selectedStopPoints)
                                 }
 
                                 const parsedValue = parseFormattedNumber(inputValue);
-                                console.log("🔍 Debug pricePerM3 - Parsed:", parsedValue);
+                                console.log('🔍 Debug pricePerM3 - Parsed:', parsedValue);
 
                                 setNewTransportForm((prev) => ({
                                   ...prev,
@@ -4549,7 +4549,7 @@ ${Array.from(selectedStopPoints)
                         )}
 
                         {/* Giá/chuyến - chỉ hiển thị khi phương thức là 'perTrip' */}
-                        {newTransportForm.pricingMethod === "perTrip" && (
+                        {newTransportForm.pricingMethod === 'perTrip' && (
                           <Grid item xs={12} md={6}>
                             <TextField
                               fullWidth
@@ -4558,7 +4558,7 @@ ${Array.from(selectedStopPoints)
                               onChange={(e) => {
                                 const inputValue = e.target.value;
                                 // Allow empty input for better UX
-                                if (inputValue === "" || inputValue === "₫") {
+                                if (inputValue === '' || inputValue === '₫') {
                                   setNewTransportForm((prev) => ({
                                     ...prev,
                                     pricePerTrip: 0,
@@ -4587,7 +4587,7 @@ ${Array.from(selectedStopPoints)
                             onChange={(e) => {
                               const inputValue = e.target.value;
                               // Allow empty input for better UX
-                              if (inputValue === "" || inputValue === "₫") {
+                              if (inputValue === '' || inputValue === '₫') {
                                 setNewTransportForm((prev) => ({
                                   ...prev,
                                   stopFee: 0,
@@ -4628,7 +4628,7 @@ ${Array.from(selectedStopPoints)
                             onChange={(e) => {
                               const inputValue = e.target.value;
                               // Allow empty input for better UX
-                              if (inputValue === "" || inputValue === "₫") {
+                              if (inputValue === '' || inputValue === '₫') {
                                 setNewTransportForm((prev) => ({
                                   ...prev,
                                   tollFee: 0,
@@ -4656,7 +4656,7 @@ ${Array.from(selectedStopPoints)
                             onChange={(e) => {
                               const inputValue = e.target.value;
                               // Allow empty input for better UX
-                              if (inputValue === "" || inputValue === "₫") {
+                              if (inputValue === '' || inputValue === '₫') {
                                 setNewTransportForm((prev) => ({
                                   ...prev,
                                   insuranceFee: 0,
@@ -4684,7 +4684,7 @@ ${Array.from(selectedStopPoints)
                             onChange={(e) => {
                               const inputValue = e.target.value;
                               // Allow empty input for better UX
-                              if (inputValue === "" || inputValue === "₫") {
+                              if (inputValue === '' || inputValue === '₫') {
                                 setNewTransportForm((prev) => ({
                                   ...prev,
                                   baseRate: 0,
@@ -4725,10 +4725,10 @@ ${Array.from(selectedStopPoints)
                         elevation={2}
                         sx={{
                           p: 2,
-                          maxHeight: "400px",
-                          overflow: "auto",
-                          border: "1px solid",
-                          borderColor: "divider",
+                          maxHeight: '400px',
+                          overflow: 'auto',
+                          border: '1px solid',
+                          borderColor: 'divider',
                         }}
                       >
                         <Typography variant="h6" fontWeight={600} mb={2} color="primary">
@@ -4774,20 +4774,20 @@ ${Array.from(selectedStopPoints)
                                             variant="body2"
                                             fontWeight={600}
                                             color="primary"
-                                            sx={{ fontSize: "0.85rem" }}
+                                            sx={{ fontSize: '0.85rem' }}
                                           >
                                             {formatDeliveryAddress(
                                               point.address,
-                                              point.transfers[0]?.deliveryLocation || ""
+                                              point.transfers[0]?.deliveryLocation || ''
                                             )}
                                           </Typography>
                                           <Typography
                                             variant="caption"
                                             color="text.secondary"
                                             sx={{
-                                              display: "block",
+                                              display: 'block',
                                               mt: 0.5,
-                                              fontSize: "0.75rem",
+                                              fontSize: '0.75rem',
                                             }}
                                           >
                                             {point.address}
@@ -4797,31 +4797,31 @@ ${Array.from(selectedStopPoints)
                                           display="flex"
                                           gap={1}
                                           sx={{
-                                            flexWrap: "nowrap",
-                                            minWidth: "fit-content",
+                                            flexWrap: 'nowrap',
+                                            minWidth: 'fit-content',
                                           }}
                                         >
                                           <Box
                                             sx={{
-                                              display: "flex",
-                                              flexDirection: "column",
-                                              alignItems: "center",
-                                              minWidth: "60px",
+                                              display: 'flex',
+                                              flexDirection: 'column',
+                                              alignItems: 'center',
+                                              minWidth: '60px',
                                               px: 1,
                                               py: 0.5,
-                                              backgroundColor: "primary.50",
-                                              border: "1px solid",
-                                              borderColor: "primary.main",
+                                              backgroundColor: 'primary.50',
+                                              border: '1px solid',
+                                              borderColor: 'primary.main',
                                               borderRadius: 1,
-                                              textAlign: "center",
+                                              textAlign: 'center',
                                             }}
                                           >
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.6rem",
+                                                fontSize: '0.6rem',
                                                 fontWeight: 600,
-                                                color: "primary.main",
+                                                color: 'primary.main',
                                                 lineHeight: 1,
                                               }}
                                             >
@@ -4830,8 +4830,8 @@ ${Array.from(selectedStopPoints)
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.5rem",
-                                                color: "primary.main",
+                                                fontSize: '0.5rem',
+                                                color: 'primary.main',
                                                 lineHeight: 1,
                                               }}
                                             >
@@ -4841,25 +4841,25 @@ ${Array.from(selectedStopPoints)
 
                                           <Box
                                             sx={{
-                                              display: "flex",
-                                              flexDirection: "column",
-                                              alignItems: "center",
-                                              minWidth: "60px",
+                                              display: 'flex',
+                                              flexDirection: 'column',
+                                              alignItems: 'center',
+                                              minWidth: '60px',
                                               px: 1,
                                               py: 0.5,
-                                              backgroundColor: "secondary.50",
-                                              border: "1px solid",
-                                              borderColor: "secondary.main",
+                                              backgroundColor: 'secondary.50',
+                                              border: '1px solid',
+                                              borderColor: 'secondary.main',
                                               borderRadius: 1,
-                                              textAlign: "center",
+                                              textAlign: 'center',
                                             }}
                                           >
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.6rem",
+                                                fontSize: '0.6rem',
                                                 fontWeight: 600,
-                                                color: "secondary.main",
+                                                color: 'secondary.main',
                                                 lineHeight: 1,
                                               }}
                                             >
@@ -4868,8 +4868,8 @@ ${Array.from(selectedStopPoints)
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.5rem",
-                                                color: "secondary.main",
+                                                fontSize: '0.5rem',
+                                                color: 'secondary.main',
                                                 lineHeight: 1,
                                               }}
                                             >
@@ -4879,25 +4879,25 @@ ${Array.from(selectedStopPoints)
 
                                           <Box
                                             sx={{
-                                              display: "flex",
-                                              flexDirection: "column",
-                                              alignItems: "center",
-                                              minWidth: "70px",
+                                              display: 'flex',
+                                              flexDirection: 'column',
+                                              alignItems: 'center',
+                                              minWidth: '70px',
                                               px: 1,
                                               py: 0.5,
-                                              backgroundColor: "success.50",
-                                              border: "1px solid",
-                                              borderColor: "success.main",
+                                              backgroundColor: 'success.50',
+                                              border: '1px solid',
+                                              borderColor: 'success.main',
                                               borderRadius: 1,
-                                              textAlign: "center",
+                                              textAlign: 'center',
                                             }}
                                           >
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.6rem",
+                                                fontSize: '0.6rem',
                                                 fontWeight: 600,
-                                                color: "success.main",
+                                                color: 'success.main',
                                                 lineHeight: 1,
                                               }}
                                             >
@@ -4906,8 +4906,8 @@ ${Array.from(selectedStopPoints)
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.5rem",
-                                                color: "success.main",
+                                                fontSize: '0.5rem',
+                                                color: 'success.main',
                                                 lineHeight: 1,
                                               }}
                                             >
@@ -4917,25 +4917,25 @@ ${Array.from(selectedStopPoints)
 
                                           <Box
                                             sx={{
-                                              display: "flex",
-                                              flexDirection: "column",
-                                              alignItems: "center",
-                                              minWidth: "60px",
+                                              display: 'flex',
+                                              flexDirection: 'column',
+                                              alignItems: 'center',
+                                              minWidth: '60px',
                                               px: 1,
                                               py: 0.5,
-                                              backgroundColor: "info.50",
-                                              border: "1px solid",
-                                              borderColor: "info.main",
+                                              backgroundColor: 'info.50',
+                                              border: '1px solid',
+                                              borderColor: 'info.main',
                                               borderRadius: 1,
-                                              textAlign: "center",
+                                              textAlign: 'center',
                                             }}
                                           >
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.6rem",
+                                                fontSize: '0.6rem',
                                                 fontWeight: 600,
-                                                color: "info.main",
+                                                color: 'info.main',
                                                 lineHeight: 1,
                                               }}
                                             >
@@ -4944,8 +4944,8 @@ ${Array.from(selectedStopPoints)
                                             <Typography
                                               variant="caption"
                                               sx={{
-                                                fontSize: "0.5rem",
-                                                color: "info.main",
+                                                fontSize: '0.5rem',
+                                                color: 'info.main',
                                                 lineHeight: 1,
                                               }}
                                             >
@@ -4968,7 +4968,7 @@ ${Array.from(selectedStopPoints)
                                               <StatusChip
                                                 label={t.requestCode}
                                                 status="active"
-                                                variant={isSelected ? "filled" : "outlined"}
+                                                variant={isSelected ? 'filled' : 'outlined'}
                                                 disabled={
                                                   !isSelected &&
                                                   Object.keys(stopPoints).length >= 10
@@ -4982,8 +4982,8 @@ ${Array.from(selectedStopPoints)
                                                     setSnackbar({
                                                       open: true,
                                                       message:
-                                                        "⚠️ Đã đạt tối đa 10 điểm dừng. Không thể thêm điểm dừng mới!",
-                                                      severity: "warning",
+                                                        '⚠️ Đã đạt tối đa 10 điểm dừng. Không thể thêm điểm dừng mới!',
+                                                      severity: 'warning',
                                                     });
                                                     return;
                                                   }
@@ -5007,16 +5007,16 @@ ${Array.from(selectedStopPoints)
                                                     point.address
                                                   );
                                                 }}
-                                                sx={{ cursor: "pointer" }}
+                                                sx={{ cursor: 'pointer' }}
                                               />
                                               <Typography
                                                 variant="caption"
                                                 color="text.secondary"
                                                 sx={{
-                                                  display: "block",
+                                                  display: 'block',
                                                   ml: 1,
-                                                  fontSize: "0.7rem",
-                                                  fontStyle: "italic",
+                                                  fontSize: '0.7rem',
+                                                  fontStyle: 'italic',
                                                 }}
                                               >
                                                 ID: {t.transferId || t.id}
@@ -5042,10 +5042,10 @@ ${Array.from(selectedStopPoints)
                         elevation={2}
                         sx={{
                           p: 2,
-                          height: "400px",
-                          overflow: "auto",
-                          border: "1px solid",
-                          borderColor: "divider",
+                          height: '400px',
+                          overflow: 'auto',
+                          border: '1px solid',
+                          borderColor: 'divider',
                         }}
                       >
                         <Typography variant="h6" fontWeight={600} mb={2} color="primary">
@@ -5064,7 +5064,7 @@ ${Array.from(selectedStopPoints)
                                 );
                                 return selectedLocation
                                   ? `${selectedLocation.code} - ${selectedLocation.address}`
-                                  : "Không tìm thấy thông tin";
+                                  : 'Không tìm thấy thông tin';
                               })()}
                             </Typography>
                           </Box>
@@ -5079,7 +5079,7 @@ ${Array.from(selectedStopPoints)
                               {newTransportForm.carrierName}
                               {newTransportForm.pricingMethod && (
                                 <span>
-                                  {" "}
+                                  {' '}
                                   - {getPricingMethodLabel(newTransportForm.pricingMethod)}
                                 </span>
                               )}
@@ -5132,8 +5132,8 @@ ${Array.from(selectedStopPoints)
                               fontWeight={600}
                               color="primary"
                               sx={{
-                                borderBottom: "2px solid",
-                                borderColor: "primary.main",
+                                borderBottom: '2px solid',
+                                borderColor: 'primary.main',
                                 pb: 1,
                                 mb: 2,
                               }}
@@ -5151,7 +5151,7 @@ ${Array.from(selectedStopPoints)
                                 🛣️ Giá/km:
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {newTransportForm.pricePerKm.toLocaleString("vi-VN")} VND
+                                {newTransportForm.pricePerKm.toLocaleString('vi-VN')} VND
                               </Typography>
                             </Box>
                           )}
@@ -5164,7 +5164,7 @@ ${Array.from(selectedStopPoints)
                                 🚛 Giá/chuyến:
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {newTransportForm.pricePerTrip.toLocaleString("vi-VN")} VND
+                                {newTransportForm.pricePerTrip.toLocaleString('vi-VN')} VND
                               </Typography>
                             </Box>
                           )}
@@ -5177,7 +5177,7 @@ ${Array.from(selectedStopPoints)
                                 📦 Giá/khối:
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {newTransportForm.pricePerM3.toLocaleString("vi-VN")} VND/m³
+                                {newTransportForm.pricePerM3.toLocaleString('vi-VN')} VND/m³
                               </Typography>
                             </Box>
                           )}
@@ -5190,7 +5190,7 @@ ${Array.from(selectedStopPoints)
                                 🛑 Chi phí điểm dừng:
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {newTransportForm.stopFee.toLocaleString("vi-VN")} VND/điểm
+                                {newTransportForm.stopFee.toLocaleString('vi-VN')} VND/điểm
                               </Typography>
                             </Box>
                           )}
@@ -5203,7 +5203,7 @@ ${Array.from(selectedStopPoints)
                                 💰 Base rate:
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {newTransportForm.baseRate.toLocaleString("vi-VN")} VND
+                                {newTransportForm.baseRate.toLocaleString('vi-VN')} VND
                               </Typography>
                             </Box>
                           )}
@@ -5218,8 +5218,8 @@ ${Array.from(selectedStopPoints)
                               fontWeight={600}
                               color="primary"
                               sx={{
-                                borderBottom: "2px solid",
-                                borderColor: "primary.main",
+                                borderBottom: '2px solid',
+                                borderColor: 'primary.main',
                                 pb: 1,
                                 mb: 2,
                               }}
@@ -5237,7 +5237,7 @@ ${Array.from(selectedStopPoints)
                                 ⛽ Phí phụ xăng:
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {newTransportForm.fuelSurcharge.toLocaleString("vi-VN")} VND
+                                {newTransportForm.fuelSurcharge.toLocaleString('vi-VN')} VND
                               </Typography>
                             </Box>
                           )}
@@ -5250,7 +5250,7 @@ ${Array.from(selectedStopPoints)
                                 🛣️ Phí cầu đường:
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {newTransportForm.tollFee.toLocaleString("vi-VN")} VND
+                                {newTransportForm.tollFee.toLocaleString('vi-VN')} VND
                               </Typography>
                             </Box>
                           )}
@@ -5263,7 +5263,7 @@ ${Array.from(selectedStopPoints)
                                 🛡️ Phí bảo hiểm:
                               </Typography>
                               <Typography variant="body2" color="text.secondary">
-                                {newTransportForm.insuranceFee.toLocaleString("vi-VN")} VND
+                                {newTransportForm.insuranceFee.toLocaleString('vi-VN')} VND
                               </Typography>
                             </Box>
                           )}
@@ -5290,12 +5290,12 @@ ${Array.from(selectedStopPoints)
                               color="white"
                               sx={{
                                 p: 1.5,
-                                bgcolor: "primary.main",
+                                bgcolor: 'primary.main',
                                 borderRadius: 1,
-                                border: "1px solid",
-                                borderColor: "primary.dark",
-                                textAlign: "center",
-                                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                                border: '1px solid',
+                                borderColor: 'primary.dark',
+                                textAlign: 'center',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                               }}
                             >
                               {formatNumber(calculateEstimatedCost())} VND
@@ -5310,7 +5310,7 @@ ${Array.from(selectedStopPoints)
                             <Box mb={2}>
                               <CostCalculationDetails
                                 formData={{
-                                  pricingMethod: newTransportForm.pricingMethod || "perKm",
+                                  pricingMethod: newTransportForm.pricingMethod || 'perKm',
                                   baseRate: newTransportForm.baseRate || 0,
                                   pricePerKm: newTransportForm.pricePerKm || 0,
                                   pricePerTrip: newTransportForm.pricePerTrip || 0,
@@ -5344,34 +5344,34 @@ ${Array.from(selectedStopPoints)
                               flexWrap="nowrap"
                               sx={{
                                 p: 1.5,
-                                bgcolor: "grey.50",
+                                bgcolor: 'grey.50',
                                 borderRadius: 1,
-                                border: "1px solid",
-                                borderColor: "grey.200",
-                                minWidth: "fit-content",
+                                border: '1px solid',
+                                borderColor: 'grey.200',
+                                minWidth: 'fit-content',
                               }}
                             >
                               <Box
                                 sx={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                  minWidth: "60px",
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  minWidth: '60px',
                                   px: 1,
                                   py: 0.5,
-                                  backgroundColor: "primary.50",
-                                  border: "1px solid",
-                                  borderColor: "primary.main",
+                                  backgroundColor: 'primary.50',
+                                  border: '1px solid',
+                                  borderColor: 'primary.main',
                                   borderRadius: 1,
-                                  textAlign: "center",
+                                  textAlign: 'center',
                                 }}
                               >
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.6rem",
+                                    fontSize: '0.6rem',
                                     fontWeight: 600,
-                                    color: "primary.main",
+                                    color: 'primary.main',
                                     lineHeight: 1,
                                   }}
                                 >
@@ -5380,8 +5380,8 @@ ${Array.from(selectedStopPoints)
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.5rem",
-                                    color: "primary.main",
+                                    fontSize: '0.5rem',
+                                    color: 'primary.main',
                                     lineHeight: 1,
                                   }}
                                 >
@@ -5391,25 +5391,25 @@ ${Array.from(selectedStopPoints)
 
                               <Box
                                 sx={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                  minWidth: "60px",
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  minWidth: '60px',
                                   px: 1,
                                   py: 0.5,
-                                  backgroundColor: "secondary.50",
-                                  border: "1px solid",
-                                  borderColor: "secondary.main",
+                                  backgroundColor: 'secondary.50',
+                                  border: '1px solid',
+                                  borderColor: 'secondary.main',
                                   borderRadius: 1,
-                                  textAlign: "center",
+                                  textAlign: 'center',
                                 }}
                               >
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.6rem",
+                                    fontSize: '0.6rem',
                                     fontWeight: 600,
-                                    color: "secondary.main",
+                                    color: 'secondary.main',
                                     lineHeight: 1,
                                   }}
                                 >
@@ -5422,8 +5422,8 @@ ${Array.from(selectedStopPoints)
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.5rem",
-                                    color: "secondary.main",
+                                    fontSize: '0.5rem',
+                                    color: 'secondary.main',
                                     lineHeight: 1,
                                   }}
                                 >
@@ -5432,25 +5432,25 @@ ${Array.from(selectedStopPoints)
                               </Box>
                               <Box
                                 sx={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                  minWidth: "70px",
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  minWidth: '70px',
                                   px: 1,
                                   py: 0.5,
-                                  backgroundColor: "success.50",
-                                  border: "1px solid",
-                                  borderColor: "success.main",
+                                  backgroundColor: 'success.50',
+                                  border: '1px solid',
+                                  borderColor: 'success.main',
                                   borderRadius: 1,
-                                  textAlign: "center",
+                                  textAlign: 'center',
                                 }}
                               >
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.6rem",
+                                    fontSize: '0.6rem',
                                     fontWeight: 600,
-                                    color: "success.main",
+                                    color: 'success.main',
                                     lineHeight: 1,
                                   }}
                                 >
@@ -5466,8 +5466,8 @@ ${Array.from(selectedStopPoints)
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.5rem",
-                                    color: "success.main",
+                                    fontSize: '0.5rem',
+                                    color: 'success.main',
                                     lineHeight: 1,
                                   }}
                                 >
@@ -5476,25 +5476,25 @@ ${Array.from(selectedStopPoints)
                               </Box>
                               <Box
                                 sx={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  alignItems: "center",
-                                  minWidth: "60px",
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  minWidth: '60px',
                                   px: 1,
                                   py: 0.5,
-                                  backgroundColor: "info.50",
-                                  border: "1px solid",
-                                  borderColor: "info.main",
+                                  backgroundColor: 'info.50',
+                                  border: '1px solid',
+                                  borderColor: 'info.main',
                                   borderRadius: 1,
-                                  textAlign: "center",
+                                  textAlign: 'center',
                                 }}
                               >
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.6rem",
+                                    fontSize: '0.6rem',
                                     fontWeight: 600,
-                                    color: "info.main",
+                                    color: 'info.main',
                                     lineHeight: 1,
                                   }}
                                 >
@@ -5508,8 +5508,8 @@ ${Array.from(selectedStopPoints)
                                 <Typography
                                   variant="caption"
                                   sx={{
-                                    fontSize: "0.5rem",
-                                    color: "info.main",
+                                    fontSize: '0.5rem',
+                                    color: 'info.main',
                                     lineHeight: 1,
                                   }}
                                 >
@@ -5524,25 +5524,25 @@ ${Array.from(selectedStopPoints)
                                 return totalDistance > 0 ? (
                                   <Box
                                     sx={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "center",
-                                      minWidth: "60px",
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'center',
+                                      minWidth: '60px',
                                       px: 1,
                                       py: 0.5,
-                                      backgroundColor: "success.50",
-                                      border: "1px solid",
-                                      borderColor: "success.main",
+                                      backgroundColor: 'success.50',
+                                      border: '1px solid',
+                                      borderColor: 'success.main',
                                       borderRadius: 1,
-                                      textAlign: "center",
+                                      textAlign: 'center',
                                     }}
                                   >
                                     <Typography
                                       variant="caption"
                                       sx={{
-                                        fontSize: "0.6rem",
+                                        fontSize: '0.6rem',
                                         fontWeight: 600,
-                                        color: "success.main",
+                                        color: 'success.main',
                                         lineHeight: 1,
                                       }}
                                     >
@@ -5551,8 +5551,8 @@ ${Array.from(selectedStopPoints)
                                     <Typography
                                       variant="caption"
                                       sx={{
-                                        fontSize: "0.5rem",
-                                        color: "success.main",
+                                        fontSize: '0.5rem',
+                                        color: 'success.main',
                                         lineHeight: 1,
                                       }}
                                     >
@@ -5564,30 +5564,30 @@ ${Array.from(selectedStopPoints)
                               {selectedStopPoints.size > 0 && (
                                 <Box
                                   sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    minWidth: "70px",
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    minWidth: '70px',
                                     px: 1,
                                     py: 0.5,
                                     backgroundColor:
-                                      selectedStopPoints.size > 10 ? "error.50" : "warning.50",
-                                    border: "1px solid",
+                                      selectedStopPoints.size > 10 ? 'error.50' : 'warning.50',
+                                    border: '1px solid',
                                     borderColor:
-                                      selectedStopPoints.size > 10 ? "error.main" : "warning.main",
+                                      selectedStopPoints.size > 10 ? 'error.main' : 'warning.main',
                                     borderRadius: 1,
-                                    textAlign: "center",
+                                    textAlign: 'center',
                                   }}
                                 >
                                   <Typography
                                     variant="caption"
                                     sx={{
-                                      fontSize: "0.6rem",
+                                      fontSize: '0.6rem',
                                       fontWeight: 600,
                                       color:
                                         selectedStopPoints.size > 10
-                                          ? "error.main"
-                                          : "warning.main",
+                                          ? 'error.main'
+                                          : 'warning.main',
                                       lineHeight: 1,
                                     }}
                                   >
@@ -5596,11 +5596,11 @@ ${Array.from(selectedStopPoints)
                                   <Typography
                                     variant="caption"
                                     sx={{
-                                      fontSize: "0.5rem",
+                                      fontSize: '0.5rem',
                                       color:
                                         selectedStopPoints.size > 10
-                                          ? "error.main"
-                                          : "warning.main",
+                                          ? 'error.main'
+                                          : 'warning.main',
                                       lineHeight: 1,
                                     }}
                                   >
@@ -5613,10 +5613,10 @@ ${Array.from(selectedStopPoints)
                                   variant="caption"
                                   color="error"
                                   sx={{
-                                    display: "block",
+                                    display: 'block',
                                     mt: 0.5,
-                                    fontWeight: "bold",
-                                    fontSize: "0.7rem",
+                                    fontWeight: 'bold',
+                                    fontSize: '0.7rem',
                                   }}
                                 >
                                   ⚠️ Vượt quá giới hạn 10 điểm dừng!
@@ -5629,7 +5629,7 @@ ${Array.from(selectedStopPoints)
                               <Typography
                                 variant="caption"
                                 color="text.secondary"
-                                sx={{ display: "block", mb: 0.5 }}
+                                sx={{ display: 'block', mb: 0.5 }}
                               >
                                 📋 Danh sách Transfer IDs:
                               </Typography>
@@ -5639,10 +5639,10 @@ ${Array.from(selectedStopPoints)
                                 flexWrap="wrap"
                                 sx={{
                                   p: 1,
-                                  bgcolor: "grey.100",
+                                  bgcolor: 'grey.100',
                                   borderRadius: 1,
-                                  border: "1px solid",
-                                  borderColor: "grey.300",
+                                  border: '1px solid',
+                                  borderColor: 'grey.300',
                                 }}
                               >
                                 {transfers
@@ -5655,9 +5655,9 @@ ${Array.from(selectedStopPoints)
                                         label={t.transferId || t.transfer_id || t.id || chipKey}
                                         status="active"
                                         sx={{
-                                          fontSize: "0.65rem",
-                                          height: "20px",
-                                          "& .MuiChip-label": {
+                                          fontSize: '0.65rem',
+                                          height: '20px',
+                                          '& .MuiChip-label': {
                                             px: 0.5,
                                           },
                                         }}
@@ -5705,7 +5705,7 @@ ${Array.from(selectedStopPoints)
                                 <LocationOn
                                   fontSize="small"
                                   color="secondary"
-                                  sx={{ fontSize: "1rem" }}
+                                  sx={{ fontSize: '1rem' }}
                                 />
                                 <Typography variant="body2" fontWeight={600} color="secondary">
                                   Điểm dừng {index + 1}:
@@ -5716,7 +5716,7 @@ ${Array.from(selectedStopPoints)
                                   variant="body2"
                                   fontWeight={600}
                                   color="primary"
-                                  sx={{ fontSize: "0.85rem" }}
+                                  sx={{ fontSize: '0.85rem' }}
                                 >
                                   {formatDeliveryAddress(
                                     stopPoint.address,
@@ -5729,15 +5729,15 @@ ${Array.from(selectedStopPoints)
                                         newTransportForm.selectedTransfers.has(selectionId) &&
                                         stopPoint.transfers.includes(transferId)
                                       );
-                                    })?.deliveryLocation || ""
+                                    })?.deliveryLocation || ''
                                   )}
                                 </Typography>
                                 <Typography
                                   variant="caption"
                                   color="text.secondary"
                                   sx={{
-                                    display: "block",
-                                    fontSize: "0.75rem",
+                                    display: 'block',
+                                    fontSize: '0.75rem',
                                   }}
                                 >
                                   {stopPoint.address}
@@ -5770,7 +5770,7 @@ ${Array.from(selectedStopPoints)
                                             selectedTransfers: newSelected,
                                           }));
                                         }}
-                                        sx={{ cursor: "pointer" }}
+                                        sx={{ cursor: 'pointer' }}
                                       />
                                     );
                                   })}
@@ -5781,34 +5781,34 @@ ${Array.from(selectedStopPoints)
                                   flexWrap="nowrap"
                                   sx={{
                                     p: 1.5,
-                                    bgcolor: "grey.50",
+                                    bgcolor: 'grey.50',
                                     borderRadius: 1,
-                                    border: "1px solid",
-                                    borderColor: "grey.200",
-                                    minWidth: "fit-content",
+                                    border: '1px solid',
+                                    borderColor: 'grey.200',
+                                    minWidth: 'fit-content',
                                   }}
                                 >
                                   <Box
                                     sx={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "center",
-                                      minWidth: "60px",
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'center',
+                                      minWidth: '60px',
                                       px: 1,
                                       py: 0.5,
-                                      backgroundColor: "primary.50",
-                                      border: "1px solid",
-                                      borderColor: "primary.main",
+                                      backgroundColor: 'primary.50',
+                                      border: '1px solid',
+                                      borderColor: 'primary.main',
                                       borderRadius: 1,
-                                      textAlign: "center",
+                                      textAlign: 'center',
                                     }}
                                   >
                                     <Typography
                                       variant="caption"
                                       sx={{
-                                        fontSize: "0.6rem",
+                                        fontSize: '0.6rem',
                                         fontWeight: 600,
-                                        color: "primary.main",
+                                        color: 'primary.main',
                                         lineHeight: 1,
                                       }}
                                     >
@@ -5817,8 +5817,8 @@ ${Array.from(selectedStopPoints)
                                     <Typography
                                       variant="caption"
                                       sx={{
-                                        fontSize: "0.5rem",
-                                        color: "primary.main",
+                                        fontSize: '0.5rem',
+                                        color: 'primary.main',
                                         lineHeight: 1,
                                       }}
                                     >
@@ -5828,25 +5828,25 @@ ${Array.from(selectedStopPoints)
 
                                   <Box
                                     sx={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "center",
-                                      minWidth: "60px",
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'center',
+                                      minWidth: '60px',
                                       px: 1,
                                       py: 0.5,
-                                      backgroundColor: "secondary.50",
-                                      border: "1px solid",
-                                      borderColor: "secondary.main",
+                                      backgroundColor: 'secondary.50',
+                                      border: '1px solid',
+                                      borderColor: 'secondary.main',
                                       borderRadius: 1,
-                                      textAlign: "center",
+                                      textAlign: 'center',
                                     }}
                                   >
                                     <Typography
                                       variant="caption"
                                       sx={{
-                                        fontSize: "0.6rem",
+                                        fontSize: '0.6rem',
                                         fontWeight: 600,
-                                        color: "secondary.main",
+                                        color: 'secondary.main',
                                         lineHeight: 1,
                                       }}
                                     >
@@ -5858,8 +5858,8 @@ ${Array.from(selectedStopPoints)
                                     <Typography
                                       variant="caption"
                                       sx={{
-                                        fontSize: "0.5rem",
-                                        color: "secondary.main",
+                                        fontSize: '0.5rem',
+                                        color: 'secondary.main',
                                         lineHeight: 1,
                                       }}
                                     >
@@ -5869,25 +5869,25 @@ ${Array.from(selectedStopPoints)
 
                                   <Box
                                     sx={{
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "center",
-                                      minWidth: "60px",
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      alignItems: 'center',
+                                      minWidth: '60px',
                                       px: 1,
                                       py: 0.5,
-                                      backgroundColor: "info.50",
-                                      border: "1px solid",
-                                      borderColor: "info.main",
+                                      backgroundColor: 'info.50',
+                                      border: '1px solid',
+                                      borderColor: 'info.main',
                                       borderRadius: 1,
-                                      textAlign: "center",
+                                      textAlign: 'center',
                                     }}
                                   >
                                     <Typography
                                       variant="caption"
                                       sx={{
-                                        fontSize: "0.6rem",
+                                        fontSize: '0.6rem',
                                         fontWeight: 600,
-                                        color: "info.main",
+                                        color: 'info.main',
                                         lineHeight: 1,
                                       }}
                                     >
@@ -5898,8 +5898,8 @@ ${Array.from(selectedStopPoints)
                                     <Typography
                                       variant="caption"
                                       sx={{
-                                        fontSize: "0.5rem",
-                                        color: "info.main",
+                                        fontSize: '0.5rem',
+                                        color: 'info.main',
                                         lineHeight: 1,
                                       }}
                                     >
@@ -5911,25 +5911,25 @@ ${Array.from(selectedStopPoints)
                                     stopPointDistances[stopKey] > 0 && (
                                       <Box
                                         sx={{
-                                          display: "flex",
-                                          flexDirection: "column",
-                                          alignItems: "center",
-                                          minWidth: "60px",
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          alignItems: 'center',
+                                          minWidth: '60px',
                                           px: 1,
                                           py: 0.5,
-                                          backgroundColor: "success.50",
-                                          border: "1px solid",
-                                          borderColor: "success.main",
+                                          backgroundColor: 'success.50',
+                                          border: '1px solid',
+                                          borderColor: 'success.main',
                                           borderRadius: 1,
-                                          textAlign: "center",
+                                          textAlign: 'center',
                                         }}
                                       >
                                         <Typography
                                           variant="caption"
                                           sx={{
-                                            fontSize: "0.6rem",
+                                            fontSize: '0.6rem',
                                             fontWeight: 600,
-                                            color: "success.main",
+                                            color: 'success.main',
                                             lineHeight: 1,
                                           }}
                                         >
@@ -5938,8 +5938,8 @@ ${Array.from(selectedStopPoints)
                                         <Typography
                                           variant="caption"
                                           sx={{
-                                            fontSize: "0.5rem",
-                                            color: "success.main",
+                                            fontSize: '0.5rem',
+                                            color: 'success.main',
                                             lineHeight: 1,
                                           }}
                                         >
@@ -5976,7 +5976,7 @@ ${Array.from(selectedStopPoints)
         </DialogContent>
         <DialogActions>
           <Button onClick={() => handleCloseDialog(true)} disabled={closingDialog}>
-            {closingDialog ? "Đang xóa..." : "Hủy"}
+            {closingDialog ? 'Đang xóa...' : 'Hủy'}
           </Button>
           <Button
             variant="contained"
@@ -5984,20 +5984,20 @@ ${Array.from(selectedStopPoints)
             disabled={!currentRequestId || submittingRequest}
             startIcon={submittingRequest ? <CircularProgress size={16} /> : null}
             sx={{
-              minWidth: "200px",
-              position: "relative",
-              overflow: "hidden",
-              "&:disabled": {
-                backgroundColor: "primary.main",
-                color: "white",
+              minWidth: '200px',
+              position: 'relative',
+              overflow: 'hidden',
+              '&:disabled': {
+                backgroundColor: 'primary.main',
+                color: 'white',
               },
             }}
           >
             {submittingRequest
-              ? "Đang tạo yêu cầu..."
+              ? 'Đang tạo yêu cầu...'
               : editing
-                ? "Cập nhật"
-                : "Tạo yêu cầu vận chuyển"}
+                ? 'Cập nhật'
+                : 'Tạo yêu cầu vận chuyển'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -6030,16 +6030,16 @@ ${Array.from(selectedStopPoints)
                 <Grid item xs={12} md={6}>
                   <Card
                     sx={{
-                      cursor: "pointer",
-                      border: "2px solid",
-                      borderColor: "primary.main",
-                      "&:hover": {
-                        backgroundColor: "primary.light",
-                        color: "white",
+                      cursor: 'pointer',
+                      border: '2px solid',
+                      borderColor: 'primary.main',
+                      '&:hover': {
+                        backgroundColor: 'primary.light',
+                        color: 'white',
                       },
-                      transition: "all 0.2s ease-in-out",
+                      transition: 'all 0.2s ease-in-out',
                     }}
-                    onClick={() => handleAddLocationTypeSelect("system")}
+                    onClick={() => handleAddLocationTypeSelect('system')}
                   >
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
@@ -6056,16 +6056,16 @@ ${Array.from(selectedStopPoints)
                 <Grid item xs={12} md={6}>
                   <Card
                     sx={{
-                      cursor: "pointer",
-                      border: "2px solid",
-                      borderColor: "secondary.main",
-                      "&:hover": {
-                        backgroundColor: "secondary.light",
-                        color: "white",
+                      cursor: 'pointer',
+                      border: '2px solid',
+                      borderColor: 'secondary.main',
+                      '&:hover': {
+                        backgroundColor: 'secondary.light',
+                        color: 'white',
                       },
-                      transition: "all 0.2s ease-in-out",
+                      transition: 'all 0.2s ease-in-out',
                     }}
-                    onClick={() => handleAddLocationTypeSelect("temporary")}
+                    onClick={() => handleAddLocationTypeSelect('temporary')}
                   >
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
@@ -6079,7 +6079,7 @@ ${Array.from(selectedStopPoints)
                 </Grid>
               </Grid>
             </Box>
-          ) : addLocationType === "system" ? (
+          ) : addLocationType === 'system' ? (
             // Step 2: Form thêm điểm nguồn hệ thống
             <Box>
               <Typography variant="h6" gutterBottom>
@@ -6319,14 +6319,14 @@ ${Array.from(selectedStopPoints)
             <Button
               variant="contained"
               onClick={
-                addLocationType === "system"
+                addLocationType === 'system'
                   ? handleSaveSystemLocation
                   : handleSaveTemporaryLocation
               }
               disabled={savingLocation}
               startIcon={savingLocation ? <CircularProgress size={16} /> : null}
             >
-              {savingLocation ? "Đang lưu..." : "Lưu"}
+              {savingLocation ? 'Đang lưu...' : 'Lưu'}
             </Button>
           )}
         </DialogActions>
@@ -6337,17 +6337,17 @@ ${Array.from(selectedStopPoints)
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           onClose={() => setSnackbar({ ...snackbar, open: false })}
           severity={snackbar.severity}
           sx={{
-            width: "100%",
-            maxWidth: "600px",
-            "& .MuiAlert-message": {
-              whiteSpace: "pre-line",
-              fontSize: "0.8rem",
+            width: '100%',
+            maxWidth: '600px',
+            '& .MuiAlert-message': {
+              whiteSpace: 'pre-line',
+              fontSize: '0.8rem',
               lineHeight: 1.3,
             },
           }}
@@ -6365,23 +6365,23 @@ ${Array.from(selectedStopPoints)
       >
         <DialogTitle>
           <Box display="flex" alignItems="center" gap={1}>
-            {newTransportType === "system" ? (
+            {newTransportType === 'system' ? (
               <Business color="primary" />
             ) : (
               <Public color="secondary" />
             )}
             <Typography variant="h6">
-              Tạo đề nghị vận chuyển -{" "}
-              {newTransportType === "system" ? "Từ hệ thống" : "Ngoài hệ thống"}
+              Tạo đề nghị vận chuyển -{' '}
+              {newTransportType === 'system' ? 'Từ hệ thống' : 'Ngoài hệ thống'}
             </Typography>
           </Box>
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <Alert severity="info" sx={{ mb: 2 }}>
-              {newTransportType === "system"
-                ? "Từ hệ thống: Chọn 1 điểm đi và 1 điểm đến (không trùng nhau, phải có trong Locations sheet)"
-                : "Ngoài hệ thống: Có thể chọn nhiều điểm đến, ít nhất 1 điểm không nằm trong địa điểm lưu"}
+              {newTransportType === 'system'
+                ? 'Từ hệ thống: Chọn 1 điểm đi và 1 điểm đến (không trùng nhau, phải có trong Locations sheet)'
+                : 'Ngoài hệ thống: Có thể chọn nhiều điểm đến, ít nhất 1 điểm không nằm trong địa điểm lưu'}
             </Alert>
 
             <Grid container spacing={2}>
@@ -6483,14 +6483,14 @@ ${Array.from(selectedStopPoints)
 
                           // Kiểm tra không được trùng với điểm đến (chỉ cho "Từ hệ thống")
                           if (
-                            newTransportType === "system" &&
+                            newTransportType === 'system' &&
                             selectedValue &&
                             newTransportForm.destinationIds.includes(selectedValue)
                           ) {
                             setSnackbar({
                               open: true,
-                              message: "Điểm đi không được trùng với điểm đến",
-                              severity: "error",
+                              message: 'Điểm đi không được trùng với điểm đến',
+                              severity: 'error',
                             });
                             return;
                           }
@@ -6502,27 +6502,27 @@ ${Array.from(selectedStopPoints)
                         }}
                         onClose={() => {
                           // Xử lý khi click outside để đóng dropdown
-                          console.log("Điểm đi dropdown đã đóng");
+                          console.log('Điểm đi dropdown đã đóng');
                         }}
                         MenuProps={{
                           PaperProps: {
                             style: {
                               maxHeight: 300,
-                              overflow: "auto",
+                              overflow: 'auto',
                             },
                           },
                           anchorOrigin: {
-                            vertical: "bottom",
-                            horizontal: "left",
+                            vertical: 'bottom',
+                            horizontal: 'left',
                           },
                           transformOrigin: {
-                            vertical: "top",
-                            horizontal: "left",
+                            vertical: 'top',
+                            horizontal: 'left',
                           },
                           // Tự động đóng khi click outside
                           disableAutoFocusItem: true,
                           // Cải thiện UX khi click outside
-                          variant: "menu",
+                          variant: 'menu',
                         }}
                       >
                         {locations.map((location) => (
@@ -6552,15 +6552,15 @@ ${Array.from(selectedStopPoints)
                           <Box
                             sx={{
                               p: 1,
-                              backgroundColor: "primary.50",
+                              backgroundColor: 'primary.50',
                               borderRadius: 1,
-                              border: "2px solid",
-                              borderColor: "primary.main",
-                              height: "56px", // Match Select height exactly
-                              display: "flex",
-                              alignItems: "center",
-                              overflow: "hidden",
-                              boxShadow: "0 0 0 1px rgba(25, 118, 210, 0.2)",
+                              border: '2px solid',
+                              borderColor: 'primary.main',
+                              height: '56px', // Match Select height exactly
+                              display: 'flex',
+                              alignItems: 'center',
+                              overflow: 'hidden',
+                              boxShadow: '0 0 0 1px rgba(25, 118, 210, 0.2)',
                             }}
                           >
                             <LocationOn
@@ -6571,16 +6571,16 @@ ${Array.from(selectedStopPoints)
                             <Typography
                               variant="caption"
                               sx={{
-                                color: "text.primary",
+                                color: 'text.primary',
                                 lineHeight: 1.2,
-                                fontSize: "0.7rem",
+                                fontSize: '0.7rem',
                                 fontWeight: 500,
-                                wordBreak: "break-word",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                display: "-webkit-box",
+                                wordBreak: 'break-word',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
                                 WebkitLineClamp: 2,
-                                WebkitBoxOrient: "vertical",
+                                WebkitBoxOrient: 'vertical',
                                 flex: 1,
                               }}
                             >
@@ -6593,12 +6593,12 @@ ${Array.from(selectedStopPoints)
                         ) : (
                           <Box
                             sx={{
-                              height: "56px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: "text.disabled",
-                              fontSize: "0.875rem",
+                              height: '56px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: 'text.disabled',
+                              fontSize: '0.875rem',
                             }}
                           >
                             Chọn điểm đi để xem địa chỉ
@@ -6619,17 +6619,17 @@ ${Array.from(selectedStopPoints)
                         <InputLabel>Điểm đến</InputLabel>
                         <Select
                           value={
-                            newTransportType === "system"
-                              ? newTransportForm.destinationIds[0] || ""
+                            newTransportType === 'system'
+                              ? newTransportForm.destinationIds[0] || ''
                               : newTransportForm.destinationIds
                           }
                           label="Điểm đến"
-                          multiple={newTransportType === "external"}
+                          multiple={newTransportType === 'external'}
                           open={destinationSelectOpen}
                           onOpen={() => setDestinationSelectOpen(true)}
                           onClose={() => setDestinationSelectOpen(false)}
                           onChange={(e) => {
-                            if (newTransportType === "system") {
+                            if (newTransportType === 'system') {
                               // Từ hệ thống: chỉ cho phép 1 điểm đến
                               const selectedValue = e.target.value as string;
 
@@ -6637,8 +6637,8 @@ ${Array.from(selectedStopPoints)
                               if (selectedValue && selectedValue === newTransportForm.originId) {
                                 setSnackbar({
                                   open: true,
-                                  message: "Điểm đến không được trùng với điểm đi",
-                                  severity: "error",
+                                  message: 'Điểm đến không được trùng với điểm đi',
+                                  severity: 'error',
                                 });
                                 return;
                               }
@@ -6665,21 +6665,21 @@ ${Array.from(selectedStopPoints)
                             PaperProps: {
                               style: {
                                 maxHeight: 300,
-                                overflow: "auto",
+                                overflow: 'auto',
                               },
                             },
                             anchorOrigin: {
-                              vertical: "bottom",
-                              horizontal: "left",
+                              vertical: 'bottom',
+                              horizontal: 'left',
                             },
                             transformOrigin: {
-                              vertical: "top",
-                              horizontal: "left",
+                              vertical: 'top',
+                              horizontal: 'left',
                             },
                             // Tự động đóng khi click outside
                             disableAutoFocusItem: true,
                             // Cải thiện UX khi click outside
-                            variant: "menu",
+                            variant: 'menu',
                           }}
                         >
                           {locations.map((location) => (
@@ -6700,7 +6700,7 @@ ${Array.from(selectedStopPoints)
 
                     {/* Hiển thị địa chỉ điểm đến bên phải (chỉ cho "Từ hệ thống") */}
                     <Grid item xs={12} md={6}>
-                      {newTransportType === "system" &&
+                      {newTransportType === 'system' &&
                         newTransportForm.destinationIds.length > 0 &&
                         (() => {
                           const selectedDestination = locations.find(
@@ -6710,15 +6710,15 @@ ${Array.from(selectedStopPoints)
                             <Box
                               sx={{
                                 p: 1,
-                                backgroundColor: "success.50",
+                                backgroundColor: 'success.50',
                                 borderRadius: 1,
-                                border: "2px solid",
-                                borderColor: "success.main",
-                                height: "56px", // Match Select height exactly
-                                display: "flex",
-                                alignItems: "center",
-                                overflow: "hidden",
-                                boxShadow: "0 0 0 1px rgba(46, 125, 50, 0.2)",
+                                border: '2px solid',
+                                borderColor: 'success.main',
+                                height: '56px', // Match Select height exactly
+                                display: 'flex',
+                                alignItems: 'center',
+                                overflow: 'hidden',
+                                boxShadow: '0 0 0 1px rgba(46, 125, 50, 0.2)',
                               }}
                             >
                               <LocationOn
@@ -6729,16 +6729,16 @@ ${Array.from(selectedStopPoints)
                               <Typography
                                 variant="caption"
                                 sx={{
-                                  color: "text.primary",
+                                  color: 'text.primary',
                                   lineHeight: 1.2,
-                                  fontSize: "0.7rem",
+                                  fontSize: '0.7rem',
                                   fontWeight: 500,
-                                  wordBreak: "break-word",
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  display: "-webkit-box",
+                                  wordBreak: 'break-word',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  display: '-webkit-box',
                                   WebkitLineClamp: 2,
-                                  WebkitBoxOrient: "vertical",
+                                  WebkitBoxOrient: 'vertical',
                                   flex: 1,
                                 }}
                               >
@@ -6753,12 +6753,12 @@ ${Array.from(selectedStopPoints)
                           ) : (
                             <Box
                               sx={{
-                                height: "56px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "text.disabled",
-                                fontSize: "0.875rem",
+                                height: '56px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'text.disabled',
+                                fontSize: '0.875rem',
                               }}
                             >
                               Chọn điểm đến để xem địa chỉ
@@ -6771,14 +6771,14 @@ ${Array.from(selectedStopPoints)
               )}
 
               {/* Hiển thị các điểm đến đã chọn với khả năng xóa (chỉ cho "Ngoài hệ thống") */}
-              {newTransportType === "external" && newTransportForm.destinationIds.length > 0 && (
+              {newTransportType === 'external' && newTransportForm.destinationIds.length > 0 && (
                 <Grid item xs={12}>
                   <Box sx={{ mt: 1 }}>
                     <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 600 }}>
                       Điểm đến đã chọn ({newTransportForm.destinationIds.length}
                       ):
                     </Typography>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                       {newTransportForm.destinationIds.map((destinationId) => {
                         const location = locations.find((loc) => loc.id === destinationId);
                         if (!location) return null;
@@ -6787,15 +6787,15 @@ ${Array.from(selectedStopPoints)
                           <Box
                             key={destinationId}
                             sx={{
-                              display: "flex",
-                              alignItems: "center",
+                              display: 'flex',
+                              alignItems: 'center',
                               gap: 1,
                               p: 1,
-                              border: "1px solid",
-                              borderColor: "primary.main",
+                              border: '1px solid',
+                              borderColor: 'primary.main',
                               borderRadius: 1,
-                              backgroundColor: "primary.50",
-                              minWidth: "200px",
+                              backgroundColor: 'primary.50',
+                              minWidth: '200px',
                             }}
                           >
                             <Box display="flex" alignItems="center" gap={0.5}>
@@ -6811,11 +6811,11 @@ ${Array.from(selectedStopPoints)
                             <Typography
                               variant="caption"
                               sx={{
-                                color: "text.secondary",
+                                color: 'text.secondary',
                                 flex: 1,
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
                               }}
                             >
                               {location.address}
@@ -6831,8 +6831,8 @@ ${Array.from(selectedStopPoints)
                                 }));
                               }}
                               sx={{
-                                color: "error.main",
-                                "&:hover": { backgroundColor: "error.50" },
+                                color: 'error.main',
+                                '&:hover': { backgroundColor: 'error.50' },
                               }}
                             >
                               <Clear fontSize="small" />
@@ -6841,7 +6841,7 @@ ${Array.from(selectedStopPoints)
                         );
                       })}
                     </Box>
-                    <Box sx={{ mt: 1, display: "flex", gap: 1 }}>
+                    <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
                       <Button
                         size="small"
                         variant="outlined"
@@ -6853,7 +6853,7 @@ ${Array.from(selectedStopPoints)
                             destinationIds: [],
                           }));
                         }}
-                        sx={{ fontSize: "0.75rem" }}
+                        sx={{ fontSize: '0.75rem' }}
                       >
                         Xóa tất cả
                       </Button>
@@ -6863,7 +6863,7 @@ ${Array.from(selectedStopPoints)
                         color="primary"
                         startIcon={<AddIcon />}
                         onClick={() => setDestinationSelectOpen(true)}
-                        sx={{ fontSize: "0.75rem" }}
+                        sx={{ fontSize: '0.75rem' }}
                       >
                         Thêm điểm đến
                       </Button>
@@ -6891,10 +6891,10 @@ ${Array.from(selectedStopPoints)
             </Grid>
 
             {/* Phần báo kiện - chỉ hiển thị cho "Từ hệ thống" */}
-            {newTransportType === "system" && (
+            {newTransportType === 'system' && (
               <Box sx={{ mt: 3 }}>
                 <Divider sx={{ mb: 2 }} />
-                <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
+                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                   📦 Báo kiện
                 </Typography>
                 <Alert severity="info" sx={{ mb: 2 }}>
@@ -6903,7 +6903,7 @@ ${Array.from(selectedStopPoints)
                     <Typography
                       variant="caption"
                       display="block"
-                      sx={{ mt: 1, color: "warning.main" }}
+                      sx={{ mt: 1, color: 'warning.main' }}
                     >
                       ⚠️ Đang sử dụng dữ liệu mẫu (Volume rules chưa load được)
                     </Typography>
@@ -6914,12 +6914,12 @@ ${Array.from(selectedStopPoints)
                   {(volumeRules.length > 0
                     ? volumeRules
                     : [
-                        { id: "S", name: "Size S", unitVolume: 0.04 },
-                        { id: "M", name: "Size M", unitVolume: 0.09 },
-                        { id: "L", name: "Size L", unitVolume: 0.14 },
-                        { id: "BAG_S", name: "Bag S", unitVolume: 0.01 },
-                        { id: "BAG_M", name: "Bag M", unitVolume: 0.02 },
-                        { id: "BAG_L", name: "Bag L", unitVolume: 0.03 },
+                        { id: 'S', name: 'Size S', unitVolume: 0.04 },
+                        { id: 'M', name: 'Size M', unitVolume: 0.09 },
+                        { id: 'L', name: 'Size L', unitVolume: 0.14 },
+                        { id: 'BAG_S', name: 'Bag S', unitVolume: 0.01 },
+                        { id: 'BAG_M', name: 'Bag M', unitVolume: 0.02 },
+                        { id: 'BAG_L', name: 'Bag L', unitVolume: 0.03 },
                       ]
                   ).map((rule) => (
                     <Grid key={rule.id} item xs={12} sm={6} md={4}>
@@ -6928,7 +6928,7 @@ ${Array.from(selectedStopPoints)
                         size="small"
                         type="number"
                         label={`${rule.name} (${Number(rule.unitVolume || 0).toLocaleString(
-                          "vi-VN",
+                          'vi-VN',
                           {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
@@ -6957,12 +6957,12 @@ ${Array.from(selectedStopPoints)
                     volumeRules.length > 0
                       ? volumeRules
                       : [
-                          { id: "S", name: "Size S", unitVolume: 0.04 },
-                          { id: "M", name: "Size M", unitVolume: 0.09 },
-                          { id: "L", name: "Size L", unitVolume: 0.14 },
-                          { id: "BAG_S", name: "Bag S", unitVolume: 0.01 },
-                          { id: "BAG_M", name: "Bag M", unitVolume: 0.02 },
-                          { id: "BAG_L", name: "Bag L", unitVolume: 0.03 },
+                          { id: 'S', name: 'Size S', unitVolume: 0.04 },
+                          { id: 'M', name: 'Size M', unitVolume: 0.09 },
+                          { id: 'L', name: 'Size L', unitVolume: 0.14 },
+                          { id: 'BAG_S', name: 'Bag S', unitVolume: 0.01 },
+                          { id: 'BAG_M', name: 'Bag M', unitVolume: 0.02 },
+                          { id: 'BAG_L', name: 'Bag L', unitVolume: 0.03 },
                         ];
                   const totalVolume = rulesToUse.reduce((sum, rule) => {
                     const count = packageCounts[rule.id] || 0;
@@ -6974,16 +6974,16 @@ ${Array.from(selectedStopPoints)
                       sx={{
                         mt: 2,
                         p: 2,
-                        backgroundColor: "primary.50",
+                        backgroundColor: 'primary.50',
                         borderRadius: 1,
                       }}
                     >
                       <Typography variant="subtitle2" color="primary.main">
-                        📊 Tổng kết: {totalPackages} kiện •{" "}
-                        {Number(totalVolume).toLocaleString("vi-VN", {
+                        📊 Tổng kết: {totalPackages} kiện •{' '}
+                        {Number(totalVolume).toLocaleString('vi-VN', {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
-                        })}{" "}
+                        })}{' '}
                         m³
                       </Typography>
                     </Box>
@@ -6993,10 +6993,10 @@ ${Array.from(selectedStopPoints)
             )}
 
             {/* Phần báo số lượng sản phẩm - chỉ hiển thị cho "Từ hệ thống" */}
-            {newTransportType === "system" && (
+            {newTransportType === 'system' && (
               <Box sx={{ mt: 3 }}>
                 <Divider sx={{ mb: 2 }} />
-                <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
+                <Typography variant="h6" sx={{ mb: 2, color: 'primary.main' }}>
                   📦 Báo số lượng sản phẩm
                 </Typography>
                 <Alert severity="info" sx={{ mb: 2 }}>
@@ -7047,7 +7047,7 @@ ${Array.from(selectedStopPoints)
             )}
 
             {/* External Destinations Section - Only for "Ngoài hệ thống" */}
-            {newTransportType === "external" && (
+            {newTransportType === 'external' && (
               <Box sx={{ mt: 3 }}>
                 <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
                   📍 Thông tin điểm đến ngoài hệ thống
@@ -7060,10 +7060,10 @@ ${Array.from(selectedStopPoints)
                       elevation={2}
                       sx={{
                         p: 2,
-                        maxHeight: "400px",
-                        overflow: "auto",
-                        border: "1px solid",
-                        borderColor: "divider",
+                        maxHeight: '400px',
+                        overflow: 'auto',
+                        border: '1px solid',
+                        borderColor: 'divider',
                       }}
                     >
                       <Typography variant="h6" fontWeight={600} mb={2} color="primary">
@@ -7074,9 +7074,9 @@ ${Array.from(selectedStopPoints)
                       <Box
                         sx={{
                           mb: 2,
-                          display: "flex",
+                          display: 'flex',
                           gap: 1,
-                          flexWrap: "wrap",
+                          flexWrap: 'wrap',
                         }}
                       >
                         <Button
@@ -7085,14 +7085,14 @@ ${Array.from(selectedStopPoints)
                           onClick={() => {
                             const newDestinations = externalDestinations.map((dest) => ({
                               ...dest,
-                              address: "",
-                              customerName: "",
-                              customerPhone: "",
-                              productName: "",
+                              address: '',
+                              customerName: '',
+                              customerPhone: '',
+                              productName: '',
                               productQuantity: 0,
                               productWeight: 0,
                               productVolume: 0,
-                              notes: "",
+                              notes: '',
                             }));
                             setExternalDestinations(newDestinations);
                           }}
@@ -7108,7 +7108,7 @@ ${Array.from(selectedStopPoints)
                               ...dest,
                               address: `Địa chỉ mẫu ${index + 1}`,
                               customerName: `Khách hàng ${index + 1}`,
-                              customerPhone: "0123456789",
+                              customerPhone: '0123456789',
                               productName: `Sản phẩm ${index + 1}`,
                               productQuantity: 1,
                               productWeight: 1,
@@ -7140,51 +7140,51 @@ ${Array.from(selectedStopPoints)
                                         variant="body2"
                                         fontWeight={600}
                                         color="primary"
-                                        sx={{ fontSize: "0.85rem" }}
+                                        sx={{ fontSize: '0.85rem' }}
                                       >
-                                        {destination.address || "Chưa nhập địa chỉ"}
+                                        {destination.address || 'Chưa nhập địa chỉ'}
                                       </Typography>
                                       <Typography
                                         variant="caption"
                                         color="text.secondary"
                                         sx={{
-                                          display: "block",
+                                          display: 'block',
                                           mt: 0.5,
-                                          fontSize: "0.75rem",
+                                          fontSize: '0.75rem',
                                         }}
                                       >
-                                        {destination.customerName || "Chưa nhập tên khách hàng"}
+                                        {destination.customerName || 'Chưa nhập tên khách hàng'}
                                       </Typography>
                                     </Box>
                                     <Box
                                       display="flex"
                                       gap={1}
                                       sx={{
-                                        flexWrap: "nowrap",
-                                        minWidth: "fit-content",
+                                        flexWrap: 'nowrap',
+                                        minWidth: 'fit-content',
                                       }}
                                     >
                                       <Box
                                         sx={{
-                                          display: "flex",
-                                          flexDirection: "column",
-                                          alignItems: "center",
-                                          minWidth: "60px",
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          alignItems: 'center',
+                                          minWidth: '60px',
                                           px: 1,
                                           py: 0.5,
-                                          backgroundColor: "primary.50",
-                                          border: "1px solid",
-                                          borderColor: "primary.main",
+                                          backgroundColor: 'primary.50',
+                                          border: '1px solid',
+                                          borderColor: 'primary.main',
                                           borderRadius: 1,
-                                          textAlign: "center",
+                                          textAlign: 'center',
                                         }}
                                       >
                                         <Typography
                                           variant="caption"
                                           sx={{
-                                            fontSize: "0.7rem",
+                                            fontSize: '0.7rem',
                                             fontWeight: 600,
-                                            color: "primary.main",
+                                            color: 'primary.main',
                                             lineHeight: 1,
                                           }}
                                         >
@@ -7193,8 +7193,8 @@ ${Array.from(selectedStopPoints)
                                         <Typography
                                           variant="caption"
                                           sx={{
-                                            fontSize: "0.6rem",
-                                            color: "primary.main",
+                                            fontSize: '0.6rem',
+                                            color: 'primary.main',
                                             lineHeight: 1,
                                           }}
                                         >
@@ -7204,25 +7204,25 @@ ${Array.from(selectedStopPoints)
 
                                       <Box
                                         sx={{
-                                          display: "flex",
-                                          flexDirection: "column",
-                                          alignItems: "center",
-                                          minWidth: "60px",
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          alignItems: 'center',
+                                          minWidth: '60px',
                                           px: 1,
                                           py: 0.5,
-                                          backgroundColor: "secondary.50",
-                                          border: "1px solid",
-                                          borderColor: "secondary.main",
+                                          backgroundColor: 'secondary.50',
+                                          border: '1px solid',
+                                          borderColor: 'secondary.main',
                                           borderRadius: 1,
-                                          textAlign: "center",
+                                          textAlign: 'center',
                                         }}
                                       >
                                         <Typography
                                           variant="caption"
                                           sx={{
-                                            fontSize: "0.7rem",
+                                            fontSize: '0.7rem',
                                             fontWeight: 600,
-                                            color: "secondary.main",
+                                            color: 'secondary.main',
                                             lineHeight: 1,
                                           }}
                                         >
@@ -7231,8 +7231,8 @@ ${Array.from(selectedStopPoints)
                                         <Typography
                                           variant="caption"
                                           sx={{
-                                            fontSize: "0.6rem",
-                                            color: "secondary.main",
+                                            fontSize: '0.6rem',
+                                            color: 'secondary.main',
                                             lineHeight: 1,
                                           }}
                                         >
@@ -7242,37 +7242,37 @@ ${Array.from(selectedStopPoints)
 
                                       <Box
                                         sx={{
-                                          display: "flex",
-                                          flexDirection: "column",
-                                          alignItems: "center",
-                                          minWidth: "70px",
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          alignItems: 'center',
+                                          minWidth: '70px',
                                           px: 1,
                                           py: 0.5,
-                                          backgroundColor: "success.50",
-                                          border: "1px solid",
-                                          borderColor: "success.main",
+                                          backgroundColor: 'success.50',
+                                          border: '1px solid',
+                                          borderColor: 'success.main',
                                           borderRadius: 1,
-                                          textAlign: "center",
+                                          textAlign: 'center',
                                         }}
                                       >
                                         <Typography
                                           variant="caption"
                                           sx={{
-                                            fontSize: "0.7rem",
+                                            fontSize: '0.7rem',
                                             fontWeight: 600,
-                                            color: "success.main",
+                                            color: 'success.main',
                                             lineHeight: 1,
                                           }}
                                         >
                                           {destination.productVolume
                                             ? destination.productVolume.toFixed(2)
-                                            : "0,00"}
+                                            : '0,00'}
                                         </Typography>
                                         <Typography
                                           variant="caption"
                                           sx={{
-                                            fontSize: "0.6rem",
-                                            color: "success.main",
+                                            fontSize: '0.6rem',
+                                            color: 'success.main',
                                             lineHeight: 1,
                                           }}
                                         >
@@ -7298,11 +7298,11 @@ ${Array.from(selectedStopPoints)
                                           placeholder="Tên người nhận"
                                           size="small"
                                           sx={{
-                                            "& .MuiInputBase-input": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputBase-input': {
+                                              fontSize: '0.875rem',
                                             },
-                                            "& .MuiInputLabel-root": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputLabel-root': {
+                                              fontSize: '0.875rem',
                                             },
                                           }}
                                         />
@@ -7320,11 +7320,11 @@ ${Array.from(selectedStopPoints)
                                           placeholder="SĐT liên lạc"
                                           size="small"
                                           sx={{
-                                            "& .MuiInputBase-input": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputBase-input': {
+                                              fontSize: '0.875rem',
                                             },
-                                            "& .MuiInputLabel-root": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputLabel-root': {
+                                              fontSize: '0.875rem',
                                             },
                                           }}
                                         />
@@ -7343,11 +7343,11 @@ ${Array.from(selectedStopPoints)
                                           required
                                           size="small"
                                           sx={{
-                                            "& .MuiInputBase-input": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputBase-input': {
+                                              fontSize: '0.875rem',
                                             },
-                                            "& .MuiInputLabel-root": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputLabel-root': {
+                                              fontSize: '0.875rem',
                                             },
                                           }}
                                         />
@@ -7365,11 +7365,11 @@ ${Array.from(selectedStopPoints)
                                           placeholder="Tên sản phẩm"
                                           size="small"
                                           sx={{
-                                            "& .MuiInputBase-input": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputBase-input': {
+                                              fontSize: '0.875rem',
                                             },
-                                            "& .MuiInputLabel-root": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputLabel-root': {
+                                              fontSize: '0.875rem',
                                             },
                                           }}
                                         />
@@ -7389,11 +7389,11 @@ ${Array.from(selectedStopPoints)
                                           placeholder="0"
                                           size="small"
                                           sx={{
-                                            "& .MuiInputBase-input": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputBase-input': {
+                                              fontSize: '0.875rem',
                                             },
-                                            "& .MuiInputLabel-root": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputLabel-root': {
+                                              fontSize: '0.875rem',
                                             },
                                           }}
                                         />
@@ -7413,11 +7413,11 @@ ${Array.from(selectedStopPoints)
                                           placeholder="0"
                                           size="small"
                                           sx={{
-                                            "& .MuiInputBase-input": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputBase-input': {
+                                              fontSize: '0.875rem',
                                             },
-                                            "& .MuiInputLabel-root": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputLabel-root': {
+                                              fontSize: '0.875rem',
                                             },
                                           }}
                                         />
@@ -7437,11 +7437,11 @@ ${Array.from(selectedStopPoints)
                                           placeholder="0"
                                           size="small"
                                           sx={{
-                                            "& .MuiInputBase-input": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputBase-input': {
+                                              fontSize: '0.875rem',
                                             },
-                                            "& .MuiInputLabel-root": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputLabel-root': {
+                                              fontSize: '0.875rem',
                                             },
                                           }}
                                         />
@@ -7461,11 +7461,11 @@ ${Array.from(selectedStopPoints)
                                           placeholder="Ghi chú thêm về điểm giao hàng này"
                                           size="small"
                                           sx={{
-                                            "& .MuiInputBase-input": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputBase-input': {
+                                              fontSize: '0.875rem',
                                             },
-                                            "& .MuiInputLabel-root": {
-                                              fontSize: "0.875rem",
+                                            '& .MuiInputLabel-root': {
+                                              fontSize: '0.875rem',
                                             },
                                           }}
                                         />
@@ -7487,17 +7487,17 @@ ${Array.from(selectedStopPoints)
                       elevation={2}
                       sx={{
                         p: 2,
-                        height: "400px",
-                        overflow: "auto",
-                        border: "1px solid",
-                        borderColor: "divider",
+                        height: '400px',
+                        overflow: 'auto',
+                        border: '1px solid',
+                        borderColor: 'divider',
                       }}
                     >
                       <Typography variant="h6" fontWeight={600} mb={2} color="primary">
                         📊 Thông tin tổng hợp
                       </Typography>
 
-                      {externalDestinations.filter((dest) => dest.address.trim() !== "").length ===
+                      {externalDestinations.filter((dest) => dest.address.trim() !== '').length ===
                       0 ? (
                         <Box>
                           <Typography variant="body2" color="text.secondary" mb={1}>
@@ -7507,7 +7507,7 @@ ${Array.from(selectedStopPoints)
                       ) : (
                         <Box>
                           {externalDestinations
-                            .filter((dest) => dest.address.trim() !== "")
+                            .filter((dest) => dest.address.trim() !== '')
                             .map((destination, _index) => (
                               <Box key={destination.id} mb={2}>
                                 <Typography variant="subtitle2" fontWeight={600} color="primary">
@@ -7554,7 +7554,7 @@ ${Array.from(selectedStopPoints)
                                       )}
                                       {destination.productVolume > 0 && (
                                         <span>
-                                          {" "}
+                                          {' '}
                                           - Thể tích: {destination.productVolume.toFixed(2)} m³
                                         </span>
                                       )}
@@ -7594,7 +7594,7 @@ ${Array.from(selectedStopPoints)
             onClick={handleCreateTransportProposal}
             disabled={creatingTransportRequest}
           >
-            {creatingTransportRequest ? "Đang tạo..." : "Tạo đề nghị"}
+            {creatingTransportRequest ? 'Đang tạo...' : 'Tạo đề nghị'}
           </Button>
         </DialogActions>
       </Dialog>

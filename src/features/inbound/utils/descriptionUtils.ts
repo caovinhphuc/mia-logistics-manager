@@ -1,8 +1,4 @@
-import {
-  DescriptionEntry,
-  TimelineItem,
-  DocumentStatusItem,
-} from '../types/inbound';
+import { DescriptionEntry, TimelineItem, DocumentStatusItem } from '../types/inbound';
 
 /**
  * Tạo một description entry mới
@@ -86,9 +82,7 @@ export const getLatestTimelineDescription = (item: TimelineItem): string => {
 /**
  * Lấy description mới nhất từ document status item
  */
-export const getLatestDocumentStatusDescription = (
-  item: DocumentStatusItem
-): string => {
+export const getLatestDocumentStatusDescription = (item: DocumentStatusItem): string => {
   if (item.descriptions && item.descriptions.length > 0) {
     return item.descriptions[item.descriptions.length - 1].content;
   }
@@ -98,9 +92,7 @@ export const getLatestDocumentStatusDescription = (
 /**
  * Format description history để hiển thị
  */
-export const formatDescriptionHistory = (
-  descriptions: DescriptionEntry[]
-): string => {
+export const formatDescriptionHistory = (descriptions: DescriptionEntry[]): string => {
   if (!descriptions || descriptions.length === 0) return '';
 
   return descriptions
@@ -120,8 +112,7 @@ export const getCurrentUser = (): string => {
     const storedSession = localStorage.getItem('mia_session');
     if (storedSession) {
       const session = JSON.parse(storedSession);
-      const userName =
-        session.user?.fullName || session.user?.email || session.user?.id;
+      const userName = session.user?.fullName || session.user?.email || session.user?.id;
       if (userName) return userName;
     }
   } catch (error) {

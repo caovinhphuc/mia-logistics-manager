@@ -1,3 +1,3 @@
-import LocationsList from "../../../components/locations/LocationsList";
+import LocationsList from '../../../components/locations/LocationsList';
 
 export default LocationsList;

@@ -1,4 +1,4 @@
-import { AddCircle, Clear, Delete, Edit, FilterList, Sync, ViewList } from "@mui/icons-material";
+import { AddCircle, Clear, Delete, Edit, FilterList, Sync, ViewList } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -15,10 +15,10 @@ import {
   Select,
   TextField,
   Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { DataTable, GridView, GridViewItem } from "../../shared/components/ui";
-import CreateLocationDialog from "./CreateLocationDialog";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { DataTable, GridView, GridViewItem } from '../../shared/components/ui';
+import CreateLocationDialog from './CreateLocationDialog';
 
 interface Location {
   id: string;
@@ -27,17 +27,17 @@ interface Location {
   category: string;
   subcategory: string;
   address: string;
-  status: "active" | "inactive";
+  status: 'active' | 'inactive';
   ward: string;
   district: string;
   province: string;
   note: string;
 }
 
-const SHEET_ID = "18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As";
+const SHEET_ID = '18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As';
 
 const getStringFrom = (obj: Record<string, unknown>, key: string): string => {
-  return String(obj[key] || "");
+  return String(obj[key] || '');
 };
 
 const LocationsList: React.FC = () => {
@@ -49,7 +49,7 @@ const LocationsList: React.FC = () => {
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
+  const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid');
   // Biến để chuyển đổi Location sang định dạng GridViewItem
   const mapLocationsToGridItems = (locations: Location[]) => {
     return locations.map((location) => ({
@@ -58,45 +58,45 @@ const LocationsList: React.FC = () => {
       subtitle: location.subcategory,
       avatarText: location.avatar,
       status: {
-        active: location.status === "active",
-        label: location.status === "active" ? "Hoạt động" : "Tạm dừng",
+        active: location.status === 'active',
+        label: location.status === 'active' ? 'Hoạt động' : 'Tạm dừng',
         // Use allowed union colors only (omit color when inactive)
-        color: location.status === "active" ? "success" : undefined,
+        color: location.status === 'active' ? 'success' : undefined,
       },
       details: [
         {
-          label: "Danh mục",
+          label: 'Danh mục',
           value: location.category,
-          color: "#4a90e2",
+          color: '#4a90e2',
         },
         {
-          label: "Địa chỉ",
+          label: 'Địa chỉ',
           value: location.address,
-          color: "#50b46e",
+          color: '#50b46e',
         },
         {
-          label: "Khu vực",
+          label: 'Khu vực',
           value: `${location.ward}, ${location.district}, ${location.province}`,
-          color: "#ff9966",
+          color: '#ff9966',
         },
       ],
       actions: [
         {
-          label: "Chỉnh sửa",
+          label: 'Chỉnh sửa',
           icon: <Edit fontSize="small" />,
           onClick: (item: GridViewItem) => {
             setEditing(locations.find((loc) => loc.id === item.id) || null);
             setOpen(true);
           },
-          color: "primary",
+          color: 'primary',
         },
         {
-          label: "Xóa",
+          label: 'Xóa',
           icon: <Delete fontSize="small" />,
           onClick: (item: GridViewItem) => {
             handleDelete(locations.find((loc) => loc.id === item.id)!);
           },
-          color: "error",
+          color: 'error',
         },
       ],
     }));
@@ -104,12 +104,12 @@ const LocationsList: React.FC = () => {
   const [showAllGrid, setShowAllGrid] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
-    province: "",
-    district: "",
-    ward: "",
-    category: "",
-    status: "",
-    search: "",
+    province: '',
+    district: '',
+    ward: '',
+    category: '',
+    status: '',
+    search: '',
   });
 
   // Load từ Google Sheets
@@ -120,12 +120,12 @@ const LocationsList: React.FC = () => {
         const res = await fetch(`/api/locations?spreadsheetId=${encodeURIComponent(SHEET_ID)}`);
 
         // Check content type
-        const contentType = res.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
           console.error(
-            "API trả về HTML thay vì JSON. Backend có thể chưa start hoặc route chưa đúng."
+            'API trả về HTML thay vì JSON. Backend có thể chưa start hoặc route chưa đúng.'
           );
-          setError("Backend API chưa sẵn sàng. Vui lòng kiểm tra backend server.");
+          setError('Backend API chưa sẵn sàng. Vui lòng kiểm tra backend server.');
           setLocations([]);
           setLoading(false);
           return;
@@ -134,26 +134,26 @@ const LocationsList: React.FC = () => {
         if (res.ok) {
           const data = await res.json();
           const mapped: Location[] = (data as Array<Record<string, unknown>>).map((r) => ({
-            id: getStringFrom(r, "id"),
-            code: getStringFrom(r, "code"),
-            avatar: getStringFrom(r, "avatar"),
-            category: getStringFrom(r, "category"),
-            subcategory: getStringFrom(r, "subcategory"),
-            address: getStringFrom(r, "address"),
-            status: getStringFrom(r, "status") as "active" | "inactive",
-            ward: getStringFrom(r, "ward"),
-            district: getStringFrom(r, "district"),
-            province: getStringFrom(r, "province"),
-            note: getStringFrom(r, "note"),
+            id: getStringFrom(r, 'id'),
+            code: getStringFrom(r, 'code'),
+            avatar: getStringFrom(r, 'avatar'),
+            category: getStringFrom(r, 'category'),
+            subcategory: getStringFrom(r, 'subcategory'),
+            address: getStringFrom(r, 'address'),
+            status: getStringFrom(r, 'status') as 'active' | 'inactive',
+            ward: getStringFrom(r, 'ward'),
+            district: getStringFrom(r, 'district'),
+            province: getStringFrom(r, 'province'),
+            note: getStringFrom(r, 'note'),
           }));
           setLocations(mapped);
         } else {
-          setError("Không thể tải danh sách địa điểm (API trả về lỗi)");
+          setError('Không thể tải danh sách địa điểm (API trả về lỗi)');
           setLocations([]);
         }
       } catch (err) {
-        console.error("Error loading locations:", err);
-        setError("Lỗi tải danh sách địa điểm. Vui lòng kiểm tra backend server đang chạy.");
+        console.error('Error loading locations:', err);
+        setError('Lỗi tải danh sách địa điểm. Vui lòng kiểm tra backend server đang chạy.');
         setLocations([]);
       } finally {
         setLoading(false);
@@ -200,19 +200,19 @@ const LocationsList: React.FC = () => {
   // Columns for DataTable
   const tableColumns = [
     {
-      id: "code",
-      label: "Địa điểm",
+      id: 'code',
+      label: 'Địa điểm',
       width: 200,
       render: (location: Location) => {
-        const isActive = location.status === "active";
+        const isActive = location.status === 'active';
         return (
           <Box display="flex" alignItems="center" gap={1.5}>
             <Avatar
               sx={{
                 width: 32,
                 height: 32,
-                bgcolor: isActive ? "primary.main" : "grey.400",
-                fontSize: "1rem",
+                bgcolor: isActive ? 'primary.main' : 'grey.400',
+                fontSize: '1rem',
               }}
             >
               {location.avatar}
@@ -227,10 +227,10 @@ const LocationsList: React.FC = () => {
         );
       },
     },
-    { id: "category", label: "Danh mục", width: 150 },
+    { id: 'category', label: 'Danh mục', width: 150 },
     {
-      id: "address",
-      label: "Địa chỉ",
+      id: 'address',
+      label: 'Địa chỉ',
       width: 300,
       render: (location: Location) => (
         <Box>
@@ -238,12 +238,12 @@ const LocationsList: React.FC = () => {
             variant="body2"
             sx={{
               maxWidth: 250,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
-            {location.address || "-"}
+            {location.address || '-'}
           </Typography>
           <Typography variant="caption" color="text.secondary">
             {location.ward}, {location.district}, {location.province}
@@ -252,14 +252,14 @@ const LocationsList: React.FC = () => {
       ),
     },
     {
-      id: "status",
-      label: "Trạng thái",
+      id: 'status',
+      label: 'Trạng thái',
       width: 120,
       render: (location: Location) => (
         <Box display="flex" justifyContent="center">
           <Chip
-            label={location.status === "active" ? "Hoạt động" : "Tạm dừng"}
-            color={location.status === "active" ? "success" : "default"}
+            label={location.status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
+            color={location.status === 'active' ? 'success' : 'default'}
             size="small"
             onClick={() => handleToggleStatus(location)}
             disabled={togglingId === location.id}
@@ -268,8 +268,8 @@ const LocationsList: React.FC = () => {
       ),
     },
     {
-      id: "actions",
-      label: "Thao tác",
+      id: 'actions',
+      label: 'Thao tác',
       width: 120,
       render: (location: Location) => (
         <Box display="flex" justifyContent="center" gap={1}>
@@ -298,17 +298,17 @@ const LocationsList: React.FC = () => {
   const handleToggleStatus = async (location: Location) => {
     setTogglingId(location.id);
     try {
-      const newStatus = location.status === "active" ? "inactive" : "active";
+      const newStatus = location.status === 'active' ? 'inactive' : 'active';
       const updatedLocation = {
         ...location,
-        status: newStatus as "active" | "inactive",
+        status: newStatus as 'active' | 'inactive',
       };
 
       const res = await fetch(
         `/api/locations/${location.id}?spreadsheetId=${encodeURIComponent(SHEET_ID)}`,
         {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updatedLocation),
         }
       );
@@ -317,7 +317,7 @@ const LocationsList: React.FC = () => {
         setLocations((prev) => prev.map((loc) => (loc.id === location.id ? updatedLocation : loc)));
       }
     } catch (err) {
-      console.error("Lỗi cập nhật trạng thái:", err);
+      console.error('Lỗi cập nhật trạng thái:', err);
     } finally {
       setTogglingId(null);
     }
@@ -340,14 +340,14 @@ const LocationsList: React.FC = () => {
     try {
       const res = await fetch(
         `/api/locations/${location.id}?spreadsheetId=${encodeURIComponent(SHEET_ID)}`,
-        { method: "DELETE" }
+        { method: 'DELETE' }
       );
 
       if (res.ok) {
         setLocations((prev) => prev.filter((loc) => loc.id !== location.id));
       }
     } catch (err) {
-      console.error("Lỗi xóa địa điểm:", err);
+      console.error('Lỗi xóa địa điểm:', err);
     } finally {
       setDeletingId(null);
     }
@@ -360,22 +360,22 @@ const LocationsList: React.FC = () => {
       if (res.ok) {
         const data = await res.json();
         const mapped: Location[] = (data as Array<Record<string, unknown>>).map((r) => ({
-          id: getStringFrom(r, "id"),
-          code: getStringFrom(r, "code"),
-          avatar: getStringFrom(r, "avatar"),
-          category: getStringFrom(r, "category"),
-          subcategory: getStringFrom(r, "subcategory"),
-          address: getStringFrom(r, "address"),
-          status: getStringFrom(r, "status") as "active" | "inactive",
-          ward: getStringFrom(r, "ward"),
-          district: getStringFrom(r, "district"),
-          province: getStringFrom(r, "province"),
-          note: getStringFrom(r, "note"),
+          id: getStringFrom(r, 'id'),
+          code: getStringFrom(r, 'code'),
+          avatar: getStringFrom(r, 'avatar'),
+          category: getStringFrom(r, 'category'),
+          subcategory: getStringFrom(r, 'subcategory'),
+          address: getStringFrom(r, 'address'),
+          status: getStringFrom(r, 'status') as 'active' | 'inactive',
+          ward: getStringFrom(r, 'ward'),
+          district: getStringFrom(r, 'district'),
+          province: getStringFrom(r, 'province'),
+          note: getStringFrom(r, 'note'),
         }));
         setLocations(mapped);
       }
     } catch (err) {
-      console.error("Lỗi làm mới:", err);
+      console.error('Lỗi làm mới:', err);
     } finally {
       setRefreshing(false);
     }
@@ -406,11 +406,11 @@ const LocationsList: React.FC = () => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => setViewMode(viewMode === "table" ? "grid" : "table")}
-            startIcon={viewMode === "table" ? <GridView /> : <ViewList />}
+            onClick={() => setViewMode(viewMode === 'table' ? 'grid' : 'table')}
+            startIcon={viewMode === 'table' ? <GridView /> : <ViewList />}
             sx={{ mr: 1 }}
           >
-            {viewMode === "table" ? "Lưới" : "Bảng"}
+            {viewMode === 'table' ? 'Lưới' : 'Bảng'}
           </Button>
           <Button
             variant="contained"
@@ -435,12 +435,12 @@ const LocationsList: React.FC = () => {
               size="small"
               onClick={() =>
                 setFilters({
-                  province: "",
-                  district: "",
-                  ward: "",
-                  category: "",
-                  status: "",
-                  search: "",
+                  province: '',
+                  district: '',
+                  ward: '',
+                  category: '',
+                  status: '',
+                  search: '',
                 })
               }
               startIcon={<Clear />}
@@ -569,7 +569,7 @@ const LocationsList: React.FC = () => {
           <Typography color="error">{error}</Typography>
         </Paper>
       ) : locations && locations.length > 0 ? (
-        viewMode === "table" ? (
+        viewMode === 'table' ? (
           <DataTable
             columns={tableColumns}
             data={filteredLocations}
@@ -589,7 +589,7 @@ const LocationsList: React.FC = () => {
                 onStatusToggle={handleGridStatusToggle}
                 emptyMessage="Chưa có địa điểm nào"
                 emptyAction={{
-                  label: "Thêm địa điểm",
+                  label: 'Thêm địa điểm',
                   onClick: () => {
                     setEditing(null);
                     setOpen(true);
@@ -604,8 +604,8 @@ const LocationsList: React.FC = () => {
             {filteredLocations.length > 8 && !showAllGrid && (
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
+                  display: 'flex',
+                  justifyContent: 'center',
                   mt: 4,
                   pb: 2,
                 }}
@@ -618,11 +618,11 @@ const LocationsList: React.FC = () => {
                     px: 4,
                     py: 1.5,
                     borderRadius: 2,
-                    borderColor: "primary.main",
-                    color: "primary.main",
-                    "&:hover": {
-                      backgroundColor: "primary.50",
-                      borderColor: "primary.dark",
+                    borderColor: 'primary.main',
+                    color: 'primary.main',
+                    '&:hover': {
+                      backgroundColor: 'primary.50',
+                      borderColor: 'primary.dark',
                     },
                   }}
                 >
@@ -635,8 +635,8 @@ const LocationsList: React.FC = () => {
             {showAllGrid && filteredLocations.length > 8 && (
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
+                  display: 'flex',
+                  justifyContent: 'center',
                   mt: 4,
                   pb: 2,
                 }}
@@ -649,11 +649,11 @@ const LocationsList: React.FC = () => {
                     px: 4,
                     py: 1.5,
                     borderRadius: 2,
-                    borderColor: "grey.500",
-                    color: "grey.700",
-                    "&:hover": {
-                      backgroundColor: "grey.50",
-                      borderColor: "grey.600",
+                    borderColor: 'grey.500',
+                    color: 'grey.700',
+                    '&:hover': {
+                      backgroundColor: 'grey.50',
+                      borderColor: 'grey.600',
                     },
                   }}
                 >
@@ -664,7 +664,7 @@ const LocationsList: React.FC = () => {
           </>
         )
       ) : (
-        <Paper sx={{ p: 4, textAlign: "center" }}>
+        <Paper sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h6" color="text.secondary" mb={2}>
             Chưa có địa điểm nào
           </Typography>

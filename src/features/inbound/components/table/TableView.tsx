@@ -50,11 +50,7 @@ interface TableViewProps {
   showAddCalendar?: boolean;
 }
 
-const TableView: React.FC<TableViewProps> = ({
-  items,
-  onAction,
-  showAddCalendar = false,
-}) => {
+const TableView: React.FC<TableViewProps> = ({ items, onAction, showAddCalendar = false }) => {
   return (
     <Paper sx={{ p: 2, overflow: 'hidden', maxWidth: '100%' }}>
       <TableContainer
@@ -132,20 +128,12 @@ const TableView: React.FC<TableViewProps> = ({
               <TableCell sx={{ minWidth: '180px' }}>Kho nhận</TableCell>
               <TableCell>Mã Sản phẩm</TableCell>
               <TableCell>Phân loại</TableCell>
-              <TableCell sx={{ textAlign: 'right', minWidth: '60px' }}>
-                SL
-              </TableCell>
-              <TableCell sx={{ textAlign: 'center', minWidth: '50px' }}>
-                Cont
-              </TableCell>
-              <TableCell sx={{ textAlign: 'center', minWidth: '120px' }}>
-                Trạng thái
-              </TableCell>
+              <TableCell sx={{ textAlign: 'right', minWidth: '60px' }}>SL</TableCell>
+              <TableCell sx={{ textAlign: 'center', minWidth: '50px' }}>Cont</TableCell>
+              <TableCell sx={{ textAlign: 'center', minWidth: '120px' }}>Trạng thái</TableCell>
               <TableCell>NVC</TableCell>
               <TableCell>Quy cách</TableCell>
-              <TableCell sx={{ textAlign: 'center', minWidth: '100px' }}>
-                Mục đích
-              </TableCell>
+              <TableCell sx={{ textAlign: 'center', minWidth: '100px' }}>Mục đích</TableCell>
               <TableCell sx={{ textAlign: 'center' }}>Thao tác</TableCell>
             </TableRow>
           </TableHead>
@@ -378,10 +366,7 @@ const TableView: React.FC<TableViewProps> = ({
                     title={
                       item.packaging && item.packaging.length > 0
                         ? item.packaging
-                            .map(
-                              (pkg) =>
-                                `${pkg.type}: ${pkg.quantity.toLocaleString()} SET`
-                            )
+                            .map((pkg) => `${pkg.type}: ${pkg.quantity.toLocaleString()} SET`)
                             .join('\n')
                         : 'Không có quy cách'
                     }
@@ -421,11 +406,7 @@ const TableView: React.FC<TableViewProps> = ({
                     />
                   </TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
-                    <ActionMenu
-                      item={item}
-                      onAction={onAction}
-                      showAddCalendar={showAddCalendar}
-                    />
+                    <ActionMenu item={item} onAction={onAction} showAddCalendar={showAddCalendar} />
                   </TableCell>
                 </TableRow>
               );

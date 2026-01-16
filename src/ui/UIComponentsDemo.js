@@ -1,43 +1,43 @@
-import React, { useState } from "react";
-import { Container, Typography, Grid, Paper, Box, Divider } from "@mui/material";
-import { Edit, Delete, Add, Visibility } from "@mui/icons-material";
+import React, { useState } from 'react';
+import { Container, Typography, Grid, Paper, Box, Divider } from '@mui/material';
+import { Edit, Delete, Add, Visibility } from '@mui/icons-material';
 
 // Import UI components
-import { ActionButton, ActionIcons, DataTable, GridView, Icon, ViewIcons } from "../ui";
+import { ActionButton, ActionIcons, DataTable, GridView, Icon, ViewIcons } from '../ui';
 
 const UIComponentsDemo = () => {
-  const [viewMode, setViewMode] = useState("table");
+  const [viewMode, setViewMode] = useState('table');
 
   // Sample data for demonstration
   const sampleData = [
     {
       id: 1,
-      name: "Sản phẩm A",
-      status: "active",
-      category: "Electronics",
-      price: "1,000,000 VND",
+      name: 'Sản phẩm A',
+      status: 'active',
+      category: 'Electronics',
+      price: '1,000,000 VND',
     },
     {
       id: 2,
-      name: "Sản phẩm B",
-      status: "inactive",
-      category: "Clothing",
-      price: "500,000 VND",
+      name: 'Sản phẩm B',
+      status: 'inactive',
+      category: 'Clothing',
+      price: '500,000 VND',
     },
     {
       id: 3,
-      name: "Sản phẩm C",
-      status: "active",
-      category: "Books",
-      price: "200,000 VND",
+      name: 'Sản phẩm C',
+      status: 'active',
+      category: 'Books',
+      price: '200,000 VND',
     },
   ];
 
   const columns = [
-    { key: "name", label: "Tên sản phẩm" },
-    { key: "category", label: "Danh mục" },
-    { key: "price", label: "Giá" },
-    { key: "status", label: "Trạng thái" },
+    { key: 'name', label: 'Tên sản phẩm' },
+    { key: 'category', label: 'Danh mục' },
+    { key: 'price', label: 'Giá' },
+    { key: 'status', label: 'Trạng thái' },
   ];
 
   return (
@@ -56,12 +56,12 @@ const UIComponentsDemo = () => {
             <Typography variant="h6" gutterBottom>
               Action Buttons
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               <ActionButton
                 variant="contained"
                 color="primary"
                 startIcon={<Add />}
-                onClick={() => console.log("Add clicked")}
+                onClick={() => console.log('Add clicked')}
               >
                 Thêm mới
               </ActionButton>
@@ -70,7 +70,7 @@ const UIComponentsDemo = () => {
                 variant="outlined"
                 color="secondary"
                 startIcon={<Edit />}
-                onClick={() => console.log("Edit clicked")}
+                onClick={() => console.log('Edit clicked')}
               >
                 Chỉnh sửa
               </ActionButton>
@@ -79,7 +79,7 @@ const UIComponentsDemo = () => {
                 variant="text"
                 color="error"
                 startIcon={<Delete />}
-                onClick={() => console.log("Delete clicked")}
+                onClick={() => console.log('Delete clicked')}
               >
                 Xóa
               </ActionButton>
@@ -88,7 +88,7 @@ const UIComponentsDemo = () => {
                 variant="contained"
                 color="success"
                 size="small"
-                onClick={() => console.log("Success clicked")}
+                onClick={() => console.log('Success clicked')}
               >
                 Thành công
               </ActionButton>
@@ -103,9 +103,9 @@ const UIComponentsDemo = () => {
               Action Icons
             </Typography>
             <ActionIcons
-              onEdit={() => console.log("Edit action")}
-              onDelete={() => console.log("Delete action")}
-              onView={() => console.log("View action")}
+              onEdit={() => console.log('Edit action')}
+              onDelete={() => console.log('Delete action')}
+              onView={() => console.log('View action')}
             />
           </Paper>
         </Grid>
@@ -129,7 +129,7 @@ const UIComponentsDemo = () => {
             <Typography variant="h6" gutterBottom>
               Custom Icons
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
               <Icon name="edit" color="primary" />
               <Icon name="delete" color="error" />
               <Icon name="visibility" color="success" />
@@ -147,9 +147,9 @@ const UIComponentsDemo = () => {
             <DataTable
               columns={columns}
               data={sampleData}
-              onEdit={(row) => console.log("Edit row:", row)}
-              onDelete={(row) => console.log("Delete row:", row)}
-              onRowClick={(row) => console.log("Row clicked:", row)}
+              onEdit={(row) => console.log('Edit row:', row)}
+              onDelete={(row) => console.log('Delete row:', row)}
+              onRowClick={(row) => console.log('Row clicked:', row)}
             />
           </Paper>
         </Grid>
@@ -162,9 +162,9 @@ const UIComponentsDemo = () => {
             </Typography>
             <GridView
               data={sampleData}
-              onEdit={(item) => console.log("Edit item:", item)}
-              onDelete={(item) => console.log("Delete item:", item)}
-              onView={(item) => console.log("View item:", item)}
+              onEdit={(item) => console.log('Edit item:', item)}
+              onDelete={(item) => console.log('Delete item:', item)}
+              onView={(item) => console.log('View item:', item)}
             />
           </Paper>
         </Grid>

@@ -13,7 +13,7 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction
+  ListItemSecondaryAction,
 } from '@mui/material';
 import {
   Add,
@@ -22,7 +22,7 @@ import {
   TrendingUp,
   TrendingDown,
   Edit,
-  Delete
+  Delete,
 } from '@mui/icons-material';
 
 const WarehouseManagement = () => {
@@ -36,17 +36,10 @@ const WarehouseManagement = () => {
           Quản lý kho hàng
         </Typography>
         <Box>
-          <Button
-            variant="outlined"
-            startIcon={<Add />}
-            sx={{ mr: 2 }}
-          >
+          <Button variant="outlined" startIcon={<Add />} sx={{ mr: 2 }}>
             Thêm sản phẩm
           </Button>
-          <Button
-            variant="contained"
-            startIcon={<Warehouse />}
-          >
+          <Button variant="contained" startIcon={<Warehouse />}>
             Thêm kho
           </Button>
         </Box>
@@ -83,7 +76,9 @@ const WarehouseManagement = () => {
             <CardContent sx={{ textAlign: 'center' }}>
               <TrendingUp sx={{ fontSize: 40, color: 'success.main', mb: 1 }} />
               <Typography variant="h6">Hàng nhập</Typography>
-              <Typography variant="h4" color="success.main">0</Typography>
+              <Typography variant="h4" color="success.main">
+                0
+              </Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -93,7 +88,9 @@ const WarehouseManagement = () => {
             <CardContent sx={{ textAlign: 'center' }}>
               <TrendingDown sx={{ fontSize: 40, color: 'warning.main', mb: 1 }} />
               <Typography variant="h6">Hàng xuất</Typography>
-              <Typography variant="h4" color="warning.main">0</Typography>
+              <Typography variant="h4" color="warning.main">
+                0
+              </Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -106,9 +103,7 @@ const WarehouseManagement = () => {
             </Typography>
             {warehouses.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 3 }}>
-                <Typography color="textSecondary">
-                  Chưa có kho nào được tạo
-                </Typography>
+                <Typography color="textSecondary">Chưa có kho nào được tạo</Typography>
               </Box>
             ) : (
               <List>
@@ -141,9 +136,7 @@ const WarehouseManagement = () => {
             </Typography>
             {inventory.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 3 }}>
-                <Typography color="textSecondary">
-                  Chưa có sản phẩm trong kho
-                </Typography>
+                <Typography color="textSecondary">Chưa có sản phẩm trong kho</Typography>
               </Box>
             ) : (
               <List>

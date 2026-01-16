@@ -10,7 +10,7 @@ import {
   TableChart as TableChartIcon,
   Telegram as TelegramIcon,
   Warning as WarningIcon,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -32,14 +32,14 @@ import {
   Tab,
   Tabs,
   Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
+} from '@mui/material';
+import { useEffect, useState } from 'react';
 
 // Import services
-import { emailService } from "../../services/emailService";
-import { googleDriveService } from "../../services/googleDriveService";
-import { googleSheetsService } from "../../services/googleSheetsService";
-import { telegramBotService } from "../../services/telegramBotService";
+import { emailService } from '../../services/emailService';
+import { googleDriveService } from '../../services/googleDriveService';
+import { googleSheetsService } from '../../services/googleSheetsService';
+import { telegramBotService } from '../../services/telegramBotService';
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -58,15 +58,15 @@ function TabPanel({ children, value, index, ...other }) {
 export default function ApiIntegrationManager() {
   const [activeTab, setActiveTab] = useState(0);
   const [services, setServices] = useState({
-    telegram: { connected: false, status: "disconnected", error: null, config: {} },
-    email: { connected: false, status: "disconnected", error: null, config: {} },
-    drive: { connected: false, status: "disconnected", error: null, config: {} },
-    sheets: { connected: false, status: "disconnected", error: null, config: {} },
+    telegram: { connected: false, status: 'disconnected', error: null, config: {} },
+    email: { connected: false, status: 'disconnected', error: null, config: {} },
+    drive: { connected: false, status: 'disconnected', error: null, config: {} },
+    sheets: { connected: false, status: 'disconnected', error: null, config: {} },
   });
   const [loading, setLoading] = useState({});
   const [testResults, setTestResults] = useState({});
   const [configDialog, setConfigDialog] = useState({ open: false, service: null });
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
   useEffect(() => {
     checkAllServices();
@@ -94,7 +94,7 @@ export default function ApiIntegrationManager() {
         ...prev,
         telegram: {
           connected: result.success,
-          status: result.success ? "connected" : "error",
+          status: result.success ? 'connected' : 'error',
           error: result.error || null,
           config: { botInfo: result.botInfo },
         },
@@ -104,7 +104,7 @@ export default function ApiIntegrationManager() {
         ...prev,
         telegram: {
           connected: false,
-          status: "error",
+          status: 'error',
           error: error.message,
           config: {},
         },
@@ -122,7 +122,7 @@ export default function ApiIntegrationManager() {
         ...prev,
         email: {
           connected: result.success,
-          status: result.success ? "connected" : "error",
+          status: result.success ? 'connected' : 'error',
           error: result.error || null,
           config: { method: result.method },
         },
@@ -132,7 +132,7 @@ export default function ApiIntegrationManager() {
         ...prev,
         email: {
           connected: false,
-          status: "error",
+          status: 'error',
           error: error.message,
           config: {},
         },
@@ -150,7 +150,7 @@ export default function ApiIntegrationManager() {
         ...prev,
         drive: {
           connected: result.connected,
-          status: result.connected ? "connected" : "error",
+          status: result.connected ? 'connected' : 'error',
           error: result.error || null,
           config: {
             folderAccess: result.folderAccess,
@@ -165,7 +165,7 @@ export default function ApiIntegrationManager() {
         ...prev,
         drive: {
           connected: false,
-          status: "error",
+          status: 'error',
           error: error.message,
           config: {},
         },
@@ -183,7 +183,7 @@ export default function ApiIntegrationManager() {
         ...prev,
         sheets: {
           connected: result.authenticated && result.spreadsheetAccess,
-          status: result.authenticated && result.spreadsheetAccess ? "connected" : "error",
+          status: result.authenticated && result.spreadsheetAccess ? 'connected' : 'error',
           error: result.error || null,
           config: {
             apiLoaded: result.apiLoaded,
@@ -198,7 +198,7 @@ export default function ApiIntegrationManager() {
         ...prev,
         sheets: {
           connected: false,
-          status: "error",
+          status: 'error',
           error: error.message,
           config: {},
         },
@@ -210,24 +210,24 @@ export default function ApiIntegrationManager() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "connected":
-        return "success";
-      case "connecting":
-        return "warning";
-      case "error":
-        return "error";
+      case 'connected':
+        return 'success';
+      case 'connecting':
+        return 'warning';
+      case 'error':
+        return 'error';
       default:
-        return "default";
+        return 'default';
     }
   };
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case "connected":
+      case 'connected':
         return <CheckCircleIcon />;
-      case "connecting":
+      case 'connecting':
         return <CircularProgress size={20} />;
-      case "error":
+      case 'error':
         return <ErrorIcon />;
       default:
         return <WarningIcon />;
@@ -240,27 +240,27 @@ export default function ApiIntegrationManager() {
     try {
       let result;
       switch (serviceName) {
-        case "telegram":
+        case 'telegram':
           result = await testTelegramFeatures();
           break;
-        case "email":
+        case 'email':
           result = await testEmailFeatures();
           break;
-        case "drive":
+        case 'drive':
           result = await testDriveFeatures();
           break;
-        case "sheets":
+        case 'sheets':
           result = await testSheetsFeatures();
           break;
         default:
-          throw new Error("Unknown service");
+          throw new Error('Unknown service');
       }
 
       setTestResults((prev) => ({ ...prev, [serviceName]: result }));
-      showSnackbar(`${serviceName} test completed successfully`, "success");
+      showSnackbar(`${serviceName} test completed successfully`, 'success');
     } catch (error) {
       setTestResults((prev) => ({ ...prev, [serviceName]: { error: error.message } }));
-      showSnackbar(`${serviceName} test failed: ${error.message}`, "error");
+      showSnackbar(`${serviceName} test failed: ${error.message}`, 'error');
     } finally {
       setLoading((prev) => ({ ...prev, [serviceName]: false }));
     }
@@ -279,15 +279,15 @@ export default function ApiIntegrationManager() {
 
     // Test message sending
     if (process.env.REACT_APP_TELEGRAM_CHAT_ID) {
-      await telegramBotService.sendMessage("🧪 Test message from MIA Logistics Manager");
+      await telegramBotService.sendMessage('🧪 Test message from MIA Logistics Manager');
       results.messageSent = true;
 
       // Test alert sending
       await telegramBotService.sendAlert(
-        "Test Alert",
-        "This is a test alert from the API integration manager.",
-        "info",
-        { testParam: "test value", timestamp: new Date().toLocaleString() }
+        'Test Alert',
+        'This is a test alert from the API integration manager.',
+        'info',
+        { testParam: 'test value', timestamp: new Date().toLocaleString() }
       );
       results.alertSent = true;
     }
@@ -305,21 +305,21 @@ export default function ApiIntegrationManager() {
 
     // Test notification
     const notificationResult = await emailService.sendNotification(
-      "test@mialogistics.com",
-      "🧪 Test Email Service",
-      "This is a test notification from MIA Logistics Manager API integration.",
-      { testParam: "test value", timestamp: new Date().toLocaleString() }
+      'test@mialogistics.com',
+      '🧪 Test Email Service',
+      'This is a test notification from MIA Logistics Manager API integration.',
+      { testParam: 'test value', timestamp: new Date().toLocaleString() }
     );
     results.serviceType = notificationResult.method;
     results.notificationSent = notificationResult.success;
 
     // Test alert
     const alertResult = await emailService.sendAlert(
-      "test@mialogistics.com",
-      "info",
-      "Test Alert",
-      "This is a test alert from the API integration manager.",
-      { testParam: "test value", timestamp: new Date().toLocaleString() }
+      'test@mialogistics.com',
+      'info',
+      'Test Alert',
+      'This is a test alert from the API integration manager.',
+      { testParam: 'test value', timestamp: new Date().toLocaleString() }
     );
     results.alertSent = alertResult.success;
 
@@ -372,7 +372,7 @@ export default function ApiIntegrationManager() {
         const testSheet = availableSheets[0];
         try {
           results.dataValidation = await googleSheetsService.validateData(testSheet, {
-            Column1: { required: false, type: "string" },
+            Column1: { required: false, type: 'string' },
           });
         } catch (error) {
           results.dataValidation = { error: error.message };
@@ -383,19 +383,19 @@ export default function ApiIntegrationManager() {
     return results;
   };
 
-  const showSnackbar = (message, severity = "info") => {
+  const showSnackbar = (message, severity = 'info') => {
     setSnackbar({ open: true, message, severity });
   };
 
   const ServiceCard = ({ serviceName, icon, title, service }) => (
-    <Card sx={{ height: "100%" }}>
+    <Card sx={{ height: '100%' }}>
       <CardContent>
         <Box display="flex" alignItems="center" gap={2} mb={2}>
           {icon}
           <Typography variant="h6" component="div">
             {title}
           </Typography>
-          <Box sx={{ ml: "auto" }}>
+          <Box sx={{ ml: 'auto' }}>
             <Chip
               icon={getStatusIcon(service.status)}
               label={service.status.toUpperCase()}
@@ -418,16 +418,16 @@ export default function ApiIntegrationManager() {
             startIcon={<RefreshIcon />}
             onClick={() => {
               switch (serviceName) {
-                case "telegram":
+                case 'telegram':
                   checkTelegramService();
                   break;
-                case "email":
+                case 'email':
                   checkEmailService();
                   break;
-                case "drive":
+                case 'drive':
                   checkDriveService();
                   break;
-                case "sheets":
+                case 'sheets':
                   checkSheetsService();
                   break;
                 default:
@@ -469,12 +469,12 @@ export default function ApiIntegrationManager() {
             <Box
               component="pre"
               sx={{
-                fontSize: "0.75rem",
+                fontSize: '0.75rem',
                 mt: 1,
                 p: 1,
-                bgcolor: "grey.100",
+                bgcolor: 'grey.100',
                 borderRadius: 1,
-                overflow: "auto",
+                overflow: 'auto',
               }}
             >
               {JSON.stringify(service.config, null, 2)}
@@ -498,7 +498,7 @@ export default function ApiIntegrationManager() {
           {results.error ? (
             <Alert severity="error">{results.error}</Alert>
           ) : (
-            <Box component="pre" sx={{ fontSize: "0.75rem", overflow: "auto" }}>
+            <Box component="pre" sx={{ fontSize: '0.75rem', overflow: 'auto' }}>
               {JSON.stringify(results, null, 2)}
             </Box>
           )}
@@ -518,7 +518,7 @@ export default function ApiIntegrationManager() {
         Google Sheets
       </Typography>
 
-      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
           <Tab label="Overview" />
           <Tab label="Telegram Bot" />
@@ -606,17 +606,17 @@ export default function ApiIntegrationManager() {
                 variant="h6"
                 color={
                   Object.values(services).every((s) => s.connected)
-                    ? "success.main"
+                    ? 'success.main'
                     : Object.values(services).some((s) => s.connected)
-                      ? "warning.main"
-                      : "error.main"
+                      ? 'warning.main'
+                      : 'error.main'
                 }
               >
                 {Object.values(services).every((s) => s.connected)
-                  ? "Excellent"
+                  ? 'Excellent'
                   : Object.values(services).some((s) => s.connected)
-                    ? "Partial"
-                    : "Down"}
+                    ? 'Partial'
+                    : 'Down'}
               </Typography>
             </Grid>
           </Grid>
@@ -707,7 +707,7 @@ export default function ApiIntegrationManager() {
         <Alert
           onClose={() => setSnackbar({ ...snackbar, open: false })}
           severity={snackbar.severity}
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {snackbar.message}
         </Alert>

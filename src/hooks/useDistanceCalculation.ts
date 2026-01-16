@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 
 type StopPointsMap = Record<string, { address: string }>;
 
@@ -17,9 +17,9 @@ export const useDistanceCalculation = () => {
           address: stop.address,
         }));
 
-        const response = await fetch("/api/transport-requests/calculate-distance", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/transport-requests/calculate-distance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             pickupAddress: pickupLocation,
             stops: stopsPayload,
@@ -42,8 +42,8 @@ export const useDistanceCalculation = () => {
 
         setDistances(newDistances);
       } catch (err) {
-        console.error("Error calculating distances:", err);
-        setError(err instanceof Error ? err.message : "Unknown error");
+        console.error('Error calculating distances:', err);
+        setError(err instanceof Error ? err.message : 'Unknown error');
         // fallback
         const fallbackDistances: Record<string, number> = {};
         Object.keys(stopPoints).forEach((key) => {
@@ -60,12 +60,12 @@ export const useDistanceCalculation = () => {
   const calculateDistance = useCallback(async (origin: string, destination: string) => {
     setIsCalculating(true);
     try {
-      const response = await fetch("/api/transport-requests/calculate-distance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/transport-requests/calculate-distance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           pickupAddress: origin,
-          stops: [{ key: "single", address: destination }],
+          stops: [{ key: 'single', address: destination }],
         }),
       });
 
@@ -75,7 +75,7 @@ export const useDistanceCalculation = () => {
       const data = await response.json();
       return data?.distances?.single ?? Math.random() * 100 + 10;
     } catch (error) {
-      console.error("Error calculating distance:", error);
+      console.error('Error calculating distance:', error);
       return Math.random() * 100 + 10;
     } finally {
       setIsCalculating(false);

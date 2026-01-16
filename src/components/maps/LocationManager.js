@@ -7,7 +7,7 @@ import {
   Search,
   ViewList,
   ViewModule,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 
 import {
   Alert,
@@ -37,9 +37,9 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import { proxyLocationsService } from "../../services/proxyLocationsService";
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { proxyLocationsService } from '../../services/proxyLocationsService';
 
 const LocationManager = () => {
   const [locations, setLocations] = useState([]);
@@ -48,61 +48,61 @@ const LocationManager = () => {
   const [error, setError] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingLocation, setEditingLocation] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterType, setFilterType] = useState("all");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [viewMode, setViewMode] = useState("card"); // 'card' or 'table'
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [viewMode, setViewMode] = useState('card'); // 'card' or 'table'
   const [locationStats, setLocationStats] = useState(null);
 
   // Helper functions
   const getLocationTypeLabel = (type) => {
     const typeMap = {
-      warehouse: "Kho hàng",
-      store: "Cửa hàng",
-      office: "Văn phòng",
-      showroom: "Showroom",
-      center: "Trung tâm",
-      branch: "Chi nhánh",
-      "Kho hàng hệ thống": "Kho hàng hệ thống",
-      "Cửa hàng": "Cửa hàng",
-      "Kho trung tâm": "Kho trung tâm",
-      "Kho Hà Nội": "Kho Hà Nội",
-      "Hội chợ": "Hội chợ",
-      "Hội chợ 2": "Hội chợ 2",
+      warehouse: 'Kho hàng',
+      store: 'Cửa hàng',
+      office: 'Văn phòng',
+      showroom: 'Showroom',
+      center: 'Trung tâm',
+      branch: 'Chi nhánh',
+      'Kho hàng hệ thống': 'Kho hàng hệ thống',
+      'Cửa hàng': 'Cửa hàng',
+      'Kho trung tâm': 'Kho trung tâm',
+      'Kho Hà Nội': 'Kho Hà Nội',
+      'Hội chợ': 'Hội chợ',
+      'Hội chợ 2': 'Hội chợ 2',
     };
-    return typeMap[type] || type || "Khác";
+    return typeMap[type] || type || 'Khác';
   };
 
   const getStatusLabel = (status) => {
     const statusMap = {
-      active: "Hoạt động",
-      inactive: "Tạm dừng",
-      maintenance: "Bảo trì",
+      active: 'Hoạt động',
+      inactive: 'Tạm dừng',
+      maintenance: 'Bảo trì',
     };
-    return statusMap[status] || "Không xác định";
+    return statusMap[status] || 'Không xác định';
   };
 
   const getStatusColor = (status) => {
     const colorMap = {
-      active: "success",
-      inactive: "error",
-      maintenance: "warning",
+      active: 'success',
+      inactive: 'error',
+      maintenance: 'warning',
     };
-    return colorMap[status] || "default";
+    return colorMap[status] || 'default';
   };
 
   // Form state
   const [formData, setFormData] = useState({
-    name: "",
-    type: "warehouse",
-    address: "",
-    latitude: "",
-    longitude: "",
-    phone: "",
-    contactPerson: "",
-    capacity: "",
-    operatingHours: "",
-    status: "active",
+    name: '',
+    type: 'warehouse',
+    address: '',
+    latitude: '',
+    longitude: '',
+    phone: '',
+    contactPerson: '',
+    capacity: '',
+    operatingHours: '',
+    status: 'active',
   });
 
   // Load dữ liệu
@@ -124,11 +124,11 @@ const LocationManager = () => {
       );
     }
 
-    if (filterType !== "all") {
+    if (filterType !== 'all') {
       filtered = filtered.filter((location) => location.type === filterType);
     }
 
-    if (filterStatus !== "all") {
+    if (filterStatus !== 'all') {
       filtered = filtered.filter((location) => location.status === filterStatus);
     }
 
@@ -147,8 +147,8 @@ const LocationManager = () => {
       const stats = await proxyLocationsService.getLocationStats();
       setLocationStats(stats);
     } catch (err) {
-      console.error("Lỗi tải dữ liệu:", err);
-      setError("Không thể tải dữ liệu địa điểm");
+      console.error('Lỗi tải dữ liệu:', err);
+      setError('Không thể tải dữ liệu địa điểm');
     } finally {
       setLoading(false);
     }
@@ -172,16 +172,16 @@ const LocationManager = () => {
     } else {
       setEditingLocation(null);
       setFormData({
-        name: "",
-        type: "warehouse",
-        address: "",
-        latitude: "",
-        longitude: "",
-        phone: "",
-        contactPerson: "",
-        capacity: "",
-        operatingHours: "",
-        status: "active",
+        name: '',
+        type: 'warehouse',
+        address: '',
+        latitude: '',
+        longitude: '',
+        phone: '',
+        contactPerson: '',
+        capacity: '',
+        operatingHours: '',
+        status: 'active',
       });
     }
     setOpenDialog(true);
@@ -191,16 +191,16 @@ const LocationManager = () => {
     setOpenDialog(false);
     setEditingLocation(null);
     setFormData({
-      name: "",
-      type: "warehouse",
-      address: "",
-      latitude: "",
-      longitude: "",
-      phone: "",
-      contactPerson: "",
-      capacity: "",
-      operatingHours: "",
-      status: "active",
+      name: '',
+      type: 'warehouse',
+      address: '',
+      latitude: '',
+      longitude: '',
+      phone: '',
+      contactPerson: '',
+      capacity: '',
+      operatingHours: '',
+      status: 'active',
     });
   };
 
@@ -222,26 +222,26 @@ const LocationManager = () => {
       await loadLocations();
       handleCloseDialog();
     } catch (err) {
-      console.error("Lỗi lưu địa điểm:", err);
-      setError("Không thể lưu địa điểm");
+      console.error('Lỗi lưu địa điểm:', err);
+      setError('Không thể lưu địa điểm');
     }
   };
 
   const handleDelete = async (locationId) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa địa điểm này?")) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa địa điểm này?')) {
       try {
         await proxyLocationsService.deleteLocation(locationId);
         await loadLocations();
       } catch (err) {
-        console.error("Lỗi xóa địa điểm:", err);
-        setError("Không thể xóa địa điểm");
+        console.error('Lỗi xóa địa điểm:', err);
+        setError('Không thể xóa địa điểm');
       }
     }
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
         <CircularProgress />
       </Box>
     );
@@ -253,9 +253,9 @@ const LocationManager = () => {
       <Box
         sx={{
           mb: 3,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <Box>
@@ -327,10 +327,10 @@ const LocationManager = () => {
       <Box
         sx={{
           mb: 3,
-          display: "flex",
+          display: 'flex',
           gap: 2,
-          alignItems: "center",
-          flexWrap: "wrap",
+          alignItems: 'center',
+          flexWrap: 'wrap',
         }}
       >
         <TextField
@@ -338,7 +338,7 @@ const LocationManager = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           InputProps={{
-            startAdornment: <Search sx={{ mr: 1, color: "text.secondary" }} />,
+            startAdornment: <Search sx={{ mr: 1, color: 'text.secondary' }} />,
           }}
           sx={{ minWidth: 300 }}
         />
@@ -371,19 +371,19 @@ const LocationManager = () => {
             <MenuItem value="maintenance">Bảo trì</MenuItem>
           </Select>
         </FormControl>
-        <Box sx={{ display: "flex", gap: 1, ml: "auto" }}>
+        <Box sx={{ display: 'flex', gap: 1, ml: 'auto' }}>
           <Button
-            variant={viewMode === "card" ? "contained" : "outlined"}
+            variant={viewMode === 'card' ? 'contained' : 'outlined'}
             startIcon={<ViewModule />}
-            onClick={() => setViewMode("card")}
+            onClick={() => setViewMode('card')}
             size="small"
           >
             Thẻ
           </Button>
           <Button
-            variant={viewMode === "table" ? "contained" : "outlined"}
+            variant={viewMode === 'table' ? 'contained' : 'outlined'}
             startIcon={<ViewList />}
-            onClick={() => setViewMode("table")}
+            onClick={() => setViewMode('table')}
             size="small"
           >
             Bảng
@@ -402,18 +402,18 @@ const LocationManager = () => {
       )}
 
       {/* Locations List */}
-      {viewMode === "card" ? (
+      {viewMode === 'card' ? (
         <Grid container spacing={2}>
           {filteredLocations &&
             filteredLocations.map((location, index) => (
               <Grid item xs={12} sm={6} md={4} key={`${location.locationId}-${index}`}>
-                <Card sx={{ height: "100%" }}>
+                <Card sx={{ height: '100%' }}>
                   <CardContent>
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
                         mb: 2,
                       }}
                     >
@@ -452,7 +452,7 @@ const LocationManager = () => {
                     />
 
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                      <LocationOn sx={{ fontSize: 16, mr: 0.5, verticalAlign: "middle" }} />
+                      <LocationOn sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }} />
                       {location.address}
                     </Typography>
 
@@ -528,8 +528,8 @@ const LocationManager = () => {
                         variant="body2"
                         sx={{
                           maxWidth: 200,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
                         }}
                       >
                         {location.address}
@@ -563,7 +563,7 @@ const LocationManager = () => {
       )}
 
       {filteredLocations && filteredLocations.length === 0 && (
-        <Box sx={{ textAlign: "center", py: 4 }}>
+        <Box sx={{ textAlign: 'center', py: 4 }}>
           <Typography variant="h6" color="text.secondary">
             Không tìm thấy địa điểm nào
           </Typography>
@@ -575,7 +575,7 @@ const LocationManager = () => {
 
       {/* Add/Edit Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
-        <DialogTitle>{editingLocation ? "Sửa địa điểm" : "Thêm địa điểm mới"}</DialogTitle>
+        <DialogTitle>{editingLocation ? 'Sửa địa điểm' : 'Thêm địa điểm mới'}</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid item xs={12} sm={6}>
@@ -687,7 +687,7 @@ const LocationManager = () => {
         <DialogActions>
           <Button onClick={handleCloseDialog}>Hủy</Button>
           <Button onClick={handleSubmit} variant="contained">
-            {editingLocation ? "Cập nhật" : "Thêm mới"}
+            {editingLocation ? 'Cập nhật' : 'Thêm mới'}
           </Button>
         </DialogActions>
       </Dialog>

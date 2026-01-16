@@ -1,11 +1,11 @@
-import { Delete, Edit, MoreVert, Visibility } from "@mui/icons-material";
-import { Box, IconButton, Tooltip } from "@mui/material";
-import React from "react";
+import { Delete, Edit, MoreVert, Visibility } from '@mui/icons-material';
+import { Box, IconButton, Tooltip } from '@mui/material';
+import React from 'react';
 
 // ActionIcons Component
-export const ActionIcons = ({ onEdit, onDelete, onView, onMore, size = "small", ...props }) => {
+export const ActionIcons = ({ onEdit, onDelete, onView, onMore, size = 'small', ...props }) => {
   return (
-    <Box sx={{ display: "flex", gap: 0.5 }}>
+    <Box sx={{ display: 'flex', gap: 0.5 }}>
       {onView && (
         <Tooltip title="Xem">
           <IconButton size={size} onClick={onView} {...props}>
