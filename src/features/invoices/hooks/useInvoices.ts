@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { InvoicesService } from '../services';
-import type { Invoices, InvoicesFormData, InvoicesFilterParams } from '../types';
+import type {
+  Invoices,
+  InvoicesFormData,
+  InvoicesFilterParams,
+} from '../types';
 
 const QUERY_KEY = 'invoices';
 
@@ -32,7 +36,8 @@ export const useCreateInvoices = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: InvoicesFormData) => InvoicesService.create(data),
+    mutationFn: (data: InvoicesFormData) =>
+      InvoicesService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },

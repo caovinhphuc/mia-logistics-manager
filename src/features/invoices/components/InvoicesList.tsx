@@ -15,11 +15,19 @@ export const InvoicesList: React.FC = () => {
   }
 
   if (error) {
-    return <Typography color="error">Error loading invoices: {error.message}</Typography>;
+    return (
+      <Typography color="error">
+        Error loading invoices: {error.message}
+      </Typography>
+    );
   }
 
   if (!data || data.length === 0) {
-    return <Typography color="text.secondary">No invoices found</Typography>;
+    return (
+      <Typography color="text.secondary">
+        No invoices found
+      </Typography>
+    );
   }
 
   return (
