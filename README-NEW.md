@@ -1,0 +1,1038 @@
+# MIA Logistics Manager
+
+Hệ thống quản lý logistics chuyên nghiệp với đầy đủ tính năng quản lý vận chuyển, kho hàng, nhân viên và phân quyền.
+
+## 🚀 Tính năng chính
+
+### 📊 Dashboard & Báo cáo
+
+- Dashboard tổng quan với các KPI chính
+- Biểu đồ thống kê vận chuyển theo tháng
+- Hoạt động gần đây
+
+### 🚛 Quản lý Vận chuyển
+
+- **Vận chuyển (TransportRequestsSheet)**: Giao diện bảng và grid view cho yêu cầu vận chuyển
+- **Yêu cầu vận chuyển**: Tạo và quản lý yêu cầu vận chuyển
+- **Chờ chuyển giao**: Theo dõi hàng chờ chuyển giao
+- **Địa điểm lưu**: Quản lý các địa điểm lưu trữ
+- **Tính toán chi phí**: Tự động tính phí vận chuyển dựa trên phương thức tính
+- **Tính toán khoảng cách**: Tích hợp Google Apps Script với Google Maps Services để tính khoảng cách thực tế
+  - Tự động xử lý địa chỉ dài và ký tự đặc biệt
+  - Sử dụng công thức Haversine để tính khoảng cách đường bộ
+  - Ước tính thời gian di chuyển dựa trên tốc độ trung bình
+
+### 📥 Quản lý Nhập hàng
+
+- **Nhập hàng - Quốc tế**: Quản lý lịch nhập hàng quốc tế
+- **Nhập hàng - Quốc nội**: Quản lý lịch nhập hàng nội địa
+- **Lịch nhập**: Lịch trình nhập hàng tổng hợp
+
+### 📦 Quản lý Kho hàng
+
+- **Phiếu chuyển kho**: Quản lý các phiếu chuyển kho với giao diện Grid/Table view
+- **Đơn hàng**: Theo dõi đơn hàng
+- **Tồn kho**: Quản lý hàng tồn kho
+
+### 👥 Quản lý Nhân viên
+
+- **Danh sách nhân viên**: Xem danh sách nhân viên (Grid + Table view)
+- **Thêm/Sửa nhân viên**: Form quản lý thông tin nhân viên
+- **Phân quyền**: Gán vai trò và quyền cho nhân viên
+
+### 🏢 Quản lý Đối tác
+
+- **Nhà vận chuyển**: Quản lý thông tin nhà vận chuyển
+- **Địa điểm**: Quản lý các địa điểm
+
+### 🗺️ Tính năng nâng cao
+
+- **Bản đồ**: Tích hợp Google Maps để hiển thị địa điểm và tính toán tuyến đường
+- **Theo dõi**: Hệ thống tracking và monitoring
+- **Thông báo**: Hệ thống notification đa kênh (Email, Telegram, In-app)
+- **Lịch trình**: Job scheduling và cron jobs
+- **Báo cáo**: Hệ thống logging và audit trail
+
+### 🔐 Tính năng bảo mật nâng cao
+
+- **Session Management**: Hệ thống quản lý phiên đăng nhập thông minh
+- **Timeout Warning**: Cảnh báo trước khi session hết hạn với UI thân thiện
+- **Smart Extension**: Gia hạn session có điều kiện để đảm bảo bảo mật
+- **Auto Redirect**: Tự động quay về vị trí cũ sau khi đăng nhập lại
+- **Activity Monitoring**: Theo dõi hoạt động người dùng để reset session timer
+- **Security Guards**: Component bảo vệ route với authentication và authorization
+
+### ⚙️ Cài đặt hệ thống
+
+- **Phân quyền**: Quản lý vai trò, quyền và người dùng
+  - Vai trò (Roles): Tạo và quản lý các vai trò
+  - Quyền (Permissions): Phân quyền chi tiết theo resource:action
+  - Người dùng (Users): Quản lý tài khoản người dùng
+- **Tính toán thể tích**: Cấu hình quy tắc tính khối hàng
+
+## 🔐 Hệ thống Authentication & Authorization
+
+### Đăng nhập
+
+- **Login**: Trang đăng nhập với email/password
+- **Session Management**: Quản lý phiên đăng nhập qua localStorage
+- **Auto Redirect**: Tự động chuyển hướng khi chưa đăng nhập
+
+#### Login System
+
+**LoginPage** (`/login`) - **HIỆN TẠI**
+
+- Giao diện đẹp và chuyên nghiệp với 2 cột layout
+- Logic xử lý ổn định và đơn giản
+- Tính năng đầy đủ: Server status, Account lockout, Real-time validation
+- Responsive design hoàn hảo cho mọi thiết bị
+- Kết hợp tốt nhất giữa UI/UX và performance
+
+### Phân quyền (RBAC)
+
+- **Vai trò (Roles)**: Admin, Manager, Staff, etc.
+- **Quyền (Permissions)**: Chi tiết theo resource:action
+  - `employees:view/create/update/delete`
+  - `transfers:view/create/update/delete`
+  - `carriers:view/create/update/delete`
+  - `locations:view/create/update/delete`
+  - `transport-requests:view/create/update/delete`
+  - `inbound-international:view`
+  - `inbound-domestic:view`
+  - `inbound-schedule:view`
+  - `settings:view/update`
+
+### Route Guards
+
+- **Permission-based routing**: Ẩn/hiện route theo quyền
+- **Action guards**: Ẩn/hiện button/action theo quyền
+- **HOC guards**: `withPermission()`, `requirePermission()`
+- **SecurityGuard**: Component bảo vệ route với authentication
+
+## 🗄️ Cấu trúc Database (Google Sheets)
+
+### Sheets chính (25 sheets connected)
+
+1. **Users**: Quản lý người dùng hệ thống
+2. **Roles**: Định nghĩa các vai trò
+3. **RolePermissions**: Phân quyền cho từng vai trò
+4. **Employees**: Quản lý nhân viên
+5. **Transfers**: Phiếu chuyển kho
+6. **Carriers**: Nhà vận chuyển
+7. **Locations**: Địa điểm
+8. **TransportRequests**: Yêu cầu vận chuyển
+9. **InboundInternational**: Lịch nhập hàng quốc tế (70+ cột)
+10. **InboundDomestic**: Lịch nhập hàng quốc nội
+11. **InboundSchedule**: Lịch nhập hàng tổng hợp
+12. **VolumeRules**: Quy tắc tính khối lượng
+13. **Settings**: Cài đặt hệ thống
+14. **Logs**: Nhật ký hoạt động
+15. **... và 10+ sheets khác**
+
+### 📋 Định nghĩa chi tiết các cột - InboundSchedule (54 cột)
+
+#### 📊 Tổng quan 54 cột
+
+| Nhóm                    | Số cột | Mô tả                                                      |
+| ----------------------- | ------ | ---------------------------------------------------------- |
+| **Thông tin cơ bản**    | 12     | ID, ngày, PI, nhà cung cấp, sản phẩm, số lượng, trạng thái |
+| **Thông tin bổ sung**   | 3      | Mục đích, giờ nhận hàng, mã PO                             |
+| **Thông tin đóng gói**  | 3      | Loại đóng gói, số lượng, mô tả                             |
+| **Timeline vận chuyển** | 18     | 6 mốc thời gian × 3 trường (dự kiến, thực tế, trạng thái)  |
+| **Trạng thái chứng từ** | 15     | 5 mốc thời gian × 3 trường (dự kiến, thực tế, trạng thái)  |
+| **Thông tin hệ thống**  | 3      | Ghi chú, ngày tạo, ngày cập nhật                           |
+| **TỔNG CỘNG**           | **54** | **Đầy đủ thông tin quản lý lịch nhập hàng**                |
+
+#### 🔢 Thông tin cơ bản (12 cột)
+
+| Cột           | Tên Việt hóa   | Định dạng | Logic                                                      | Mô tả                          |
+| ------------- | -------------- | --------- | ---------------------------------------------------------- | ------------------------------ |
+| `id`          | Mã lịch nhập   | String    | `INB-{timestamp}`                                          | ID duy nhất của lịch nhập hàng |
+| `date`        | Ngày tạo lịch  | Date      | `dd/MM/yyyy`                                               | Ngày tạo lịch nhập hàng        |
+| `pi`          | Mã PI          | String    | Alphanumeric                                               | Mã Proforma Invoice            |
+| `supplier`    | Nhà cung cấp   | String    | Text                                                       | Tên nhà cung cấp               |
+| `origin`      | Nơi xuất phát  | String    | Location                                                   | Địa điểm xuất phát hàng hóa    |
+| `destination` | Nơi đến        | String    | Address                                                    | Địa điểm nhận hàng             |
+| `product`     | Sản phẩm       | String    | Text                                                       | Tên sản phẩm                   |
+| `category`    | Danh mục       | String    | Text                                                       | Danh mục sản phẩm              |
+| `quantity`    | Số lượng       | Number    | Positive integer                                           | Tổng số lượng sản phẩm         |
+| `container`   | Số container   | Number    | Positive integer                                           | Số lượng container             |
+| `status`      | Trạng thái     | Enum      | `pending/confirmed/in-transit/arrived/completed/cancelled` | Trạng thái lịch nhập           |
+| `carrier`     | Nhà vận chuyển | String    | Text                                                       | Tên nhà vận chuyển             |
+
+#### 📝 Thông tin bổ sung (3 cột)
+
+| Cột           | Tên Việt hóa  | Định dạng | Logic               | Mô tả                       |
+| ------------- | ------------- | --------- | ------------------- | --------------------------- |
+| `purpose`     | Mục đích      | Enum      | `online/offline`    | Mục đích sử dụng            |
+| `receiveTime` | Giờ nhận hàng | Time      | `HH:mm`             | Giờ nhận hàng dự kiến       |
+| `poNumbers`   | Mã PO         | String    | Semicolon-separated | Danh sách mã Purchase Order |
+
+#### 📦 Thông tin đóng gói (3 cột)
+
+| Cột                     | Tên Việt hóa      | Định dạng | Logic                       | Mô tả                                        |
+| ----------------------- | ----------------- | --------- | --------------------------- | -------------------------------------------- |
+| `packagingTypes`        | Loại đóng gói     | String    | Semicolon-separated         | Các loại đóng gói (1PCS/SET, 2PCS/SET, etc.) |
+| `packagingQuantities`   | Số lượng đóng gói | String    | Semicolon-separated-numbers | Số lượng tương ứng với từng loại đóng gói    |
+| `packagingDescriptions` | Mô tả đóng gói    | String    | Semicolon-separated         | Mô tả chi tiết cho từng loại đóng gói        |
+
+#### ⏰ Timeline vận chuyển (18 cột - 6 mốc thời gian × 3 trường)
+
+**6 mốc thời gian:**
+
+1. **Cargo Ready** - Hàng sẵn sàng
+2. **ETD** - Estimated Time of Departure (Thời gian khởi hành dự kiến)
+3. **ETA** - Estimated Time of Arrival (Thời gian đến dự kiến)
+4. **Depart** - Khởi hành
+5. **Arrival Port** - Đến cảng
+6. **Receive** - Nhận hàng
+
+**Mỗi mốc có 3 trường:**
+
+| Cột                           | Tên Việt hóa | Định dạng | Logic                                             | Mô tả                          |
+| ----------------------------- | ------------ | --------- | ------------------------------------------------- | ------------------------------ |
+| `timeline_{milestone}_est`    | Ngày dự kiến | Date      | `dd/MM/yyyy`                                      | Ngày dự kiến cho mốc thời gian |
+| `timeline_{milestone}_act`    | Ngày thực tế | Date      | `dd/MM/yyyy`                                      | Ngày thực tế đã thực hiện      |
+| `timeline_{milestone}_status` | Trạng thái   | Enum      | `pending/confirmed/completed/delayed/in-progress` | Trạng thái của mốc thời gian   |
+
+**Ví dụ các cột Timeline:**
+
+- `timeline_cargoReady_est`, `timeline_cargoReady_act`, `timeline_cargoReady_status`
+- `timeline_etd_est`, `timeline_etd_act`, `timeline_etd_status`
+- `timeline_eta_est`, `timeline_eta_act`, `timeline_eta_status`
+- `timeline_depart_est`, `timeline_depart_act`, `timeline_depart_status`
+- `timeline_arrivalPort_est`, `timeline_arrivalPort_act`, `timeline_arrivalPort_status`
+- `timeline_receive_est`, `timeline_receive_act`, `timeline_receive_status`
+
+#### 📄 Trạng thái chứng từ (15 cột - 5 mốc thời gian × 3 trường)
+
+**5 mốc thời gian:**
+
+1. **Check Bill** - Kiểm tra Bill
+2. **Check CO** - Kiểm tra CO (Certificate of Origin)
+3. **Send Docs** - Gửi chứng từ
+4. **Customs** - Thông quan
+5. **Tax** - Nộp thuế
+
+**Mỗi mốc có 3 trường:**
+
+| Cột                      | Tên Việt hóa | Định dạng | Logic                                             | Mô tả                       |
+| ------------------------ | ------------ | --------- | ------------------------------------------------- | --------------------------- |
+| `doc_{milestone}_est`    | Ngày dự kiến | Date      | `dd/MM/yyyy`                                      | Ngày dự kiến xử lý chứng từ |
+| `doc_{milestone}_act`    | Ngày thực tế | Date      | `dd/MM/yyyy`                                      | Ngày thực tế đã xử lý       |
+| `doc_{milestone}_status` | Trạng thái   | Enum      | `pending/confirmed/completed/delayed/in-progress` | Trạng thái xử lý chứng từ   |
+
+**Ví dụ các cột Document Status:**
+
+- `doc_checkBill_est`, `doc_checkBill_act`, `doc_checkBill_status`
+- `doc_checkCO_est`, `doc_checkCO_act`, `doc_checkCO_status`
+- `doc_sendDocs_est`, `doc_sendDocs_act`, `doc_sendDocs_status`
+- `doc_customs_est`, `doc_customs_act`, `doc_customs_status`
+- `doc_tax_est`, `doc_tax_act`, `doc_tax_status`
+
+#### 🔧 Thông tin hệ thống (3 cột)
+
+| Cột         | Tên Việt hóa  | Định dạng | Logic                              | Mô tả                                             |
+| ----------- | ------------- | --------- | ---------------------------------- | ------------------------------------------------- |
+| `notes`     | Ghi chú       | String    | Text                               | Ghi chú bổ sung và mô tả timeline/document status |
+| `createdAt` | Ngày tạo      | Timestamp | `HH:mm` hoặc `dd/MM/yyyy HH:mm:ss` | Thời gian tạo record                              |
+| `updatedAt` | Ngày cập nhật | Timestamp | `dd/MM/yyyy HH:mm:ss`              | Thời gian cập nhật cuối cùng                      |
+
+#### 🔄 Logic xử lý dữ liệu
+
+**1. Timeline Logic:**
+
+- **Ưu tiên hiển thị**: `actual` > `estimated` > `created date`
+- **Calendar display**: Sử dụng ngày thực tế nếu có, ngược lại dùng ngày dự kiến
+- **Status tracking**: Theo dõi tiến độ từ `pending` → `confirmed` → `completed`
+
+**2. Document Status Logic:**
+
+- **Workflow**: Check Bill → Check CO → Send Docs → Customs → Tax
+- **Dependency**: Mỗi bước phụ thuộc vào bước trước đó
+- **Status mapping**: Tương tự timeline với các trạng thái tương ứng
+
+**3. Packaging Logic:**
+
+- **Semicolon-separated**: Các giá trị được phân tách bằng dấu `;`
+- **Array mapping**: Frontend convert thành array objects
+- **Validation**: Đảm bảo số lượng types = quantities = descriptions
+
+**4. Description Storage:**
+
+- **Notes field**: Lưu trữ mô tả timeline và document status
+- **Format**: `[Milestone Name]: Description | [Another Milestone]: Description`
+- **Parse logic**: Extract descriptions từ notes field khi load data
+
+**5. Date Format Logic:**
+
+- **Display**: `dd/MM/yyyy` (Vietnamese format)
+- **Input**: `yyyy-MM-dd` (HTML date input format)
+- **Storage**: `dd/MM/yyyy` trong Google Sheets
+- **Conversion**: Auto-convert giữa các format khi cần thiết
+
+**6. Validation Logic:**
+
+- **Required fields**: id, date, pi, supplier, origin, destination, product, category, quantity, container, status, carrier, purpose, receiveTime, poNumbers
+- **Optional fields**: Tất cả timeline, document status, packaging fields
+- **Enum validation**: status, purpose, timeline_status, doc_status
+- **Number validation**: quantity, container, packaging quantities
+- **Date validation**: Tất cả date fields phải đúng format dd/MM/yyyy
+
+#### 💡 Ví dụ sử dụng
+
+**1. Tạo lịch nhập hàng mới:**
+
+```json
+{
+  "id": "INB-1757391900610",
+  "date": "09/09/2025",
+  "pi": "MG-VMA25-017",
+  "supplier": "Eximvina",
+  "origin": "NINGBO",
+  "destination": "Kho trung tâm - lô2-5, Đường CN1, Phường Tây Thạnh, Quận Tân Phú, Thành phố Hồ Chí Minh",
+  "product": "Larita Juden MG0624",
+  "category": "Vali",
+  "quantity": 3640,
+  "container": 2,
+  "status": "pending",
+  "carrier": "CK",
+  "purpose": "online",
+  "receiveTime": "08:00",
+  "poNumbers": "PO06092025:0025835",
+  "packagingTypes": "2PCS/SET",
+  "packagingQuantities": "1820",
+  "packagingDescriptions": "Test ghi chú quy cách đóng gói ạ",
+  "timeline_cargoReady_est": "10/09/2025",
+  "timeline_cargoReady_act": "11/09/2025",
+  "timeline_cargoReady_status": "completed",
+  "timeline_receive_est": "10/09/2025",
+  "timeline_receive_act": "",
+  "timeline_receive_status": "pending",
+  "notes": "Test ghi chú lịch nhập hàng"
+}
+```
+
+**2. Cập nhật timeline:**
+
+```json
+{
+  "timeline_etd_est": "15/09/2025",
+  "timeline_etd_act": "16/09/2025",
+  "timeline_etd_status": "completed",
+  "timeline_eta_est": "25/09/2025",
+  "timeline_eta_act": "26/09/2025",
+  "timeline_eta_status": "completed"
+}
+```
+
+**3. Cập nhật document status:**
+
+```json
+{
+  "doc_checkBill_est": "01/10/2025",
+  "doc_checkBill_act": "02/10/2025",
+  "doc_checkBill_status": "completed",
+  "doc_customs_est": "05/10/2025",
+  "doc_customs_act": "06/10/2025",
+  "doc_customs_status": "completed"
+}
+```
+
+**4. Thêm mô tả vào notes:**
+
+```text
+Test ghi chú lịch nhập hàng
+
+--- DESCRIPTIONS ---
+[Cargo Ready]: Hàng đã sẵn sàng xuất kho | [ETD]: Tàu đã khởi hành đúng giờ || [Check Bill]: Bill đã được kiểm tra kỹ lưỡng
+```
+
+### Schema Users
+
+```typescript
+{
+  id: string;
+  email: string;
+  passwordHash: string;
+  fullName: string;
+  roleId: string;
+  status: 'active' | 'inactive';
+  createdAt: string;
+  updatedAt: string;
+}
+```
+
+### Schema Roles
+
+```typescript
+{
+  id: string;
+  name: string;
+  description: string;
+}
+```
+
+### Schema RolePermissions
+
+```typescript
+{
+  roleId: string;
+  resource: string;
+  action: string;
+}
+```
+
+## 🛠️ Cài đặt và Chạy
+
+### Yêu cầu hệ thống
+
+- Node.js 18+
+- npm hoặc yarn
+- Google Sheets API credentials
+- Google Maps API key (cho tính năng bản đồ)
+
+### Cài đặt
+
+```bash
+# Clone repository
+git clone https://github.com/YOUR_USERNAME/mia-logistics-manager.git
+cd mia-logistics-manager
+
+# Cài đặt dependencies Frontend
+npm install
+
+# Cài đặt dependencies Backend
+cd backend
+npm install
+cd ..
+
+# Cấu hình Environment Variables
+
+# Root .env (Frontend)
+cp .env.example .env
+# Cập nhật:
+# REACT_APP_API_URL=http://localhost:5050
+# REACT_APP_GOOGLE_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
+
+# Backend .env
+cd backend
+cp .env.example .env
+# Cập nhật:
+# PORT=5050
+# GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
+# GOOGLE_APPLICATION_CREDENTIALS=./sinuous-aviary-474820-e3-c442968a0e87.json
+cd ..
+```
+
+### Cấu hình Google Apps Script cho tính toán khoảng cách
+
+Hệ thống sử dụng Google Apps Script để tính khoảng cách thực tế giữa các địa chỉ.
+
+#### 1. Tạo Google Apps Script
+
+1. Truy cập [Google Apps Script](https://script.google.com/)
+2. Tạo project mới
+3. Copy code từ file `google-apps-script/distance-calculator.gs`
+4. Lưu và đặt tên project (ví dụ: "MIA Distance Calculator")
+
+#### 2. Deploy Script
+
+1. Click **Deploy** → **New deployment**
+2. Chọn type: **Web app**
+3. Execute as: **Me**
+4. Who has access: **Anyone**
+5. Click **Deploy**
+6. Copy URL deployment (dạng: `https://script.google.com/macros/s/.../exec`)
+
+#### 3. Cấu hình Environment
+
+Cập nhật file `.env` với URL Google Apps Script:
+
+```bash
+# Google Apps Script URL cho tính toán khoảng cách
+VITE_GOOGLE_APPS_SCRIPT_URL=https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
+```
+
+#### 4. Test Script
+
+Test script với địa chỉ mẫu:
+
+```bash
+curl "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?origin=Ho%20Chi%20Minh%20City&destination=Hanoi"
+```
+
+Kết quả mong đợi:
+
+```json
+{
+  "success": true,
+  "distance": 1479.24,
+  "duration": 2958,
+  "method": "google_maps_services"
+}
+```
+
+#### 5. Xử lý địa chỉ dài
+
+Script tự động xử lý địa chỉ dài bằng cách:
+
+- Rút gọn: "Thành phố Hồ Chí Minh" → "HCM"
+- Loại bỏ ký tự đặc biệt
+- Ưu tiên thông tin quan trọng (Quận, Phường, số nhà)
+
+Ví dụ:
+
+- Input: "lô2-5, Đường CN1, Phường Tây Thạnh, Quận Tân Phú, Thành phố Hồ Chí Minh"
+- Output: "L2-5 Đ CN1 P Tây Thạnh Q Tân Phú HCM"
+
+### Khởi động
+
+```bash
+# Option 1: Quick Start (Recommended)
+./start-project.sh              # Development (với Telegram notifications)
+./start.sh                      # Simple start
+
+# Option 2: Manual Start
+
+# Terminal 1: Backend
+cd backend
+npm install
+npm start                       # Backend chạy tại http://localhost:5050
+
+# Terminal 2: Frontend
+npm install
+npm start                       # Frontend chạy tại http://localhost:3000
+
+# Terminal 3: AI Service (Optional)
+cd ai-service
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main_simple:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### Khởi tạo dữ liệu
+
+```bash
+# Khởi tạo auth sheets (Users, Roles, RolePermissions)
+curl -X POST http://localhost:5050/api/auth/init
+
+# Verify health check
+curl http://localhost:5050/api/health
+
+# Verify Google Sheets connection
+curl http://localhost:5050/api/google-sheets-auth/status
+
+# Test carriers endpoint
+curl http://localhost:5050/api/carriers
+
+# Test authentication
+curl -X POST http://localhost:5050/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"admin123"}'
+```
+
+### Tài khoản mặc định
+
+- **Email**: <admin@mia.vn>
+- **Password**: admin@123
+- **Role**: Admin (full permissions)
+
+## 📱 Giao diện
+
+### Responsive Design
+
+- Mobile-first approach
+- Breakpoints: xs, sm, md, lg, xl
+- Consistent UI/UX across all views
+
+### Shared Components
+
+- **DataTable**: Bảng dữ liệu với sorting, filtering, pagination
+- **GridView**: Hiển thị dạng thẻ với expandable details
+- **StatusChip**: Hiển thị trạng thái với màu sắc và label tùy chỉnh
+- **ActionButton**: Button với icon và label
+- **Checkbox**: Checkbox tùy chỉnh
+- **FormField**: Field form chuẩn hóa
+- **LoadingState**: Trạng thái loading
+- **EmptyState**: Trạng thái không có dữ liệu
+- **ErrorBoundary**: Xử lý lỗi component
+
+### Navigation Structure
+
+- **Sidebar Navigation**: Menu điều hướng với các nhóm chính:
+  - Dashboard
+  - Vận chuyển (Vận chuyển, Chờ chuyển giao, Đề nghị vận chuyển, Địa điểm lưu)
+  - Đơn hàng
+  - Kho hàng
+  - Phiếu chuyển kho
+  - Nhà vận chuyển
+  - Nhân viên
+  - Theo dõi
+  - Phân quyền hệ thống
+  - **Nhập hàng** (Quốc tế, Quốc nội, Lịch nhập)
+  - Hướng dẫn (Phân quyền)
+  - Nhật ký hoạt động
+  - Cài đặt (Bảng tính khối)
+
+### Theme
+
+- Material-UI v5
+- Custom theme với brand colors
+- Dark/Light mode support
+- Consistent typography và spacing
+
+## 🔧 API Endpoints
+
+### Health & Status
+
+- `GET /api/health` - Health check endpoint
+- `GET /api/google-sheets-auth/status` - Google Sheets connection status
+- `GET /api/admin/stats` - System statistics
+- `GET /api/admin/sheets` - All sheets information
+
+### Authentication (authRoutes.js)
+
+- `POST /api/auth/login` - Đăng nhập
+- `POST /api/auth/register` - Đăng ký người dùng mới
+- `POST /api/auth/logout` - Đăng xuất
+- `GET /api/auth/me` - Lấy thông tin người dùng hiện tại
+- `PUT /api/auth/change-password` - Đổi mật khẩu
+- `GET /api/auth/users` - Lấy danh sách tất cả users (Admin)
+- `GET /api/auth/users/:id` - Lấy chi tiết user theo ID
+- `PUT /api/auth/users/:id` - Cập nhật user (Admin)
+- `POST /api/auth/init` - Khởi tạo auth sheets (Users, Roles, RolePermissions)
+
+### Roles (rolesRoutes.js)
+
+- `GET /api/roles` - Lấy danh sách vai trò
+- `GET /api/roles/:id` - Lấy chi tiết vai trò
+- `POST /api/roles` - Tạo vai trò mới
+- `PUT /api/roles/:id` - Cập nhật vai trò
+- `DELETE /api/roles/:id` - Xóa vai trò
+
+### Employees (employeesRoutes.js)
+
+- `GET /api/employees` - Lấy danh sách nhân viên
+- `GET /api/employees/:id` - Lấy chi tiết nhân viên
+- `POST /api/employees` - Tạo nhân viên mới
+- `PUT /api/employees/:id` - Cập nhật nhân viên
+- `DELETE /api/employees/:id` - Xóa nhân viên (soft delete)
+
+### Role Permissions (rolePermissionsRoutes.js)
+
+- `GET /api/role-permissions` - Lấy tất cả role permissions
+- `GET /api/role-permissions/role/:roleId` - Lấy permissions của một role
+- `GET /api/role-permissions/check` - Kiểm tra permission (query: roleId, resource, action)
+- `POST /api/role-permissions` - Gán permission cho role
+- `DELETE /api/role-permissions/:id` - Xóa permission
+
+### Carriers (carriersRoutes.js)
+
+- `GET /api/carriers` - Lấy danh sách nhà vận chuyển
+- `GET /api/carriers/:id` - Lấy chi tiết nhà vận chuyển
+- `POST /api/carriers` - Tạo nhà vận chuyển mới
+- `PUT /api/carriers/:id` - Cập nhật nhà vận chuyển
+- `DELETE /api/carriers/:id` - Xóa nhà vận chuyển
+
+### Transfers (transfersRoutes.js)
+
+- `GET /api/transfers` - Lấy danh sách phiếu chuyển kho
+- `GET /api/transfers/:id` - Lấy chi tiết phiếu chuyển kho
+- `POST /api/transfers` - Tạo phiếu chuyển kho mới
+- `PUT /api/transfers/:id` - Cập nhật phiếu chuyển kho
+- `DELETE /api/transfers/:id` - Xóa phiếu chuyển kho
+
+### Locations (locationsRoutes.js)
+
+- `GET /api/locations` - Lấy danh sách địa điểm
+- `GET /api/locations/:id` - Lấy chi tiết địa điểm
+- `POST /api/locations` - Tạo địa điểm mới
+- `PUT /api/locations/:id` - Cập nhật địa điểm
+- `DELETE /api/locations/:id` - Xóa địa điểm
+
+### Transport Requests (transportRequestsRoutes.js)
+
+- `GET /api/transport-requests` - Lấy danh sách yêu cầu vận chuyển
+- `GET /api/transport-requests/:id` - Lấy chi tiết yêu cầu vận chuyển
+- `POST /api/transport-requests` - Tạo yêu cầu vận chuyển mới
+- `PUT /api/transport-requests/:id` - Cập nhật yêu cầu vận chuyển
+- `DELETE /api/transport-requests/:id` - Xóa yêu cầu vận chuyển
+
+### Settings (settingsRoutes.js)
+
+- `GET /api/settings/volume-rules` - Lấy danh sách quy tắc tính khối lượng
+- `POST /api/settings/volume-rules` - Tạo/cập nhật quy tắc tính khối lượng
+
+### Inbound Domestic (inboundDomesticRoutes.js)
+
+- `GET /api/inbound/domestic` - Lấy danh sách inbound domestic
+- `GET /api/inbound/domestic/:id` - Lấy chi tiết inbound domestic
+- `POST /api/inbound/domestic` - Tạo inbound domestic mới
+- `PUT /api/inbound/domestic/:id` - Cập nhật inbound domestic
+- `DELETE /api/inbound/domestic/:id` - Xóa inbound domestic (soft delete)
+
+### Inbound International (inboundInternationalRoutes.js)
+
+- `GET /api/inbound/international` - Lấy danh sách inbound international (70+ cột)
+- `GET /api/inbound/international/:id` - Lấy chi tiết inbound international
+- `POST /api/inbound/international` - Tạo inbound international mới (54+ cột)
+- `PUT /api/inbound/international/:id` - Cập nhật inbound international
+- `DELETE /api/inbound/international/:id` - Xóa inbound international (soft delete)
+
+### Admin (adminRoutes.js)
+
+- `GET /api/admin/stats` - Lấy thống kê hệ thống
+- `GET /api/admin/sheets` - Lấy thông tin tất cả sheets
+
+### Google Sheets (googleSheetsRoutes.js)
+
+- `GET /api/sheets/info` - Lấy thông tin Google Sheets
+- `GET /api/sheets/:sheetName` - Lấy dữ liệu từ sheet cụ thể
+
+### Telegram (telegramRoutes.js)
+
+- `POST /api/telegram/test` - Test Telegram notification
+- `POST /api/telegram/send` - Gửi Telegram message
+
+### Google Sheets Auth (googleSheetsAuthRoutes.js)
+
+- `GET /api/google-sheets-auth/status` - Kiểm tra trạng thái kết nối Google Sheets
+
+**Tổng số:** 50+ API endpoints từ 16 route modules (100% complete)
+
+## 📊 Tính năng nâng cao
+
+### Real-time Updates
+
+- Socket.IO integration
+- Live notifications
+- Real-time data sync
+
+### Notifications
+
+- Email notifications (SendGrid, Nodemailer)
+- Telegram bot integration
+- In-app notifications
+- Push notifications (Web Push API)
+
+### Maps & Location Services
+
+- Google Maps integration
+- Distance calculation
+- Route optimization
+- Geocoding services
+
+### Business Logic
+
+- Transport cost calculation
+- Volume calculation algorithms
+- Genetic algorithm optimization
+- Performance monitoring
+
+### Reporting & Analytics
+
+- Daily/weekly/monthly reports
+- Export to Excel/PDF
+- Custom report builder
+- Audit logging
+
+## 🔒 Bảo mật
+
+### Authentication
+
+- SHA-256 password hashing (implemented)
+- Session management với localStorage
+- Security context và guards
+- Auto logout khi session hết hạn
+- Session timeout warning (5 phút trước khi hết hạn)
+
+### Authorization
+
+- Role-based access control (RBAC)
+- Resource-level permissions
+- Action-level permissions
+- Route-level protection
+
+### Session Management & Security
+
+- **Session Timeout**: 30 phút tự động hết hạn
+- **Warning System**: Cảnh báo 5 phút trước khi hết hạn
+- **Smart Extension**: Chỉ cho phép gia hạn session < 20 phút
+- **Auto Redirect**: Tự động quay về vị trí cũ sau khi đăng nhập lại
+- **Security Guards**: Component bảo vệ route với authentication
+- **Activity Monitoring**: Theo dõi hoạt động người dùng để reset timer
+- **UI Warning**: Cảnh báo thông minh với màu sắc và nút hành động
+
+### Data Protection
+
+- Input validation (Joi, Zod)
+- SQL injection prevention
+- XSS protection
+- CORS configuration
+
+## 🏗️ Backend Architecture
+
+### Route Modules (16 modules - 100% Complete)
+
+```text
+backend/src/routes/
+├── router.js                    # Main router (aggregates all routes)
+├── authRoutes.js                # Authentication & User Management
+├── carriersRoutes.js            # Carriers CRUD
+├── transfersRoutes.js           # Transfers CRUD
+├── locationsRoutes.js           # Locations CRUD
+├── transportRequestsRoutes.js   # Transport Requests CRUD
+├── settingsRoutes.js            # Settings & Volume Rules
+├── inboundDomesticRoutes.js     # Inbound Domestic CRUD
+├── inboundInternationalRoutes.js # Inbound International CRUD (70+ columns)
+├── rolesRoutes.js               # Roles CRUD
+├── employeesRoutes.js           # Employees CRUD
+├── rolePermissionsRoutes.js     # Role Permissions CRUD
+├── adminRoutes.js               # Admin Operations
+├── telegramRoutes.js            # Telegram Notifications
+├── googleSheetsRoutes.js        # Google Sheets Operations
+└── googleSheetsAuthRoutes.js    # Google Sheets Auth Status
+```
+
+### API Architecture
+
+- **Base URL**: `http://localhost:5050/api`
+- **Health Check**: `/api/health`
+- **Google Sheets Status**: `/api/google-sheets-auth/status`
+- **All Routes**: Prefixed with `/api/`
+
+### Database Architecture
+
+- **Primary Database**: Google Sheets (25 sheets)
+- **Connection**: Service Account authentication
+- **Operations**: CRUD operations via Google Sheets API
+- **Helpers**: `googleSheetsHelpers` utility functions
+
+## 🚀 Deployment
+
+### Production
+
+```bash
+# Build frontend
+npm run build
+
+# Start production backend
+cd backend
+NODE_ENV=production npm start
+# Backend sẽ chạy tại port 5050
+
+# Hoặc sử dụng PM2
+npm install -g pm2
+pm2 start index.js --name mia-backend
+pm2 save
+pm2 startup
+```
+
+### Environment Variables
+
+#### Frontend (Root `.env`)
+
+```bash
+# Google Sheets Configuration
+REACT_APP_GOOGLE_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
+REACT_APP_GOOGLE_DRIVE_FOLDER_ID=1_Zy9Q31vPEHOSIT077kMolek3F3-yxZE
+
+# Google Apps Script
+REACT_APP_GOOGLE_APPS_SCRIPT_ID=1fNrUwCusl_47rpxKcEFXZITIYUmBVGNgpJWDKLwSW8oF5h--Q3AbxoBv
+REACT_APP_APPS_SCRIPT_WEB_APP_URL=https://script.google.com/macros/s/...
+
+# Backend API URL
+REACT_APP_API_URL=http://localhost:5050
+REACT_APP_BACKEND_URL=http://localhost:5050
+
+# Telegram (Optional)
+REACT_APP_TELEGRAM_BOT_TOKEN=your_bot_token
+REACT_APP_TELEGRAM_CHAT_ID=your_chat_id
+
+# Frontend Port
+FRONTEND_PORT=3000
+```
+
+#### Backend (`backend/.env`)
+
+```bash
+# Google Sheets
+GOOGLE_SHEETS_SPREADSHEET_ID=18B1PIhCDmBWyHZytvOcfj_1QbYBwczLf1x1Qbu0E5As
+GOOGLE_APPLICATION_CREDENTIALS=./sinuous-aviary-474820-e3-c442968a0e87.json
+
+# Backend Port
+PORT=5050
+
+# Telegram (Optional)
+TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_CHAT_ID=your_chat_id
+
+# Email (Optional)
+SENDGRID_API_KEY=your_sendgrid_key
+EMAIL_FROM=kho.1@mia.vn
+
+# Node Environment
+NODE_ENV=production
+```
+
+## 🔧 Troubleshooting
+
+### Tính toán khoảng cách không hoạt động
+
+#### 1. Kiểm tra Google Apps Script
+
+```bash
+# Test script trực tiếp
+curl "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?origin=test&destination=test"
+```
+
+**Lỗi thường gặp:**
+
+- `{"success":false,"error":"Missing origin or destination parameter"}` → Script hoạt động, chỉ thiếu parameters
+- `{"success":false,"error":"Could not get coordinates from addresses"}` → Lỗi Google Maps Services
+- `Error 400 (Bad Request)` → URL quá dài, script sẽ tự động xử lý
+
+#### 2. Kiểm tra Environment Variables
+
+```bash
+# Kiểm tra URL trong .env
+grep "VITE_GOOGLE_APPS_SCRIPT_URL" .env
+```
+
+#### 3. Kiểm tra Console Logs
+
+Mở Developer Tools → Console để xem lỗi chi tiết:
+
+- `🔍 Starting distance calculation...` → Script được gọi
+- `📍 Processed origin: ...` → Địa chỉ được xử lý
+- `✅ Real distance calculated: X.XX km` → Thành công
+
+#### 4. Fallback System
+
+Nếu Google Apps Script không hoạt động, hệ thống sẽ:
+
+- Tự động sử dụng dữ liệu fallback từ `mapsConfig.ts`
+- Hiển thị khoảng cách ước tính cho các route phổ biến
+- Không làm crash ứng dụng
+
+## 📝 Changelog
+
+### v1.1.0 (2024-09-11)
+
+- ✅ **Cải thiện tính toán khoảng cách**
+  - Tích hợp Google Apps Script với Google Maps Services
+  - Tự động xử lý địa chỉ dài và ký tự đặc biệt
+  - Hệ thống fallback robust khi Google Apps Script không hoạt động
+  - Cải thiện UI/UX cho bảng dữ liệu và grid view
+- ✅ **Tối ưu hóa hệ thống**
+  - Dọn dẹp code và file tạm thời
+  - Cải thiện error handling và logging
+  - Cập nhật documentation chi tiết
+
+### v1.0.0 (2024-08-28)
+
+- ✅ Hệ thống authentication hoàn chỉnh
+- ✅ UI Phân quyền (Roles/Permissions/Users)
+- ✅ Quản lý nhân viên (CRUD)
+- ✅ Route guards và permission-based UI
+- ✅ Google Sheets integration
+- ✅ Responsive design
+- ✅ Shared UI components
+
+### v1.1.0 (2024-09-03)
+
+- ✅ TransportRequestsSheet component với giao diện bảng và grid
+- ✅ StatusChip component được cải thiện với label prop
+- ✅ Google Maps integration cho tính toán khoảng cách
+- ✅ Hệ thống notification đa kênh
+- ✅ Business logic engines (pricing, consolidation, routing)
+- ✅ Performance monitoring và optimization
+- ✅ Error boundaries và loading states
+
+### v1.1.1 (2024-09-03)
+
+- ✅ **Session Timeout Warning System**: Cảnh báo thông minh 5 phút trước khi hết hạn
+- ✅ **Smart Session Extension**: Chỉ cho phép gia hạn session < 20 phút để đảm bảo bảo mật
+- ✅ **Auto Redirect System**: Tự động quay về vị trí cũ sau khi đăng nhập lại
+- ✅ **UI Warning Improvements**: Warning ở center top, không che nút đăng xuất
+- ✅ **Security Enhancement**: Kiểm tra strict session validity, không thể gia hạn session cũ
+- ✅ **User Experience**: 2 tùy chọn: "Gia hạn phiên" hoặc "Đăng nhập lại" tùy theo trạng thái
+
+### v1.2.0 (2024-12-19)
+
+- ✅ **Quản lý Nhập hàng**: Thêm module quản lý lịch nhập hàng với 3 mục con
+  - **Nhập hàng - Quốc tế**: Quản lý lịch nhập hàng quốc tế
+  - **Nhập hàng - Quốc nội**: Quản lý lịch nhập hàng nội địa
+  - **Lịch nhập**: Lịch trình nhập hàng tổng hợp
+- ✅ **Phân quyền mở rộng**: Thêm 3 quyền mới cho module nhập hàng
+  - `inbound-international:view`
+  - `inbound-domestic:view`
+  - `inbound-schedule:view`
+- ✅ **Sidebar Navigation**: Cập nhật cấu trúc menu với nhóm "Nhập hàng" và các mục con
+- ✅ **Route Protection**: Bảo vệ routes nhập hàng với permission-based guards
+- ✅ **Session Auto-refresh**: Tự động cập nhật session permissions sau khi thay đổi quyền
+
+### v1.3.0 (2025-01-13)
+
+- ✅ **Cải thiện hệ thống Login**: Tạo nhiều phiên bản login để phù hợp với nhu cầu khác nhau
+  - **BasicLogin**: Giao diện đơn giản, logic ổn định
+  - **HybridLogin**: Giao diện đẹp + logic đơn giản (KHUYẾN NGHỊ)
+  - **AuthLayout**: Giao diện chuyên nghiệp với đầy đủ tính năng
+- ✅ **Phân tích bảo mật**: Tạo báo cáo chi tiết về tình trạng bảo mật hệ thống
+- ✅ **Tối ưu hóa code**: Dọn dẹp file tạm, cải thiện cấu trúc code
+- ✅ **Cập nhật documentation**: Bổ sung hướng dẫn sử dụng các phiên bản login
+
+### v1.4.0 (2025-01-13)
+
+- ✅ **Đổi tên Login System**: HybridLoginPage → LoginPage để ngắn gọn hơn
+- ✅ **Tối ưu hóa cấu trúc**: Gộp tất cả logic login vào 1 component duy nhất
+- ✅ **Cải thiện UI/UX**: Responsive design hoàn hảo, server status indicator
+- ✅ **Tính năng nâng cao**: Account lockout, real-time validation, remember me
+- ✅ **Dọn dẹp code**: Xóa các file login cũ, cập nhật router và documentation
+
+### v2.1.0 (2025-10-31)
+
+- ✅ **Backend API Routes - 100% Complete**: Triển khai đầy đủ 16 route modules
+  - **Authentication & User Management**: authRoutes.js (9 endpoints: login, register, logout, users CRUD, change-password, init)
+  - **Core Business**: carriersRoutes.js, transfersRoutes.js, locationsRoutes.js, transportRequestsRoutes.js (full CRUD)
+  - **Settings**: settingsRoutes.js (volume rules)
+  - **Inbound**: inboundDomesticRoutes.js, inboundInternationalRoutes.js (full CRUD với 54+ cột cho International)
+  - **RBAC System**: rolesRoutes.js, employeesRoutes.js, rolePermissionsRoutes.js (full CRUD)
+  - **Admin**: adminRoutes.js (stats, sheets info)
+  - **Utilities**: googleSheetsRoutes.js, telegramRoutes.js, googleSheetsAuthRoutes.js
+  - **Main Router**: router.js (aggregates all routes)
+- ✅ **50+ API Endpoints**: Tất cả endpoints đã được implement và test
+- ✅ **Frontend Pages - Hoàn thiện**:
+  - Employees Management (`/employees`) - CRUD với Grid/Table view
+  - Authorization System (`/settings/roles`, `/settings/permissions`, `/settings/users`)
+  - Locations (`/transport/locations-saved`) - Địa điểm lưu
+  - Tất cả routes đã được bảo vệ với RBAC
+- ✅ **Backend Port**: Chuẩn hóa port 5050
+- ✅ **Google Sheets Integration**: 25 sheets connected và working
+- ✅ **Real-time Data**: Tất cả data từ Google Sheets API
+- ✅ **Production Ready**: Deployment configuration đầy đủ
+- ✅ **Session Management**: Timeout warning, smart extension, activity monitoring
+
+## 🤝 Đóng góp
+
+1. Fork repository
+2. Tạo feature branch
+3. Commit changes
+4. Push to branch
+5. Tạo Pull Request
+
+## 📄 License
+
+MIT License - xem file LICENSE để biết thêm chi tiết.
+
+## 📞 Liên hệ
+
+- **Email**: <support@mia.vn>
+- **Website**: <https://mia.vn>
+- **Documentation**: [Wiki](link-to-wiki)
+
+---
+
+© 2024 MIA Logistics Manager - Hệ thống quản lý logistics chuyên nghiệp

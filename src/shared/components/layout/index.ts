@@ -1,0 +1,1 @@
+export { ModernPageLayout } from './ModernPageLayout';

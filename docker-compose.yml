@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # Frontend Service
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - '${FRONTEND_PORT:-3000}:3000'
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_GOOGLE_SPREADSHEET_ID=${REACT_APP_GOOGLE_SPREADSHEET_ID}
+      - REACT_APP_TELEGRAM_BOT_TOKEN=${REACT_APP_TELEGRAM_BOT_TOKEN}
+      - REACT_APP_TELEGRAM_CHAT_ID=${REACT_APP_TELEGRAM_CHAT_ID}
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    networks:
+      - mia-network
+    depends_on:
+      - backend
+
+  # Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '${BACKEND_PORT:-5050}:5050'
+    environment:
+      - NODE_ENV=production
+      - BACKEND_PORT=5050
+      - REACT_APP_GOOGLE_SPREADSHEET_ID=${REACT_APP_GOOGLE_SPREADSHEET_ID}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - EMAIL_FROM=${EMAIL_FROM}
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/sinuous-aviary-474820-e3-c442968a0e87.json:/app/sinuous-aviary-474820-e3-c442968a0e87.json
+      - ./logs:/app/logs
+    networks:
+      - mia-network
+    restart: unless-stopped
+
+  # AI Service (Optional)
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./ai-service:/app
+    networks:
+      - mia-network
+    restart: unless-stopped
+    profiles:
+      - ai
+
+networks:
+  mia-network:
+    driver: bridge
+
+volumes:
+  logs:
+  node_modules:
+  backend_node_modules:

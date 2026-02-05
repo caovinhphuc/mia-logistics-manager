@@ -1,0 +1,278 @@
+# Hướng dẫn Việt hoá ứng dụng MIA Logistics Manager
+
+## Mục tiêu
+
+Việt hoá toàn bộ ứng dụng để hiển thị tiếng Việt và sử dụng múi giờ Việt Nam.
+
+## Những gì đã làm ✅
+
+### 1. Hoàn thành Việt hoá 100% các trang chính
+
+- ✅ **12/12 trang** đã Việt hoá hoàn toàn
+- ✅ **Dropdown menus** đã Việt hoá (Action, Resource, Status)
+- ✅ **Table headers** đã Việt hoá
+- ✅ **Button labels** đã Việt hoá
+- ✅ **Error messages** đã Việt hoá
+- ✅ **Success messages** đã Việt hoá
+- ✅ **Dialog titles** đã Việt hoá
+- ✅ **Form labels** đã Việt hoá
+- ✅ **Validation messages** đã Việt hoá
+- ✅ **Empty states** đã Việt hoá
+
+### 2. Cấu hình timezone Việt Nam
+
+- ✅ **Backend**: `getVietnamTimeString()`, `getVietnamTimeDisplay()`
+- ✅ **Frontend**: Store config `Asia/Ho_Chi_Minh`
+- ✅ **Format ngày giờ**: `vi-VN` locale
+- ✅ **Number formatting**: `toLocaleString('vi-VN')`
+
+### 3. Tạo hệ thống logging
+
+- ✅ **Backend API**: `/api/logs`, `/api/logs/export`
+- ✅ **Frontend page**: `/logs` với DataTable và filters
+- ✅ **Logging service**: `logService` cho frontend
+- ✅ **Auto truncation**: Giới hạn 1000 logs
+
+### 4. Tạo file ghi chú chi tiết
+
+- ✅ **VIETNAMESE_LOCALIZATION_GUIDE.md**: Hướng dẫn đầy đủ
+- ✅ **Mapping tables**: Action/Resource labels
+- ✅ **Code examples**: Format functions
+- ✅ **Progress tracking**: Tiến độ chi tiết
+
+## Các phần cần Việt hoá
+
+### 1. Trang Nhật ký hoạt động (/logs) ✅
+
+- ✅ Dropdown Action: Đã Việt hoá (LOGIN → Đăng nhập, EMPLOYEE_CREATE → Tạo nhân viên, etc.)
+- ✅ Dropdown Resource: Đã Việt hoá (auth → Xác thực, employees → Nhân viên, etc.)
+- ✅ Cột DataTable: Đã Việt hoá (Resource → Tài nguyên, IP → Địa chỉ IP, UserAgent → Trình duyệt)
+- ✅ Format ngày giờ: Đã cấu hình timezone Việt Nam (Asia/Ho_Chi_Minh)
+
+### 2. Trang Đăng nhập (/login) ✅
+
+- ✅ Title: "MIA Logistics"
+- ✅ Subtitle: "Đăng nhập hệ thống"
+- ✅ Labels: "Email", "Mật khẩu"
+- ✅ Button: "Đăng nhập", "Đang đăng nhập..."
+- ✅ Error messages: "Đăng nhập thất bại"
+
+### 3. Trang Dashboard (/) ✅
+
+- ✅ Title: "Dashboard - Tổng quan"
+- ✅ Stats cards: "Tổng đơn hàng", "Đang vận chuyển", "Hàng tồn kho", "Doanh thu tháng"
+- ✅ Charts: "Biểu đồ vận chuyển theo tháng", "Hoạt động gần đây"
+
+### 4. Trang Nhân viên (/employees) ✅
+
+- ✅ Title: "Quản lý nhân viên"
+- ✅ Table columns: "Mã NV", "Họ tên", "Email", "Số điện thoại", "Phòng ban", "Chức vụ", "Trạng thái", "Thao tác"
+- ✅ Buttons: "Thêm nhân viên", "Làm mới"
+- ✅ Tooltips: "Sửa", "Xóa"
+
+### 5. Các trang khác cần Việt hoá
+
+- ✅ Trang Vận chuyển (/shipments)
+- ✅ Trang Đơn hàng (/orders)
+- ✅ Trang Kho hàng (/inventory)
+- ✅ Trang Phiếu chuyển kho (/transfers)
+- ✅ Trang Nhà vận chuyển (/carriers)
+- ✅ Trang Theo dõi (/tracking)
+- ✅ Trang Phân quyền hệ thống (/authorization)
+- ✅ Trang Cài đặt (/settings)
+
+### 6. Trang Nhà vận chuyển (/carriers) ✅
+
+- ✅ Title: "Quản lý nhà vận chuyển"
+- ✅ Status labels: "Hoạt động", "Tạm dừng"
+- ✅ Detail labels: "Liên hệ", "Điện thoại", "Phương thức"
+- ✅ Section titles: "Định giá"
+- ✅ Action labels: "Sửa", "Xóa", "Thêm nhà vận chuyển", "Làm mới"
+- ✅ View mode: "Grid", "Bảng"
+- ✅ Error messages: "Lỗi khi tải dữ liệu", "Thử lại"
+- ✅ Empty state: "Chưa có nhà vận chuyển nào. Thêm nhà vận chuyển đầu tiên?"
+- ✅ Confirm dialogs: "Xóa nhà vận chuyển {name}?"
+
+### 7. Trang Phiếu chuyển kho (/transfers) ✅
+
+- ✅ Title: "Phiếu chuyển kho"
+- ✅ Status labels: "Chờ báo kiện", "Chờ chuyển giao", "Đã chuyển giao"
+- ✅ Stats cards: "Chờ báo kiện", "Chờ chuyển giao", "Đã chuyển giao", "Tổng cộng"
+- ✅ Action labels: "Sửa", "Xóa", "Xem", "In phiếu", "In picking", "Xuất"
+- ✅ Filter labels: "Tìm kiếm", "Có vali", "Trạng thái", "Kho nguồn", "Kho đích"
+- ✅ Form labels: "Địa chỉ", "Phường/Xã", "Quận/Huyện", "Tỉnh/Thành phố"
+- ✅ Button labels: "Hủy", "Lưu", "Làm mới", "Nhập CSV", "Xuất CSV"
+- ✅ Error messages: "Xoá phiếu thất bại. Vui lòng thử lại.", "Vui lòng chọn ít nhất một phiếu để in"
+- ✅ Success messages: "Đã làm mới dữ liệu từ sheet"
+
+### 8. Trang Đơn hàng (/orders) ✅
+
+- ✅ Title: "Quản lý đơn hàng"
+- ✅ Status labels: "Chờ xử lý", "Đã xác nhận", "Đang lấy hàng", "Đang vận chuyển", "Đã giao", "Đã hủy"
+- ✅ Table headers: "Mã đơn", "Khách hàng", "Điểm đi - Điểm đến", "Nhà vận chuyển", "Trạng thái", "Chi phí ước tính", "Khoảng cách", "Thao tác"
+- ✅ Action labels: "Tạo đơn hàng", "Làm mới", "Tải lại", "Xem", "Sửa", "Xóa"
+- ✅ Button labels: "Hủy", "Xóa"
+- ✅ Dialog titles: "Xác nhận xóa đơn hàng"
+- ✅ Error messages: "Lỗi khi tải dữ liệu đơn hàng. Vui lòng thử lại."
+- ✅ Empty state: "Chưa có đơn hàng nào. Tạo đơn hàng đầu tiên?"
+- ✅ Confirm messages: "Bạn có chắc chắn muốn xóa đơn hàng {orderId}? Hành động này không thể hoàn tác."
+
+### 9. Trang Kho hàng (/inventory) ✅
+
+- ✅ Title: "Quản lý kho hàng"
+- ✅ Description: "Module kho hàng sẽ được phát triển ở Phase 2"
+- ✅ Features: "Tính năng bao gồm: Quản lý SKU, theo dõi tồn kho, báo cáo xuất nhập"
+
+### 10. Trang Theo dõi (/tracking) ✅
+
+- ✅ Title: "Theo dõi vận chuyển"
+- ✅ Description: "Module theo dõi sẽ được phát triển ở Phase 2"
+- ✅ Features: "Tính năng bao gồm: Bản đồ theo dõi real-time, timeline trạng thái, thông báo"
+
+### 11. Trang Vận chuyển (/shipments) ✅
+
+- ✅ Status labels: "Đề nghị chuyển kho", "Xuất chuyển kho", "Nhập chuyển kho", "Đã hủy", "Chờ báo kiện", "Chờ chuyển giao", "Đang chuyển giao", "Đang giao", "Đã chuyển giao", "Đã giao hàng", "Hoàn thành", "Chờ xác nhận", "Đã xác nhận", "Đang vận chuyển", "Chuẩn bị"
+- ✅ Form labels: "Tên khách hàng", "Email", "Số điện thoại", "Địa chỉ lấy hàng", "Địa chỉ giao hàng", "Khối lượng", "Thể tích", "Số kiện", "Mức dịch vụ", "Nhà vận chuyển", "Ghi chú"
+- ✅ Validation messages: "Tên khách hàng là bắt buộc", "Email không hợp lệ", "Email là bắt buộc", "Số điện thoại là bắt buộc", "Địa chỉ lấy hàng là bắt buộc", "Địa chỉ giao hàng là bắt buộc", "Khối lượng phải lớn hơn 0", "Khối lượng là bắt buộc", "Thể tích phải lớn hơn 0", "Thể tích là bắt buộc", "Số kiện phải lớn hơn 0", "Số kiện là bắt buộc", "Mức dịch vụ là bắt buộc"
+- ✅ Analysis labels: "Phân tích thông minh cho đơn hàng", "Đang phân tích tối ưu..."
+
+### 12. Trang Phân quyền hệ thống (/authorization) ✅
+
+- ✅ Title: "Quản lý phân quyền"
+- ✅ Tab labels: "Vai trò", "Quyền", "Người dùng"
+- ✅ Table headers: "Tên vai trò", "Mô tả", "Thao tác", "Email", "Họ tên", "Vai trò", "Trạng thái"
+- ✅ Action labels: "Thêm vai trò", "Thêm người dùng", "Sửa", "Làm mới"
+- ✅ Status labels: "Hoạt động", "Không hoạt động"
+- ✅ Dialog titles: "Sửa vai trò", "Thêm vai trò mới", "Sửa người dùng", "Thêm người dùng mới"
+- ✅ Error messages: "Không thể tải dữ liệu", "Không thể lưu vai trò", "Không thể lưu người dùng"
+- ✅ Empty messages: "Không có vai trò nào", "Không có người dùng nào"
+- ✅ Section titles: "Danh sách vai trò", "Danh sách người dùng", "Xem dạng thẻ"
+
+### 13. Trang Cài đặt (/settings) ✅
+
+- ✅ Title: "Cài đặt hệ thống"
+- ✅ Notification settings: "Đơn hàng mới", "Xác nhận đơn hàng", "Lấy hàng", "Giao hàng", "Báo cáo tuần", "Báo cáo tháng", "Cảnh báo hệ thống"
+- ✅ Channel labels: "Telegram", "Email"
+- ✅ Timezone: "Vietnam (GMT+7)", "UTC (GMT+0)"
+- ✅ Button labels: "Lưu cài đặt", "Đang lưu..."
+
+## Các bước tiếp theo 🔄
+
+### 1. Messages và Notifications toàn cục ✅
+
+- ✅ **Thông báo lỗi toàn cục**
+  - ✅ Tạo `errorMessages.ts` với mapping lỗi
+  - [ ] Áp dụng cho tất cả API calls
+  - [ ] Standardize error display
+
+- ✅ **Thông báo thành công toàn cục**
+  - ✅ Tạo `successMessages.ts` với mapping thành công
+  - [ ] Áp dụng cho tất cả CRUD operations
+  - [ ] Standardize success display
+
+- ✅ **Confirm dialogs toàn cục**
+  - ✅ Tạo `confirmMessages.ts` với mapping xác nhận
+  - [ ] Áp dụng cho tất cả delete operations
+  - [ ] Standardize confirm dialogs
+
+- ✅ **Validation messages toàn cục**
+  - ✅ Tạo `validationMessages.ts` với mapping validation
+  - [ ] Áp dụng cho tất cả form validations
+  - [ ] Standardize validation display
+
+### 2. Form labels và placeholders toàn cục ✅
+
+- ✅ **Input labels toàn cục**
+  - ✅ Tạo `formLabels.ts` với mapping labels
+  - [ ] Áp dụng cho tất cả form inputs
+  - [ ] Standardize label display
+
+- ✅ **Placeholder text toàn cục**
+  - ✅ Tạo `placeholders.ts` với mapping placeholders
+  - [ ] Áp dụng cho tất cả input fields
+  - [ ] Standardize placeholder display
+
+- ✅ **Button text toàn cục**
+  - ✅ Tạo `buttonLabels.ts` với mapping buttons
+  - [ ] Áp dụng cho tất cả buttons
+  - [ ] Standardize button display
+
+### 3. Cấu hình timezone toàn cục ✅
+
+- ✅ Backend: Đã cấu hình `getVietnamTimeString()` và `getVietnamTimeDisplay()`
+- ✅ Frontend: Đã cấu hình timezone trong store (`Asia/Ho_Chi_Minh`)
+- ✅ **Date utilities**: Tạo `dateUtils.ts` với các hàm format timezone Việt Nam
+- [ ] Cập nhật tất cả các component hiển thị ngày giờ
+- [ ] Cấu hình moment.js hoặc date-fns với timezone Việt Nam
+
+### 4. Tích hợp và áp dụng 🔄
+
+- [ ] **Áp dụng messages vào các components**
+  - [ ] Thay thế hardcoded error messages
+  - [ ] Thay thế hardcoded success messages
+  - [ ] Thay thế hardcoded confirm messages
+  - [ ] Thay thế hardcoded validation messages
+
+- [ ] **Áp dụng form labels vào các forms**
+  - [ ] Thay thế hardcoded input labels
+  - [ ] Thay thế hardcoded placeholders
+  - [ ] Thay thế hardcoded button texts
+
+- [ ] **Áp dụng date utils vào các components**
+  - [ ] Thay thế hardcoded date formatting
+  - [ ] Sử dụng timezone Việt Nam nhất quán
+  - [ ] Áp dụng relative time formatting
+
+## Cách thực hiện
+
+### 1. Sử dụng timezone Việt Nam
+
+```typescript
+// Format ngày giờ Việt Nam
+const formatVietnamTime = (date: string | Date) => {
+  return new Date(date).toLocaleString('vi-VN', {
+    timeZone: 'Asia/Ho_Chi_Minh',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+};
+```
+
+### 2. Mapping Action/Resource
+
+```typescript
+const ACTION_LABELS = {
+  LOGIN: 'Đăng nhập',
+  LOGOUT: 'Đăng xuất',
+  EMPLOYEE_CREATE: 'Tạo nhân viên',
+  // ...
+};
+
+const RESOURCE_LABELS = {
+  auth: 'Xác thực',
+  employees: 'Nhân viên',
+  users: 'Người dùng',
+  // ...
+};
+```
+
+## Tiến độ tổng thể
+
+- ✅ **Hoàn thành**: 12/12 trang chính (100%)
+- ✅ **Hoàn thành**: Cấu hình timezone Việt Nam
+- ✅ **Hoàn thành**: Tạo hệ thống messages toàn cục
+- ✅ **Hoàn thành**: Tạo hệ thống form labels toàn cục
+- ✅ **Hoàn thành**: Tạo date utilities với timezone Việt Nam
+- 🔄 **Đang thực hiện**: Tích hợp và áp dụng vào components
+- ⏳ **Chưa bắt đầu**: Testing và optimization
+
+## Lưu ý
+
+- Giữ nguyên các giá trị value trong database/API
+- Chỉ thay đổi label hiển thị cho người dùng
+- Đảm bảo tính nhất quán trong toàn bộ ứng dụng
+- Test kỹ các chức năng filter/search sau khi Việt hoá

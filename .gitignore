@@ -1,0 +1,133 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production builds
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Credentials (Security) - CRITICAL: Never commit these!
+server/service-account-key.json
+backend/service-account-key.json
+backend/*.json
+backend/sinuous-aviary-*.json
+backend/mia-logistics-*.json
+scripts/credentials.json
+*.key
+*.p12
+*.pem
+*-key.json
+service-account*.json
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# ESLint cache
+.eslintcache
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Temporary files
+*.tmp
+*.temp
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads
+uploads/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Webpack
+.webpack/
+
+# MacOS
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+node_modules
+node_modules
+node_modules
+node_modules
+
+# Local Netlify folder
+.netlify
+
+# VS Code settings (optional - include for team consistency)
+# .vscode/
+
+# Logs
+logs/
+*.log
+
+# Archive old files (optional - can commit or ignore)
+# archive/
+
+# Backup files (optional)
+backup/
+*.backup
+*.bak
+
+# Test coverage
+coverage/
+
+# Vercel
+.vercel
+.env*.local

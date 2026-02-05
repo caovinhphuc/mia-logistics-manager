@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_GOOGLE_SHEETS_ID": "@sheets_id",
+    "GOOGLE_SERVICE_ACCOUNT": "@service_account_prod",
+    "GOOGLE_SERVICE_ACCOUNT_NUQ74": "@service_account_nuq74"
+  },
+  "regions": ["sin1"]
+}

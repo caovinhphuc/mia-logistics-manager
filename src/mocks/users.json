@@ -1,0 +1,42 @@
+[
+  {
+    "id": "u-admin",
+    "email": "admin@mia.vn",
+    "name": "Admin User",
+    "role": "admin",
+    "status": "active",
+    "created_at": "2024-01-01"
+  },
+  {
+    "id": "u-manager1",
+    "email": "manager1@mia.vn",
+    "name": "Manager 1",
+    "role": "manager",
+    "status": "active",
+    "created_at": "2024-01-01"
+  },
+  {
+    "id": "u-operator1",
+    "email": "operator1@mia.vn",
+    "name": "Operator 1",
+    "role": "warehouse_staff",
+    "status": "active",
+    "created_at": "2024-01-01"
+  },
+  {
+    "id": "u-driver1",
+    "email": "driver1@mia.vn",
+    "name": "Driver 1",
+    "role": "driver",
+    "status": "active",
+    "created_at": "2024-01-01"
+  },
+  {
+    "id": "u-warehouse1",
+    "email": "warehouse1@mia.vn",
+    "name": "Warehouse Staff 1",
+    "role": "warehouse_staff",
+    "status": "active",
+    "created_at": "2024-01-01"
+  }
+]
