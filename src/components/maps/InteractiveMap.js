@@ -312,7 +312,7 @@ const InteractiveMap = () => {
               icon={locationIcons[location.type]}
               eventHandlers={{
                 click: () => {
-                  // console.log("Location clicked:", location);
+                  // logger.debug("Location clicked:", location);
                 },
               }}
             >

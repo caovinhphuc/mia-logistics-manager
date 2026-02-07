@@ -482,7 +482,7 @@ const Carriers = () => {
                             onClick={() => {
                               // TODO: Implement edit functionality
                               // eslint-disable-next-line no-console
-                              console.log('Edit carrier:', carrierId);
+                              logger.debug('Edit carrier:', carrierId);
                             }}
                           >
                             <EditIcon fontSize="small" />
@@ -496,7 +496,7 @@ const Carriers = () => {
                               if (window.confirm(`Xóa nhà vận chuyển ${carrierName}?`)) {
                                 // TODO: Implement delete functionality
                                 // eslint-disable-next-line no-console
-                                console.log('Delete carrier:', carrierId);
+                                logger.debug('Delete carrier:', carrierId);
                               }
                             }}
                           >

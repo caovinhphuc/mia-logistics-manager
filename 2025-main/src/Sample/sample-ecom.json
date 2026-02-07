@@ -1,0 +1,48 @@
+{
+  "error": false,
+  "message": "OK",
+  "data": [
+    {
+      "id": 434819,
+      "name": "SO09032025:0845541",
+      "transporter": "S - SPX Express",
+      "customer": "Shopee",
+      "phone": "18002000",
+      "amount_total": "699000",
+      "cod_total": "0",
+      "shipment_id": "2503094EA6YXJT",
+      "shipment_code": "SPXVN057423890073",
+      "ecom_order_weight": "12635",
+      "ecom_recipient_code": "HN-20-14-PD01",
+      "ecom_cod_amount": "0",
+      "date_order": "2025-03-09 00:08:52",
+      "address": "******hẻm 193/64/87 phú diễn, Phường Phú Diễn, Quận Bắc Từ Liêm, Hà Nội",
+      "district": "Quận Bắc Từ Liêm",
+      "city": "Hà Nội",
+      "ward": "Phú Diễn",
+      "note": ".2503094EA6YXJT",
+      "detail": "Valinice Yari ID2041_20 S Orange(1), Mia Luggage Tag S Orange(1), Cerave Kem dưỡng ẩm 7ml S Blue/White(1)"
+    },
+    {
+      "id": 434821,
+      "name": "SO09032025:0845543",
+      "transporter": "S - Giao hàng nhanh",
+      "customer": "Shopee",
+      "phone": "18002000",
+      "amount_total": "169000",
+      "cod_total": "0",
+      "shipment_id": "2503094EYPMYK9",
+      "shipment_code": "G8E6X7C3",
+      "ecom_order_weight": "250",
+      "ecom_recipient_code": "290-A-05-A3",
+      "ecom_cod_amount": "0",
+      "date_order": "2025-03-09 00:19:10",
+      "address": "****** p2, 1 Châu Văn Liêm, Phường Phú Đô, Quận Nam Từ Liêm, Hà Nội",
+      "district": "Quận Nam Từ Liêm",
+      "city": "Hà Nội",
+      "ward": "Phú Đô",
+      "note": ".2503094EYPMYK9",
+      "detail": "The Travel Star Clearguard Cover_20 S Black(1), Cerave Kem dưỡng ẩm 7ml S Blue/White(1)"
+    }
+  ]
+}

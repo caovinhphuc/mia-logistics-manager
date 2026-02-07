@@ -4,8 +4,14 @@ class APIClient {
   private client: AxiosInstance;
 
   constructor() {
+    const useProxy =
+      typeof window !== 'undefined' &&
+      window.location.hostname === 'localhost' &&
+      window.location.port === '3000';
+    let baseURL = useProxy ? '' : process.env.REACT_APP_API_BASE_URL || 'http://localhost:5050';
+    if (baseURL && baseURL.endsWith('/api')) baseURL = baseURL.replace(/\/api\/?$/, '');
     this.client = axios.create({
-      baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:3000',
+      baseURL,
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',

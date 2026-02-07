@@ -1,0 +1,3351 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng Điều Khiển Quản Lý Tiến Độ Xác Nhận Đơn Và Bàn Giao Vận Chuyển</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --success-color: #4cc9f0;
+        --info-color: #4895ef;
+        --warning-color: #f72585;
+        --danger-color: #ff4d6d;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+      }
+
+      body {
+        font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+          'Segoe UI Symbol', 'Noto Color Emoji';
+        background-color: #f5f8fa;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+
+      .dashboard-container {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 250px;
+        background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        color: white;
+        padding: 20px 0;
+        position: fixed;
+        height: 100vh;
+        overflow-y: auto;
+        transition: all 0.3s;
+        z-index: 1000;
+      }
+
+      .sidebar-header {
+        padding: 0 20px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .sidebar-brand {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      .sidebar-brand i {
+        margin-right: 10px;
+        font-size: 1.8rem;
+      }
+
+      .sidebar-menu {
+        padding: 20px 0;
+        list-style: none;
+        margin: 0;
+      }
+
+      .sidebar-menu li {
+        margin-bottom: 5px;
+      }
+
+      .sidebar-menu a {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s;
+        border-left: 3px solid transparent;
+      }
+
+      .sidebar-menu a:hover,
+      .sidebar-menu a.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border-left-color: #f72585;
+      }
+
+      .sidebar-menu i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+      }
+
+      .main-content {
+        flex: 1;
+        margin-left: 250px;
+        padding: 20px;
+        transition: all 0.3s;
+      }
+
+      .navbar {
+        background-color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 15px 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+
+      .navbar-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .navbar-left h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .navbar-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .navbar-item {
+        margin-left: 20px;
+        position: relative;
+      }
+
+      .navbar-item select,
+      .navbar-item button {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 5px;
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .navbar-item select:hover,
+      .navbar-item button:hover {
+        background-color: #e9ecef;
+      }
+
+      .card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .card-title {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .stat-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 1.5rem;
+      }
+
+      .stat-info h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+
+      .stat-info p {
+        margin: 5px 0 0;
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+      }
+
+      .alert {
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-left: 4px solid;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .alert-icon {
+        margin-right: 15px;
+        font-size: 1.5rem;
+      }
+
+      .alert-content {
+        flex: 1;
+      }
+
+      .alert-title {
+        margin: 0 0 5px;
+        font-weight: 600;
+      }
+
+      .alert-description {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+
+      .alert-warning {
+        background-color: #fff8e6;
+        border-left-color: #ffc107;
+        color: #856404;
+      }
+
+      .alert-danger {
+        background-color: #ffebee;
+        border-left-color: #dc3545;
+        color: #721c24;
+      }
+
+      .alert-success {
+        background-color: #e8f5e9;
+        border-left-color: #28a745;
+        color: #155724;
+      }
+
+      .alert-info {
+        background-color: #e3f2fd;
+        border-left-color: #17a2b8;
+        color: #0c5460;
+      }
+
+      .alert-close {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 1.2rem;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: opacity 0.3s;
+      }
+
+      .alert-close:hover {
+        opacity: 1;
+      }
+
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table th,
+      .table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .table th {
+        font-weight: 600;
+        background-color: #f8f9fa;
+      }
+
+      .table tbody tr:hover {
+        background-color: #f8f9fa;
+      }
+
+      .badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .badge-success {
+        background-color: #e8f5e9;
+        color: #28a745;
+      }
+
+      .badge-warning {
+        background-color: #fff8e6;
+        color: #ffc107;
+      }
+
+      .badge-danger {
+        background-color: #ffebee;
+        color: #dc3545;
+      }
+
+      .progress {
+        height: 8px;
+        border-radius: 4px;
+        background-color: #e9ecef;
+        margin-top: 5px;
+      }
+
+      .progress-bar {
+        height: 100%;
+        border-radius: 4px;
+      }
+
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid #e9ecef;
+        margin-bottom: 20px;
+      }
+
+      .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+      }
+
+      .tab.active {
+        border-bottom-color: var(--primary-color);
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      .tab:hover:not(.active) {
+        background-color: #f8f9fa;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .carrier-comparison-card {
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .carrier-comparison-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .carrier-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .carrier-logo {
+        font-size: 2rem;
+        margin-right: 15px;
+      }
+
+      .carrier-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .carrier-rating {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+      }
+
+      .carrier-rating span {
+        margin-left: 5px;
+        font-weight: 600;
+      }
+
+      .carrier-metrics {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .carrier-metric {
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+      }
+
+      .carrier-metric p {
+        margin: 0;
+        font-size: 0.8rem;
+        color: #6c757d;
+      }
+
+      .carrier-metric h4 {
+        margin: 5px 0 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .carrier-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+      }
+
+      .carrier-feature {
+        padding: 5px 10px;
+        background-color: #e3f2fd;
+        color: #0c5460;
+        border-radius: 20px;
+        font-size: 0.8rem;
+      }
+
+      .settings-panel {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .settings-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0 0 15px;
+      }
+
+      .settings-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #e9ecef;
+        border-radius: 5px;
+        font-size: 0.9rem;
+      }
+
+      .btn {
+        padding: 8px 15px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--secondary-color);
+      }
+
+      .btn-outline {
+        background-color: transparent;
+        border: 1px solid #e9ecef;
+      }
+
+      .btn-outline:hover {
+        background-color: #f8f9fa;
+      }
+
+      .btn-success {
+        background-color: var(--success-color);
+        color: white;
+      }
+
+      .btn-success:hover {
+        background-color: #3da5d9;
+      }
+
+      .btn-warning {
+        background-color: var(--warning-color);
+        color: white;
+      }
+
+      .btn-warning:hover {
+        background-color: #d61c69;
+      }
+
+      .btn-danger {
+        background-color: var(--danger-color);
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background-color: #e5383b;
+      }
+
+      .btn-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-icon i {
+        margin-right: 5px;
+      }
+
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+      }
+
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+
+      .toggle-slider:before {
+        position: absolute;
+        content: '';
+        height: 16px;
+        width: 16px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .toggle-slider {
+        background-color: var(--primary-color);
+      }
+
+      input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+      }
+
+      .toggle-label {
+        margin-left: 10px;
+        font-size: 0.9rem;
+      }
+
+      .citation-section {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+      }
+
+      .citation-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      .citation-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .citation-item {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #f8f9fa;
+      }
+
+      .citation-item:last-child {
+        border-bottom: none;
+      }
+
+      .citation-item a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .citation-item a:hover {
+        text-decoration: underline;
+      }
+
+      .citation-item p {
+        margin: 5px 0 0;
+        font-size: 0.9rem;
+        color: #6c757d;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 992px) {
+        .sidebar {
+          width: 70px;
+          padding: 15px 0;
+        }
+
+        .sidebar-brand span,
+        .sidebar-menu span {
+          display: none;
+        }
+
+        .sidebar-brand {
+          justify-content: center;
+        }
+
+        .sidebar-brand i {
+          margin-right: 0;
+        }
+
+        .sidebar-menu a {
+          justify-content: center;
+          padding: 15px;
+        }
+
+        .sidebar-menu i {
+          margin-right: 0;
+          font-size: 1.5rem;
+        }
+
+        .main-content {
+          margin-left: 70px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .stats-container {
+          grid-template-columns: 1fr;
+        }
+
+        .navbar-content {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .navbar-right {
+          margin-top: 15px;
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .navbar-item {
+          margin-left: 0;
+        }
+
+        .settings-form {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .main-content {
+          padding: 15px;
+        }
+
+        .card-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .card-header .btn {
+          margin-top: 10px;
+        }
+      }
+
+      /* Alert System Styles */
+      .alert-system-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        max-width: 90vw;
+        z-index: 1050;
+      }
+
+      .alert-notification {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        overflow: hidden;
+        animation: slideIn 0.5s forwards;
+        transform: translateX(100%);
+      }
+
+      @keyframes slideIn {
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideOut {
+        to {
+          transform: translateX(100%);
+        }
+      }
+
+      .alert-notification.closing {
+        animation: slideOut 0.5s forwards;
+      }
+
+      .alert-notification-header {
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+      }
+
+      .alert-notification-header.critical {
+        background-color: #dc3545;
+      }
+
+      .alert-notification-header.warning {
+        background-color: #ffc107;
+        color: #212529;
+      }
+
+      .alert-notification-header.info {
+        background-color: #17a2b8;
+      }
+
+      .alert-notification-title {
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      .alert-notification-title i {
+        margin-right: 8px;
+      }
+
+      .alert-notification-close {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 1.2rem;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+      }
+
+      .alert-notification-close:hover {
+        opacity: 1;
+      }
+
+      .alert-notification-body {
+        padding: 15px;
+      }
+
+      .alert-notification-message {
+        margin: 0 0 10px;
+      }
+
+      .alert-notification-time {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin: 0;
+      }
+
+      .alert-notification-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+      }
+
+      .alert-notification-actions button {
+        margin-left: 10px;
+      }
+
+      .alert-settings-panel {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .alert-threshold-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .alert-threshold-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+
+      .alert-threshold-info {
+        flex: 1;
+      }
+
+      .alert-threshold-name {
+        font-weight: 600;
+        margin: 0 0 5px;
+      }
+
+      .alert-threshold-description {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin: 0;
+      }
+
+      .alert-threshold-controls {
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+      }
+
+      .alert-threshold-value {
+        width: 80px;
+        padding: 5px 10px;
+        border: 1px solid #e9ecef;
+        border-radius: 5px;
+        margin-right: 10px;
+        text-align: center;
+      }
+
+      .alert-history-item {
+        padding: 15px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .alert-history-item:last-child {
+        border-bottom: none;
+      }
+
+      .alert-history-icon {
+        margin-right: 15px;
+        font-size: 1.2rem;
+      }
+
+      .alert-history-icon.critical {
+        color: #dc3545;
+      }
+
+      .alert-history-icon.warning {
+        color: #ffc107;
+      }
+
+      .alert-history-icon.info {
+        color: #17a2b8;
+      }
+
+      .alert-history-content {
+        flex: 1;
+      }
+
+      .alert-history-title {
+        font-weight: 600;
+        margin: 0 0 5px;
+      }
+
+      .alert-history-message {
+        margin: 0 0 5px;
+        font-size: 0.9rem;
+      }
+
+      .alert-history-time {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin: 0;
+      }
+
+      .alert-history-status {
+        margin-left: 15px;
+        font-size: 0.8rem;
+        padding: 3px 8px;
+        border-radius: 20px;
+      }
+
+      .alert-history-status.resolved {
+        background-color: #e8f5e9;
+        color: #28a745;
+      }
+
+      .alert-history-status.pending {
+        background-color: #fff8e6;
+        color: #ffc107;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-brand">
+            <i class="bi bi-box-seam"></i>
+            <span>Fulfillment Dashboard</span>
+          </div>
+        </div>
+        <ul class="sidebar-menu">
+          <li>
+            <a href="#" class="active" onclick="changeTab('overview')">
+              <i class="bi bi-grid-1x2"></i>
+              <span>Tổng quan</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="changeTab('order-confirmation')">
+              <i class="bi bi-check2-circle"></i>
+              <span>Xác nhận đơn hàng</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="changeTab('shipping-handover')">
+              <i class="bi bi-truck"></i>
+              <span>Bàn giao vận chuyển</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="changeTab('carrier-comparison')">
+              <i class="bi bi-bar-chart"></i>
+              <span>So sánh đơn vị vận chuyển</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="changeTab('real-time-analytics')">
+              <i class="bi bi-graph-up"></i>
+              <span>Phân tích thời gian thực</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="changeTab('alert-system')">
+              <i class="bi bi-bell"></i>
+              <span>Hệ thống cảnh báo</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="changeTab('settings')">
+              <i class="bi bi-gear"></i>
+              <span>Cài đặt</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Navbar -->
+        <div class="navbar">
+          <div class="navbar-content">
+            <div class="navbar-left">
+              <h1>Bảng Điều Khiển Quản Lý Tiến Độ Xác Nhận Đơn Và Bàn Giao Vận Chuyển</h1>
+            </div>
+            <div class="navbar-right">
+              <div class="navbar-item">
+                <select id="platform-select" onchange="changePlatform()">
+                  <option value="all">Tất cả sàn</option>
+                  <option value="shopee">Shopee</option>
+                  <option value="tiktok">TikTok Shop</option>
+                </select>
+              </div>
+              <div class="navbar-item">
+                <select id="date-range-select" onchange="changeDateRange()">
+                  <option value="today">Hôm nay</option>
+                  <option value="yesterday">Hôm qua</option>
+                  <option value="week" selected>7 ngày qua</option>
+                  <option value="month">30 ngày qua</option>
+                  <option value="custom">Tùy chỉnh...</option>
+                </select>
+              </div>
+              <div class="navbar-item">
+                <button class="btn btn-outline btn-icon" onclick="refreshData()">
+                  <i class="bi bi-arrow-clockwise"></i> Làm mới
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content active">
+          <!-- Stats Cards -->
+          <div class="stats-container">
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e3f2fd; color: #0d6efd">
+                <i class="bi bi-box-seam"></i>
+              </div>
+              <div class="stat-info">
+                <h3>582</h3>
+                <p>Tổng đơn hàng</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e8f5e9; color: #28a745">
+                <i class="bi bi-check2-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h3>92%</h3>
+                <p>Tỷ lệ xác nhận đúng hạn</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #fff8e6; color: #ffc107">
+                <i class="bi bi-truck"></i>
+              </div>
+              <div class="stat-info">
+                <h3>85%</h3>
+                <p>Tỷ lệ bàn giao đúng hạn</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #ffebee; color: #dc3545">
+                <i class="bi bi-x-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h3>32</h3>
+                <p>Đơn hàng bị hủy</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alerts -->
+          <div id="alerts-container">
+            <div class="alert alert-warning">
+              <div class="alert-icon">
+                <i class="bi bi-exclamation-triangle"></i>
+              </div>
+              <div class="alert-content">
+                <h4 class="alert-title">Cảnh báo: Tỷ lệ bàn giao vận chuyển thấp</h4>
+                <p class="alert-description">
+                  Tỷ lệ bàn giao vận chuyển đúng hạn đang ở mức 85%, thấp hơn ngưỡng 90%. Cần kiểm
+                  tra quy trình đóng gói và bàn giao.
+                </p>
+              </div>
+              <button class="alert-close" onclick="dismissAlert(this)">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+            <div class="alert alert-danger">
+              <div class="alert-icon">
+                <i class="bi bi-exclamation-circle"></i>
+              </div>
+              <div class="alert-content">
+                <h4 class="alert-title">Cảnh báo nghiêm trọng: Đơn hàng tồn đọng</h4>
+                <p class="alert-description">
+                  Có 15 đơn hàng chưa được xác nhận quá 12 giờ. Cần xử lý ngay để tránh vi phạm
+                  chính sách của sàn.
+                </p>
+              </div>
+              <button class="alert-close" onclick="dismissAlert(this)">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+            <div class="alert alert-info">
+              <div class="alert-icon">
+                <i class="bi bi-info-circle"></i>
+              </div>
+              <div class="alert-content">
+                <h4 class="alert-title">Thông báo: Cập nhật chính sách vận chuyển</h4>
+                <p class="alert-description">
+                  Shopee vừa cập nhật chính sách vận chuyển mới từ ngày 12/05/2025. Vui lòng kiểm
+                  tra và điều chỉnh quy trình cho phù hợp.
+                </p>
+              </div>
+              <button class="alert-close" onclick="dismissAlert(this)">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Order Status Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Trạng thái đơn hàng</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="orderStatusChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fulfillment Time Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Thời gian xử lý đơn hàng theo ngày</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="fulfillmentTimeChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery Performance Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Hiệu suất giao hàng</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="deliveryPerformanceChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carrier Performance Table -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Hiệu suất đơn vị vận chuyển</h2>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Đơn vị vận chuyển</th>
+                      <th>Tổng đơn</th>
+                      <th>Đúng hạn</th>
+                      <th>Tỷ lệ đúng hạn</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>SPX Express</td>
+                      <td>150</td>
+                      <td>143</td>
+                      <td>95%</td>
+                      <td><span class="badge badge-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>Giao Hàng Nhanh</td>
+                      <td>120</td>
+                      <td>106</td>
+                      <td>88%</td>
+                      <td>
+                        <span class="badge badge-warning">Cần cải thiện</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Viettel Post</td>
+                      <td>100</td>
+                      <td>92</td>
+                      <td>92%</td>
+                      <td><span class="badge badge-success">Tốt</span></td>
+                    </tr>
+                    <tr>
+                      <td>J&T Express</td>
+                      <td>80</td>
+                      <td>68</td>
+                      <td>85%</td>
+                      <td>
+                        <span class="badge badge-warning">Cần cải thiện</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>GHTK</td>
+                      <td>70</td>
+                      <td>63</td>
+                      <td>90%</td>
+                      <td><span class="badge badge-success">Tốt</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Cancellation Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Lý do hủy đơn hàng</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="orderCancellationChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Confirmation Tab -->
+        <div id="order-confirmation-tab" class="tab-content">
+          <!-- Stats Cards -->
+          <div class="stats-container">
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e3f2fd; color: #0d6efd">
+                <i class="bi bi-hourglass-split"></i>
+              </div>
+              <div class="stat-info">
+                <h3>120</h3>
+                <p>Đơn chờ xác nhận</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e8f5e9; color: #28a745">
+                <i class="bi bi-check2-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h3>92%</h3>
+                <p>Tỷ lệ xác nhận đúng hạn</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #fff8e6; color: #ffc107">
+                <i class="bi bi-clock-history"></i>
+              </div>
+              <div class="stat-info">
+                <h3>8.5 giờ</h3>
+                <p>Thời gian xác nhận trung bình</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #ffebee; color: #dc3545">
+                <i class="bi bi-exclamation-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h3>15</h3>
+                <p>Đơn quá hạn xác nhận</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hourly Order Confirmation Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Phân bố đơn hàng theo giờ</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="hourlyOrderConfirmationChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Confirmation Timeline -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Quy định thời gian xác nhận đơn hàng</h2>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Sàn TMĐT</th>
+                      <th>Thời gian tối đa</th>
+                      <th>Chính sách phạt</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Shopee</td>
+                      <td>24 giờ</td>
+                      <td>Giảm hiển thị, phạt tiền</td>
+                      <td>Theo Điều Khoản Dịch Vụ Shopee mới nhất</td>
+                    </tr>
+                    <tr>
+                      <td>TikTok Shop</td>
+                      <td>12 giờ</td>
+                      <td>Giảm hiển thị, phạt tiền</td>
+                      <td>Áp dụng từ 01/01/2024</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending Orders Table -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Đơn hàng chờ xác nhận</h2>
+              <button class="btn btn-primary btn-icon">
+                <i class="bi bi-download"></i> Xuất Excel
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Mã đơn hàng</th>
+                      <th>Sàn</th>
+                      <th>Thời gian đặt</th>
+                      <th>Thời gian còn lại</th>
+                      <th>Trạng thái</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>SP123456789</td>
+                      <td>Shopee</td>
+                      <td>15/05/2024 08:30</td>
+                      <td>2 giờ 15 phút</td>
+                      <td>
+                        <span class="badge badge-warning">Sắp hết hạn</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Xác nhận</button>
+                        <button class="btn btn-danger btn-sm">Hủy</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>TT987654321</td>
+                      <td>TikTok</td>
+                      <td>15/05/2024 09:45</td>
+                      <td>1 giờ 30 phút</td>
+                      <td>
+                        <span class="badge badge-danger">Gần hết hạn</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Xác nhận</button>
+                        <button class="btn btn-danger btn-sm">Hủy</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SP123456790</td>
+                      <td>Shopee</td>
+                      <td>15/05/2024 10:15</td>
+                      <td>15 giờ 45 phút</td>
+                      <td>
+                        <span class="badge badge-success">Đủ thời gian</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Xác nhận</button>
+                        <button class="btn btn-danger btn-sm">Hủy</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>TT987654322</td>
+                      <td>TikTok</td>
+                      <td>15/05/2024 10:30</td>
+                      <td>3 giờ 30 phút</td>
+                      <td>
+                        <span class="badge badge-success">Đủ thời gian</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Xác nhận</button>
+                        <button class="btn btn-danger btn-sm">Hủy</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SP123456791</td>
+                      <td>Shopee</td>
+                      <td>15/05/2024 07:15</td>
+                      <td>-1 giờ 15 phút</td>
+                      <td><span class="badge badge-danger">Quá hạn</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Xác nhận</button>
+                        <button class="btn btn-danger btn-sm">Hủy</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping Handover Tab -->
+        <div id="shipping-handover-tab" class="tab-content">
+          <!-- Stats Cards -->
+          <div class="stats-container">
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e3f2fd; color: #0d6efd">
+                <i class="bi bi-box-seam"></i>
+              </div>
+              <div class="stat-info">
+                <h3>85</h3>
+                <p>Đơn chờ bàn giao</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e8f5e9; color: #28a745">
+                <i class="bi bi-truck"></i>
+              </div>
+              <div class="stat-info">
+                <h3>85%</h3>
+                <p>Tỷ lệ bàn giao đúng hạn</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #fff8e6; color: #ffc107">
+                <i class="bi bi-clock-history"></i>
+              </div>
+              <div class="stat-info">
+                <h3>22 giờ</h3>
+                <p>Thời gian bàn giao trung bình</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #ffebee; color: #dc3545">
+                <i class="bi bi-exclamation-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h3>12</h3>
+                <p>Đơn quá hạn bàn giao</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hourly Shipping Handover Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Phân bố bàn giao vận chuyển theo giờ</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="hourlyShippingHandoverChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Handover Timeline -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Quy định thời gian bàn giao vận chuyển</h2>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Sàn TMĐT</th>
+                      <th>Thời gian tối đa</th>
+                      <th>Chính sách phạt</th>
+                      <th>Ghi chú</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Shopee</td>
+                      <td>24 giờ sau xác nhận</td>
+                      <td>Giảm hiển thị, phạt tiền</td>
+                      <td>Theo Chính Sách Vận Chuyển Shopee mới nhất</td>
+                    </tr>
+                    <tr>
+                      <td>TikTok Shop</td>
+                      <td>24 giờ sau xác nhận</td>
+                      <td>Giảm hiển thị, phạt tiền</td>
+                      <td>Áp dụng từ 01/01/2024</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending Shipping Handover Table -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Đơn hàng chờ bàn giao vận chuyển</h2>
+              <button class="btn btn-primary btn-icon">
+                <i class="bi bi-download"></i> Xuất Excel
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Mã đơn hàng</th>
+                      <th>Sàn</th>
+                      <th>Thời gian xác nhận</th>
+                      <th>Thời gian còn lại</th>
+                      <th>Đơn vị vận chuyển</th>
+                      <th>Trạng thái</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>SP123456789</td>
+                      <td>Shopee</td>
+                      <td>14/05/2024 08:30</td>
+                      <td>2 giờ 15 phút</td>
+                      <td>SPX Express</td>
+                      <td>
+                        <span class="badge badge-warning">Sắp hết hạn</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Bàn giao</button>
+                        <button class="btn btn-warning btn-sm">In vận đơn</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>TT987654321</td>
+                      <td>TikTok</td>
+                      <td>14/05/2024 09:45</td>
+                      <td>1 giờ 30 phút</td>
+                      <td>Giao Hàng Nhanh</td>
+                      <td>
+                        <span class="badge badge-danger">Gần hết hạn</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Bàn giao</button>
+                        <button class="btn btn-warning btn-sm">In vận đơn</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SP123456790</td>
+                      <td>Shopee</td>
+                      <td>15/05/2024 10:15</td>
+                      <td>15 giờ 45 phút</td>
+                      <td>Viettel Post</td>
+                      <td>
+                        <span class="badge badge-success">Đủ thời gian</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Bàn giao</button>
+                        <button class="btn btn-warning btn-sm">In vận đơn</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>TT987654322</td>
+                      <td>TikTok</td>
+                      <td>15/05/2024 10:30</td>
+                      <td>3 giờ 30 phút</td>
+                      <td>J&T Express</td>
+                      <td>
+                        <span class="badge badge-success">Đủ thời gian</span>
+                      </td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Bàn giao</button>
+                        <button class="btn btn-warning btn-sm">In vận đơn</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SP123456791</td>
+                      <td>Shopee</td>
+                      <td>13/05/2024 07:15</td>
+                      <td>-1 giờ 15 phút</td>
+                      <td>GHTK</td>
+                      <td><span class="badge badge-danger">Quá hạn</span></td>
+                      <td>
+                        <button class="btn btn-success btn-sm">Bàn giao</button>
+                        <button class="btn btn-warning btn-sm">In vận đơn</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carrier Comparison Tab -->
+        <div id="carrier-comparison-tab" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">So sánh đơn vị vận chuyển</h2>
+              <div>
+                <select id="carrier-comparison-metric" onchange="changeCarrierComparisonMetric()">
+                  <option value="onTimeDelivery">Tỷ lệ giao hàng đúng hạn</option>
+                  <option value="costPerKm">Chi phí trên km</option>
+                  <option value="costPerKg">Chi phí trên kg</option>
+                  <option value="complaintRate">Tỷ lệ khiếu nại</option>
+                  <option value="damageRate">Tỷ lệ hư hỏng</option>
+                  <option value="returnRate">Tỷ lệ hoàn trả</option>
+                  <option value="customerSatisfaction">Mức độ hài lòng khách hàng</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="carrierComparisonChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carrier Radar Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Đánh giá tổng thể đơn vị vận chuyển</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="carrierRadarChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Cost by Region -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Chi phí vận chuyển theo khu vực (VNĐ)</h2>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Khu vực</th>
+                      <th>SPX Express</th>
+                      <th>Giao Hàng Nhanh</th>
+                      <th>Viettel Post</th>
+                      <th>J&T Express</th>
+                      <th>GHTK</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Nội thành Hà Nội</td>
+                      <td>22,000</td>
+                      <td>20,000</td>
+                      <td>18,000</td>
+                      <td>19,000</td>
+                      <td>19,500</td>
+                    </tr>
+                    <tr>
+                      <td>Nội thành TP.HCM</td>
+                      <td>22,000</td>
+                      <td>20,000</td>
+                      <td>18,000</td>
+                      <td>19,000</td>
+                      <td>19,500</td>
+                    </tr>
+                    <tr>
+                      <td>Miền Bắc</td>
+                      <td>30,000</td>
+                      <td>28,000</td>
+                      <td>25,000</td>
+                      <td>27,000</td>
+                      <td>26,500</td>
+                    </tr>
+                    <tr>
+                      <td>Miền Trung</td>
+                      <td>35,000</td>
+                      <td>32,000</td>
+                      <td>30,000</td>
+                      <td>33,000</td>
+                      <td>31,500</td>
+                    </tr>
+                    <tr>
+                      <td>Miền Nam</td>
+                      <td>32,000</td>
+                      <td>30,000</td>
+                      <td>28,000</td>
+                      <td>29,000</td>
+                      <td>29,500</td>
+                    </tr>
+                    <tr>
+                      <td>Vùng sâu vùng xa</td>
+                      <td>45,000</td>
+                      <td>42,000</td>
+                      <td>38,000</td>
+                      <td>40,000</td>
+                      <td>39,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery Time by Region -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Thời gian giao hàng theo khu vực (ngày)</h2>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Khu vực</th>
+                      <th>SPX Express</th>
+                      <th>Giao Hàng Nhanh</th>
+                      <th>Viettel Post</th>
+                      <th>J&T Express</th>
+                      <th>GHTK</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Nội thành Hà Nội</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td>1.5</td>
+                      <td>1</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
+                      <td>Nội thành TP.HCM</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td>1.5</td>
+                      <td>1</td>
+                      <td>1</td>
+                    </tr>
+                    <tr>
+                      <td>Miền Bắc</td>
+                      <td>2</td>
+                      <td>2.5</td>
+                      <td>3</td>
+                      <td>2.5</td>
+                      <td>2.5</td>
+                    </tr>
+                    <tr>
+                      <td>Miền Trung</td>
+                      <td>3</td>
+                      <td>3.5</td>
+                      <td>4</td>
+                      <td>3.5</td>
+                      <td>3.5</td>
+                    </tr>
+                    <tr>
+                      <td>Miền Nam</td>
+                      <td>2.5</td>
+                      <td>3</td>
+                      <td>3.5</td>
+                      <td>3</td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
+                      <td>Vùng sâu vùng xa</td>
+                      <td>4</td>
+                      <td>5</td>
+                      <td>4</td>
+                      <td>5</td>
+                      <td>4.5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detailed Carrier Cards -->
+          <h2 class="mb-4">Chi tiết đơn vị vận chuyển</h2>
+          <div class="carrier-comparison-card">
+            <div class="carrier-header">
+              <div class="carrier-logo">🚚</div>
+              <h3 class="carrier-name">SPX Express</h3>
+              <div class="carrier-rating">
+                <i class="bi bi-star-fill" style="color: #ffc107"></i>
+                <span>4.8</span>
+              </div>
+            </div>
+            <div class="carrier-metrics">
+              <div class="carrier-metric">
+                <p>Tỷ lệ giao đúng hạn</p>
+                <h4>95%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Chi phí trên km</p>
+                <h4>5,000 VNĐ</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Chi phí trên kg</p>
+                <h4>15,000 VNĐ</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ khiếu nại</p>
+                <h4>2%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ hư hỏng</p>
+                <h4>1.5%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ hoàn trả</p>
+                <h4>3%</h4>
+              </div>
+            </div>
+            <p><strong>Thời gian giao hàng trung bình:</strong> 1.5 ngày</p>
+            <p><strong>Phạm vi phủ sóng:</strong> 95% toàn quốc</p>
+            <p><strong>Tích hợp với Shopee:</strong> Tích hợp hoàn toàn</p>
+            <p><strong>Tích hợp với TikTok Shop:</strong> Tích hợp một phần</p>
+            <div class="carrier-features">
+              <span class="carrier-feature">Giao hàng nhanh</span>
+              <span class="carrier-feature">Bảo hiểm hàng hóa</span>
+              <span class="carrier-feature">Đồng kiểm</span>
+            </div>
+          </div>
+
+          <div class="carrier-comparison-card">
+            <div class="carrier-header">
+              <div class="carrier-logo">🏍️</div>
+              <h3 class="carrier-name">Giao Hàng Nhanh</h3>
+              <div class="carrier-rating">
+                <i class="bi bi-star-fill" style="color: #ffc107"></i>
+                <span>4.2</span>
+              </div>
+            </div>
+            <div class="carrier-metrics">
+              <div class="carrier-metric">
+                <p>Tỷ lệ giao đúng hạn</p>
+                <h4>88%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Chi phí trên km</p>
+                <h4>4,500 VNĐ</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Chi phí trên kg</p>
+                <h4>14,000 VNĐ</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ khiếu nại</p>
+                <h4>4%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ hư hỏng</p>
+                <h4>2.5%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ hoàn trả</p>
+                <h4>5%</h4>
+              </div>
+            </div>
+            <p><strong>Thời gian giao hàng trung bình:</strong> 2 ngày</p>
+            <p><strong>Phạm vi phủ sóng:</strong> 90% toàn quốc</p>
+            <p><strong>Tích hợp với Shopee:</strong> Tích hợp hoàn toàn</p>
+            <p><strong>Tích hợp với TikTok Shop:</strong> Tích hợp hoàn toàn</p>
+            <div class="carrier-features">
+              <span class="carrier-feature">Giao hàng linh hoạt</span>
+              <span class="carrier-feature">Thu COD</span>
+              <span class="carrier-feature">Đồng kiểm</span>
+            </div>
+          </div>
+
+          <div class="carrier-comparison-card">
+            <div class="carrier-header">
+              <div class="carrier-logo">📮</div>
+              <h3 class="carrier-name">Viettel Post</h3>
+              <div class="carrier-rating">
+                <i class="bi bi-star-fill" style="color: #ffc107"></i>
+                <span>4.3</span>
+              </div>
+            </div>
+            <div class="carrier-metrics">
+              <div class="carrier-metric">
+                <p>Tỷ lệ giao đúng hạn</p>
+                <h4>92%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Chi phí trên km</p>
+                <h4>4,000 VNĐ</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Chi phí trên kg</p>
+                <h4>13,000 VNĐ</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ khiếu nại</p>
+                <h4>3%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ hư hỏng</p>
+                <h4>2%</h4>
+              </div>
+              <div class="carrier-metric">
+                <p>Tỷ lệ hoàn trả</p>
+                <h4>4%</h4>
+              </div>
+            </div>
+            <p><strong>Thời gian giao hàng trung bình:</strong> 2.5 ngày</p>
+            <p><strong>Phạm vi phủ sóng:</strong> 98% toàn quốc</p>
+            <p><strong>Tích hợp với Shopee:</strong> Tích hợp hoàn toàn</p>
+            <p><strong>Tích hợp với TikTok Shop:</strong> Tích hợp hoàn toàn</p>
+            <div class="carrier-features">
+              <span class="carrier-feature">Phủ sóng rộng</span>
+              <span class="carrier-feature">Thu COD</span>
+              <span class="carrier-feature">Bảo hiểm hàng hóa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-time Analytics Tab -->
+        <div id="real-time-analytics-tab" class="tab-content">
+          <!-- Stats Cards -->
+          <div class="stats-container">
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e3f2fd; color: #0d6efd">
+                <i class="bi bi-activity"></i>
+              </div>
+              <div class="stat-info">
+                <h3>98%</h3>
+                <p>Hiệu suất xác nhận hiện tại</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #e8f5e9; color: #28a745">
+                <i class="bi bi-truck"></i>
+              </div>
+              <div class="stat-info">
+                <h3>93%</h3>
+                <p>Hiệu suất bàn giao hiện tại</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #fff8e6; color: #ffc107">
+                <i class="bi bi-hourglass-split"></i>
+              </div>
+              <div class="stat-info">
+                <h3>15</h3>
+                <p>Đơn mới trong giờ qua</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background-color: #ffebee; color: #dc3545">
+                <i class="bi bi-exclamation-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h3>3</h3>
+                <p>Đơn cần xử lý ngay</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real-time Performance Chart -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Hiệu suất theo thời gian thực</h2>
+            </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <canvas id="realTimePerformanceChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resource Allocation Table -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Phân tích nguồn lực theo giờ</h2>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Khung giờ</th>
+                      <th>Lượng đơn hàng</th>
+                      <th>Nhân viên đề xuất</th>
+                      <th>Nhân viên hiện tại</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>00:00 - 04:00</td>
+                      <td>Thấp</td>
+                      <td>1</td>
+                      <td>1</td>
+                      <td><span class="badge badge-success">Phù hợp</span></td>
+                    </tr>
+                    <tr>
+                      <td>04:00 - 08:00</td>
+                      <td>Thấp-Trung bình</td>
+                      <td>2</td>
+                      <td>1</td>
+                      <td><span class="badge badge-warning">Thiếu</span></td>
+                    </tr>
+                    <tr>
+                      <td>08:00 - 12:00</td>
+                      <td>Cao</td>
+                      <td>5</td>
+                      <td>4</td>
+                      <td><span class="badge badge-warning">Thiếu</span></td>
+                    </tr>
+                    <tr>
+                      <td>12:00 - 16:00</td>
+                      <td>Trung bình-Cao</td>
+                      <td>4</td>
+                      <td>4</td>
+                      <td><span class="badge badge-success">Phù hợp</span></td>
+                    </tr>
+                    <tr>
+                      <td>16:00 - 20:00</td>
+                      <td>Rất cao</td>
+                      <td>6</td>
+                      <td>4</td>
+                      <td>
+                        <span class="badge badge-danger">Thiếu nghiêm trọng</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>20:00 - 00:00</td>
+                      <td>Trung bình</td>
+                      <td>3</td>
+                      <td>2</td>
+                      <td><span class="badge badge-warning">Thiếu</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Orders Table -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Đơn hàng đang xử lý (Cập nhật thời gian thực)</h2>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Mã đơn hàng</th>
+                      <th>Sàn</th>
+                      <th>Thời gian đặt</th>
+                      <th>Trạng thái</th>
+                      <th>Thời gian còn lại</th>
+                      <th>Nhân viên xử lý</th>
+                      <th>Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>SP123456789</td>
+                      <td>Shopee</td>
+                      <td>15/05/2024 15:30 (5 phút trước)</td>
+                      <td>
+                        <span class="badge badge-success">Đang xác nhận</span>
+                      </td>
+                      <td>23 giờ 55 phút</td>
+                      <td>Nguyễn Văn A</td>
+                      <td>
+                        <button class="btn btn-primary btn-sm">Xem chi tiết</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>TT987654321</td>
+                      <td>TikTok</td>
+                      <td>15/05/2024 14:45 (50 phút trước)</td>
+                      <td>
+                        <span class="badge badge-warning">Chờ đóng gói</span>
+                      </td>
+                      <td>11 giờ 10 phút</td>
+                      <td>Trần Thị B</td>
+                      <td>
+                        <button class="btn btn-primary btn-sm">Xem chi tiết</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SP123456790</td>
+                      <td>Shopee</td>
+                      <td>15/05/2024 13:15 (2 giờ 20 phút trước)</td>
+                      <td>
+                        <span class="badge badge-info">Đang đóng gói</span>
+                      </td>
+                      <td>21 giờ 40 phút</td>
+                      <td>Lê Văn C</td>
+                      <td>
+                        <button class="btn btn-primary btn-sm">Xem chi tiết</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>TT987654322</td>
+                      <td>TikTok</td>
+                      <td>15/05/2024 10:30 (5 giờ 5 phút trước)</td>
+                      <td>
+                        <span class="badge badge-primary">Chờ bàn giao</span>
+                      </td>
+                      <td>6 giờ 55 phút</td>
+                      <td>Phạm Thị D</td>
+                      <td>
+                        <button class="btn btn-primary btn-sm">Xem chi tiết</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SP123456791</td>
+                      <td>Shopee</td>
+                      <td>14/05/2024 16:15 (23 giờ 20 phút trước)</td>
+                      <td>
+                        <span class="badge badge-danger">Quá hạn xác nhận</span>
+                      </td>
+                      <td>-40 phút</td>
+                      <td>Chưa phân công</td>
+                      <td>
+                        <button class="btn btn-danger btn-sm">Xử lý ngay</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alert System Tab -->
+        <div id="alert-system-tab" class="tab-content">
+          <!-- Alert System Settings -->
+          <div class="alert-settings-panel">
+            <h2 class="settings-title">Cài đặt ngưỡng cảnh báo</h2>
+            <p>
+              Thiết lập các ngưỡng cảnh báo để nhận thông báo khi hiệu suất xử lý đơn hàng không đạt
+              yêu cầu.
+            </p>
+
+            <div class="alert-threshold-item">
+              <div class="alert-threshold-info">
+                <h4 class="alert-threshold-name">Tỷ lệ xác nhận đơn đúng hạn</h4>
+                <p class="alert-threshold-description">
+                  Cảnh báo khi tỷ lệ xác nhận đơn đúng hạn thấp hơn ngưỡng đã thiết lập.
+                </p>
+              </div>
+              <div class="alert-threshold-controls">
+                <input type="number" class="alert-threshold-value" value="90" min="0" max="100" />
+                <label class="toggle-switch">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="alert-threshold-item">
+              <div class="alert-threshold-info">
+                <h4 class="alert-threshold-name">Tỷ lệ bàn giao vận chuyển đúng hạn</h4>
+                <p class="alert-threshold-description">
+                  Cảnh báo khi tỷ lệ bàn giao vận chuyển đúng hạn thấp hơn ngưỡng đã thiết lập.
+                </p>
+              </div>
+              <div class="alert-threshold-controls">
+                <input type="number" class="alert-threshold-value" value="85" min="0" max="100" />
+                <label class="toggle-switch">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="alert-threshold-item">
+              <div class="alert-threshold-info">
+                <h4 class="alert-threshold-name">Thời gian xác nhận đơn tối đa</h4>
+                <p class="alert-threshold-description">
+                  Cảnh báo khi có đơn hàng chưa được xác nhận trong khoảng thời gian đã thiết lập
+                  (giờ).
+                </p>
+              </div>
+              <div class="alert-threshold-controls">
+                <input type="number" class="alert-threshold-value" value="12" min="1" max="24" />
+                <label class="toggle-switch">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="alert-threshold-item">
+              <div class="alert-threshold-info">
+                <h4 class="alert-threshold-name">Thời gian bàn giao vận chuyển tối đa</h4>
+                <p class="alert-threshold-description">
+                  Cảnh báo khi có đơn hàng chưa được bàn giao vận chuyển trong khoảng thời gian đã
+                  thiết lập (giờ).
+                </p>
+              </div>
+              <div class="alert-threshold-controls">
+                <input type="number" class="alert-threshold-value" value="24" min="1" max="48" />
+                <label class="toggle-switch">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="alert-threshold-item">
+              <div class="alert-threshold-info">
+                <h4 class="alert-threshold-name">Tỷ lệ đơn hàng bị hủy</h4>
+                <p class="alert-threshold-description">
+                  Cảnh báo khi tỷ lệ đơn hàng bị hủy cao hơn ngưỡng đã thiết lập.
+                </p>
+              </div>
+              <div class="alert-threshold-controls">
+                <input type="number" class="alert-threshold-value" value="5" min="0" max="100" />
+                <label class="toggle-switch">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="alert-threshold-item">
+              <div class="alert-threshold-info">
+                <h4 class="alert-threshold-name">Cảnh báo khi lượng đơn hàng tăng đột biến</h4>
+                <p class="alert-threshold-description">
+                  Cảnh báo khi lượng đơn hàng tăng đột biến so với cùng kỳ (%).
+                </p>
+              </div>
+              <div class="alert-threshold-controls">
+                <input type="number" class="alert-threshold-value" value="30" min="0" max="100" />
+                <label class="toggle-switch">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="alert-threshold-item">
+              <div class="alert-threshold-info">
+                <h4 class="alert-threshold-name">Cảnh báo khi thiếu nhân viên xử lý</h4>
+                <p class="alert-threshold-description">
+                  Cảnh báo khi số lượng nhân viên hiện tại thấp hơn số lượng đề xuất (%).
+                </p>
+              </div>
+              <div class="alert-threshold-controls">
+                <input type="number" class="alert-threshold-value" value="20" min="0" max="100" />
+                <label class="toggle-switch">
+                  <input type="checkbox" checked />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <button class="btn btn-primary mt-3">Lưu cài đặt</button>
+          </div>
+
+          <!-- Alert Notification Methods -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Phương thức thông báo</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="d-flex align-items-center mb-2">
+                  <input type="checkbox" checked class="me-2" /> Thông báo trên bảng điều khiển
+                </label>
+                <label class="d-flex align-items-center mb-2">
+                  <input type="checkbox" checked class="me-2" /> Thông báo qua email
+                </label>
+                <label class="d-flex align-items-center mb-2">
+                  <input type="checkbox" checked class="me-2" /> Thông báo qua SMS
+                </label>
+                <label class="d-flex align-items-center mb-2">
+                  <input type="checkbox" class="me-2" /> Thông báo qua Telegram
+                </label>
+                <label class="d-flex align-items-center mb-2">
+                  <input type="checkbox" class="me-2" /> Thông báo qua Zalo
+                </label>
+              </div>
+
+              <div class="form-group mt-3">
+                <label>Email nhận thông báo:</label>
+                <input type="email" class="form-control" value="admin@example.com" />
+              </div>
+
+              <div class="form-group mt-3">
+                <label>Số điện thoại nhận SMS:</label>
+                <input type="text" class="form-control" value="0912345678" />
+              </div>
+
+              <button class="btn btn-primary mt-3">Lưu cài đặt</button>
+            </div>
+          </div>
+
+          <!-- Alert History -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Lịch sử cảnh báo</h2>
+            </div>
+            <div class="card-body">
+              <div class="alert-history-item">
+                <div class="alert-history-icon critical">
+                  <i class="bi bi-exclamation-circle-fill"></i>
+                </div>
+                <div class="alert-history-content">
+                  <h4 class="alert-history-title">Cảnh báo nghiêm trọng: Đơn hàng tồn đọng</h4>
+                  <p class="alert-history-message">
+                    Có 15 đơn hàng chưa được xác nhận quá 12 giờ. Cần xử lý ngay để tránh vi phạm
+                    chính sách của sàn.
+                  </p>
+                  <p class="alert-history-time">15/05/2024 14:30</p>
+                </div>
+                <span class="alert-history-status pending">Đang xử lý</span>
+              </div>
+
+              <div class="alert-history-item">
+                <div class="alert-history-icon warning">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <div class="alert-history-content">
+                  <h4 class="alert-history-title">Cảnh báo: Tỷ lệ bàn giao vận chuyển thấp</h4>
+                  <p class="alert-history-message">
+                    Tỷ lệ bàn giao vận chuyển đúng hạn đang ở mức 85%, thấp hơn ngưỡng 90%. Cần kiểm
+                    tra quy trình đóng gói và bàn giao.
+                  </p>
+                  <p class="alert-history-time">15/05/2024 13:15</p>
+                </div>
+                <span class="alert-history-status pending">Đang xử lý</span>
+              </div>
+
+              <div class="alert-history-item">
+                <div class="alert-history-icon warning">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <div class="alert-history-content">
+                  <h4 class="alert-history-title">Cảnh báo: Lượng đơn hàng tăng đột biến</h4>
+                  <p class="alert-history-message">
+                    Lượng đơn hàng tăng 35% so với cùng kỳ tuần trước. Cần bổ sung nhân viên xử lý
+                    trong khung giờ cao điểm.
+                  </p>
+                  <p class="alert-history-time">14/05/2024 18:45</p>
+                </div>
+                <span class="alert-history-status resolved">Đã xử lý</span>
+              </div>
+
+              <div class="alert-history-item">
+                <div class="alert-history-icon critical">
+                  <i class="bi bi-exclamation-circle-fill"></i>
+                </div>
+                <div class="alert-history-content">
+                  <h4 class="alert-history-title">Cảnh báo nghiêm trọng: Thiếu nhân viên xử lý</h4>
+                  <p class="alert-history-message">
+                    Thiếu 33% nhân viên xử lý đơn hàng trong khung giờ 16:00 - 20:00. Cần điều phối
+                    lại nhân sự hoặc bổ sung nhân viên.
+                  </p>
+                  <p class="alert-history-time">14/05/2024 16:30</p>
+                </div>
+                <span class="alert-history-status resolved">Đã xử lý</span>
+              </div>
+
+              <div class="alert-history-item">
+                <div class="alert-history-icon info">
+                  <i class="bi bi-info-circle-fill"></i>
+                </div>
+                <div class="alert-history-content">
+                  <h4 class="alert-history-title">Thông báo: Cập nhật chính sách vận chuyển</h4>
+                  <p class="alert-history-message">
+                    Shopee vừa cập nhật chính sách vận chuyển mới từ ngày 12/05/2025. Vui lòng kiểm
+                    tra và điều chỉnh quy trình cho phù hợp.
+                  </p>
+                  <p class="alert-history-time">13/05/2024 10:15</p>
+                </div>
+                <span class="alert-history-status resolved">Đã xử lý</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings-tab" class="tab-content">
+          <div class="settings-panel">
+            <h2 class="settings-title">Cài đặt chung</h2>
+            <div class="settings-form">
+              <div class="form-group">
+                <label>Tự động làm mới dữ liệu (phút)</label>
+                <input type="number" value="5" min="1" max="60" />
+              </div>
+              <div class="form-group">
+                <label>Hiển thị cảnh báo</label>
+                <div class="d-flex align-items-center">
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                  <span class="toggle-label">Bật</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Ngôn ngữ</label>
+                <select>
+                  <option value="vi" selected>Tiếng Việt</option>
+                  <option value="en">English</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Múi giờ</label>
+                <select>
+                  <option value="GMT+7" selected>GMT+7 (Việt Nam)</option>
+                  <option value="GMT+8">GMT+8</option>
+                  <option value="GMT+9">GMT+9</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-panel">
+            <h2 class="settings-title">Cài đặt tài khoản sàn TMĐT</h2>
+            <div class="settings-form">
+              <div class="form-group">
+                <label>Tài khoản Shopee</label>
+                <input type="text" value="shopee_account" />
+              </div>
+              <div class="form-group">
+                <label>API Key Shopee</label>
+                <input type="password" value="************" />
+              </div>
+              <div class="form-group">
+                <label>Tài khoản TikTok Shop</label>
+                <input type="text" value="tiktok_account" />
+              </div>
+              <div class="form-group">
+                <label>API Key TikTok Shop</label>
+                <input type="password" value="************" />
+              </div>
+            </div>
+            <button class="btn btn-primary mt-3">Lưu cài đặt</button>
+          </div>
+
+          <div class="settings-panel">
+            <h2 class="settings-title">Cài đặt thông báo</h2>
+            <div class="settings-form">
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" value="admin@example.com" />
+              </div>
+              <div class="form-group">
+                <label>Số điện thoại</label>
+                <input type="text" value="0912345678" />
+              </div>
+              <div class="form-group">
+                <label>Telegram</label>
+                <input type="text" value="@username" />
+              </div>
+              <div class="form-group">
+                <label>Zalo</label>
+                <input type="text" value="0912345678" />
+              </div>
+            </div>
+            <button class="btn btn-primary mt-3">Lưu cài đặt</button>
+          </div>
+        </div>
+
+        <!-- Citation Section -->
+        <div class="citation-section">
+          <h2 class="citation-title">Tài liệu tham khảo</h2>
+          <ul class="citation-list">
+            <li class="citation-item">
+              <a
+                href="https://help.shopee.vn/4/article/156186-%C4%90I%E1%BB%80U-KHO%E1%BA%A2N-V%C3%80-%C4%90I%E1%BB%80U-KI%E1%BB%86N-CH%C6%AF%C6%A0NG-TR%C3%8CNH-G%C3%93I-S%E1%BA%B4N-GIAO-NHANH"
+                target="_blank"
+                >ĐIỀU KHOẢN VÀ ĐIỀU KIỆN CHƯƠNG TRÌNH GÓI SẴN GIAO NHANH</a
+              >
+              <p>Shopee Trung tâm trợ giúp - Cập nhật ngày 05/08/2024</p>
+            </li>
+            <li class="citation-item">
+              <a
+                href="https://help.shopee.vn/portal/4/article/77243?previousPage=other+articles"
+                target="_blank"
+                >ĐIỀU KHOẢN DỊCH VỤ</a
+              >
+              <p>Shopee Trung tâm trợ giúp - Cập nhật ngày 01/07/2025</p>
+            </li>
+            <li class="citation-item">
+              <a
+                href="https://help.shopee.vn/portal/4/article/77250-CH%C3%8DNH-S%C3%81CH-V%E1%BA%ACN-CHUY%E1%BB%82N-SHOPEE"
+                target="_blank"
+                >CHÍNH SÁCH VẬN CHUYỂN SHOPEE</a
+              >
+              <p>Shopee Trung tâm trợ giúp - Cập nhật ngày 12/05/2025</p>
+            </li>
+            <li class="citation-item">
+              <a
+                href="https://help.shopee.vn/portal/4/article/79569-[Giao%2Fnh%E1%BA%ADn-h%C3%A0ng]-%C4%90%C6%A1n-v%E1%BB%8B-v%E1%BA%ADn-chuy%E1%BB%83n-giao-h%C3%A0ng-cho-Ng%C6%B0%E1%BB%9Di-mua-nh%C6%B0-th%E1%BA%BF-n%C3%A0o%3F"
+                target="_blank"
+                >Đơn vị vận chuyển giao hàng cho Người mua như thế nào?</a
+              >
+              <p>Shopee Trung tâm trợ giúp - 2023</p>
+            </li>
+            <li class="citation-item">
+              <a
+                href="https://fmit.vn/tu-dien-quan-ly/order-fulfillment-metrics-dashboards"
+                target="_blank"
+                >Order Fulfillment Metrics Dashboards</a
+              >
+              <p>Viện đào tạo FMIT - 2023</p>
+            </li>
+            <li class="citation-item">
+              <a
+                href="https://help.shopee.vn/4/article/79182-%5B%C4%90%C6%A1n-h%C3%A0ng%5D-T%C3%B4i-c%C3%B3-th%E1%BB%83-h%E1%BB%A7y-%C4%91%C6%A1n-h%C3%A0ng-kh%C3%B4ng"
+                target="_blank"
+                >Tôi có thể hủy đơn hàng không?</a
+              >
+              <p>Shopee Trung tâm trợ giúp - 2023</p>
+            </li>
+            <li class="citation-item">
+              <a href="https://www.shipbob.com/fulfillment-dashboards/" target="_blank"
+                >Fulfillment Dashboard</a
+              >
+              <p>ShipBob - 2023</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert System Container -->
+    <div class="alert-system-container" id="alert-system-container">
+      <!-- Alert notifications will be dynamically added here -->
+    </div>
+
+    <script>
+      // Tab switching
+      function changeTab(tabId) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach((tab) => {
+          tab.classList.remove('active');
+        });
+
+        // Remove active class from all sidebar menu items
+        document.querySelectorAll('.sidebar-menu a').forEach((item) => {
+          item.classList.remove('active');
+        });
+
+        // Show selected tab content
+        document.getElementById(tabId + '-tab').classList.add('active');
+
+        // Add active class to selected sidebar menu item
+        document
+          .querySelector(`.sidebar-menu a[onclick="changeTab('${tabId}')"]`)
+          .classList.add('active');
+      }
+
+      // Platform filter
+      function changePlatform() {
+        const platform = document.getElementById('platform-select').value;
+        console.log('Platform changed to:', platform);
+        // Implement filtering logic here
+      }
+
+      // Date range filter
+      function changeDateRange() {
+        const dateRange = document.getElementById('date-range-select').value;
+        console.log('Date range changed to:', dateRange);
+        // Implement date range logic here
+
+        if (dateRange === 'custom') {
+          // Show date picker modal or additional inputs
+          alert('Please select custom date range');
+        }
+      }
+
+      // Refresh data
+      function refreshData() {
+        console.log('Refreshing data...');
+        // Implement data refresh logic here
+
+        // Update last refreshed time
+        const now = new Date();
+        document.getElementById('last-refreshed').textContent = now.toLocaleTimeString();
+      }
+
+      // Dismiss alert
+      function dismissAlert(element) {
+        const alert = element.closest('.alert');
+        alert.style.display = 'none';
+      }
+
+      // Change carrier comparison metric
+      function changeCarrierComparisonMetric() {
+        const metric = document.getElementById('carrier-comparison-metric').value;
+        console.log('Carrier comparison metric changed to:', metric);
+        // Update chart based on selected metric
+        updateCarrierComparisonChart(metric);
+      }
+
+      // Create alert notification
+      function createAlertNotification(type, title, message) {
+        const alertContainer = document.getElementById('alert-system-container');
+
+        const alertNotification = document.createElement('div');
+        alertNotification.className = 'alert-notification';
+
+        const alertHeader = document.createElement('div');
+        alertHeader.className = `alert-notification-header ${type}`;
+
+        const alertTitle = document.createElement('h4');
+        alertTitle.className = 'alert-notification-title';
+
+        let icon = '';
+        if (type === 'critical') {
+          icon = '<i class="bi bi-exclamation-circle"></i>';
+        } else if (type === 'warning') {
+          icon = '<i class="bi bi-exclamation-triangle"></i>';
+        } else {
+          icon = '<i class="bi bi-info-circle"></i>';
+        }
+
+        alertTitle.innerHTML = `${icon} ${title}`;
+
+        const closeButton = document.createElement('button');
+        closeButton.className = 'alert-notification-close';
+        closeButton.innerHTML = '<i class="bi bi-x"></i>';
+        closeButton.onclick = function () {
+          alertNotification.classList.add('closing');
+          setTimeout(() => {
+            alertContainer.removeChild(alertNotification);
+          }, 500);
+        };
+
+        alertHeader.appendChild(alertTitle);
+        alertHeader.appendChild(closeButton);
+
+        const alertBody = document.createElement('div');
+        alertBody.className = 'alert-notification-body';
+
+        const alertMessage = document.createElement('p');
+        alertMessage.className = 'alert-notification-message';
+        alertMessage.textContent = message;
+
+        const alertTime = document.createElement('p');
+        alertTime.className = 'alert-notification-time';
+        alertTime.textContent = new Date().toLocaleTimeString();
+
+        const alertActions = document.createElement('div');
+        alertActions.className = 'alert-notification-actions';
+
+        const viewButton = document.createElement('button');
+        viewButton.className = 'btn btn-sm btn-outline';
+        viewButton.textContent = 'Xem chi tiết';
+
+        const actionButton = document.createElement('button');
+        actionButton.className = 'btn btn-sm btn-primary';
+        actionButton.textContent = 'Xử lý ngay';
+
+        alertActions.appendChild(viewButton);
+        alertActions.appendChild(actionButton);
+
+        alertBody.appendChild(alertMessage);
+        alertBody.appendChild(alertTime);
+        alertBody.appendChild(alertActions);
+
+        alertNotification.appendChild(alertHeader);
+        alertNotification.appendChild(alertBody);
+
+        alertContainer.appendChild(alertNotification);
+
+        // Auto close after 10 seconds
+        setTimeout(() => {
+          if (alertContainer.contains(alertNotification)) {
+            alertNotification.classList.add('closing');
+            setTimeout(() => {
+              if (alertContainer.contains(alertNotification)) {
+                alertContainer.removeChild(alertNotification);
+              }
+            }, 500);
+          }
+        }, 10000);
+      }
+
+      // Initialize charts when the page loads
+      document.addEventListener('DOMContentLoaded', function () {
+        // Order Status Chart
+        const orderStatusCtx = document.getElementById('orderStatusChart').getContext('2d');
+        const orderStatusChart = new Chart(orderStatusCtx, {
+          type: 'pie',
+          data: {
+            labels: ['Chờ xác nhận', 'Chờ lấy hàng', 'Đang vận chuyển', 'Đã giao', 'Đã hủy'],
+            datasets: [
+              {
+                data: [120, 85, 147, 230, 32],
+                backgroundColor: ['#FF8042', '#FFBB28', '#0088FE', '#00C49F', '#FF0000'],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+              },
+              title: {
+                display: true,
+                text: 'Phân bố trạng thái đơn hàng',
+              },
+            },
+          },
+        });
+
+        // Fulfillment Time Chart
+        const fulfillmentTimeCtx = document.getElementById('fulfillmentTimeChart').getContext('2d');
+        const fulfillmentTimeChart = new Chart(fulfillmentTimeCtx, {
+          type: 'bar',
+          data: {
+            labels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+            datasets: [
+              {
+                label: 'Shopee (phút)',
+                data: [45, 35, 50, 40, 60, 75, 30],
+                backgroundColor: '#FF5733',
+              },
+              {
+                label: 'TikTok (phút)',
+                data: [38, 42, 45, 35, 55, 68, 25],
+                backgroundColor: '#3498DB',
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Thời gian xử lý (phút)',
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Ngày trong tuần',
+                },
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'Thời gian xử lý đơn hàng theo ngày',
+              },
+            },
+          },
+        });
+
+        // Delivery Performance Chart
+        const deliveryPerformanceCtx = document
+          .getElementById('deliveryPerformanceChart')
+          .getContext('2d');
+        const deliveryPerformanceChart = new Chart(deliveryPerformanceCtx, {
+          type: 'bar',
+          data: {
+            labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
+            datasets: [
+              {
+                label: 'Đúng hạn (%)',
+                data: [92, 88, 95, 90],
+                backgroundColor: '#2ECC71',
+              },
+              {
+                label: 'Trễ hạn (%)',
+                data: [8, 12, 5, 10],
+                backgroundColor: '#E74C3C',
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                title: {
+                  display: true,
+                  text: 'Phần trăm (%)',
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Tuần',
+                },
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'Hiệu suất giao hàng theo tuần',
+              },
+            },
+          },
+        });
+
+        // Order Cancellation Chart
+        const orderCancellationCtx = document
+          .getElementById('orderCancellationChart')
+          .getContext('2d');
+        const orderCancellationChart = new Chart(orderCancellationCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Hết hàng', 'Thay đổi ý định', 'Thời gian giao hàng lâu', 'Đặt nhầm', 'Khác'],
+            datasets: [
+              {
+                data: [35, 25, 20, 15, 5],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+              },
+              title: {
+                display: true,
+                text: 'Lý do hủy đơn hàng',
+              },
+            },
+          },
+        });
+
+        // Hourly Order Confirmation Chart
+        const hourlyOrderConfirmationCtx = document
+          .getElementById('hourlyOrderConfirmationChart')
+          .getContext('2d');
+        const hourlyOrderConfirmationChart = new Chart(hourlyOrderConfirmationCtx, {
+          type: 'line',
+          data: {
+            labels: [
+              '00:00',
+              '01:00',
+              '02:00',
+              '03:00',
+              '04:00',
+              '05:00',
+              '06:00',
+              '07:00',
+              '08:00',
+              '09:00',
+              '10:00',
+              '11:00',
+              '12:00',
+              '13:00',
+              '14:00',
+              '15:00',
+              '16:00',
+              '17:00',
+              '18:00',
+              '19:00',
+              '20:00',
+              '21:00',
+              '22:00',
+              '23:00',
+            ],
+            datasets: [
+              {
+                label: 'Shopee',
+                data: [
+                  5, 3, 2, 1, 1, 2, 5, 10, 18, 25, 30, 28, 22, 20, 25, 28, 32, 35, 40, 38, 35, 30,
+                  20, 10,
+                ],
+                borderColor: '#FF5733',
+                backgroundColor: 'rgba(255, 87, 51, 0.1)',
+                fill: true,
+                tension: 0.4,
+              },
+              {
+                label: 'TikTok',
+                data: [
+                  3, 2, 1, 1, 0, 1, 3, 7, 12, 18, 22, 20, 15, 14, 18, 20, 24, 26, 30, 28, 25, 22,
+                  15, 8,
+                ],
+                borderColor: '#3498DB',
+                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                fill: true,
+                tension: 0.4,
+              },
+              {
+                label: 'Tổng',
+                data: [
+                  8, 5, 3, 2, 1, 3, 8, 17, 30, 43, 52, 48, 37, 34, 43, 48, 56, 61, 70, 66, 60, 52,
+                  35, 18,
+                ],
+                borderColor: '#2ECC71',
+                backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Số lượng đơn hàng',
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Giờ trong ngày',
+                },
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'Phân bố đơn hàng theo giờ',
+              },
+            },
+          },
+        });
+
+        // Hourly Shipping Handover Chart
+        const hourlyShippingHandoverCtx = document
+          .getElementById('hourlyShippingHandoverChart')
+          .getContext('2d');
+        const hourlyShippingHandoverChart = new Chart(hourlyShippingHandoverCtx, {
+          type: 'line',
+          data: {
+            labels: [
+              '00:00',
+              '01:00',
+              '02:00',
+              '03:00',
+              '04:00',
+              '05:00',
+              '06:00',
+              '07:00',
+              '08:00',
+              '09:00',
+              '10:00',
+              '11:00',
+              '12:00',
+              '13:00',
+              '14:00',
+              '15:00',
+              '16:00',
+              '17:00',
+              '18:00',
+              '19:00',
+              '20:00',
+              '21:00',
+              '22:00',
+              '23:00',
+            ],
+            datasets: [
+              {
+                label: 'Shopee',
+                data: [
+                  2, 1, 0, 0, 0, 1, 3, 8, 15, 22, 25, 20, 15, 18, 22, 25, 28, 30, 25, 20, 15, 10, 5,
+                  3,
+                ],
+                borderColor: '#FF5733',
+                backgroundColor: 'rgba(255, 87, 51, 0.1)',
+                fill: true,
+                tension: 0.4,
+              },
+              {
+                label: 'TikTok',
+                data: [
+                  1, 0, 0, 0, 0, 0, 2, 5, 10, 15, 18, 15, 10, 12, 16, 18, 20, 22, 18, 15, 10, 7, 3,
+                  2,
+                ],
+                borderColor: '#3498DB',
+                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                fill: true,
+                tension: 0.4,
+              },
+              {
+                label: 'Tổng',
+                data: [
+                  3, 1, 0, 0, 0, 1, 5, 13, 25, 37, 43, 35, 25, 30, 38, 43, 48, 52, 43, 35, 25, 17,
+                  8, 5,
+                ],
+                borderColor: '#2ECC71',
+                backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Số lượng đơn hàng',
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Giờ trong ngày',
+                },
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'Phân bố bàn giao vận chuyển theo giờ',
+              },
+            },
+          },
+        });
+
+        // Real-time Performance Chart
+        const realTimePerformanceCtx = document
+          .getElementById('realTimePerformanceChart')
+          .getContext('2d');
+        const realTimePerformanceChart = new Chart(realTimePerformanceCtx, {
+          type: 'line',
+          data: {
+            labels: [
+              '08:00',
+              '09:00',
+              '10:00',
+              '11:00',
+              '12:00',
+              '13:00',
+              '14:00',
+              '15:00',
+              '16:00',
+            ],
+            datasets: [
+              {
+                label: 'Hiệu suất xác nhận đơn (%)',
+                data: [92, 95, 97, 94, 90, 93, 96, 98, 95],
+                borderColor: '#FF5733',
+                backgroundColor: 'rgba(255, 87, 51, 0.1)',
+                fill: true,
+                tension: 0.4,
+              },
+              {
+                label: 'Hiệu suất bàn giao vận chuyển (%)',
+                data: [88, 90, 92, 89, 85, 87, 91, 93, 90],
+                borderColor: '#3498DB',
+                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                fill: true,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                title: {
+                  display: true,
+                  text: 'Hiệu suất (%)',
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Giờ trong ngày',
+                },
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'Hiệu suất theo thời gian thực',
+              },
+            },
+          },
+        });
+
+        // Carrier Comparison Chart
+        const carrierComparisonCtx = document
+          .getElementById('carrierComparisonChart')
+          .getContext('2d');
+        const carrierComparisonChart = new Chart(carrierComparisonCtx, {
+          type: 'bar',
+          data: {
+            labels: ['SPX Express', 'Giao Hàng Nhanh', 'Viettel Post', 'J&T Express', 'GHTK'],
+            datasets: [
+              {
+                label: 'Tỷ lệ giao hàng đúng hạn (%)',
+                data: [95, 88, 92, 85, 90],
+                backgroundColor: '#3498DB',
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                max: 100,
+                title: {
+                  display: true,
+                  text: 'Tỷ lệ (%)',
+                },
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Đơn vị vận chuyển',
+                },
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'So sánh tỷ lệ giao hàng đúng hạn giữa các đơn vị vận chuyển',
+              },
+            },
+          },
+        });
+
+        // Carrier Radar Chart
+        const carrierRadarCtx = document.getElementById('carrierRadarChart').getContext('2d');
+        const carrierRadarChart = new Chart(carrierRadarCtx, {
+          type: 'radar',
+          data: {
+            labels: [
+              'Giao đúng hạn',
+              'Chi phí',
+              'Tỷ lệ khiếu nại thấp',
+              'Phạm vi phủ sóng',
+              'Chất lượng theo dõi',
+              'Hỗ trợ khách hàng',
+            ],
+            datasets: [
+              {
+                label: 'SPX Express',
+                data: [95, 70, 90, 85, 95, 90],
+                backgroundColor: 'rgba(255, 87, 51, 0.2)',
+                borderColor: '#FF5733',
+                pointBackgroundColor: '#FF5733',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#FF5733',
+              },
+              {
+                label: 'Giao Hàng Nhanh',
+                data: [88, 80, 75, 80, 80, 85],
+                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                borderColor: '#3498DB',
+                pointBackgroundColor: '#3498DB',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#3498DB',
+              },
+              {
+                label: 'Viettel Post',
+                data: [92, 85, 85, 95, 90, 80],
+                backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                borderColor: '#2ECC71',
+                pointBackgroundColor: '#2ECC71',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#2ECC71',
+              },
+              {
+                label: 'J&T Express',
+                data: [85, 82, 70, 75, 75, 75],
+                backgroundColor: 'rgba(155, 89, 182, 0.2)',
+                borderColor: '#9B59B6',
+                pointBackgroundColor: '#9B59B6',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#9B59B6',
+              },
+              {
+                label: 'GHTK',
+                data: [90, 81, 80, 85, 85, 85],
+                backgroundColor: 'rgba(241, 196, 15, 0.2)',
+                borderColor: '#F1C40F',
+                pointBackgroundColor: '#F1C40F',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#F1C40F',
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                angleLines: {
+                  display: true,
+                },
+                suggestedMin: 0,
+                suggestedMax: 100,
+              },
+            },
+            plugins: {
+              title: {
+                display: true,
+                text: 'Đánh giá tổng thể đơn vị vận chuyển',
+              },
+            },
+          },
+        });
+
+        // Function to update carrier comparison chart based on selected metric
+        window.updateCarrierComparisonChart = function (metric) {
+          let data = [];
+          let title = '';
+
+          switch (metric) {
+            case 'onTimeDelivery':
+              data = [95, 88, 92, 85, 90];
+              title = 'Tỷ lệ giao hàng đúng hạn (%)';
+              break;
+            case 'costPerKm':
+              data = [5000, 4500, 4000, 4200, 4300];
+              title = 'Chi phí trên km (VNĐ)';
+              break;
+            case 'costPerKg':
+              data = [15000, 14000, 13000, 13500, 13800];
+              title = 'Chi phí trên kg (VNĐ)';
+              break;
+            case 'complaintRate':
+              data = [2, 4, 3, 5, 3.5];
+              title = 'Tỷ lệ khiếu nại (%)';
+              break;
+            case 'damageRate':
+              data = [1.5, 2.5, 2, 3, 2.2];
+              title = 'Tỷ lệ hư hỏng (%)';
+              break;
+            case 'returnRate':
+              data = [3, 5, 4, 6, 4.5];
+              title = 'Tỷ lệ hoàn trả (%)';
+              break;
+            case 'customerSatisfaction':
+              data = [4.5, 4.0, 4.2, 3.8, 4.1];
+              title = 'Mức độ hài lòng khách hàng (5 sao)';
+              break;
+            default:
+              data = [95, 88, 92, 85, 90];
+              title = 'Tỷ lệ giao hàng đúng hạn (%)';
+          }
+
+          carrierComparisonChart.data.datasets[0].data = data;
+          carrierComparisonChart.data.datasets[0].label = title;
+          carrierComparisonChart.options.plugins.title.text = `So sánh ${title.toLowerCase()} giữa các đơn vị vận chuyển`;
+
+          // Adjust scale for different metrics
+          if (
+            metric === 'onTimeDelivery' ||
+            metric === 'complaintRate' ||
+            metric === 'damageRate' ||
+            metric === 'returnRate'
+          ) {
+            carrierComparisonChart.options.scales.y.max = 100;
+          } else if (metric === 'customerSatisfaction') {
+            carrierComparisonChart.options.scales.y.max = 5;
+          } else {
+            carrierComparisonChart.options.scales.y.max = undefined;
+          }
+
+          carrierComparisonChart.update();
+        };
+
+        // Simulate real-time alerts
+        setTimeout(() => {
+          createAlertNotification(
+            'critical',
+            'Cảnh báo nghiêm trọng',
+            'Có 15 đơn hàng chưa được xác nhận quá 12 giờ. Cần xử lý ngay để tránh vi phạm chính sách của sàn.',
+          );
+        }, 3000);
+
+        setTimeout(() => {
+          createAlertNotification(
+            'warning',
+            'Cảnh báo',
+            'Tỷ lệ bàn giao vận chuyển đúng hạn đang ở mức 85%, thấp hơn ngưỡng 90%. Cần kiểm tra quy trình đóng gói và bàn giao.',
+          );
+        }, 6000);
+
+        setTimeout(() => {
+          createAlertNotification(
+            'info',
+            'Thông báo',
+            'Shopee vừa cập nhật chính sách vận chuyển mới từ ngày 12/05/2025. Vui lòng kiểm tra và điều chỉnh quy trình cho phù hợp.',
+          );
+        }, 9000);
+      });
+    </script>
+  </body>
+</html>

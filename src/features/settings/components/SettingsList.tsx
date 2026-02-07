@@ -15,19 +15,11 @@ export const SettingsList: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <Typography color="error">
-        Error loading settings: {error.message}
-      </Typography>
-    );
+    return <Typography color="error">Error loading settings: {error.message}</Typography>;
   }
 
   if (!data || data.length === 0) {
-    return (
-      <Typography color="text.secondary">
-        No settings found
-      </Typography>
-    );
+    return <Typography color="text.secondary">No settings found</Typography>;
   }
 
   return (

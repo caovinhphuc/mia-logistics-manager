@@ -1,0 +1,118 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import { useToast } from '../components/ui/Toast';
+import { Button, Input } from '../components/ui';
+import { DEV_CONFIG } from '../config/development';
+
+const LoginScreen: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { login } = useAuth();
+  const { darkMode, themeClasses } = useTheme();
+  const { error } = useToast();
+  const navigate = useNavigate();
+  const isDev = process.env.NODE_ENV === 'development';
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      await login(email, password);
+      navigate('/dashboard');
+    } catch (err) {
+      error('Login Failed', err instanceof Error ? err.message : 'Please check your credentials');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className={`min-h-screen flex items-center justify-center ${themeClasses.bg}`}>
+      <div className="max-w-md w-full space-y-8 p-8">
+        <div>
+          <h2 className={`text-center text-3xl font-extrabold ${themeClasses.text}`}>
+            Sign in to your account
+          </h2>
+        </div>
+
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-4">
+            <Input
+              type="email"
+              label="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="Enter your email"
+            />
+
+            <Input
+              type="password"
+              label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Enter your password"
+            />
+          </div>
+
+          <Button
+            type="submit"
+            variant="primary"
+            fullWidth
+            loading={isLoading}
+          >
+            Sign in
+          </Button>
+        </form>
+
+        {/* Development Helper */}
+        {isDev && (
+          <div className={`mt-6 p-4 rounded-lg ${
+            darkMode ? 'bg-blue-900/20 border-blue-700' : 'bg-blue-50 border-blue-200'
+          } border`}>
+            <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
+              Development Mode - Test Accounts:
+            </h3>
+            <div className="space-y-2 text-xs">
+              {DEV_CONFIG.MOCK_USERS.map((user, index) => (
+                <div key={index} className="flex justify-between">
+                  <span className="text-blue-700 dark:text-blue-300">
+                    {user.email}
+                  </span>
+                  <span className="text-blue-600 dark:text-blue-400">
+                    {user.password}
+                  </span>
+                  <span className={`px-2 py-0.5 rounded text-xs ${
+                    user.role === 'admin' ? 'bg-red-100 text-red-800' :
+                    user.role === 'manager' ? 'bg-orange-100 text-orange-800' :
+                    'bg-green-100 text-green-800'
+                  }`}>
+                    {user.role}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setEmail(DEV_CONFIG.MOCK_USERS[0].email);
+                setPassword(DEV_CONFIG.MOCK_USERS[0].password);
+              }}
+              className="mt-2 text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+            >
+              Quick Login as Admin
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default LoginScreen;

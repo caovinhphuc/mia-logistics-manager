@@ -1,0 +1,584 @@
+src/ui/UIComponentsDemo.js:              onEdit={() => console.log('Edit action')}
+src/ui/UIComponentsDemo.js:              onDelete={() => console.log('Delete action')}
+src/ui/UIComponentsDemo.js:              onView={() => console.log('View action')}
+src/ui/UIComponentsDemo.js:              onEdit={(row) => console.log('Edit row:', row)}
+src/ui/UIComponentsDemo.js:              onDelete={(row) => console.log('Delete row:', row)}
+src/ui/UIComponentsDemo.js:              onRowClick={(row) => console.log('Row clicked:', row)}
+src/ui/UIComponentsDemo.js:              onEdit={(item) => console.log('Edit item:', item)}
+src/ui/UIComponentsDemo.js:              onDelete={(item) => console.log('Delete item:', item)}
+src/ui/UIComponentsDemo.js:              onView={(item) => console.log('View item:', item)}
+src/contexts/NotificationContext.js:      console.warn('Failed to load notifications:', error);
+src/contexts/NotificationContext.js:      console.warn('Failed to load notification settings:', error);
+src/contexts/NotificationContext.js:      console.warn('Could not play notification sound:', error);
+src/contexts/GoogleContext.js:          console.debug('Google Client ID not configured. Google services will be disabled.');
+src/contexts/GoogleContext.js:        console.debug('Google services initialization error (non-blocking):', error);
+src/contexts/GoogleContext.js:        console.warn('Auto-connect failed:', error.message);
+src/contexts/GoogleContext.js:        console.error('Disconnect error:', error);
+src/server.js:    console.error('Error reading user from Google Sheets:', error);
+src/server.js:  console.log('📧 Email: Using SendGrid');
+src/server.js:  console.log('📧 Email: Using SMTP');
+src/server.js:  console.log('📧 Email: Using legacy Gmail config');
+src/server.js:    console.error('Error loading locations map:', error);
+src/server.js:  console.log(
+src/server.js:      console.error('bcrypt error:', bcryptError);
+src/server.js:      console.log(`Failed login attempt for ${email} at ${new Date().toISOString()}`);
+src/server.js:    console.log(`✅ User logged in: ${email} (${user.role}) at ${new Date().toISOString()}`);
+src/server.js:    console.error('Login error:', error);
+src/server.js:    console.error('Error fetching transfers:', error);
+src/server.js:    console.error('Error updating transfer:', error);
+src/server.js:    console.error('Error generating transport request ID:', error);
+src/server.js:    console.error('Error fetching locations:', error);
+src/server.js:    console.error('Error fetching carriers:', error);
+src/server.js:    console.error('Error fetching transport requests:', error);
+src/server.js:    console.error('Error updating transport request:', error);
+src/server.js:    console.error('Error deleting transport request:', error);
+src/server.js:          console.warn(`Distance calculation failed for ${address}:`, error);
+src/server.js:    console.error('Error calculating distances:', error);
+src/server.js:    console.error('Error creating carrier:', error);
+src/server.js:    console.error('Error updating carrier:', error);
+src/server.js:    console.error('Error deleting carrier:', error);
+src/server.js:    console.error('Error importing transfers:', error);
+src/server.js:    console.error('Error fetching volume rules:', error);
+src/server.js:    console.error('Password verification error:', error);
+src/server.js:        console.log(`✅ Password reset email sent to ${email}`);
+src/server.js:        console.error('Error sending email:', emailError);
+src/server.js:      console.log(`⚠️ Email not configured. Reset token for ${email}: ${resetToken}`);
+src/server.js:    console.error('Forgot password error:', error);
+src/server.js:    console.log(`Password reset for ${decoded.email}: password updated`);
+src/server.js:    console.error('Reset password error:', error);
+src/server.js:    console.log(`📊 Getting info for spreadsheet: ${targetSpreadsheetId}`);
+src/server.js:    console.error('Error getting spreadsheet info:', error);
+src/server.js:    console.error('Error reading sheet:', error);
+src/server.js:    console.error('Error writing to sheet:', error);
+src/server.js:    console.error('Error appending to sheet:', error);
+src/server.js:    console.error('Error creating sheet:', error);
+src/server.js:    console.error('Error getting spreadsheet info:', error);
+src/server.js:    console.error('Error uploading file:', error);
+src/server.js:    console.error('Error listing files:', error);
+src/server.js:    console.error('Error creating folder:', error);
+src/server.js:    console.error('Error deleting file:', error);
+src/server.js:    console.error('Error sharing file:', error);
+src/server.js:    console.error('Error getting file link:', error);
+src/server.js:    console.error('Error sending email:', error);
+src/server.js:    console.error('Error sending Telegram message:', error);
+src/server.js:    console.error('Email test failed:', error);
+src/server.js:    console.error('Telegram test failed:', error);
+src/server.js:    console.error('Error generating overview report:', error);
+src/server.js:    console.log('Running daily report...');
+src/server.js:        console.log('Daily report sent successfully');
+src/server.js:        console.error('Failed to send daily report:', error);
+src/server.js:  console.error('Unhandled error:', error);
+src/server.js:  console.log(`🚀 Server running on port ${PORT}`);
+src/server.js:  console.log(
+src/server.js:  console.log(`📧 Email: ${!!transporter ? 'Configured' : 'Not configured'}`);
+src/server.js:  console.log(
+src/features/inbound/InboundDomestic.tsx:  console.log('Adding item (mock):', item);
+src/features/inbound/InboundDomestic.tsx:  console.log('Updating item (mock):', id, updates);
+src/features/inbound/InboundDomestic.tsx:  console.log('Deleting item (mock):', id);
+src/features/inbound/InboundDomestic.tsx:        console.error('Error loading inbound domestic items:', err);
+src/features/inbound/InboundDomestic.tsx:      console.error('Error adding item:', err);
+src/features/inbound/InboundDomestic.tsx:      console.error('Error updating item:', err);
+src/features/inbound/InboundDomestic.tsx:      console.error('Error deleting item:', err);
+src/features/inbound/InboundDomestic.tsx:      console.error('Error refreshing data:', err);
+src/features/inbound/InboundSchedule.tsx:      console.error('Error loading data:', err);
+src/features/inbound/InboundSchedule.tsx:          console.log('Add to calendar:', item);
+src/features/inbound/InboundSchedule.tsx:      console.error('Error handling action:', error);
+src/features/inbound/InboundSchedule.tsx:          console.log('Updating domestic item:', updated);
+src/features/inbound/InboundSchedule.tsx:          console.log('Adding domestic item:', payload);
+src/features/inbound/InboundSchedule.tsx:      console.error('Error saving item:', error);
+src/features/inbound/InboundSchedule.tsx:                  console.log(
+src/features/inbound/InboundSchedule.tsx:                  console.log('Online/Offline counts:', {
+src/features/inbound/utils/descriptionUtils.ts:    console.warn('Failed to get current user from session:', error);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('Loading item data:', item);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('Item packaging:', item.packaging);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('Item timeline:', item.timeline);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('Item documentStatus:', item.documentStatus);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('Item notes:', item.notes);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('Item quantity:', item.quantity);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('State set - packagingItems:', item.packaging || []);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('State set - timelineItems:', item.timeline || []);
+src/features/inbound/hooks/useItemManagement.ts:    console.log('State set - documentStatusItems:', item.documentStatus || []);
+src/features/inbound/InboundReports.tsx:        console.error('Error loading data:', error);
+src/features/inbound/InboundInternational.tsx:    reload().catch((err) => console.error('Load InboundInternational failed', err));
+src/features/inbound/InboundInternational.tsx:      console.error('Save inbound failed', err);
+src/features/carriers/components/CreateCarrierDialog.tsx:      console.error('Error saving carrier:', error);
+src/index.js:        console.error('Application Error:', error, errorInfo);
+src/index.js:      console.error('Failed to load unified app:', err);
+src/utils/constants.js:      console.warn('Error formatting date:', error);
+src/utils/googleAPIInitializer.js:      console.log('🔄 Khởi tạo Google API...');
+src/utils/googleAPIInitializer.js:          console.log('✅ Google API đã được khởi tạo');
+src/utils/googleAPIInitializer.js:      console.error('❌ Lỗi khởi tạo Google API:', error);
+src/utils/googleAPIInitializer.js:      console.log('🔄 Authenticate với Google...');
+src/utils/googleAPIInitializer.js:      console.log('✅ Đã authenticate với Google');
+src/utils/googleAPIInitializer.js:      console.error('❌ Lỗi authenticate:', error);
+src/utils/googleAPIInitializer.js:      console.error('❌ Lỗi kiểm tra auth status:', error);
+src/utils/googleAPIInitializer.js:      console.error('❌ Lỗi lấy auth token:', error);
+src/utils/googleAPIInitializer.js:      console.log('✅ Google API đã sẵn sàng');
+src/utils/googleAPIInitializer.js:      console.error('❌ Lỗi auto-initialize Google API:', error);
+src/utils/reportWebVitals.js:          console.warn('Web Vitals could not be loaded:', error);
+src/utils/reportWebVitals.js:      console.warn('Error loading web vitals:', error);
+src/utils/logger.js: * Thay thế tất cả console.log/error/warn statements
+src/utils/logger.js:      console.error('🚨 ERROR:', message, data);
+src/utils/logger.js:      console.warn('⚠️ WARN:', message, data);
+src/utils/logger.js:      console.info('ℹ️ INFO:', message, data);
+src/utils/logger.js:      console.log('✅ SUCCESS:', message, data);
+src/utils/logger.js:      console.log('🐛 DEBUG:', message, data);
+src/utils/logger.js:      console.log('🌐 API:', method, url, options);
+src/utils/logger.js:      console.log('⚡ PERF:', `${operation} took ${duration}ms`, data);
+src/utils/logger.js:      console.error('Failed to send log to monitoring:', error);
+src/utils/logger.js:      console.error('Failed to clear logs:', error);
+src/utils/logger.js:      console.group(`📁 ${groupName}`);
+src/utils/logger.js:      console.groupEnd();
+src/utils/logger.js:      console.time(`⏱️ ${label}`);
+src/utils/logger.js:      console.timeEnd(`⏱️ ${label}`);
+src/utils/logger.js:    console.table(logger.getLogs());
+src/utils/passwordHash.js:    console.warn('⚠️ Client-side bcrypt comparison not secure. Use backend for production.');
+src/utils/passwordHash.js:  console.warn('⚠️ Client-side password hashing not secure. Use backend.');
+src/utils/suppressWarnings.js:const originalConsoleWarn = console.warn;
+src/utils/suppressWarnings.js:console.warn = function (...args) {
+src/utils/suppressWarnings.js:const originalConsoleLog = console.log;
+src/utils/suppressWarnings.js:console.log = function (...args) {
+src/utils/suppressWarnings.js:const originalConsoleError = console.error;
+src/utils/suppressWarnings.js:console.error = function (...args) {
+src/utils/suppressWarnings.js:const originalConsoleInfo = console.info;
+src/utils/suppressWarnings.js:console.info = function (...args) {
+src/utils/suppressWarnings.js:const originalConsoleDebug = console.debug;
+src/utils/suppressWarnings.js:console.debug = function (...args) {
+src/utils/setupGoogleSheets.js:    console.log('Google Sheets Setup Instructions:');
+src/utils/setupGoogleSheets.js:    console.log('================================');
+src/utils/setupGoogleSheets.js:    console.log('1. Mở Google Sheet với ID:', spreadsheetId);
+src/utils/setupGoogleSheets.js:    console.log('2. Tạo sheet tên "Carriers"');
+src/utils/setupGoogleSheets.js:    console.log('3. Thêm headers vào dòng 1:');
+src/utils/setupGoogleSheets.js:    console.log(carriersHeaders.join('\t'));
+src/utils/setupGoogleSheets.js:    console.log('');
+src/utils/setupGoogleSheets.js:    console.log('4. Thêm sample data vào dòng 2-4:');
+src/utils/setupGoogleSheets.js:      console.log(`Dòng ${index + 2}:`, row.join('\t'));
+src/utils/setupGoogleSheets.js:    console.log('');
+src/utils/setupGoogleSheets.js:    console.log('5. Lưu và chia sẻ quyền truy cập cho ứng dụng');
+src/utils/setupGoogleSheets.js:    console.log('');
+src/utils/setupGoogleSheets.js:    console.log('✅ Setup hoàn tất!');
+src/utils/setupGoogleSheets.js:    console.error('Setup error:', error);
+src/utils/initTestData.js:  console.log('🧪 Test data initialized for development');
+src/utils/consoleConfig.js:  const originalConsoleWarn = console.warn;
+src/utils/consoleConfig.js:  const originalConsoleError = console.error;
+src/utils/consoleConfig.js:  const originalConsoleLog = console.log;
+src/utils/consoleConfig.js:  // Override console.warn
+src/utils/consoleConfig.js:  console.warn = function (...args) {
+src/utils/consoleConfig.js:  // Override console.error
+src/utils/consoleConfig.js:  console.error = function (...args) {
+src/utils/consoleConfig.js:  // Override console.log
+src/utils/consoleConfig.js:  console.log = function (...args) {
+src/utils/consoleConfig.js:  const originalConsoleWarn = console.warn;
+src/utils/consoleConfig.js:  console.warn = function (...args) {
+src/utils/consoleConfig.js:  const originalConsoleWarn = console.warn;
+src/utils/consoleConfig.js:  console.warn = function (...args) {
+src/utils/consoleConfig.js:  console.log('🔇 Console warnings suppression initialized');
+src/utils/browserTheme.js:          console.warn('Failed to update PWA manifest:', error);
+src/utils/browserTheme.js:    console.warn('PWA manifest update not supported:', error);
+src/shared/hooks/useLocalStorage.ts:      console.error(error);
+src/shared/hooks/useLocalStorage.ts:      console.error(error);
+src/components/maps/LocationManager.js:      console.error('Lỗi tải dữ liệu:', err);
+src/components/maps/LocationManager.js:      console.error('Lỗi lưu địa điểm:', err);
+src/components/maps/LocationManager.js:        console.error('Lỗi xóa địa điểm:', err);
+src/components/maps/InteractiveMap.js:      console.error('Lỗi tải dữ liệu địa điểm:', err);
+src/components/maps/InteractiveMap.js:          console.error('Lỗi lấy vị trí hiện tại:', error);
+src/components/maps/InteractiveMap.js:                  // console.log("Location clicked:", location);
+src/components/settings/ApiDiagnostics.js:      console.error('Diagnostics error:', error);
+src/components/settings/ApiDiagnostics.js:      // console.log('🔍 Starting debug test from UI...');
+src/components/settings/ApiDiagnostics.js:      // console.log('Debug test completed:', results);
+src/components/settings/ApiDiagnostics.js:      // console.error('Debug test error:', error);
+src/components/settings/ApiDiagnostics.js:      // console.log(`🧪 Testing folder creation${useREST ? ' (REST API)' : ' (gapi.client)'}...`);
+src/components/settings/ApiDiagnostics.js:      // console.log('Folder creation test result:', result);
+src/components/settings/ApiDiagnostics.js:      console.error('Folder creation test error:', error);
+src/components/settings/GoogleApiStatusContent.js:          console.warn('Google Sheets API not available:', e);
+src/components/settings/GoogleApiStatusContent.js:            console.warn('Google Sheets API load failed (both methods):', e2.message);
+src/components/settings/GoogleApiStatusContent.js:          console.warn('Google Drive API not available:', e);
+src/components/settings/GoogleApiStatusContent.js:            console.warn('Google Drive API load failed (both methods):', e2.message);
+src/components/settings/GoogleApiStatusContent.js:      console.error('Error testing Google API:', error);
+src/components/settings/SecuritySettings.js:    // console.log('Saving security settings:', settings);
+src/components/settings/SystemSettings.js:    // console.log('Saving system settings:', settings);
+src/components/settings/GeneralSettings.js:    // console.log("Saving general settings:", settings);
+src/components/layout/MainLayout.js:      console.error('Logout error:', error);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - Creating stopPoint:', {
+src/components/transfers/components/TransportRequests.tsx:    console.log('🔍 calculateEstimatedCost called');
+src/components/transfers/components/TransportRequests.tsx:    console.log('🔍 carrier:', carrier);
+src/components/transfers/components/TransportRequests.tsx:      console.log('❌ No carrier found, returning 0');
+src/components/transfers/components/TransportRequests.tsx:    console.log('🔍 DEBUG - Cost calculation inputs:');
+src/components/transfers/components/TransportRequests.tsx:    console.log('  - totalDistance from stopPointDistances:', totalDistance);
+src/components/transfers/components/TransportRequests.tsx:    console.log('  - stopPointDistances:', stopPointDistances);
+src/components/transfers/components/TransportRequests.tsx:    console.log('  - totalStops:', totalStops);
+src/components/transfers/components/TransportRequests.tsx:    console.log('  - totalVolume:', totalVolume);
+src/components/transfers/components/TransportRequests.tsx:    console.log('  - pricingMethod:', hookPricingMethod);
+src/components/transfers/components/TransportRequests.tsx:    console.log('  - baseRate:', newTransportForm.baseRate);
+src/components/transfers/components/TransportRequests.tsx:    console.log('  - pricePerKm:', newTransportForm.pricePerKm);
+src/components/transfers/components/TransportRequests.tsx:      console.error('Error generating request ID:', error);
+src/components/transfers/components/TransportRequests.tsx:      console.error('Failed to create new request:', error);
+src/components/transfers/components/TransportRequests.tsx:        console.warn(`⚠️ DELETE API failed: ${response.status}`, errorData);
+src/components/transfers/components/TransportRequests.tsx:          console.log(`💡 Quota limit reached, but continuing (user confirmed data still loads)`);
+src/components/transfers/components/TransportRequests.tsx:      console.log(`✅ Đã xóa transport request: ${requestId}`);
+src/components/transfers/components/TransportRequests.tsx:        console.warn(`⏰ DELETE request timeout for ${requestId}`);
+src/components/transfers/components/TransportRequests.tsx:      console.error('Error deleting transport request:', error);
+src/components/transfers/components/TransportRequests.tsx:        console.log(`💡 Sheet API issue, but continuing (likely quota/range issue)`);
+src/components/transfers/components/TransportRequests.tsx:      console.log(`🗑️ Sẽ xóa request ${requestToDelete} sau khi dialog đóng`);
+src/components/transfers/components/TransportRequests.tsx:          console.log(`🗑️ Bắt đầu xóa request: ${requestToDelete}`);
+src/components/transfers/components/TransportRequests.tsx:          console.log(`✅ Đã xóa thành công request ${requestToDelete}`);
+src/components/transfers/components/TransportRequests.tsx:          console.error('❌ Lỗi khi xóa request:', error);
+src/components/transfers/components/TransportRequests.tsx:          console.log('💡 Có thể cần xóa thủ công trên sheet nếu cần');
+src/components/transfers/components/TransportRequests.tsx:      console.log('ℹ️ Không có request nào cần xóa', {
+src/components/transfers/components/TransportRequests.tsx:      console.error('Error fetching transfers:', error);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔄 Fetching locations for distance calculation...');
+src/components/transfers/components/TransportRequests.tsx:        console.log(`✅ Locations loaded: ${data.length} locations`);
+src/components/transfers/components/TransportRequests.tsx:        console.error('❌ Failed to fetch locations:', response.status);
+src/components/transfers/components/TransportRequests.tsx:      console.error('❌ Error fetching locations:', error);
+src/components/transfers/components/TransportRequests.tsx:    console.log(`📍 Locations: ${locations.length} total, ${filtered.length} active`);
+src/components/transfers/components/TransportRequests.tsx:    console.log(
+src/components/transfers/components/TransportRequests.tsx:    console.log(`📂 Grouped locations:`, Object.keys(groups));
+src/components/transfers/components/TransportRequests.tsx:        console.log(
+src/components/transfers/components/TransportRequests.tsx:      console.log(
+src/components/transfers/components/TransportRequests.tsx:    console.log(
+src/components/transfers/components/TransportRequests.tsx:          console.log(
+src/components/transfers/components/TransportRequests.tsx:      console.error('❌ Error saving system location:', error);
+src/components/transfers/components/TransportRequests.tsx:      console.error('❌ Error creating temporary location:', error);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔄 Frontend: Fetching carriers...');
+src/components/transfers/components/TransportRequests.tsx:      console.log('📊 Frontend: Response status:', response.status);
+src/components/transfers/components/TransportRequests.tsx:        console.log('📋 Frontend: Raw carriers data:', data.length, 'carriers');
+src/components/transfers/components/TransportRequests.tsx:        console.log('📋 Frontend: Sample carrier:', data[0]);
+src/components/transfers/components/TransportRequests.tsx:        console.log('✅ Frontend: Active carriers:', activeCarriers.length, 'carriers');
+src/components/transfers/components/TransportRequests.tsx:        console.log('📋 Frontend: Active carriers sample:', activeCarriers.slice(0, 2));
+src/components/transfers/components/TransportRequests.tsx:        console.error('❌ Frontend: API error:', response.status, errorText);
+src/components/transfers/components/TransportRequests.tsx:      console.error('❌ Frontend: Network error fetching carriers:', error);
+src/components/transfers/components/TransportRequests.tsx:    console.log('🔍 Calculating distances...');
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔄 Locations chưa được load, đang fetch...');
+src/components/transfers/components/TransportRequests.tsx:    console.log('🔍 Calculating distances with locations:', locations.length);
+src/components/transfers/components/TransportRequests.tsx:      console.error('❌ Error calculating distances:', result.error);
+src/components/transfers/components/TransportRequests.tsx:      console.log('✅ Distances calculated successfully:', result.distances);
+src/components/transfers/components/TransportRequests.tsx:    console.log('🧪 Testing Google Apps Script connectivity...');
+src/components/transfers/components/TransportRequests.tsx:      console.error('❌ Test failed:', error);
+src/components/transfers/components/TransportRequests.tsx:        console.log('Loaded volume rules:', mapped);
+src/components/transfers/components/TransportRequests.tsx:        console.error('Failed to load volume rules:', response.status);
+src/components/transfers/components/TransportRequests.tsx:      console.error('Error loading volume rules:', error);
+src/components/transfers/components/TransportRequests.tsx:      console.error('Error creating transport proposal:', error);
+src/components/transfers/components/TransportRequests.tsx:    console.log('🔄 Frontend: Grouping carriers, total carriers:', carriers.length);
+src/components/transfers/components/TransportRequests.tsx:    console.log('✅ Frontend: Grouped carriers:', Object.keys(groups));
+src/components/transfers/components/TransportRequests.tsx:    console.log('🔍 Debug getPricingMethodsForCarrier:', carrierName);
+src/components/transfers/components/TransportRequests.tsx:    console.log('🔍 Debug groupedCarriers:', groupedCarriers);
+src/components/transfers/components/TransportRequests.tsx:      console.log('❌ No carriers found for:', carrierName);
+src/components/transfers/components/TransportRequests.tsx:    console.log('✅ Available pricing methods for', carrierName, ':', methods);
+src/components/transfers/components/TransportRequests.tsx:    console.log(
+src/components/transfers/components/TransportRequests.tsx:    console.log('📋 Frontend: Carriers with method:', carriersWithMethod.length);
+src/components/transfers/components/TransportRequests.tsx:    console.log('✅ Frontend: Extracted vehicle types:', vehicleTypes);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔄 Đang tính khoảng cách...');
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - stopPoints:', stopPoints);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - selectedStopPoints:', Array.from(selectedStopPoints));
+src/components/transfers/components/TransportRequests.tsx:        console.log(`🔍 DEBUG - Processing stop ${index + 1}:`, {
+src/components/transfers/components/TransportRequests.tsx:              console.log(`🔍 DEBUG - Found MN code: ${mnCode} from address: ${stopPoint.address}`);
+src/components/transfers/components/TransportRequests.tsx:              console.log(`🔍 DEBUG - Fallback MN from locations: ${mnCode}`);
+src/components/transfers/components/TransportRequests.tsx:          console.log(`🔍 DEBUG - Filtering transfers for stop ${index + 1}:`, {
+src/components/transfers/components/TransportRequests.tsx:            console.log(`🔍 DEBUG - Transfer ${t.id} (transferId: ${transferId}):`, {
+src/components/transfers/components/TransportRequests.tsx:          console.log(`🔍 DEBUG - Stop ${index + 1} selectedTransfersForStop:`, {
+src/components/transfers/components/TransportRequests.tsx:          console.log(
+src/components/transfers/components/TransportRequests.tsx:              console.log(`🔍 DEBUG - Transfer mapping:`, {
+src/components/transfers/components/TransportRequests.tsx:          console.log(`🔍 DEBUG - Stop ${index + 1} transfer IDs: ${transferIdsForStop}`);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - stopDistances:', stopDistances);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - stopOrderCounts:', stopOrderCounts);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - stopProducts:', stopProducts);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - stopTransferIds:', stopTransferIds);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - stopMNs:', stopMNs);
+src/components/transfers/components/TransportRequests.tsx:      console.log(
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - selectedStopPoints:', Array.from(selectedStopPoints));
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - Distance payload from hook:', distancePayload);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - totalDistance:', totalDistance);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - totalOrderCount:', totalOrderCount);
+src/components/transfers/components/TransportRequests.tsx:      console.log('🔍 DEBUG - totalProducts:', totalProducts);
+src/components/transfers/components/TransportRequests.tsx:        console.log('🔍 DEBUG - Final payload:', payload);
+src/components/transfers/components/TransportRequests.tsx:        console.log('🔍 DEBUG - Distance fields in payload:', {
+src/components/transfers/components/TransportRequests.tsx:        console.log('🔍 DEBUG - OrderCount fields in payload:', {
+src/components/transfers/components/TransportRequests.tsx:        console.log('🔍 DEBUG - TransferIds fields in payload:', {
+src/components/transfers/components/TransportRequests.tsx:        console.log('🔍 DEBUG - Products fields in payload:', {
+src/components/transfers/components/TransportRequests.tsx:            console.log('🔄 Update transfers status results:', results);
+src/components/transfers/components/TransportRequests.tsx:          console.warn('⚠️ Không thể cập nhật trạng thái transfers:', e);
+src/components/transfers/components/TransportRequests.tsx:      fetchTransfers().catch(console.error);
+src/components/transfers/components/TransportRequests.tsx:      console.error('Submit transport request error:', e);
+src/components/transfers/components/TransportRequests.tsx:                        console.log(
+src/components/transfers/components/TransportRequests.tsx:                                console.log('🔍 Debug pricePerKm - Input:', inputValue);
+src/components/transfers/components/TransportRequests.tsx:                                console.log('🔍 Debug pricePerKm - Parsed:', parsedValue);
+src/components/transfers/components/TransportRequests.tsx:                                console.log('🔍 Debug pricePerM3 - Input:', inputValue);
+src/components/transfers/components/TransportRequests.tsx:                                console.log('🔍 Debug pricePerM3 - Parsed:', parsedValue);
+src/components/transfers/components/TransportRequests.tsx:                          console.log('Điểm đi dropdown đã đóng');
+src/components/transfers/components/TransportRequestsSheet.tsx:      console.log('🔍 TransportRequestsSheet - Raw data from API:', data[0]);
+src/components/transfers/components/TransportRequestsSheet.tsx:      console.log('🔍 TransportRequestsSheet - Mapped data (first item):', mappedData[0]);
+src/components/transfers/components/TransportRequestsSheet.tsx:        console.log('🔍 TransportRequestsSheet - MN fields check:');
+src/components/transfers/components/TransportRequestsSheet.tsx:          console.log(`  ${mnKey}: "${mnValue || 'null/undefined'}"`);
+src/components/transfers/components/TransportRequestsSheet.tsx:        console.log('🔍 TransportRequestsSheet - OrderCount fields check:');
+src/components/transfers/components/TransportRequestsSheet.tsx:          console.log(`  ${orderCountKey}: ${orderCountValue || 'null/undefined'}`);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🔄 Frontend: Grouping carriers, total carriers:', carriers?.length || 0);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('❌ Frontend: carriers is not an array:', carriers);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.warn('⚠️ Frontend: Skipping carrier with missing name:', carrier);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('✅ Frontend: Grouped carriers:', Object.keys(groups));
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - Creating stopPoint:', {
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🔍 calculateEstimatedCost called');
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('❌ No carrier found, returning 0');
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🔍 carrier:', carrier);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('❌ No carrier found, returning 0');
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🔍 DEBUG - Cost calculation inputs:');
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('  - totalDistance from stopPointDistances:', totalDistance);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('  - stopPointDistances:', stopPointDistances);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('  - totalStops:', totalStops);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('  - totalVolume:', totalVolume);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('  - pricingMethod:', hookPricingMethod);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('  - baseRate:', newTransportForm.baseRate);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('  - pricePerKm:', newTransportForm.pricePerKm);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('Error generating request ID:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('Failed to create new request:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.warn(`⚠️ DELETE API failed: ${response.status}`, errorData);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log(`✅ Đã xóa transport request: ${requestId}`);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.warn(`⏰ DELETE request timeout for ${requestId}`);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('Error deleting transport request:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log(`💡 Sheet API issue, but continuing (likely quota/range issue)`);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log(`🗑️ Sẽ xóa request ${requestToDelete} sau khi dialog đóng`);
+src/components/transfers/components/TransportRequests-backup.tsx:          console.log(`🗑️ Bắt đầu xóa request: ${requestToDelete}`);
+src/components/transfers/components/TransportRequests-backup.tsx:          console.log(`✅ Đã xóa thành công request ${requestToDelete}`);
+src/components/transfers/components/TransportRequests-backup.tsx:          console.error('❌ Lỗi khi xóa request:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:          console.log('💡 Có thể cần xóa thủ công trên sheet nếu cần');
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('ℹ️ Không có request nào cần xóa', {
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('❌ Lỗi khi load dữ liệu từ sheet Transfers:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔄 Fetching locations for distance calculation...');
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log(`✅ Locations loaded: ${data.length} locations`);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.error('❌ Failed to fetch locations:', response.status);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('❌ Error fetching locations:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log(`📍 Locations: ${locations.length} total, ${filtered.length} active`);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log(`📂 Grouped locations:`, Object.keys(groups));
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:          console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('❌ Error saving system location:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('❌ Error creating temporary location:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🔍 Calculating distances...');
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔄 Locations chưa được load, đang fetch...');
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🔍 Calculating distances with locations:', locations.length);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('✅ Distance calculation initiated');
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🧪 Testing Google Apps Script connectivity...');
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('❌ Test failed:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('Error deleting transport request:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log('Loaded volume rules:', mapped);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.error('Failed to load volume rules:', response.status);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('Error loading volume rules:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('Error creating transport proposal:', error);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🔍 Debug getPricingMethodsForCarrier:', carrierName);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('🔍 Debug groupedCarriers:', groupedCarriers);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('❌ No carriers found for:', carrierName);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('✅ Available pricing methods for', carrierName, ':', methods);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('📋 Frontend: Carriers with method:', carriersWithMethod.length);
+src/components/transfers/components/TransportRequests-backup.tsx:    console.log('✅ Frontend: Extracted vehicle types:', vehicleTypes);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔄 Đang tính khoảng cách...');
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - stopPoints:', stopPoints);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - selectedStopPoints:', Array.from(selectedStopPoints));
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log(`🔍 DEBUG - Processing stop ${index + 1}:`, {
+src/components/transfers/components/TransportRequests-backup.tsx:              console.log(`🔍 DEBUG - Found MN code: ${mnCode} from address: ${stopPoint.address}`);
+src/components/transfers/components/TransportRequests-backup.tsx:              console.log(`🔍 DEBUG - Fallback MN from locations: ${mnCode}`);
+src/components/transfers/components/TransportRequests-backup.tsx:          console.log(`🔍 DEBUG - Filtering transfers for stop ${index + 1}:`, {
+src/components/transfers/components/TransportRequests-backup.tsx:            console.log(`🔍 DEBUG - Transfer ${t.id} (transferId: ${transferId}):`, {
+src/components/transfers/components/TransportRequests-backup.tsx:          console.log(`🔍 DEBUG - Stop ${index + 1} selectedTransfersForStop:`, {
+src/components/transfers/components/TransportRequests-backup.tsx:          console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:              console.log(`🔍 DEBUG - Transfer mapping:`, {
+src/components/transfers/components/TransportRequests-backup.tsx:          console.log(`🔍 DEBUG - Stop ${index + 1} transfer IDs: ${transferIdsForStop}`);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - stopDistances:', stopDistances);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - stopOrderCounts:', stopOrderCounts);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - stopProducts:', stopProducts);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - stopTransferIds:', stopTransferIds);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - stopMNs:', stopMNs);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - selectedStopPoints:', Array.from(selectedStopPoints));
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - totalDistance:', totalDistance);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - totalOrderCount:', totalOrderCount);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.log('🔍 DEBUG - totalProducts:', totalProducts);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log('🔍 DEBUG - Final payload:', payload);
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log('🔍 DEBUG - Distance fields in payload:', {
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log('🔍 DEBUG - OrderCount fields in payload:', {
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log('🔍 DEBUG - TransferIds fields in payload:', {
+src/components/transfers/components/TransportRequests-backup.tsx:        console.log('🔍 DEBUG - Products fields in payload:', {
+src/components/transfers/components/TransportRequests-backup.tsx:            console.log('🔄 Update transfers status results:', results);
+src/components/transfers/components/TransportRequests-backup.tsx:          console.warn('⚠️ Không thể cập nhật trạng thái transfers:', e);
+src/components/transfers/components/TransportRequests-backup.tsx:      fetchTransfers().catch(console.error);
+src/components/transfers/components/TransportRequests-backup.tsx:      console.error('Submit transport request error:', e);
+src/components/transfers/components/TransportRequests-backup.tsx:                          console.log(
+src/components/transfers/components/TransportRequests-backup.tsx:                              console.log('🔍 Debug: Rendering pricing methods:', methods);
+src/components/transfers/components/TransportRequests-backup.tsx:                                console.log('🔍 Debug pricePerKm - Input:', inputValue);
+src/components/transfers/components/TransportRequests-backup.tsx:                                console.log('🔍 Debug pricePerKm - Parsed:', parsedValue);
+src/components/transfers/components/TransportRequests-backup.tsx:                                console.log('🔍 Debug pricePerM3 - Input:', inputValue);
+src/components/transfers/components/TransportRequests-backup.tsx:                                console.log('🔍 Debug pricePerM3 - Parsed:', parsedValue);
+src/components/transfers/components/TransportRequests-backup.tsx:                          console.log('Điểm đi dropdown đã đóng');
+src/components/locations/CreateLocationDialog.tsx:      console.error('Lỗi lưu địa điểm:', error);
+src/components/locations/LocationsList.tsx:          console.error(
+src/components/locations/LocationsList.tsx:        console.error('Error loading locations:', err);
+src/components/locations/LocationsList.tsx:      console.error('Lỗi cập nhật trạng thái:', err);
+src/components/locations/LocationsList.tsx:      console.error('Lỗi xóa địa điểm:', err);
+src/components/locations/LocationsList.tsx:      console.error('Lỗi làm mới:', err);
+src/components/inbound/InboundDomestic.tsx:        console.error('Error loading inbound domestic items:', err);
+src/components/inbound/InboundDomestic.tsx:      console.error('Error adding item:', err);
+src/components/inbound/InboundDomestic.tsx:      console.error('Error updating item:', err);
+src/components/inbound/InboundDomestic.tsx:      console.error('Error deleting item:', err);
+src/components/inbound/InboundDomestic.tsx:      console.error('Error refreshing data:', err);
+src/components/inbound/InboundSchedule.tsx:// Logging service (avoids console.* to satisfy eslint no-console)
+src/components/inbound/utils/descriptionUtils.ts:    console.warn('Failed to get current user from session:', error);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('Loading item data:', item);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('Item packaging:', item.packaging);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('Item timeline:', item.timeline);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('Item documentStatus:', item.documentStatus);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('Item notes:', item.notes);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('Item quantity:', item.quantity);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('State set - packagingItems:', item.packaging || []);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('State set - timelineItems:', item.timeline || []);
+src/components/inbound/hooks/useItemManagement.ts:    console.log('State set - documentStatusItems:', item.documentStatus || []);
+src/components/inbound/InboundReports.tsx:        console.error('Error loading data:', error);
+src/components/inbound/InboundInternational.tsx:    reload().catch((err) => console.error('Load InboundInternational failed', err));
+src/components/inbound/InboundInternational.tsx:      console.error('Save inbound failed', err);
+src/components/ErrorBoundary.js:    console.error('ErrorBoundary caught an error:', error, errorInfo);
+src/components/inbound-backup/InboundDomestic.tsx:  console.log('Adding item (mock):', item);
+src/components/inbound-backup/InboundDomestic.tsx:  console.log('Updating item (mock):', id, updates);
+src/components/inbound-backup/InboundDomestic.tsx:  console.log('Deleting item (mock):', id);
+src/components/inbound-backup/InboundDomestic.tsx:        console.error('Error loading inbound domestic items:', err);
+src/components/inbound-backup/InboundDomestic.tsx:      console.error('Error adding item:', err);
+src/components/inbound-backup/InboundDomestic.tsx:      console.error('Error updating item:', err);
+src/components/inbound-backup/InboundDomestic.tsx:      console.error('Error deleting item:', err);
+src/components/inbound-backup/InboundDomestic.tsx:      console.error('Error refreshing data:', err);
+src/components/inbound-backup/InboundSchedule.tsx:      // console.error("Error loading data:", err);
+src/components/inbound-backup/InboundSchedule.tsx:          // console.log("Add to calendar:", item);
+src/components/inbound-backup/InboundSchedule.tsx:      // console.error("Error handling action:", error);
+src/components/inbound-backup/InboundSchedule.tsx:          // console.log("Updating domestic item:", updated);
+src/components/inbound-backup/InboundSchedule.tsx:          // console.log("Adding domestic item:", payload);
+src/components/inbound-backup/InboundSchedule.tsx:      // console.error("Error saving item:", error);
+src/components/inbound-backup/InboundSchedule.tsx:                  // console.log(
+src/components/inbound-backup/InboundSchedule.tsx:                  // console.log("Online/Offline counts:", {
+src/components/inbound-backup/utils/descriptionUtils.ts:    console.warn('Failed to get current user from session:', error);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('Loading item data:', item);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('Item packaging:', item.packaging);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('Item timeline:', item.timeline);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('Item documentStatus:', item.documentStatus);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('Item notes:', item.notes);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('Item quantity:', item.quantity);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('State set - packagingItems:', item.packaging || []);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('State set - timelineItems:', item.timeline || []);
+src/components/inbound-backup/hooks/useItemManagement.ts:    // console.log('State set - documentStatusItems:', item.documentStatus || []);
+src/components/inbound-backup/InboundReports.tsx:        console.error('Error loading data:', error);
+src/components/inbound-backup/InboundInternational.tsx:    reload().catch((err) => console.error('Load InboundInternational failed', err));
+src/components/inbound-backup/InboundInternational.tsx:      console.error('Save inbound failed', err);
+src/components/custom/YourMetricsWidget.jsx:      console.error('Error fetching custom metrics:', error);
+src/hooks/useGoogleSheets.js:      console.error('Error fetching locations:', err);
+src/hooks/useGoogleSheets.js:        console.error('Error adding location:', err);
+src/hooks/useGoogleSheets.js:      console.error('Error fetching employees:', err);
+src/hooks/useGoogleSheets.js:      console.error('Error fetching carriers:', err);
+src/hooks/useGoogleSheets.js:      console.error('Error fetching transport requests:', err);
+src/hooks/useGoogleSheets.js:      console.error('Connection test failed:', err);
+src/hooks/useTransportCostCalculation.ts:      console.error('Error calculating transport cost:', error);
+src/hooks/useDistanceCalculation.ts:        console.error('Error calculating distances:', err);
+src/hooks/useDistanceCalculation.ts:      console.error('Error calculating distance:', error);
+src/pages/Transport/PendingDelivery.tsx:      console.error('Error fetching transfers:', err);
+src/pages/Transport/PendingDelivery.tsx:      console.error('Error fetching carriers:', err);
+src/pages/Transport/PendingDelivery.tsx:    console.log('🔍 handleOrderVehicle called:', {
+src/pages/Transport/PendingDelivery.tsx:      console.log('✅ Using provided transfers:', transfersToOrder.length);
+src/pages/Transport/PendingDelivery.tsx:      console.log('📋 Filtering from selected:', {
+src/pages/Transport/PendingDelivery.tsx:          console.log(
+src/pages/Transport/PendingDelivery.tsx:      console.log('📦 Filtered transfersToOrder:', {
+src/pages/Transport/PendingDelivery.tsx:    console.log(
+src/pages/Transport/PendingDelivery.tsx:      console.warn('⚠️ transfersToOrder.length === 0 - Dialog sẽ KHÔNG mở', {
+src/pages/Transport/PendingDelivery.tsx:    console.log('✅ transfersToOrder.length > 0, tiếp tục mở dialog...');
+src/pages/Transport/PendingDelivery.tsx:    console.log('✅ Setting dialog open:', {
+src/pages/Transport/PendingDelivery.tsx:    console.log('✅ setOrderVehicleDialogOpen(true) đã được gọi');
+src/pages/Transport/PendingDelivery.tsx:      console.log('🔍 After state update - orderVehicleDialogOpen should be true');
+src/pages/Transport/PendingDelivery.tsx:        console.warn(`Không thể cập nhật trạng thái cho ${failedUpdates} phiếu`);
+src/pages/Transport/PendingDelivery.tsx:      console.error('Error creating transport request:', err);
+src/pages/Transport/PendingDelivery.tsx:      console.log('✅ Select All:', allIds);
+src/pages/Transport/PendingDelivery.tsx:      console.log('❌ Deselect All');
+src/pages/Transport/PendingDelivery.tsx:    console.log('📝 handleSelectOne called:', { transferId, currentSelected: selected });
+src/pages/Transport/PendingDelivery.tsx:      console.log('📝 New selected:', newSelected);
+src/pages/Transport/PendingDelivery.tsx:                console.log("🔘 Nút 'Đặt xe mới' clicked:", {
+src/pages/Transport/PendingDelivery.tsx:                          console.log('🔘 Grid Checkbox clicked:', {
+src/pages/Transport/PendingDelivery.tsx:                          console.log('🔘 Table Checkbox clicked:', {
+src/pages/Transport/Carriers/Carriers.js:        console.error('Error fetching carriers:', err);
+src/pages/Transport/Carriers/Carriers.js:                              console.log('Edit carrier:', carrierId);
+src/pages/Transport/Carriers/Carriers.js:                                console.log('Delete carrier:', carrierId);
+src/pages/Locations/CreateLocationDialog.tsx:      console.error('Lỗi lưu địa điểm:', error);
+src/pages/Locations/LocationsList.tsx:      console.error('Lỗi cập nhật trạng thái:', err);
+src/pages/Locations/LocationsList.tsx:      console.error('Lỗi xóa địa điểm:', err);
+src/pages/Locations/LocationsList.tsx:      console.error('Lỗi làm mới:', err);
+src/routes/custom-metrics.js:    console.error('Error fetching logistics overview:', error);
+src/routes/custom-metrics.js:    console.error('Error fetching shipment metrics:', error);
+src/routes/custom-metrics.js:    console.error('Error fetching carrier performance:', error);
+src/routes/custom-metrics.js:    console.error('Error fetching revenue metrics:', error);
+src/routes/custom-metrics.js:    console.error('Error fetching route optimization:', error);
+src/routes/custom-metrics.js:    console.error('Error fetching real-time tracking:', error);
+src/routes/custom-metrics.js:    console.error('Error predicting demand:', error);
+src/services/googleSheetsService.js:      console.error(`❌ Failed to get values from ${sheetName}:`, error);
+src/services/googleSheetsService.js:      console.error(`Failed to create sheet ${title}:`, error);
+src/services/googleSheetsService.js:      console.error(`Failed to delete sheet ${sheetName}:`, error);
+src/services/sesionService.js:        console.error('Failed to create session:', error);
+src/services/sesionService.js:      console.error('Failed to get session:', error);
+src/services/sesionService.js:      console.error('Failed to update session:', error);
+src/services/sesionService.js:      console.error('Failed to refresh session:', error);
+src/services/sesionService.js:      console.log('Session cleared');
+src/services/sesionService.js:      console.error('Failed to clear session:', error);
+src/services/sesionService.js:      console.warn('Possible session hijacking detected: User agent mismatch');
+src/services/sesionService.js:      console.error('Failed to track activity:', error);
+src/services/sesionService.js:      console.error('Failed to get activity log:', error);
+src/services/googleDriveService.js:      console.error('Failed to list files:', error);
+src/services/googleDriveService.js:      console.error('Failed to search files:', error);
+src/services/googleDriveService.js:      console.error('Failed to create folder:', error);
+src/services/googleDriveService.js:      console.error('Failed to move file:', error);
+src/services/googleDriveService.js:      console.error('Failed to get quota:', error);
+src/services/googleDriveService.js:      console.error('Failed to share file:', error);
+src/services/googleDriveService.js:      console.error('Failed to sync files:', error);
+src/services/distanceService.ts:      console.error('DistanceService.calculateRoute error:', error);
+src/services/distanceService.ts:      console.error('DistanceService.optimizeRoute error:', error);
+src/services/distanceService.ts:      console.error('DistanceService.findNearest error:', error);
+src/services/googleAuthService.js:      console.error('Token refresh failed:', error);
+src/services/googleSheets/inboundDomesticService.ts:    console.error('Error fetching inbound domestic items:', error);
+src/services/googleSheets/inboundDomesticService.ts:    console.error('Error adding inbound domestic item:', error);
+src/services/googleSheets/inboundDomesticService.ts:    console.error('Error updating inbound domestic item:', error);
+src/services/googleSheets/inboundDomesticService.ts:    console.error('Error deleting inbound domestic item:', error);
+src/services/googleSheets/inboundDomesticService.ts:    console.error('Error initializing inbound domestic sheet:', error);
+src/services/googleSheets/employeesService.ts:      console.error('Error fetching employees:', error);
+src/services/googleSheets/employeesService.ts:      console.error('Error creating employee:', error);
+src/services/googleSheets/employeesService.ts:      console.error('Error updating employee:', error);
+src/services/googleSheets/employeesService.ts:      console.error('Error deleting employee:', error);
+src/services/googleSheets/usersService.ts:      console.error('Error getting user by email:', error);
+src/services/googleSheets/usersService.ts:      console.error('Error getting user by ID:', error);
+src/services/googleSheets/usersService.ts:      console.error('Error verifying password:', error);
+src/services/googleSheets/usersService.ts:      console.error('Error creating user:', error);
+src/services/googleSheets/usersService.ts:      console.error('Error updating user:', error);
+src/services/googleSheets/usersService.ts:      console.error('Error getting all users:', error);
+src/services/emailService.js:    console.log('Email service mock - sendNotification:', { to, subject, message, data });
+src/services/emailService.js:    console.log('Email service mock - sendAlert:', { to, level, title, message, data });
+src/services/sessionManager.js:      console.error('Error getting session:', error);
+src/services/sessionManager.js:        console.error('Error in session listener:', error);
+src/services/proxyLocationsService.js:      console.error('Error getting locations:', error);
+src/services/proxyLocationsService.js:      console.error('Error getting location stats:', error);
+src/services/proxyLocationsService.js:      console.error('Error adding location:', error);
+src/services/proxyLocationsService.js:      console.error('Error updating location:', error);
+src/services/proxyLocationsService.js:      console.error('Error deleting location:', error);
+src/services/proxyLocationsService.js:      console.error('Error getting locations by type:', error);
+src/services/proxyLocationsService.js:      console.error('Error getting locations by status:', error);
+src/services/proxyLocationsService.js:      console.error('Error searching locations:', error);
+src/services/telegramBotService.js:    console.log('Telegram service mock - sendMessage:', message);
+src/services/telegramBotService.js:    console.log('Telegram service mock - sendAlert:', { title, message, level, data });
+src/services/api/client.ts:        console.error('API Error:', error);
+src/services/logService.js:      console.error('Logging failed:', error);
+src/services/logService.js:        console.error(consoleMessage, data ? JSON.parse(data) : '');
+src/services/logService.js:        console.warn(consoleMessage, data ? JSON.parse(data) : '');
+src/services/logService.js:        console.debug(consoleMessage, data ? JSON.parse(data) : '');
+src/services/logService.js:        console.log(consoleMessage, data ? JSON.parse(data) : '');
+src/services/logService.js:      console.error('Failed to store log locally:', error);
+src/services/logService.js:      console.error('Failed to get local logs:', error);
+src/services/logService.js:          console.error('Failed to log to Google Sheets:', error);
+src/services/logService.js:      console.error('Failed to queue Google Sheets log:', error);
+src/services/logService.js:      console.error('Failed to log to Google Sheets:', error);
+src/services/logService.js:      console.log = (...args) => {
+src/services/logService.js:      console.error = (...args) => {
+src/services/logService.js:      console.warn = (...args) => {
+src/services/analyticsService.js:        console.log('Analytics Event:', eventType, eventData);
+src/services/analyticsService.js:      console.error('Analytics error:', error);
+src/debug/apiDebugTest.js:    console.log('🔍 Debug Test Results:', debugInfo);

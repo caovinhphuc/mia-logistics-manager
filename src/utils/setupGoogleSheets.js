@@ -117,21 +117,21 @@ export const setupGoogleSheets = async (spreadsheetId) => {
       ],
     ];
 
-    console.log('Google Sheets Setup Instructions:');
-    console.log('================================');
-    console.log('1. Mở Google Sheet với ID:', spreadsheetId);
-    console.log('2. Tạo sheet tên "Carriers"');
-    console.log('3. Thêm headers vào dòng 1:');
-    console.log(carriersHeaders.join('\t'));
-    console.log('');
-    console.log('4. Thêm sample data vào dòng 2-4:');
+    logger.debug('Google Sheets Setup Instructions:');
+    logger.debug('================================');
+    logger.debug('1. Mở Google Sheet với ID:', spreadsheetId);
+    logger.debug('2. Tạo sheet tên "Carriers"');
+    logger.debug('3. Thêm headers vào dòng 1:');
+    logger.debug(carriersHeaders.join('\t'));
+    logger.debug('');
+    logger.debug('4. Thêm sample data vào dòng 2-4:');
     sampleData.forEach((row, index) => {
-      console.log(`Dòng ${index + 2}:`, row.join('\t'));
+      logger.debug(`Dòng ${index + 2}:`, row.join('\t'));
     });
-    console.log('');
-    console.log('5. Lưu và chia sẻ quyền truy cập cho ứng dụng');
-    console.log('');
-    console.log('✅ Setup hoàn tất!');
+    logger.debug('');
+    logger.debug('5. Lưu và chia sẻ quyền truy cập cho ứng dụng');
+    logger.debug('');
+    logger.debug('✅ Setup hoàn tất!');
 
     return {
       headers: carriersHeaders,

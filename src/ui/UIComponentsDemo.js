@@ -111,9 +111,9 @@ const UIComponentsDemo = () => {
               Action Icons
             </Typography>
             <ActionIcons
-              onEdit={() => console.log('Edit action')}
-              onDelete={() => console.log('Delete action')}
-              onView={() => console.log('View action')}
+              onEdit={() => logger.debug('Edit action')}
+              onDelete={() => logger.debug('Delete action')}
+              onView={() => logger.debug('View action')}
             />
           </Paper>
         </Grid>
@@ -155,9 +155,9 @@ const UIComponentsDemo = () => {
             <DataTable
               columns={columns}
               data={sampleData}
-              onEdit={(row) => console.log('Edit row:', row)}
-              onDelete={(row) => console.log('Delete row:', row)}
-              onRowClick={(row) => console.log('Row clicked:', row)}
+              onEdit={(row) => logger.debug('Edit row:', row)}
+              onDelete={(row) => logger.debug('Delete row:', row)}
+              onRowClick={(row) => logger.debug('Row clicked:', row)}
             />
           </Paper>
         </Grid>
@@ -170,9 +170,9 @@ const UIComponentsDemo = () => {
             </Typography>
             <GridView
               data={sampleData}
-              onEdit={(item) => console.log('Edit item:', item)}
-              onDelete={(item) => console.log('Delete item:', item)}
-              onView={(item) => console.log('View item:', item)}
+              onEdit={(item) => logger.debug('Edit item:', item)}
+              onDelete={(item) => logger.debug('Delete item:', item)}
+              onView={(item) => logger.debug('View item:', item)}
             />
           </Paper>
         </Grid>

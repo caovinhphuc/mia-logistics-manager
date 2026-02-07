@@ -48,7 +48,7 @@ const SystemSettings = () => {
   };
 
   const handleSave = () => {
-    // console.log('Saving system settings:', settings);
+    // logger.debug('Saving system settings:', settings);
   };
 
   return (

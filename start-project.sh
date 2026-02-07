@@ -130,9 +130,11 @@ if [ ! -d "node_modules" ]; then
     print_warning "node_modules not found. Installing root dependencies..."
     npm install
 fi
-if [ ! -d "backend/node_modules" ]; then
+# Backend uses root node_modules (no backend/package.json). Skip backend npm install.
+# Only install in backend if it has its own package.json
+if [ -f "backend/package.json" ] && [ ! -d "backend/node_modules" ]; then
     print_warning "backend/node_modules not found. Installing backend dependencies..."
-    (cd backend && npm install)
+    (cd backend && npm install --legacy-peer-deps)
 fi
 
 # Start backend
@@ -321,7 +323,7 @@ fi
 # Google Drive
 echo -n "   📁 Google Drive API... "
 DRIVE_FOLDER_ID="${REACT_APP_GOOGLE_DRIVE_FOLDER_ID:-}"
-SERVICE_ACCOUNT_FILE=$(ls backend/*.json 2>/dev/null | grep -E "(service-account|sinuous)" | head -1)
+SERVICE_ACCOUNT_FILE=$(ls backend/credentials/*.json backend/*.json 2>/dev/null | grep -E "(service-account|sinuous|mia-logistics)" | head -1)
 if [ -n "$SERVICE_ACCOUNT_FILE" ] && [ -f "$SERVICE_ACCOUNT_FILE" ]; then
     print_success "Service account found"
     echo "[$(date '+%H:%M:%S')] ✅ Google Drive: Service account authenticated" >> "${GOOGLE_DRIVE_LOG}"

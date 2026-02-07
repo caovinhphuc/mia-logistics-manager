@@ -1,0 +1,603 @@
+import React, { useState } from 'react';
+import {
+  Package, Clock, AlertTriangle, Users, Activity,
+  TrendingUp, CheckCircle, BarChart2, ChevronDown, Eye, Bell,
+  FileText, Printer, Filter, Calendar, Download, RefreshCw,
+  ArrowRight, Map, PieChart, ChevronUp, Zap
+} from 'lucide-react';
+
+const Dashboard = ({
+  stats,
+  orders,
+  hourlyPerformanceData,
+  alerts,
+  darkMode,
+  buttonSecondaryClass,
+  cardClass
+}) => {
+  // State cho các filter và tuỳ chọn hiển thị
+  const [timeRangeFilter, setTimeRangeFilter] = useState('today');
+  const [showDetailedCharts, setShowDetailedCharts] = useState(false);
+  const [showAllAlerts, setShowAllAlerts] = useState(false);
+
+  // Tính toán số đơn còn lại (P3, P4)
+  const remainingOrders = stats.totalOrders - stats.p1Orders - stats.p2Orders;
+
+  // Lọc orders theo priority P1
+  const priorityP1Orders = orders.filter(order =>
+    order.priority === 'P1' && order.status !== 'completed'
+  );
+
+  // Format thời gian
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  // Ước tính thời gian còn lại cho deadline
+  const getTimeLeft = (deadline) => {
+    const now = new Date();
+    const deadlineTime = new Date(deadline);
+    const diff = deadlineTime - now;
+
+    if (diff <= 0) return 'Quá hạn';
+
+    const minutes = Math.floor(diff / (1000 * 60));
+    if (minutes < 60) return `${minutes} phút`;
+
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}h${remainingMinutes > 0 ? ` ${remainingMinutes}m` : ''}`;
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Tiêu đề và filter */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+        <h2 className="text-xl font-semibold mb-2 md:mb-0">Tổng quan hệ thống</h2>
+        <div className="flex items-center space-x-2">
+          <select
+            className={`border rounded py-1 px-3 text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-white border-gray-300 text-gray-800'}`}
+            value={timeRangeFilter}
+            onChange={(e) => setTimeRangeFilter(e.target.value)}
+          >
+            <option value="today">Hôm nay</option>
+            <option value="yesterday">Hôm qua</option>
+            <option value="week">7 ngày qua</option>
+            <option value="month">30 ngày qua</option>
+          </select>
+          <button
+            className={`p-2 rounded ${buttonSecondaryClass}`}
+            onClick={() => setShowDetailedCharts(!showDetailedCharts)}
+            title="Hiển thị biểu đồ chi tiết"
+          >
+            <BarChart2 size={18} />
+          </button>
+          <button
+            className={`p-2 rounded ${buttonSecondaryClass}`}
+            title="Làm mới dữ liệu"
+          >
+            <RefreshCw size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* KPI Cards - Metric chính */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm opacity-70">Tổng đơn</p>
+              <p className="text-2xl font-bold">{stats.totalOrders}</p>
+            </div>
+            <div className="p-3 rounded-full bg-blue-500 bg-opacity-20">
+              <Package className="h-6 w-6 text-blue-500" />
+            </div>
+          </div>
+          <div className="mt-2 grid grid-cols-3 gap-1 text-xs">
+            <div className="flex flex-col items-center p-1 bg-yellow-500 bg-opacity-10 rounded">
+              <span className="opacity-70">Đang chờ</span>
+              <span className="font-medium">{stats.pendingOrders}</span>
+            </div>
+            <div className="flex flex-col items-center p-1 bg-blue-500 bg-opacity-10 rounded">
+              <span className="opacity-70">Xử lý</span>
+              <span className="font-medium">{stats.processingOrders}</span>
+            </div>
+            <div className="flex flex-col items-center p-1 bg-green-500 bg-opacity-10 rounded">
+              <span className="opacity-70">Hoàn thành</span>
+              <span className="font-medium">{stats.completedOrders}</span>
+            </div>
+          </div>
+          <div className="flex mt-2 text-xs">
+            <span className="flex items-center text-green-500">
+              <TrendingUp className="h-3 w-3 mr-1" /> +5% so với hôm qua
+            </span>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm opacity-70">Đơn P1 (Gấp)</p>
+              <p className="text-2xl font-bold text-red-500">{stats.p1Orders}</p>
+            </div>
+            <div className="p-3 rounded-full bg-red-500 bg-opacity-20">
+              <Clock className="h-6 w-6 text-red-500" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="w-full bg-gray-700 rounded-full h-2">
+              <div
+                className="h-2 bg-red-500 rounded-full"
+                style={{width: `${Math.round((stats.p1Orders/stats.totalOrders)*100)}%`}}
+              ></div>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-xs">
+            <span className="flex items-center text-orange-500">
+              <Clock className="h-3 w-3 mr-1" /> {Math.round((stats.p1Orders/stats.totalOrders)*100)}% tổng đơn
+            </span>
+            <span className="text-gray-400">SLA: 2 giờ</span>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm opacity-70">Tỷ lệ đạt SLA</p>
+              <p className="text-2xl font-bold text-green-500">{stats.slaRate}%</p>
+            </div>
+            <div className="p-3 rounded-full bg-green-500 bg-opacity-20">
+              <CheckCircle className="h-6 w-6 text-green-500" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="w-full bg-gray-700 rounded-full h-2">
+              <div
+                className="h-2 bg-green-500 rounded-full"
+                style={{width: `${stats.slaRate}%`}}
+              ></div>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-xs">
+            <span className="flex items-center text-green-500">
+              <TrendingUp className="h-3 w-3 mr-1" /> +1.2% so với hôm qua
+            </span>
+            <span className="text-gray-400">Mục tiêu: 95%</span>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm opacity-70">Thời gian xử lý TB</p>
+              <p className="text-2xl font-bold text-purple-500">{stats.avgOrderTime} phút</p>
+            </div>
+            <div className="p-3 rounded-full bg-purple-500 bg-opacity-20">
+              <Activity className="h-6 w-6 text-purple-500" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-xs font-medium mb-1 flex justify-between">
+              <span className="opacity-70">Thời gian TB theo sản phẩm:</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span>Vali: 28m</span>
+              <span>Phụ kiện: 15m</span>
+              <span>Mix: 32m</span>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-xs">
+            <span className="flex items-center text-green-500">
+              <TrendingUp className="h-3 w-3 mr-1" /> -3 phút so với hôm qua
+            </span>
+            <span className="text-gray-400">Tốc độ tốt</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Biểu đồ và phân tích */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className={`lg:col-span-2 p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-medium">Hiệu suất xử lý đơn theo giờ</h3>
+            {showDetailedCharts && (
+              <div className="flex items-center space-x-2">
+                <button className={`px-2 py-1 text-xs rounded ${buttonSecondaryClass}`}>
+                  <Download size={14} className="inline mr-1" /> Excel
+                </button>
+                <button className={`px-2 py-1 text-xs rounded ${buttonSecondaryClass}`}>
+                  <Filter size={14} className="inline mr-1" /> Lọc
+                </button>
+              </div>
+            )}
+          </div>
+          <div className={`h-${showDetailedCharts ? '80' : '64'}`}>
+            <div className="w-full h-full flex items-end">
+              {hourlyPerformanceData.map((item, index) => (
+                <div key={index} className="flex-1 flex flex-col items-center">
+                  <div className="relative w-full flex justify-center space-x-1 mb-1">
+                    <div
+                      className="w-5 bg-blue-500 rounded-t"
+                      style={{height: `${(item.orders/35)*100}%`}}
+                      title={`Tổng đơn: ${item.orders}`}
+                    ></div>
+                    <div
+                      className="w-5 bg-green-500 rounded-t"
+                      style={{height: `${(item.completed/35)*100}%`}}
+                      title={`Hoàn thành: ${item.completed}`}
+                    ></div>
+                  </div>
+                  <div className="text-xs pt-1">{item.hour}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex justify-center space-x-4 mt-2">
+            <div className="flex items-center text-xs">
+              <div className="w-3 h-3 bg-blue-500 rounded mr-1"></div>
+              <span>Tổng đơn: {hourlyPerformanceData.reduce((sum, item) => sum + item.orders, 0)}</span>
+            </div>
+            <div className="flex items-center text-xs">
+              <div className="w-3 h-3 bg-green-500 rounded mr-1"></div>
+              <span>Hoàn thành: {hourlyPerformanceData.reduce((sum, item) => sum + item.completed, 0)}</span>
+            </div>
+            <div className="flex items-center text-xs">
+              <div className="w-3 h-3 bg-yellow-500 rounded mr-1"></div>
+              <span>SLA TB: {(hourlyPerformanceData.reduce((sum, item) => sum + item.sla, 0) / hourlyPerformanceData.length).toFixed(1)}%</span>
+            </div>
+          </div>
+
+          {showDetailedCharts && (
+            <div className="mt-4 border-t pt-4">
+              <h4 className="text-sm font-medium mb-2">Phân tích hiệu suất theo giờ</h4>
+              <div className="text-xs space-y-1">
+                <p>• Cao điểm: 11:00 - 14:00 (55 đơn/giờ)</p>
+                <p>• Tỷ lệ hoàn thành cao nhất: 12:00 (97% SLA)</p>
+                <p>• Đề xuất: Tăng 1 nhân viên vào khung giờ 11:00 - 14:00</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-medium">Phân bổ đơn theo SLA</h3>
+            <button
+              onClick={() => setShowDetailedCharts(!showDetailedCharts)}
+              className="text-xs opacity-75"
+            >
+              {showDetailedCharts ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </button>
+          </div>
+          <div className={`h-${showDetailedCharts ? '64' : '52'} flex justify-center items-center`}>
+            <div className="w-full h-full flex flex-col space-y-2">
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                <span className="text-sm">P1 - Gấp</span>
+                <div className="flex-1 h-5 bg-gray-700 rounded-full overflow-hidden ml-2">
+                  <div
+                    className="h-full bg-red-500 rounded-full"
+                    style={{width: `${(stats.p1Orders/stats.totalOrders)*100}%`}}
+                  ></div>
+                </div>
+                <span className="text-sm ml-2">{stats.p1Orders} đơn</span>
+              </div>
+
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                <span className="text-sm">P2 - Cảnh báo</span>
+                <div className="flex-1 h-5 bg-gray-700 rounded-full overflow-hidden ml-2">
+                  <div
+                    className="h-full bg-yellow-500 rounded-full"
+                    style={{width: `${(stats.p2Orders/stats.totalOrders)*100}%`}}
+                  ></div>
+                </div>
+                <span className="text-sm ml-2">{stats.p2Orders} đơn</span>
+              </div>
+
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                <span className="text-sm">P3 - Bình thường</span>
+                <div className="flex-1 h-5 bg-gray-700 rounded-full overflow-hidden ml-2">
+                  <div
+                    className="h-full bg-green-500 rounded-full"
+                    style={{width: `${((remainingOrders - 1)/stats.totalOrders)*100}%`}}
+                  ></div>
+                </div>
+                <span className="text-sm ml-2">{remainingOrders - 1} đơn</span>
+              </div>
+
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                <span className="text-sm">P4 - Chờ xử lý</span>
+                <div className="flex-1 h-5 bg-gray-700 rounded-full overflow-hidden ml-2">
+                  <div
+                    className="h-full bg-blue-500 rounded-full"
+                    style={{width: `${(1/stats.totalOrders)*100}%`}}
+                  ></div>
+                </div>
+                <span className="text-sm ml-2">1 đơn</span>
+              </div>
+
+              <div className="mt-4">
+                <h4 className="text-sm font-medium mb-1">Lưu ý SLA</h4>
+                <div className="text-xs opacity-75">
+                  <p>• P1: ≤ 2 giờ để hoàn thành</p>
+                  <p>• P2: 2-4 giờ để hoàn thành</p>
+                  <p>• P3: 4-8 giờ để hoàn thành</p>
+                  <p>• P4: &gt; 8 giờ để hoàn thành</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {showDetailedCharts && (
+            <div className="mt-4 border-t pt-4">
+              <h4 className="text-sm font-medium mb-2">Phân tích theo nguyên tắc 80/20</h4>
+              <div className="text-xs space-y-1">
+                <p>• 20% đơn P1 tốn 80% thời gian xử lý</p>
+                <p>• Đề xuất: Ưu tiên nhân viên cấp cao với đơn P1</p>
+                <p>• Áp dụng lộ trình lấy hàng tối ưu cho đơn P2+P3</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Đơn hàng ưu tiên và cảnh báo */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className={`p-4 rounded-lg border ${cardClass} lg:col-span-2`}>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium">Đơn cần xử lý ưu tiên (P1)</h3>
+            <div className="flex space-x-2">
+              <button className={`px-3 py-1 rounded text-xs ${buttonSecondaryClass}`}>
+                Xem tất cả
+              </button>
+              <button className={`px-3 py-1 rounded text-xs bg-blue-600 hover:bg-blue-700 text-white`}>
+                <Zap size={12} className="inline mr-1" /> Phân bổ tự động
+              </button>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b border-gray-700">
+                  <th className="py-2 text-left text-xs font-medium text-gray-400">Mã đơn</th>
+                  <th className="py-2 text-left text-xs font-medium text-gray-400">Kênh</th>
+                  <th className="py-2 text-left text-xs font-medium text-gray-400">SLA</th>
+                  <th className="py-2 text-left text-xs font-medium text-gray-400">Còn lại</th>
+                  <th className="py-2 text-left text-xs font-medium text-gray-400">Chi tiết</th>
+                  <th className="py-2 text-left text-xs font-medium text-gray-400">Trạng thái</th>
+                  <th className="py-2 text-center text-xs font-medium text-gray-400">Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                {priorityP1Orders.slice(0, 4).map((order, index) => (
+                  <tr key={index} className="border-b border-gray-700 hover:bg-gray-800">
+                    <td className="py-2 text-sm">{order.id}</td>
+                    <td className="py-2 text-sm">{order.channel}</td>
+                    <td className="py-2 text-sm">
+                      <span className="px-2 py-1 text-xs rounded-full bg-red-500 bg-opacity-20 text-red-400">
+                        {order.priority}
+                      </span>
+                    </td>
+                    <td className="py-2 text-sm text-red-400 font-medium">
+                      {getTimeLeft(order.deadline)}
+                    </td>
+                    <td className="py-2 text-sm max-w-xs truncate">
+                      {order.detail}
+                    </td>
+                    <td className="py-2 text-sm">
+                      <span className={`px-2 py-1 text-xs rounded-full ${
+                        order.status === 'pending' ? 'bg-yellow-500 bg-opacity-20 text-yellow-400' :
+                        order.status === 'processing' ? 'bg-blue-500 bg-opacity-20 text-blue-400' :
+                        'bg-green-500 bg-opacity-20 text-green-400'
+                      }`}>
+                        {order.status === 'pending' ? 'Chờ xử lý' :
+                         order.status === 'processing' ? 'Đang xử lý' : 'Hoàn thành'}
+                      </span>
+                    </td>
+                    <td className="py-2 flex justify-center space-x-1">
+                      <button className="p-1 text-blue-400 hover:text-blue-300" title="Chi tiết">
+                        <Eye size={16} />
+                      </button>
+                      <button className="p-1 text-green-400 hover:text-green-300" title="Phân công">
+                        <Users size={16} />
+                      </button>
+                      <button className="p-1 text-purple-400 hover:text-purple-300" title="In đơn">
+                        <FileText size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {priorityP1Orders.length === 0 && (
+                  <tr>
+                    <td colSpan="7" className="py-4 text-center text-gray-500">
+                      Không có đơn P1 cần xử lý
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Phần thông tin tối ưu */}
+          <div className="mt-4 bg-blue-900 bg-opacity-10 rounded-lg p-3 border border-blue-800">
+            <div className="flex items-start">
+              <Map className="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+              <div>
+                <h4 className="text-sm font-medium">Đề xuất tối ưu lộ trình</h4>
+                <p className="text-xs mt-1">
+                  Có <b>5 đơn hàng Vali Larita 28L</b> từ vị trí A12 - Xử lý cùng lúc để giảm 25% thời gian di chuyển
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-medium">Cảnh báo hoạt động</h3>
+            <button
+              className={`px-2 py-1 rounded text-xs ${buttonSecondaryClass}`}
+              onClick={() => setShowAllAlerts(!showAllAlerts)}
+            >
+              {showAllAlerts ? 'Thu gọn' : 'Xem tất cả'}
+            </button>
+          </div>
+          <div className="space-y-3">
+            {(showAllAlerts ? alerts : alerts.slice(0, 3)).map((alert, index) => (
+              <div
+                key={index}
+                className={`p-3 rounded-lg ${
+                  alert.type === 'urgent' ? 'bg-red-900 bg-opacity-20 border-l-4 border-red-600' :
+                  alert.type === 'warning' ? 'bg-yellow-900 bg-opacity-20 border-l-4 border-yellow-600' :
+                  'bg-blue-900 bg-opacity-20 border-l-4 border-blue-600'
+                }`}
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex items-start">
+                    {alert.type === 'urgent' ? <AlertTriangle className="h-5 w-5 mr-2 text-red-500 mt-0.5" /> :
+                     alert.type === 'warning' ? <Bell className="h-5 w-5 mr-2 text-yellow-500 mt-0.5" /> :
+                     <Clock className="h-5 w-5 mr-2 text-blue-500 mt-0.5" />}
+                    <div>
+                      <p className="font-medium text-sm">{alert.title}</p>
+                      <p className="text-xs opacity-75 mt-1">{alert.message}</p>
+                    </div>
+                  </div>
+                  <span className="text-xs opacity-75">{alert.time}</span>
+                </div>
+                <div className="mt-2 flex justify-end">
+                  <button className="text-xs text-blue-400 hover:text-blue-300 mr-2">
+                    Xử lý
+                  </button>
+                  <button className="text-xs text-gray-400 hover:text-gray-300">
+                    Bỏ qua
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Phần thống kê cảnh báo */}
+          <div className="mt-4 pt-4 border-t border-gray-700">
+            <div className="flex justify-between text-xs mb-2">
+              <span className="text-gray-400">Tổng cảnh báo hôm nay:</span>
+              <span className="font-medium">12</span>
+            </div>
+            <div className="flex justify-between text-xs mb-2">
+              <span className="text-gray-400">Cảnh báo đã xử lý:</span>
+              <span className="font-medium text-green-500">7</span>
+            </div>
+            <div className="flex justify-between text-xs mb-2">
+              <span className="text-gray-400">Cảnh báo đang chờ:</span>
+              <span className="font-medium text-yellow-500">5</span>
+            </div>
+            <div className="w-full h-2 bg-gray-700 rounded-full mt-2">
+              <div className="h-2 bg-green-500 rounded-full" style={{width: '58%'}}></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Phần phản hồi nhanh và tài nguyên */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <h3 className="text-lg font-medium mb-3">Hành động nhanh</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="border rounded-lg p-3 hover:bg-gray-800 transition cursor-pointer">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="font-medium text-sm">Phân bổ nhân viên</h4>
+                <Users className="h-5 w-5 text-blue-500" />
+              </div>
+              <p className="text-xs opacity-75">Gán đơn P1 cho nhân viên kho dựa trên hiệu suất và tải hiện tại</p>
+            </div>
+
+            <div className="border rounded-lg p-3 hover:bg-gray-800 transition cursor-pointer">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="font-medium text-sm">In đơn hàng P1</h4>
+                <Printer className="h-5 w-5 text-green-500" />
+              </div>
+              <p className="text-xs opacity-75">In nhanh tất cả đơn P1 chưa được xử lý ({stats.p1Orders} đơn)</p>
+            </div>
+
+            <div className="border rounded-lg p-3 hover:bg-gray-800 transition cursor-pointer">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="font-medium text-sm">Tối ưu hóa lộ trình</h4>
+                <Map className="h-5 w-5 text-purple-500" />
+              </div>
+              <p className="text-xs opacity-75">Tính toán lộ trình tối ưu để lấy hàng theo nguyên tắc 80/20</p>
+            </div>
+
+            <div className="border rounded-lg p-3 hover:bg-gray-800 transition cursor-pointer">
+              <div className="flex justify-between items-start mb-2">
+                <h4 className="font-medium text-sm">Xuất báo cáo</h4>
+                <Download className="h-5 w-5 text-orange-500" />
+              </div>
+              <p className="text-xs opacity-75">Xuất báo cáo SLA và hiệu suất kho vận hôm nay (04/05/2025)</p>
+            </div>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <h3 className="text-lg font-medium mb-3">Phân tích quy luật 80/20</h3>
+
+          <div className="space-y-2">
+            <div className="p-3 rounded-lg bg-purple-900 bg-opacity-10">
+              <h4 className="text-sm font-medium flex items-center">
+                <PieChart className="h-4 w-4 text-purple-500 mr-2" />
+                <span>80% doanh thu đến từ 20% sản phẩm</span>
+              </h4>
+              <div className="text-xs mt-2 opacity-75">
+                <p>Sản phẩm bán chạy: Vali Larita 28L, Tag hành lý.</p>
+                <p>Đề xuất: Sắp xếp khu vực lấy hàng gần lối ra.</p>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-green-900 bg-opacity-10">
+              <h4 className="text-sm font-medium flex items-center">
+                <Users className="h-4 w-4 text-green-500 mr-2" />
+                <span>20% nhân viên xử lý 80% đơn hàng</span>
+              </h4>
+              <div className="text-xs mt-2 opacity-75">
+                <p>Nhân viên hiệu quả: Nguyễn Văn A, Trần Thị B.</p>
+                <p>Đề xuất: Phân bổ đơn P1 cho nhân viên năng suất cao.</p>
+              </div>
+            </div>
+
+            <div className="p-3 rounded-lg bg-blue-900 bg-opacity-10">
+              <h4 className="text-sm font-medium flex items-center">
+                <Clock className="h-4 w-4 text-blue-500 mr-2" />
+                <span>80% lỗi đến từ 20% khâu</span>
+              </h4>
+              <div className="text-xs mt-2 opacity-75">
+                <p>Điểm nghẽn: Tìm kiếm vị trí, kiểm tra số lượng.</p>
+                <p>Đề xuất: Cải thiện quy trình tìm kiếm sản phẩm.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 p-3 rounded-lg bg-blue-900 bg-opacity-10 border border-blue-700">
+            <div className="flex justify-between items-start">
+              <div className="flex items-start">
+                <RefreshCw className="h-5 w-5 mr-2 text-blue-500 mt-0.5" />
+                <div>
+                  <p className="font-medium text-sm">Cập nhật nguyên tắc SLA 80/20</p>
+                  <p className="text-xs mt-1 opacity-75">Phiên bản mới 2.1 - Cập nhật 04/05/2025</p>
+                </div>
+              </div>
+              <span className="text-xs text-blue-500">Mới</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;

@@ -120,7 +120,7 @@ class SessionService {
       localStorage.removeItem(this.sessionKey);
       sessionStorage.removeItem('mia-session-id');
       // eslint-disable-next-line no-console
-      console.log('Session cleared');
+      logger.debug('Session cleared');
     } catch (error) {
       console.error('Failed to clear session:', error);
     }

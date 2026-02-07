@@ -1,0 +1,815 @@
+// filepath: e:\All-in-one\2025\src\module\PickingTab_fixed.jsx
+// PickingTab.jsx - Optimized Picking Management Interface
+import React, { useState, useEffect, useContext } from 'react';
+import {
+  List,
+  Grid,
+  Eye,
+  EyeOff,
+  Package,
+  Play,
+  Pause,
+  Square,
+  MapPin,
+  Clock,
+  User,
+  TrendingUp,
+  CheckCircle,
+  AlertTriangle,
+  RefreshCw,
+  Settings,
+  BarChart3,
+  Filter,
+  Search
+} from 'lucide-react';
+import AnalyticsTab from '../placeholder/AnalyticsTab.jsx';
+import SettingsTab from '../placeholder/SettingsTab.jsx';
+import StaffPerformanceWidget from '../widget/StaffAnalyticsWidget.jsx';
+import { useLayout } from '../context/LayoutContext.jsx';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { SYSTEM_CONFIG } from '../components/config/systemConfig.jsx';
+
+// Define consistent theme styles matching the main dashboard
+const getThemeStyles = (darkMode = false) => ({
+  // Text styles - consistent font sizes
+  text: {
+    title: darkMode ? 'text-white text-2xl font-bold' : 'text-gray-900 text-2xl font-bold',
+    subtitle: darkMode ? 'text-gray-300 text-lg font-semibold' : 'text-gray-800 text-lg font-semibold',
+    body: darkMode ? 'text-gray-200 text-sm' : 'text-gray-700 text-sm',
+    caption: darkMode ? 'text-gray-400 text-xs' : 'text-gray-500 text-xs',
+    muted: darkMode ? 'text-gray-500 text-xs' : 'text-gray-400 text-xs'
+  },
+  // Surface styles
+  surface: {
+    primary: darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200',
+    secondary: darkMode ? 'bg-gray-900 border-gray-600' : 'bg-gray-50 border-gray-100',
+    hover: darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'
+  },
+  // Button styles
+  buttons: {
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200',
+    secondary: 'bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-all duration-200',
+    success: 'bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-3 py-1.5 rounded-md transition-all duration-200',
+    warning: 'bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium px-3 py-1.5 rounded-md transition-all duration-200',
+    danger: 'bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-3 py-1.5 rounded-md transition-all duration-200',
+    ghost: darkMode ? 'text-gray-300 hover:bg-gray-700 text-sm font-medium px-3 py-1.5 rounded-md transition-all duration-200' : 'text-gray-600 hover:bg-gray-100 text-sm font-medium px-3 py-1.5 rounded-md transition-all duration-200'
+  },
+  // Status styles
+  status: {
+    pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    processing: 'bg-blue-100 text-blue-800 border-blue-200',
+    completed: 'bg-green-100 text-green-800 border-green-200',
+    error: 'bg-red-100 text-red-800 border-red-200'
+  }
+});
+
+// Safe hook to use layout context
+const useLayoutSafe = () => {
+  try {
+    return useLayout();
+  } catch (error) {
+    // LayoutProvider not available, return defaults
+    return {
+      themeClasses: {},
+      uiState: {},
+      data: {},
+      metrics: {}
+    };
+  }
+};
+
+// ==================== PICKING TAB COMPONENT ====================
+
+const PickingTab = ({ themeClasses, darkMode = false, data, metrics }) => {
+  // State management
+  const [orders, setOrders] = useState([]);
+  const [pickingBatches, setPickingBatches] = useState([]);
+  const [activeBatch, setActiveBatch] = useState(null);
+  const [batchInProgress, setBatchInProgress] = useState(false);
+  const [activityHistory, setActivityHistory] = useState([]);
+  const [highlightedLocations, setHighlightedLocations] = useState([]);
+  const [warehouseViewMode, setWarehouseViewMode] = useState('default');
+  const [showLocations, setShowLocations] = useState(true);
+  const [activeTab, setActiveTab] = useState("picking");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [currentUser, setCurrentUser] = useState({
+    name: "System",
+    role: "admin",
+  });
+
+  // Get consistent theme styles
+  const themeStyles = getThemeStyles(darkMode);
+
+  // Initialize user data
+  useEffect(() => {
+    const storedUser = localStorage.getItem("currentUser");
+    if (storedUser) {
+      setCurrentUser(JSON.parse(storedUser));
+    } else {
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    }
+    generateSampleOrders();
+  }, []);
+
+  // Action handlers with full functionality
+  const handleStartBatch = (batch) => {
+    if (batchInProgress) return;
+
+    setBatchInProgress(true);
+    setActiveBatch(batch);
+
+    // Update batch status
+    const updatedBatches = pickingBatches.map(b =>
+      b.id === batch.id
+        ? { ...b, status: 'processing', startTime: new Date().toISOString() }
+        : b
+    );
+    setPickingBatches(updatedBatches);
+
+    // Highlight locations
+    setHighlightedLocations(batch.locations);
+
+    // Log activity
+    addActivityLog(`Bắt đầu xử lý ${batch.name}`, 'processing');
+  };
+
+  const handlePauseBatch = (batch) => {
+    setBatchInProgress(false);
+
+    const updatedBatches = pickingBatches.map(b =>
+      b.id === batch.id
+        ? { ...b, status: 'paused', pauseTime: new Date().toISOString() }
+        : b
+    );
+    setPickingBatches(updatedBatches);
+
+    addActivityLog(`Tạm dừng ${batch.name}`, 'warning');
+  };
+
+  const handleCompleteBatch = (batch) => {
+    setBatchInProgress(false);
+    setActiveBatch(null);
+    setHighlightedLocations([]);
+
+    const updatedBatches = pickingBatches.map(b =>
+      b.id === batch.id
+        ? { ...b, status: 'completed', endTime: new Date().toISOString() }
+        : b
+    );
+    setPickingBatches(updatedBatches);
+
+    // Update orders status
+    const completedOrderIds = batch.orders.map(o => o.id);
+    const updatedOrders = orders.map(order =>
+      completedOrderIds.includes(order.id)
+        ? { ...order, status: 'completed' }
+        : order
+    );
+    setOrders(updatedOrders);
+
+    addActivityLog(`Hoàn thành ${batch.name}`, 'success');
+  };
+
+  const addActivityLog = (action, type = 'info') => {
+    const newLog = {
+      id: Date.now(),
+      type: type,
+      action: action,
+      user: currentUser?.name || "System",
+      time: new Date().toLocaleTimeString("vi-VN"),
+      timestamp: new Date().toISOString()
+    };
+    setActivityHistory(prev => [newLog, ...prev.slice(0, 49)]); // Keep only last 50 logs
+  };
+
+  const toggleLocations = () => {
+    setShowLocations(prev => !prev);
+    addActivityLog(showLocations ? "Ẩn vị trí kho" : "Hiển thị vị trí kho");
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    addActivityLog(`Chuyển sang tab ${tab.charAt(0).toUpperCase() + tab.slice(1)}`);
+  };
+
+  // Enhanced sample data generation
+  const generateSampleOrders = () => {
+    const locations = [
+      { id: "A1", type: "Vali S", zone: "A" },
+      { id: "A2", type: "Vali M", zone: "A" },
+      { id: "A5", type: "Vali M", zone: "A" },
+      { id: "A12", type: "Vali L", zone: "A" },
+      { id: "B2", type: "Phụ kiện", zone: "B" },
+      { id: "B8", type: "Phụ kiện", zone: "B" },
+      { id: "B10", type: "Phụ kiện", zone: "B" },
+      { id: "B15", type: "Phụ kiện", zone: "B" },
+      { id: "C4", type: "Đặc biệt", zone: "C" },
+      { id: "C10", type: "Đặc biệt", zone: "C" },
+    ];
+
+    const products = [
+      { sku: "LAR-BLK-28L", name: "Vali Larita 28L", location: "A12", zone: "A", priority: "P1" },
+      { sku: "LAR-BLK-24M", name: "Vali Larita 24M", location: "A5", zone: "A", priority: "P2" },
+      { sku: "LAR-BLK-20S", name: "Vali Larita 20S", location: "A1", zone: "A", priority: "P2" },
+      { sku: "PIS-BLU-24M", name: "Vali Pisani 24M", location: "A2", zone: "A", priority: "P1" },
+      { sku: "TAG-BLK-01", name: "Luggage Tag Black", location: "B2", zone: "B", priority: "P3" },
+      { sku: "COV-BLK-M", name: "Cover Medium Black", location: "B8", zone: "B", priority: "P3" },
+      { sku: "TRK-BLK-01", name: "Travel Kit Black", location: "B10", zone: "B", priority: "P2" },
+      { sku: "PCK-BLK-S", name: "Pack-it Cube Small", location: "B15", zone: "B", priority: "P3" },
+    ];
+
+    const sampleOrders = [];
+    for (let i = 1; i <= 15; i++) {
+      const randomProducts = products.slice(0, Math.floor(Math.random() * 3) + 1);
+      const highestPriority = randomProducts.reduce((prev, curr) =>
+        prev.priority < curr.priority ? prev : curr
+      ).priority;
+
+      sampleOrders.push({
+        id: `ORD-2025-${String(i).padStart(4, '0')}`,
+        channel: ["Shopee", "TikTok", "Lazada", "Website"][Math.floor(Math.random() * 4)],
+        status: ["pending", "processing", "completed"][Math.floor(Math.random() * 3)],
+        priority: highestPriority,
+        orderTime: new Date(Date.now() - Math.random() * 86400000).toISOString(),
+        customer: `Khách hàng ${i}`,
+        items: randomProducts.map(product => ({
+          ...product,
+          quantity: Math.floor(Math.random() * 3) + 1
+        })),
+        totalItems: randomProducts.reduce((sum, p) => sum + (Math.floor(Math.random() * 3) + 1), 0)
+      });
+    }
+
+    setOrders(sampleOrders);
+    createOptimizedBatches(sampleOrders);
+  };
+
+  // Create optimized picking batches using 80/20 principle
+  const createOptimizedBatches = (orderList = orders) => {
+    const pendingOrders = orderList.filter(o => o.status === 'pending');
+    if (pendingOrders.length === 0) return;
+
+    const batches = [];
+    const processedOrderIds = new Set();
+
+    // 1. P1 Priority orders first
+    const p1Orders = pendingOrders.filter(o => o.priority === 'P1' && !processedOrderIds.has(o.id));
+    if (p1Orders.length > 0) {
+      const p1Locations = [...new Set(p1Orders.flatMap(o => o.items.map(i => i.location)))];
+      batches.push({
+        id: `BATCH-P1-${Date.now()}`,
+        name: "Batch P1 - Ưu tiên cao",
+        type: 'priority',
+        orders: p1Orders,
+        locations: p1Locations,
+        status: 'pending',
+        principle: 'P1_FIRST',
+        estimatedTime: p1Orders.length * 3,
+        zone: p1Locations[0]?.charAt(0) || 'Mixed'
+      });
+      p1Orders.forEach(o => processedOrderIds.add(o.id));
+    }
+
+    // 2. Single product orders (quick picks)
+    const singleProductOrders = pendingOrders.filter(o =>
+      o.items.length === 1 && !processedOrderIds.has(o.id)
+    );
+    if (singleProductOrders.length >= 2) {
+      const locations = [...new Set(singleProductOrders.flatMap(o => o.items.map(i => i.location)))];
+      batches.push({
+        id: `BATCH-SINGLE-${Date.now()}`,
+        name: "Batch Single - Đơn nhanh",
+        type: 'single_product',
+        orders: singleProductOrders.slice(0, 8), // Limit to 8 orders
+        locations: locations,
+        status: 'pending',
+        principle: 'SINGLE_PRODUCT',
+        estimatedTime: Math.min(singleProductOrders.length, 8) * 1.5,
+        zone: 'Mixed'
+      });
+      singleProductOrders.slice(0, 8).forEach(o => processedOrderIds.add(o.id));
+    }
+
+    // 3. Group by location (same zone efficiency)
+    const locationGroups = new Map();
+    pendingOrders.forEach(order => {
+      if (processedOrderIds.has(order.id)) return;
+
+      order.items.forEach(item => {
+        const zone = item.zone;
+        if (!locationGroups.has(zone)) {
+          locationGroups.set(zone, []);
+        }
+        if (!locationGroups.get(zone).some(o => o.id === order.id)) {
+          locationGroups.get(zone).push(order);
+        }
+      });
+    });
+
+    locationGroups.forEach((orders, zone) => {
+      if (orders.length >= 2) {
+        const locations = [...new Set(orders.flatMap(o => o.items.map(i => i.location)))];
+        batches.push({
+          id: `BATCH-ZONE-${zone}-${Date.now()}`,
+          name: `Batch Zone ${zone} - Cùng khu vực`,
+          type: 'location_based',
+          orders: orders.slice(0, 6), // Limit per batch
+          locations: locations,
+          status: 'pending',
+          principle: 'SAME_ZONE',
+          estimatedTime: Math.min(orders.length, 6) * 2.5,
+          zone: zone
+        });
+        orders.slice(0, 6).forEach(o => processedOrderIds.add(o.id));
+      }
+    });
+
+    // 4. Remaining orders
+    const remainingOrders = pendingOrders.filter(o => !processedOrderIds.has(o.id));
+    if (remainingOrders.length > 0) {
+      const locations = [...new Set(remainingOrders.flatMap(o => o.items.map(i => i.location)))];
+      batches.push({
+        id: `BATCH-MIXED-${Date.now()}`,
+        name: "Batch Mixed - Đơn còn lại",
+        type: 'mixed',
+        orders: remainingOrders,
+        locations: locations,
+        status: 'pending',
+        principle: 'MIXED',
+        estimatedTime: remainingOrders.length * 4,
+        zone: 'Mixed'
+      });
+    }
+
+    setPickingBatches(batches);
+    addActivityLog(`Tạo ${batches.length} batch tối ưu từ ${pendingOrders.length} đơn hàng`);
+  };
+
+  // Modern picking interface rendering
+  const renderPickingTab = () => (
+    <div className="space-y-6">
+      {/* Header Controls */}
+      <div className={`p-4 rounded-xl border ${themeStyles.surface.primary}`}>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h2 className={themeStyles.text.title}>Quản lý Picking</h2>
+            <p className={themeStyles.text.muted}>
+              Tối ưu hóa lộ trình lấy hàng theo nguyên tắc 80/20
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Tìm đơn hàng..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`pl-10 pr-4 py-2 border rounded-lg text-sm w-64 ${
+                  darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
+                }`}
+              />
+            </div>
+
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className={`px-3 py-2 border rounded-lg text-sm ${
+                darkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300'
+              }`}
+            >
+              <option value="all">Tất cả trạng thái</option>
+              <option value="pending">Chờ xử lý</option>
+              <option value="processing">Đang xử lý</option>
+              <option value="completed">Hoàn thành</option>
+            </select>
+
+            <button
+              onClick={() => createOptimizedBatches()}
+              className={themeStyles.buttons.primary}
+              disabled={batchInProgress}
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Tối ưu batch
+            </button>
+
+            <button
+              onClick={toggleLocations}
+              className={themeStyles.buttons.ghost}
+            >
+              {showLocations ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+              {showLocations ? 'Ẩn vị trí' : 'Hiện vị trí'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className={`p-4 rounded-xl border ${themeStyles.surface.primary}`}>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className={themeStyles.text.muted}>Tổng đơn</p>
+              <p className={`text-2xl font-bold ${themeStyles.text.title}`}>
+                {orders.length}
+              </p>
+            </div>
+            <Package className="w-8 h-8 text-blue-500" />
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-xl border ${themeStyles.surface.primary}`}>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className={themeStyles.text.muted}>Đang chờ</p>
+              <p className={`text-2xl font-bold ${themeStyles.text.title}`}>
+                {orders.filter(o => o.status === 'pending').length}
+              </p>
+            </div>
+            <Clock className="w-8 h-8 text-yellow-500" />
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-xl border ${themeStyles.surface.primary}`}>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className={themeStyles.text.muted}>Đang xử lý</p>
+              <p className={`text-2xl font-bold ${themeStyles.text.title}`}>
+                {orders.filter(o => o.status === 'processing').length}
+              </p>
+            </div>
+            <TrendingUp className="w-8 h-8 text-blue-500" />
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-xl border ${themeStyles.surface.primary}`}>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className={themeStyles.text.muted}>Hoàn thành</p>
+              <p className={`text-2xl font-bold ${themeStyles.text.title}`}>
+                {orders.filter(o => o.status === 'completed').length}
+              </p>
+            </div>
+            <CheckCircle className="w-8 h-8 text-green-500" />
+          </div>
+        </div>
+      </div>
+
+      {/* Picking Batches */}
+      <div className={`p-6 rounded-xl border ${themeStyles.surface.primary}`}>
+        <div className="flex justify-between items-center mb-6">
+          <h3 className={themeStyles.text.subtitle}>Batch Picking</h3>
+          <div className="flex space-x-2">
+            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+              batchInProgress ? themeStyles.status.processing : themeStyles.status.pending
+            }`}>
+              {batchInProgress ? 'Đang xử lý' : 'Sẵn sàng'}
+            </span>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {pickingBatches.length > 0 ? (
+            pickingBatches.map((batch) => (
+              <div
+                key={batch.id}
+                className={`p-4 rounded-lg border-l-4 transition-all duration-200 ${
+                  batch.status === 'processing'
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                    : batch.status === 'completed'
+                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                    : 'border-gray-300 bg-gray-50 dark:bg-gray-800/50'
+                } ${themeStyles.surface.primary}`}
+              >
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h4 className={`font-semibold ${themeStyles.text.subtitle}`}>
+                        {batch.name}
+                      </h4>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        batch.status === 'pending' ? themeStyles.status.pending :
+                        batch.status === 'processing' ? themeStyles.status.processing :
+                        themeStyles.status.completed
+                      }`}>
+                        {batch.status === 'pending' ? 'Chờ xử lý' :
+                         batch.status === 'processing' ? 'Đang xử lý' : 'Hoàn thành'}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                        {batch.orders.length} đơn hàng
+                      </span>
+                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
+                        {batch.orders.reduce((sum, order) => sum + order.totalItems, 0)} sản phẩm
+                      </span>
+                      <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs font-medium">
+                        Zone {batch.zone}
+                      </span>
+                      <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs font-medium">
+                        ~{batch.estimatedTime} phút
+                      </span>
+                    </div>
+
+                    <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 text-xs ${themeStyles.text.body}`}>
+                      <div>
+                        <span className="font-medium">Đơn hàng: </span>
+                        {batch.orders.slice(0, 2).map(o => o.id).join(', ')}
+                        {batch.orders.length > 2 && ` +${batch.orders.length - 2} khác`}
+                      </div>
+                      <div>
+                        <span className="font-medium">Vị trí: </span>
+                        {batch.locations.slice(0, 4).join(', ')}
+                        {batch.locations.length > 4 && ` +${batch.locations.length - 4}`}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {batch.status === 'pending' && (
+                      <button
+                        onClick={() => handleStartBatch(batch)}
+                        disabled={batchInProgress}
+                        className={themeStyles.buttons.success}
+                      >
+                        <Play className="w-4 h-4 mr-1" />
+                        Bắt đầu
+                      </button>
+                    )}
+
+                    {batch.status === 'processing' && (
+                      <>
+                        <button
+                          onClick={() => handlePauseBatch(batch)}
+                          className={themeStyles.buttons.warning}
+                        >
+                          <Pause className="w-4 h-4 mr-1" />
+                          Tạm dừng
+                        </button>
+                        <button
+                          onClick={() => handleCompleteBatch(batch)}
+                          className={themeStyles.buttons.success}
+                        >
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          Hoàn thành
+                        </button>
+                      </>
+                    )}
+
+                    {batch.status === 'completed' && (
+                      <span className="flex items-center text-green-600 text-sm font-medium">
+                        <CheckCircle className="w-4 h-4 mr-1" />
+                        Đã xong
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {batch.status === 'processing' && (
+                  <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <div className="flex justify-between items-center text-xs mb-2">
+                      <span>Tiến độ: {Math.floor(Math.random() * 50) + 50}%</span>
+                      <span className="text-blue-600">
+                        Bắt đầu: {new Date(batch.startTime).toLocaleTimeString('vi-VN')}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 h-2 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                        style={{ width: `${Math.floor(Math.random() * 50) + 50}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-12">
+              <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className={themeStyles.text.body}>Chưa có batch picking nào</p>
+              <button
+                onClick={() => createOptimizedBatches()}
+                className={`mt-4 ${themeStyles.buttons.primary}`}
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Tạo batch tự động
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Optimization Tips */}
+      <div className={`p-6 rounded-xl border ${themeStyles.surface.primary}`}>
+        <h3 className={`mb-4 ${themeStyles.text.subtitle}`}>
+          <AlertTriangle className="w-5 h-5 mr-2 inline text-yellow-500" />
+          Gợi ý tối ưu hóa
+        </h3>
+        <div className="space-y-3">
+          <div className="p-4 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500">
+            <p className={themeStyles.text.body}>
+              Xử lý các đơn P1 trước để đảm bảo SLA. Hiện có {orders.filter(o => o.priority === 'P1' && o.status === 'pending').length} đơn P1 chờ xử lý.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500">
+            <p className={themeStyles.text.body}>
+              Gom nhóm đơn cùng zone để giảm thời gian di chuyển. Tối ưu hóa có thể tiết kiệm 25-30% thời gian.
+            </p>
+          </div>
+          <div className="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500">
+            <p className={themeStyles.text.body}>
+              Ưu tiên đơn 1 sản phẩm để tăng tốc độ xử lý. Hiện có {orders.filter(o => o.items?.length === 1 && o.status === 'pending').length} đơn đơn giản.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Render warehouse map with improved visualization
+  const renderWarehouseMap = () => (
+    <div className={`p-6 rounded-xl border ${themeStyles.surface.primary}`}>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className={themeStyles.text.subtitle}>Mô hình kho và vị trí đơn hàng</h3>
+        <div className="flex space-x-2">
+          <button className={themeStyles.buttons.ghost}>
+            <List className="w-4 h-4 mr-1" /> Danh sách
+          </button>
+          <button className={themeStyles.buttons.primary}>
+            <Grid className="w-4 h-4 mr-1" /> Mô hình kho
+          </button>
+        </div>
+      </div>
+
+      <div className="relative p-4 border border-gray-300 dark:border-gray-600 rounded-lg">
+        {/* Zone A */}
+        <div className="grid grid-cols-4 gap-2 mb-4">
+          <div className="bg-blue-600 text-white text-center p-2 rounded">
+            A1<div className="text-xs mt-1">Vali S</div>
+          </div>
+          <div className="bg-blue-600 text-white text-center p-2 rounded">
+            A2<div className="text-xs mt-1">Vali M</div>
+          </div>
+          <div className="bg-blue-600 text-white text-center p-2 rounded relative">
+            A5<div className="text-xs mt-1">Vali M</div>
+            <div className="absolute -top-1 -right-1 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">2</div>
+          </div>
+          <div className="bg-blue-600 text-white text-center p-2 rounded relative">
+            A12<div className="text-xs mt-1">Vali L</div>
+            <div className="absolute -top-1 -right-1 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">3</div>
+          </div>
+        </div>
+
+        <div className="bg-gray-300 dark:bg-gray-600 h-6 mb-4 flex items-center justify-center text-xs">
+          Lối đi
+        </div>
+
+        {/* Zone B */}
+        <div className="grid grid-cols-4 gap-2 mb-4">
+          <div className="bg-green-600 text-white text-center p-2 rounded relative">
+            B2<div className="text-xs mt-1">Phụ kiện</div>
+            <div className="absolute -top-1 -right-1 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">1</div>
+          </div>
+          <div className="bg-green-600 text-white text-center p-2 rounded relative">
+            B8<div className="text-xs mt-1">Phụ kiện</div>
+            <div className="absolute -top-1 -right-1 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">2</div>
+          </div>
+          <div className="bg-green-600 text-white text-center p-2 rounded">
+            B10<div className="text-xs mt-1">Phụ kiện</div>
+          </div>
+          <div className="bg-green-600 text-white text-center p-2 rounded relative">
+            B15<div className="text-xs mt-1">Phụ kiện</div>
+            <div className="absolute -top-1 -right-1 bg-yellow-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">1</div>
+          </div>
+        </div>
+
+        <div className="bg-gray-300 dark:bg-gray-600 h-6 mb-4 flex items-center justify-center text-xs">
+          Lối đi
+        </div>
+
+        {/* Zone C */}
+        <div className="grid grid-cols-4 gap-2">
+          <div className="bg-purple-600 text-white text-center p-2 rounded relative">
+            C4<div className="text-xs mt-1">Đặc biệt</div>
+            <div className="absolute -top-1 -right-1 bg-yellow-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">1</div>
+          </div>
+          <div className="bg-purple-600 text-white text-center p-2 rounded">
+            C8<div className="text-xs mt-1">Đặc biệt</div>
+          </div>
+          <div className="bg-purple-600 text-white text-center p-2 rounded relative">
+            C10<div className="text-xs mt-1">Đặc biệt</div>
+            <div className="absolute -top-1 -right-1 bg-blue-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">1</div>
+          </div>
+          <div className="bg-purple-600 text-white text-center p-2 rounded">
+            C12<div className="text-xs mt-1">Đặc biệt</div>
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="mt-4 text-xs flex justify-center space-x-4">
+          <div className="flex items-center">
+            <div className="w-3 h-3 bg-red-500 rounded-full mr-1"></div>
+            <span>Đơn P1</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 bg-yellow-500 rounded-full mr-1"></div>
+            <span>Đơn P2</span>
+          </div>
+          <div className="flex items-center">
+            <div className="w-3 h-3 bg-blue-500 rounded-full mr-1"></div>
+            <span>Đơn P3/P4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Get theme classes and other data - use props if provided, otherwise fall back to context
+  const layoutContext = useLayoutSafe();
+  const authContext = useContext(AuthContext) || {};
+
+  // Use props if provided, otherwise fall back to context
+  const finalThemeClasses = themeClasses || layoutContext.themeClasses || {};
+  const finalData = data || authContext.data || {};
+  const finalMetrics = metrics || authContext.metrics || {};
+  const uiState = layoutContext.uiState || {};
+
+  return (
+    <div className={`min-h-screen p-6 space-y-6 ${themeStyles.surface.secondary}`}>
+      {/* Header with improved typography */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className={`${themeStyles.text.title} mb-2`}>
+            Quản lý Picking
+          </h1>
+          <p className={themeStyles.text.muted}>
+            Hệ thống tối ưu hóa quy trình lấy hàng thông minh
+          </p>
+        </div>
+
+        {/* Tab Navigation with consistent styling */}
+        <div className="flex space-x-2">
+          <button
+            onClick={() => handleTabChange("picking")}
+            className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 ${
+              activeTab === "picking"
+                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
+                : `${themeStyles.surface.primary} ${themeStyles.text.body} ${themeStyles.surface.hover} border`
+            }`}
+          >
+            <Package className="w-4 h-4 mr-2 inline" />
+            Picking
+          </button>
+          <button
+            onClick={() => handleTabChange("analytics")}
+            className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 ${
+              activeTab === "analytics"
+                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
+                : `${themeStyles.surface.primary} ${themeStyles.text.body} ${themeStyles.surface.hover} border`
+            }`}
+          >
+            <BarChart3 className="w-4 h-4 mr-2 inline" />
+            Analytics
+          </button>
+          <button
+            onClick={() => handleTabChange("settings")}
+            className={`px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-200 ${
+              activeTab === "settings"
+                ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/30'
+                : `${themeStyles.surface.primary} ${themeStyles.text.body} ${themeStyles.surface.hover} border`
+            }`}
+          >
+            <Settings className="w-4 h-4 mr-2 inline" />
+            Settings
+          </button>
+        </div>
+      </div>
+
+      {/* Content based on active tab */}
+      <div className="flex-1">
+        {activeTab === "picking" && renderPickingTab()}
+        {activeTab === "analytics" && <AnalyticsTab />}
+        {activeTab === "settings" && <SettingsTab themeClasses={finalThemeClasses} />}
+      </div>
+
+      {/* Warehouse Map - Only show in picking tab */}
+      {activeTab === "picking" && warehouseViewMode === 'default' && (
+        <div className="mt-6">
+          {renderWarehouseMap()}
+        </div>
+      )}
+
+      {/* Staff Performance Widget - Always visible */}
+      <div className="mt-6">
+        <StaffPerformanceWidget themeClasses={finalThemeClasses} />
+      </div>
+    </div>
+  );
+};
+
+// ==================== EXPORTS ====================
+export default PickingTab;
+

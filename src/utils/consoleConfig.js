@@ -6,7 +6,7 @@
 const suppressGoogleAPIWarnings = () => {
   const originalConsoleWarn = console.warn;
   const originalConsoleError = console.error;
-  const originalConsoleLog = console.log;
+  const originalConsoleLog = logger.debug;
 
   // Override console.warn
   console.warn = function (...args) {
@@ -47,8 +47,8 @@ const suppressGoogleAPIWarnings = () => {
     originalConsoleError.apply(console, args);
   };
 
-  // Override console.log
-  console.log = function (...args) {
+  // Override logger.debug
+  logger.debug = function (...args) {
     const message = args.join(' ');
 
     // Suppress Google API logs
@@ -113,7 +113,7 @@ const initializeWarningSuppression = () => {
   suppressReactWarnings();
   suppressWebpackWarnings();
 
-  console.log('🔇 Console warnings suppression initialized');
+  logger.debug('🔇 Console warnings suppression initialized');
 };
 
 export default initializeWarningSuppression;

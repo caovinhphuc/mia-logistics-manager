@@ -73,11 +73,7 @@ const Analytics = React.lazy(() => import('./pages/Reports/Analytics'));
 const Financial = React.lazy(() => import('./pages/Reports/Financial'));
 const Performance = React.lazy(() => import('./pages/Reports/Performance'));
 
-// Import Settings Components
-const General = React.lazy(() => import('./pages/Settings/General'));
-const Api = React.lazy(() => import('./pages/Settings/Api'));
-const Security = React.lazy(() => import('./pages/Settings/Security'));
-const System = React.lazy(() => import('./pages/Settings/System'));
+// Import Settings Components (General/Api/Security/System → redirect to /settings?tab=)
 const Roles = React.lazy(() => import('./pages/Settings/Roles'));
 const Permissions = React.lazy(() => import('./pages/Settings/Permissions'));
 const Users = React.lazy(() => import('./pages/Settings/Users'));
@@ -586,50 +582,17 @@ const App = () => {
             }
           />
 
-          {/* Settings Routes */}
+          {/* Settings sub-routes → redirect to /settings?tab= (đồng bộ với trang tab) */}
           <Route
             path="/settings/general"
-            element={
-              <ProtectedRoute requiredRoles={['admin']}>
-                <MainLayout>
-                  <General />
-                </MainLayout>
-              </ProtectedRoute>
-            }
+            element={<Navigate to="/settings?tab=general" replace />}
           />
-
-          <Route
-            path="/settings/api"
-            element={
-              <ProtectedRoute requiredRoles={['admin']}>
-                <MainLayout>
-                  <Api />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-
+          <Route path="/settings/api" element={<Navigate to="/settings?tab=api" replace />} />
           <Route
             path="/settings/security"
-            element={
-              <ProtectedRoute requiredRoles={['admin']}>
-                <MainLayout>
-                  <Security />
-                </MainLayout>
-              </ProtectedRoute>
-            }
+            element={<Navigate to="/settings?tab=security" replace />}
           />
-
-          <Route
-            path="/settings/system"
-            element={
-              <ProtectedRoute requiredRoles={['admin']}>
-                <MainLayout>
-                  <System />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/settings/system" element={<Navigate to="/settings?tab=system" replace />} />
 
           <Route
             path="/settings/roles"

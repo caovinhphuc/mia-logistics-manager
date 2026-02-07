@@ -1,0 +1,212 @@
+import React, { ReactNode } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
+
+
+interface BreadcrumbItem {
+   /**
+    * The label to display in the breadcrumb.
+    */
+
+   label: string;
+  path?: string;
+}
+
+interface MainLayoutProps {
+  children: ReactNode;
+  pageTitle?: string;
+  pageDescription?: string;
+  showBreadcrumbs?: boolean;
+  breadcrumbs?: BreadcrumbItem[];
+  actions?: ReactNode;
+  filters?: ReactNode;
+  showPageHeader?: boolean;
+  className?: string;
+}
+
+const MainLayout: React.FC<MainLayoutProps> = ({
+  children,
+  pageTitle,
+  pageDescription,
+  showBreadcrumbs = true,
+  breadcrumbs,
+  actions,
+  filters,
+  showPageHeader = true,
+  className = '',
+}) => {
+  const location = useLocation();
+  const { darkMode } = useTheme();
+
+  // Auto-generate breadcrumbs if not provided
+   const generateBreadcrumbs = (): BreadcrumbItem[] => {
+      if (location.pathname === '/') {
+         return [{ label: 'Home', path: '/' }];
+      }
+      // Split the path into segments and generate breadcrumb items
+      if (location.pathname === '/login') {
+         return [{ label: 'Login', path: '/login' }];
+      }
+      if (location.pathname === '/register') {
+         return [{ label: 'Register', path: '/register' }];
+      }
+      if (location.pathname === '/forgot-password') {
+         return [{ label: 'Forgot Password', path: '/forgot-password' }];
+      }
+      if (location.pathname === '/reset-password') {
+            return [{ label: 'Reset Password', path: '/reset-password' }];
+         }
+    const pathSegments = location.pathname.split('/').filter(Boolean);
+    const items: BreadcrumbItem[] = [{ label: 'Home', path: '/' }];
+
+      const pathMap: Record<string, string> = {
+         home: 'Home',
+      login: 'Login',
+      dashboard: 'Dashboard',
+      warehouse: 'Warehouse',
+      staff: 'Staff',
+      schedule: 'Schedule',
+      timesheet: 'Timesheet',
+      inventory: 'Inventory',
+      reports: 'Reports',
+      settings: 'Settings',
+    };
+
+    let currentPath = '';
+    pathSegments.forEach((segment, index) => {
+      currentPath += `/${segment}`;
+      const label = pathMap[segment] || segment.charAt(0).toUpperCase() + segment.slice(1);
+
+      items.push({
+        label,
+        path: index === pathSegments.length - 1 ? undefined : currentPath,
+      });
+    });
+
+    return items;
+  };
+
+  const finalBreadcrumbs = breadcrumbs || generateBreadcrumbs();
+  const shouldShowPageHeader =
+    showPageHeader &&
+    (pageTitle || pageDescription || actions || filters || (showBreadcrumbs && finalBreadcrumbs.length > 1));
+
+  const themeClasses = darkMode
+    ? {
+        bg: 'bg-gray-900',
+        text: 'text-gray-200',
+        border: 'border-gray-700',
+      }
+    : {
+        bg: 'bg-white',
+        text: 'text-gray-900',
+        border: 'border-gray-200',
+      };
+
+  return (
+    <div className={`min-h-full ${className}`}>
+      {/* Background and Text Color */}
+      <div className={`${themeClasses.bg} ${themeClasses.text}`}>
+        {/* Page Header */}
+        {shouldShowPageHeader && (
+          <div className={`${themeClasses.bg} border-b ${themeClasses.border} mb-6`}>
+            <div className="px-6 py-4">
+              {/* Breadcrumbs */}
+              {showBreadcrumbs && finalBreadcrumbs.length > 1 && (
+                <nav className="flex mb-4" aria-label="Breadcrumb">
+                  <ol className="inline-flex items-center space-x-1 md:space-x-3">
+                    {finalBreadcrumbs.map((item, index) => (
+                      <li key={index} className="inline-flex items-center">
+                        {index > 0 && (
+                          <svg
+                            className={`w-4 h-4 mx-1 ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        )}
+                        {item.path ? (
+                          <Link
+                            to={item.path}
+                            className={`text-sm font-medium ${
+                              darkMode
+                                ? 'text-gray-400 hover:text-gray-200'
+                                : 'text-gray-500 hover:text-gray-700'
+                            } transition-colors`}
+                          >
+                            {item.label}
+                          </Link>
+                        ) : (
+                          <span
+                            className={`text-sm font-medium ${
+                              darkMode ? 'text-gray-200' : 'text-gray-900'
+                            }`}
+                          >
+                            {item.label}
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              )}
+
+              {/* Page Title & Actions */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex-1 min-w-0">
+                  {pageTitle && (
+                    <h1 className={`text-2xl font-bold ${themeClasses.text} truncate`}>{pageTitle}</h1>
+                  )}
+                  {pageDescription && (
+                    <p
+                      className={`mt-1 text-sm ${
+                        darkMode ? 'text-gray-400' : 'text-gray-600'
+                      }`}
+                    >
+                      {pageDescription}
+                    </p>
+                  )}
+                </div>
+
+                {actions && (
+                  <div className="mt-4 sm:mt-0 sm:ml-4 flex-shrink-0">
+                    <div className="flex items-center space-x-3">{actions}</div>
+                  </div>
+                )}
+              </div>
+
+              {/* Filters */}
+              {filters && (
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  {filters}
+                </div>
+              )}
+            </div>
+          </div>
+           )}
+
+
+
+
+
+           {/* Main Content */}
+
+        <div className="px-6 pb-6">
+          <div
+            className={`bg-white dark:bg-gray-800 shadow rounded-lg p-6 ${themeClasses.border} ${themeClasses.text}`}
+          >
+            <div className="space-y-6">{children}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MainLayout;
+

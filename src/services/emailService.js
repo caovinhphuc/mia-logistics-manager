@@ -14,7 +14,7 @@ export const emailService = {
 
   sendNotification: async (to, subject, message, data) => {
     // eslint-disable-next-line no-console
-    console.log('Email service mock - sendNotification:', { to, subject, message, data });
+    logger.debug('Email service mock - sendNotification:', { to, subject, message, data });
     return {
       success: false,
       method: 'mock',
@@ -24,7 +24,7 @@ export const emailService = {
 
   sendAlert: async (to, level, title, message, data) => {
     // eslint-disable-next-line no-console
-    console.log('Email service mock - sendAlert:', { to, level, title, message, data });
+    logger.debug('Email service mock - sendAlert:', { to, level, title, message, data });
     return {
       success: false,
       method: 'mock',

@@ -1,8 +1,9 @@
 ## Đề Xuất Cấu Trúc Dự Án
 
 ### 1. Phân lớp tổng quát
+
 ```
-m ia-logistics-manager/
+mia-logistics-manager/
 ├─ package.json
 ├─ tsconfig.json
 ├─ craco.config.js           # Giữ nếu còn dùng CRACO
@@ -19,6 +20,7 @@ m ia-logistics-manager/
 ```
 
 ### 2. Chi tiết thư mục `src/` (frontend React)
+
 ```
 src/
 ├─ app/
@@ -53,6 +55,7 @@ src/
 ```
 
 ### 3. Chi tiết `backend/` (Node/Express)
+
 ```
 backend/
 ├─ package.json
@@ -72,6 +75,7 @@ backend/
 ```
 
 ### 4. Thư mục `scripts/`
+
 ```
 scripts/
 ├─ README.md                 # Giải thích các command
@@ -94,6 +98,7 @@ scripts/
 ```
 
 ### 5. Định hướng tách file `TransportRequests.tsx`
+
 ```
 features/transport/
 ├─ components/
@@ -126,10 +131,10 @@ features/transport/
 ```
 
 ### 6. Checklist triển khai cấu trúc mới
+
 - [ ] Di chuyển script vào `scripts/`, tạo `manage.sh`
 - [ ] Thiết lập alias đường dẫn trong `tsconfig.json`/`craco.config.js`
 - [ ] Tách nhỏ `TransportRequests` theo cấu trúc trên
 - [ ] Di chuyển hooks/utils chung sang `src/shared/`
 - [ ] Cập nhật tài liệu (`docs/`) mô tả kiến trúc mới
 - [ ] Thêm CI lint kiểm tra import chuẩn (`eslint-plugin-boundaries`/`import/no-cycle`)
-

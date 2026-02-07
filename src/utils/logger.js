@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /**
  * 📋 CENTRALIZED LOGGER
- * Thay thế tất cả console.log/error/warn statements
+ * Thay thế tất cả logger.debug/error/warn statements
  * Hỗ trợ development và production environments
  */
 
@@ -76,7 +76,7 @@ class Logger {
    */
   success(message, data = {}) {
     if (this.enableConsole) {
-      console.log('✅ SUCCESS:', message, data);
+      logger.debug('✅ SUCCESS:', message, data);
     }
   }
 
@@ -87,7 +87,7 @@ class Logger {
    */
   debug(message, data = {}) {
     if (this.isDev) {
-      console.log('🐛 DEBUG:', message, data);
+      logger.debug('🐛 DEBUG:', message, data);
     }
   }
 
@@ -99,7 +99,7 @@ class Logger {
    */
   api(method, url, options = {}) {
     if (this.isDev) {
-      console.log('🌐 API:', method, url, options);
+      logger.debug('🌐 API:', method, url, options);
     }
   }
 
@@ -118,7 +118,7 @@ class Logger {
     };
 
     if (this.enableConsole) {
-      console.log('⚡ PERF:', `${operation} took ${duration}ms`, data);
+      logger.debug('⚡ PERF:', `${operation} took ${duration}ms`, data);
     }
 
     // Always send performance data for monitoring

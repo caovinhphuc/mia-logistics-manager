@@ -11,14 +11,16 @@ Before deploying to production, ensure ALL placeholder values are replaced with 
 ### ⚠️ CRITICAL - Google Services Configuration
 
 ```bash
-# Google Client ID (OAuth 2.0)
-REACT_APP_GOOGLE_CLIENT_ID=your-actual-client-id.apps.googleusercontent.com
-
-# Google API Key
-REACT_APP_GOOGLE_API_KEY=your-actual-api-key
+# Google Service Account (Backend - BẮT BUỘC cho Sheets/Drive)
+# Đường dẫn tới file JSON (tuyệt đối khuyến nghị)
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/backend/credentials/mia-logistics-xxx.json
 
 # Google Spreadsheet ID
 REACT_APP_GOOGLE_SPREADSHEET_ID=your-actual-spreadsheet-id
+GOOGLE_SHEETS_SPREADSHEET_ID=your-actual-spreadsheet-id
+
+# Share Google Sheet với email Service Account (trong file JSON: client_email)
+# Ví dụ: xxx@project-id.iam.gserviceaccount.com
 
 # Google Drive Folder ID (Optional)
 REACT_APP_GOOGLE_DRIVE_FOLDER_ID=your-drive-folder-id
@@ -57,19 +59,21 @@ REACT_APP_TELEGRAM_CHAT_ID=your-chat-id
 ### Application Configuration
 
 ```bash
-# Backend API URL
-REACT_APP_API_URL=http://localhost:3100/api
-# For production: https://your-backend-domain.com/api
+# Backend API URL (development: proxy trong package.json chuyển /api tới backend)
+REACT_APP_API_BASE_URL=http://localhost:5050
+# For production: https://your-backend-domain.com
 
 # Frontend Port
 FRONTEND_PORT=3000
 
 # Backend Port
-BACKEND_PORT=3100
+BACKEND_PORT=5050
 
 # Environment
 NODE_ENV=production
 ```
+
+> **Lưu ý:** `package.json` cần `"proxy": "http://localhost:5050"` để frontend dev proxy `/api/*` tới backend. Dùng `make start` để chạy cả backend + frontend.
 
 ### Security Configuration
 

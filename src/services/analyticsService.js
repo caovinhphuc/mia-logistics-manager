@@ -77,7 +77,7 @@ class AnalyticsService {
     if (!this.endpoint) {
       // Log to console in development
       if (process.env.NODE_ENV === 'development') {
-        console.log('Analytics Event:', eventType, eventData);
+        logger.debug('Analytics Event:', eventType, eventData);
       }
       return;
     }

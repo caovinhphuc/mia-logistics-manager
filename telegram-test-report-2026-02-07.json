@@ -1,0 +1,89 @@
+{
+  "title": "Telegram Integration Test Report",
+  "timestamp": "2026-02-07T04:33:04.097Z",
+  "summary": {
+    "total_tests": 6,
+    "passed": 5,
+    "failed": 0,
+    "warnings": 1
+  },
+  "configuration": {
+    "bot_token": "configured",
+    "chat_id": "configured",
+    "api_url": "https://api.telegram.org/bot7889855862:AAGdAgXVJZ3QfBC1sahJag7eOF_E-nW1cjI"
+  },
+  "results": [
+    {
+      "test": "environment-check",
+      "status": "success",
+      "message": "Tất cả environment variables cần thiết đã có",
+      "details": {
+        "required_count": 2
+      },
+      "timestamp": "2026-02-07T04:33:00.801Z"
+    },
+    {
+      "test": "bot-info",
+      "status": "success",
+      "message": "Bot kết nối thành công: mia-warehouse-management",
+      "details": {
+        "id": 7889855862,
+        "username": "mia_warehouse_bot",
+        "first_name": "mia-warehouse-management",
+        "can_join_groups": true,
+        "can_read_all_group_messages": false,
+        "supports_inline_queries": true
+      },
+      "timestamp": "2026-02-07T04:33:01.497Z"
+    },
+    {
+      "test": "webhook-info",
+      "status": "warning",
+      "message": "Chưa cấu hình webhook",
+      "details": {
+        "url": "",
+        "has_custom_certificate": false,
+        "pending_update_count": 4
+      },
+      "timestamp": "2026-02-07T04:33:02.245Z"
+    },
+    {
+      "test": "chat-info",
+      "status": "success",
+      "message": "Thông tin chat lấy thành công: MIA.vn - Kho Vận - Trưởng Phòng - Cao Vĩnh Phúc",
+      "details": {
+        "id": 1361977198,
+        "type": "private",
+        "first_name": "MIA.vn - Kho Vận - Trưởng Phòng - Cao Vĩnh Phúc",
+        "last_name": "Vĩnh Phúc",
+        "username": "phuccaomia"
+      },
+      "timestamp": "2026-02-07T04:33:02.647Z"
+    },
+    {
+      "test": "send-message",
+      "status": "success",
+      "message": "Tin nhắn test đã được gửi thành công",
+      "details": {
+        "message_id": 20,
+        "chat_id": 1361977198,
+        "chat_type": "private",
+        "chat_title": "MIA.vn - Kho Vận - Trưởng Phòng - Cao Vĩnh Phúc Vĩnh Phúc",
+        "date": "2026-02-07T04:33:02.000Z"
+      },
+      "timestamp": "2026-02-07T04:33:03.118Z"
+    },
+    {
+      "test": "file-upload",
+      "status": "success",
+      "message": "File test đã được upload thành công",
+      "details": {
+        "file_id": "BQACAgUAAxkDAAMVaYbAfyJ7_oH0q-I8IGFqOxZdq0sAArYeAALKjjhUkMk0pnrYGYs6BA",
+        "file_name": "telegram-test-report.json",
+        "file_size": 2144,
+        "mime_type": "application/json"
+      },
+      "timestamp": "2026-02-07T04:33:04.096Z"
+    }
+  ]
+}

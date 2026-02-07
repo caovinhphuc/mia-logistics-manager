@@ -165,7 +165,6 @@ class TelegramTester {
       const response = await axios.post(`${this.apiUrl}/sendMessage`, {
         chat_id: this.chatId,
         text: testMessage,
-        parse_mode: 'Markdown',
       })
 
       if (response.data.ok) {

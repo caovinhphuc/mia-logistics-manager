@@ -5,7 +5,11 @@ import { useCreateInvoices } from '../hooks';
 import type { InvoicesFormData } from '../types';
 
 export const InvoicesForm: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<InvoicesFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InvoicesFormData>();
   const { mutate: create, isPending } = useCreateInvoices();
 
   const onSubmit = (data: InvoicesFormData) => {
@@ -27,11 +31,7 @@ export const InvoicesForm: React.FC = () => {
         sx={{ mb: 2 }}
       />
 
-      <Button
-        type="submit"
-        variant="contained"
-        disabled={isPending}
-      >
+      <Button type="submit" variant="contained" disabled={isPending}>
         {isPending ? 'Creating...' : 'Create Invoices'}
       </Button>
     </Box>

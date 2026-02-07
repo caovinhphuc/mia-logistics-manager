@@ -20,6 +20,12 @@ help:
 	@echo "  make lint             - Run linter"
 	@echo "  make format           - Format code"
 	@echo ""
+	@echo "Optimization: ⭐ NEW"
+	@echo "  make analyze          - Analyze bundle size"
+	@echo "  make optimize         - Run optimization checks"
+	@echo "  make cleanup-deps     - Remove unused dependencies"
+	@echo "  make fix-security     - Fix security vulnerabilities"
+	@echo ""
 	@echo "Deployment:"
 	@echo "  make deploy           - Deploy to production"
 	@echo "  make deploy-staging   - Deploy to staging"
@@ -35,21 +41,21 @@ help:
 	@echo "  make security         - Run security audit"
 	@echo ""
 
-# Installation
+# Installation (--legacy-peer-deps tránh conflict MUI peer deps)
 install:
 	@echo "📦 Installing dependencies..."
-	npm install
-	cd backend && npm install
+	npm install --legacy-peer-deps
+	cd backend && npm install --legacy-peer-deps
 	@echo "✅ Installation complete!"
 
 install-backend:
 	@echo "📦 Installing backend dependencies..."
-	cd backend && npm install
+	cd backend && npm install --legacy-peer-deps
 	@echo "✅ Backend dependencies installed!"
 
 install-frontend:
 	@echo "📦 Installing frontend dependencies..."
-	npm install
+	npm install --legacy-peer-deps
 	@echo "✅ Frontend dependencies installed!"
 
 # Development
@@ -180,6 +186,75 @@ deps-check:
 deps-update:
 	@echo "📦 Updating dependencies..."
 	npm run deps:update
+
+# Optimization Commands ⭐ NEW
+analyze:
+	@echo "🔍 Analyzing bundle size..."
+	@echo "Building production bundle..."
+	npm run build
+	@echo "Analyzing with webpack-bundle-analyzer..."
+	@command -v npx webpack-bundle-analyzer >/dev/null 2>&1 || npm install -D webpack-bundle-analyzer
+	npx webpack-bundle-analyzer build/static/js/*.js --mode static --report build/bundle-report.html
+	@echo "✅ Bundle analysis complete! Open build/bundle-report.html"
+
+optimize:
+	@echo "⚡ Running optimization checks..."
+	@echo "1. Checking for unused dependencies..."
+	npm run deps:check || true
+	@echo ""
+	@echo "2. Running security audit..."
+	npm audit || true
+	@echo ""
+	@echo "3. Checking bundle size..."
+	@test -d build && du -sh build/ || echo "Run 'make build' first"
+	@echo ""
+	@echo "4. Running linter..."
+	npm run lint || true
+	@echo ""
+	@echo "✅ Optimization checks complete!"
+	@echo "📄 See ANALYSIS_REPORT.md and OPTIMIZATION_PLAN.md for details"
+
+cleanup-deps:
+	@echo "🧹 Cleaning up unused dependencies..."
+	@echo "This will uninstall: @craco/craco ajv exceljs html2canvas js-cookie lodash numeral jspdf"
+	@read -p "Continue? [y/N] " confirm; \
+	if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \
+		npm uninstall @craco/craco ajv exceljs html2canvas js-cookie lodash numeral jspdf; \
+		echo "✅ Cleanup complete!"; \
+	else \
+		echo "Cancelled."; \
+	fi
+
+fix-security:
+	@echo "🔒 Fixing security vulnerabilities..."
+	@echo "Running npm audit fix..."
+	npm audit fix
+	@echo ""
+	@echo "Checking remaining issues..."
+	npm audit
+	@echo ""
+	@echo "📄 For detailed security info, see ANALYSIS_REPORT.md"
+
+install-missing:
+	@echo "📦 Installing safe backend dependencies (excluding mjml)..."
+	@echo "⚠️  Note: mjml excluded due to unfixable vulnerabilities"
+	npm install handlebars @sendgrid/mail socket.io node-fetch --legacy-peer-deps
+	@echo ""
+	@echo "⚠️  For Telegram: npm install node-telegram-bot-api@0.67.0 --legacy-peer-deps"
+	@echo "📄 See SECURITY_CRITICAL_DEPENDENCIES.md for details"
+	@echo "✅ Safe dependencies installed!"
+
+quick-wins:
+	@echo "⚡ Applying quick optimization wins..."
+	@echo ""
+	@echo "Step 1: Installing safe dependencies..."
+	@$(MAKE) install-missing
+	@echo ""
+	@echo "Step 2: Fixing security issues..."
+	npm audit fix --legacy-peer-deps || true
+	@echo ""
+	@echo "✅ Quick wins complete! Check npm audit for remaining issues"
+	@echo "📄 Next: See SECURITY_CRITICAL_DEPENDENCIES.md for MJML refactor plan"
 
 # Cleanup
 clean:

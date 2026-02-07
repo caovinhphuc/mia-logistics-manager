@@ -90,7 +90,7 @@ class LogService {
         console.debug(consoleMessage, data ? JSON.parse(data) : '');
         break;
       default:
-        console.log(consoleMessage, data ? JSON.parse(data) : '');
+        logger.debug(consoleMessage, data ? JSON.parse(data) : '');
     }
   }
 
@@ -319,7 +319,7 @@ class LogService {
       // Override console methods to capture all logs
       const originalConsole = { ...console };
 
-      console.log = (...args) => {
+      logger.debug = (...args) => {
         this.debug('CONSOLE', args.join(' '));
         originalConsole.log(...args);
       };

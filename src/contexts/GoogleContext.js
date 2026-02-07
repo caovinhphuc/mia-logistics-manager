@@ -163,6 +163,7 @@ export const GoogleProvider = ({ children }) => {
     } finally {
       dispatch({ type: GOOGLE_ACTIONS.SET_LOADING, payload: false });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- autoConnect defined below, avoid circular deps
   }, []);
 
   // Initialize Google services on mount

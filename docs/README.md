@@ -78,6 +78,13 @@ Tổng hợp tài liệu hướng dẫn sử dụng và phát triển hệ thố
    - Migration guides
    - Best practices
 
+#### Unified App (canonical)
+
+- **[UNIFIED.md](UNIFIED.md)** – **Nguồn chính cho Unified:** vị trí `src/unified/`, cách chạy `npm run start:unified`, không dùng `src-unified`.
+- **[UNIFIED_SIDEBAR_GUIDE.md](UNIFIED_SIDEBAR_GUIDE.md)** – Thêm mục Sidebar và route trong unified.
+- **[UNIFIED_LAYOUT_CONFIG_GUIDE.md](UNIFIED_LAYOUT_CONFIG_GUIDE.md)** – Nút Cấu hình Layout, LayoutConfigManager.
+- **[PROJECT_ARCHITECTURE.md](PROJECT_ARCHITECTURE.md)** – Cấu trúc tổng thể, app chính vs unified.
+
 ---
 
 ### 👥 Contributing & Community

@@ -1,0 +1,763 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@cypress/request-promise": {
+      "name": "@cypress/request-promise",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "request-promise-core"
+      ],
+      "effects": [
+        "node-telegram-bot-api"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/@cypress/request-promise"
+      ],
+      "fixAvailable": {
+        "name": "node-telegram-bot-api",
+        "version": "0.63.0",
+        "isSemVerMajor": true
+      }
+    },
+    "form-data": {
+      "name": "form-data",
+      "severity": "critical",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1109540,
+          "name": "form-data",
+          "dependency": "form-data",
+          "title": "form-data uses unsafe random function in form-data for choosing boundary",
+          "url": "https://github.com/advisories/GHSA-fjxv-7rqg-78g4",
+          "severity": "critical",
+          "cwe": [
+            "CWE-330"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<2.5.4"
+        }
+      ],
+      "effects": [
+        "request"
+      ],
+      "range": "<2.5.4",
+      "nodes": [
+        "node_modules/request/node_modules/form-data"
+      ],
+      "fixAvailable": {
+        "name": "node-telegram-bot-api",
+        "version": "0.63.0",
+        "isSemVerMajor": true
+      }
+    },
+    "html-minifier": {
+      "name": "html-minifier",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1105440,
+          "name": "html-minifier",
+          "dependency": "html-minifier",
+          "title": "kangax html-minifier REDoS vulnerability",
+          "url": "https://github.com/advisories/GHSA-pfq8-rq6v-vf5m",
+          "severity": "high",
+          "cwe": [
+            "CWE-400",
+            "CWE-1333"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<=4.0.0"
+        }
+      ],
+      "effects": [
+        "mjml-cli",
+        "mjml-core"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/html-minifier"
+      ],
+      "fixAvailable": false
+    },
+    "mjml": {
+      "name": "mjml",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1111537,
+          "name": "mjml",
+          "dependency": "mjml",
+          "title": "MJML allows mj-include directory traversal due to an incomplete fix for CVE-2020-12827",
+          "url": "https://github.com/advisories/GHSA-45h5-66jx-r2wf",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-36"
+          ],
+          "cvss": {
+            "score": 4.5,
+            "vectorString": "CVSS:3.1/AV:L/AC:H/PR:N/UI:N/S:C/C:L/I:N/A:L"
+          },
+          "range": "<=4.18.0"
+        },
+        "mjml-cli",
+        "mjml-core",
+        "mjml-migrate",
+        "mjml-preset-core"
+      ],
+      "effects": [],
+      "range": "<=5.0.0-alpha.0",
+      "nodes": [
+        "node_modules/mjml"
+      ],
+      "fixAvailable": false
+    },
+    "mjml-accordion": {
+      "name": "mjml-accordion",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [
+        "mjml-preset-core"
+      ],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-accordion"
+      ],
+      "fixAvailable": false
+    },
+    "mjml-body": {
+      "name": "mjml-body",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-body"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-button": {
+      "name": "mjml-button",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-button"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-carousel": {
+      "name": "mjml-carousel",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-carousel"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-cli": {
+      "name": "mjml-cli",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "html-minifier",
+        "mjml-core",
+        "mjml-migrate"
+      ],
+      "effects": [
+        "mjml"
+      ],
+      "range": "<=5.0.0-alpha.0",
+      "nodes": [
+        "node_modules/mjml-cli"
+      ],
+      "fixAvailable": false
+    },
+    "mjml-column": {
+      "name": "mjml-column",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-column"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-core": {
+      "name": "mjml-core",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "html-minifier",
+        "mjml-migrate"
+      ],
+      "effects": [
+        "mjml",
+        "mjml-accordion",
+        "mjml-body",
+        "mjml-button",
+        "mjml-carousel",
+        "mjml-cli",
+        "mjml-column",
+        "mjml-divider",
+        "mjml-group",
+        "mjml-head",
+        "mjml-head-attributes",
+        "mjml-head-breakpoint",
+        "mjml-head-font",
+        "mjml-head-html-attributes",
+        "mjml-head-preview",
+        "mjml-head-style",
+        "mjml-head-title",
+        "mjml-hero",
+        "mjml-image",
+        "mjml-migrate",
+        "mjml-navbar",
+        "mjml-raw",
+        "mjml-section",
+        "mjml-social",
+        "mjml-spacer",
+        "mjml-table",
+        "mjml-text",
+        "mjml-wrapper"
+      ],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-core"
+      ],
+      "fixAvailable": false
+    },
+    "mjml-divider": {
+      "name": "mjml-divider",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-divider"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-group": {
+      "name": "mjml-group",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-group"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-head": {
+      "name": "mjml-head",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-head"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-head-attributes": {
+      "name": "mjml-head-attributes",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=2.0.4 || 4.0.0-alpha.1 - 4.18.0",
+      "nodes": [
+        "node_modules/mjml-head-attributes"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-head-breakpoint": {
+      "name": "mjml-head-breakpoint",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-head-breakpoint"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-head-font": {
+      "name": "mjml-head-font",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "4.0.0-alpha.1 - 4.18.0",
+      "nodes": [
+        "node_modules/mjml-head-font"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-head-html-attributes": {
+      "name": "mjml-head-html-attributes",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-head-html-attributes"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-head-preview": {
+      "name": "mjml-head-preview",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "4.0.0-alpha.3 - 4.18.0",
+      "nodes": [
+        "node_modules/mjml-head-preview"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-head-style": {
+      "name": "mjml-head-style",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "4.0.0-alpha.1 - 4.18.0",
+      "nodes": [
+        "node_modules/mjml-head-style"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-head-title": {
+      "name": "mjml-head-title",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "4.0.0-alpha.1 - 4.18.0",
+      "nodes": [
+        "node_modules/mjml-head-title"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-hero": {
+      "name": "mjml-hero",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-hero"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-image": {
+      "name": "mjml-image",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-image"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-migrate": {
+      "name": "mjml-migrate",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [
+        "mjml",
+        "mjml-cli",
+        "mjml-core"
+      ],
+      "range": "4.0.0-beta.1 - 4.18.0",
+      "nodes": [
+        "node_modules/mjml-migrate"
+      ],
+      "fixAvailable": false
+    },
+    "mjml-navbar": {
+      "name": "mjml-navbar",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-navbar"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-preset-core": {
+      "name": "mjml-preset-core",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-accordion",
+        "mjml-body",
+        "mjml-button",
+        "mjml-carousel",
+        "mjml-column",
+        "mjml-divider",
+        "mjml-group",
+        "mjml-head",
+        "mjml-head-attributes",
+        "mjml-head-breakpoint",
+        "mjml-head-font",
+        "mjml-head-html-attributes",
+        "mjml-head-preview",
+        "mjml-head-style",
+        "mjml-head-title",
+        "mjml-hero",
+        "mjml-image",
+        "mjml-navbar",
+        "mjml-raw",
+        "mjml-section",
+        "mjml-social",
+        "mjml-spacer",
+        "mjml-table",
+        "mjml-text",
+        "mjml-wrapper"
+      ],
+      "effects": [
+        "mjml"
+      ],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-preset-core"
+      ],
+      "fixAvailable": false
+    },
+    "mjml-raw": {
+      "name": "mjml-raw",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-raw"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-section": {
+      "name": "mjml-section",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-section"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-social": {
+      "name": "mjml-social",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-social"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-spacer": {
+      "name": "mjml-spacer",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-spacer"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-table": {
+      "name": "mjml-table",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-table"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-text": {
+      "name": "mjml-text",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-text"
+      ],
+      "fixAvailable": true
+    },
+    "mjml-wrapper": {
+      "name": "mjml-wrapper",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "mjml-core",
+        "mjml-section"
+      ],
+      "effects": [],
+      "range": "<=4.18.0",
+      "nodes": [
+        "node_modules/mjml-wrapper"
+      ],
+      "fixAvailable": true
+    },
+    "node-telegram-bot-api": {
+      "name": "node-telegram-bot-api",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@cypress/request-promise"
+      ],
+      "effects": [],
+      "range": ">=0.64.0",
+      "nodes": [
+        "node_modules/node-telegram-bot-api"
+      ],
+      "fixAvailable": {
+        "name": "node-telegram-bot-api",
+        "version": "0.63.0",
+        "isSemVerMajor": true
+      }
+    },
+    "qs": {
+      "name": "qs",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1111755,
+          "name": "qs",
+          "dependency": "qs",
+          "title": "qs's arrayLimit bypass in its bracket notation allows DoS via memory exhaustion",
+          "url": "https://github.com/advisories/GHSA-6rw7-vpxm-498p",
+          "severity": "high",
+          "cwe": [
+            "CWE-20"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<6.14.1"
+        }
+      ],
+      "effects": [
+        "request"
+      ],
+      "range": "<6.14.1",
+      "nodes": [
+        "node_modules/request/node_modules/qs"
+      ],
+      "fixAvailable": {
+        "name": "node-telegram-bot-api",
+        "version": "0.63.0",
+        "isSemVerMajor": true
+      }
+    },
+    "request": {
+      "name": "request",
+      "severity": "critical",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1096727,
+          "name": "request",
+          "dependency": "request",
+          "title": "Server-Side Request Forgery in Request",
+          "url": "https://github.com/advisories/GHSA-p8p7-x288-28g6",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-918"
+          ],
+          "cvss": {
+            "score": 6.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": "<=2.88.2"
+        },
+        "form-data",
+        "qs",
+        "tough-cookie"
+      ],
+      "effects": [
+        "request-promise-core"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/request"
+      ],
+      "fixAvailable": {
+        "name": "node-telegram-bot-api",
+        "version": "0.63.0",
+        "isSemVerMajor": true
+      }
+    },
+    "request-promise-core": {
+      "name": "request-promise-core",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "request"
+      ],
+      "effects": [
+        "@cypress/request-promise"
+      ],
+      "range": "*",
+      "nodes": [
+        "node_modules/request-promise-core"
+      ],
+      "fixAvailable": {
+        "name": "node-telegram-bot-api",
+        "version": "0.63.0",
+        "isSemVerMajor": true
+      }
+    },
+    "tough-cookie": {
+      "name": "tough-cookie",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1097682,
+          "name": "tough-cookie",
+          "dependency": "tough-cookie",
+          "title": "tough-cookie Prototype Pollution vulnerability",
+          "url": "https://github.com/advisories/GHSA-72xf-g2v4-qvf3",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-1321"
+          ],
+          "cvss": {
+            "score": 6.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N"
+          },
+          "range": "<4.1.3"
+        }
+      ],
+      "effects": [
+        "request"
+      ],
+      "range": "<4.1.3",
+      "nodes": [
+        "node_modules/request/node_modules/tough-cookie"
+      ],
+      "fixAvailable": {
+        "name": "node-telegram-bot-api",
+        "version": "0.63.0",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 4,
+      "high": 32,
+      "critical": 2,
+      "total": 38
+    },
+    "dependencies": {
+      "prod": 708,
+      "dev": 451,
+      "optional": 3,
+      "peer": 14,
+      "peerOptional": 0,
+      "total": 1175
+    }
+  }
+}

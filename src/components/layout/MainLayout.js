@@ -317,25 +317,25 @@ const getMenuItems = (t) => [
       {
         key: 'general',
         text: t('navigation.general_settings'),
-        path: '/settings/general',
+        path: '/settings?tab=general',
         roles: ['admin'],
       },
       {
         key: 'api_integration',
         text: t('navigation.api_integration'),
-        path: '/settings/api',
+        path: '/settings?tab=api',
         roles: ['admin'],
       },
       {
         key: 'security',
         text: t('navigation.security_settings'),
-        path: '/settings/security',
+        path: '/settings?tab=security',
         roles: ['admin'],
       },
       {
         key: 'system',
         text: t('navigation.system_settings'),
-        path: '/settings/system',
+        path: '/settings?tab=system',
         roles: ['admin'],
       },
     ],
@@ -425,13 +425,6 @@ const MainLayout = ({ children }) => {
     setTimeout(() => setLoading(false), 500);
   };
 
-  const handleExpandItem = (itemText) => {
-    setExpandedItems((prev) => ({
-      ...prev,
-      [itemText]: !prev[itemText],
-    }));
-  };
-
   const handleQuickAction = (action) => {
     if (action.path) {
       handleNavigation(action.path);
@@ -442,13 +435,22 @@ const MainLayout = ({ children }) => {
   };
 
   const renderMenuItem = (item, level = 0) => {
-    const isActive = location.pathname.startsWith(item.path);
+    const tabFromUrl = new URLSearchParams(location.search).get('tab');
+    const itemTab = item.path.match(/tab=(\w+)/)?.[1];
+    const isActive = item.path.includes('?')
+      ? location.pathname === '/settings' && tabFromUrl === itemTab
+      : location.pathname.startsWith(item.path);
     const hasAccess = item.roles.some((role) => hasRole(role));
 
     // Auto-expand parent menu if any child is active
     const hasChildren = item.children && item.children.length > 0;
     const hasActiveChild =
-      hasChildren && item.children.some((child) => location.pathname.startsWith(child.path));
+      hasChildren &&
+      item.children.some(
+        (child) =>
+          location.pathname === '/settings' &&
+          new URLSearchParams(location.search).get('tab') === child.path.match(/tab=(\w+)/)?.[1]
+      );
     const isExpanded = expandedItems[item.key] || hasActiveChild;
 
     if (!hasAccess) return null;
@@ -465,10 +467,9 @@ const MainLayout = ({ children }) => {
             selected={isActive}
             onClick={() => {
               if (hasChildren) {
-                handleExpandItem(item.key);
-              } else {
-                handleNavigation(item.path);
+                setExpandedItems((prev) => ({ ...prev, [item.key]: true }));
               }
+              handleNavigation(item.path);
             }}
             sx={{
               minHeight: 48,

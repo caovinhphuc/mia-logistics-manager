@@ -1,0 +1,593 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
+import { usePermissions } from '../../context/PermissionContext';
+import { LAYOUT, ROUTES } from '../../constants';
+import { motion } from 'framer-motion';
+
+
+
+import {
+  Home, Package, Users, BarChart3, Calendar, Settings, ChevronRight,
+  Download, Mail, Info, Clock, Shield, TrendingUp, UserCheck,
+  FileText, Truck, History, AlertTriangle
+} from 'lucide-react';
+
+// Define the structure of a menu item
+
+
+interface MenuItem {
+   /**
+    * Unique identifier for the menu item.
+    */
+  id: string;
+  label: string;
+  icon: React.ElementType;
+  path?: string;
+  permissions?: string[];
+  badge?: string | number;
+  hasSubmenu?: boolean;
+  submenu?: MenuItem[];
+}
+
+interface SidebarProps {
+   /**
+    * Whether the sidebar is collapsed or expanded.
+    * Defaults to false (expanded).
+    */
+  collapsed?: boolean;
+  onToggle?: () => void;
+  className?: string;
+  metrics?: any;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({
+
+  collapsed = false,
+  onToggle,
+  className = '',
+   metrics = {
+   // Default metrics data
+    orders: { pending: 12 },
+    performance: { slaRate: 95.7, throughput: 156 },
+    staff: { active: 8, total: 12 }
+  }
+}) => {
+   // Hooks
+   const [collapsedState, setCollapsedState] = useState(collapsed);
+   useEffect(() => {
+      setCollapsedState(collapsed);
+   }, [collapsed]);
+   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+   useEffect(() => {
+      const handleResize = () => {
+         // Update isMobile state based on window width
+         setIsMobile(window.innerWidth < 1024);
+
+         // Update sidebar width based on collapsed state
+         const sidebarWidth = collapsedState ? '4rem' : '16rem';
+         document.documentElement.style.setProperty('--sidebar-width', sidebarWidth);
+         document.documentElement.style.setProperty('--sidebar-collapsed', collapsedState ? 'true' : 'false');
+         document.documentElement.style.setProperty('--sidebar-mobile', isMobile ? 'true' : 'false');
+         document.documentElement.style.setProperty('--sidebar-transition', 'all 0.3s ease');
+         document.documentElement.style.setProperty('--sidebar-transform', collapsedState ? 'translateX(-100%)' : 'translateX(0)');
+         document.documentElement.style.setProperty('--sidebar-bg', darkMode ? 'bg-gray-900' : 'bg-white');
+         document.documentElement.style.setProperty('--sidebar-text', darkMode ? 'text-gray-200' : 'text-gray-900');
+         document.documentElement.style.setProperty('--sidebar-border', darkMode ? 'border-gray-700' : 'border-gray-200');
+
+
+      };
+      window.addEventListener('resize', handleResize);
+      handleResize(); // Initial call to set styles based on current window size
+      // Cleanup event listener on unmount
+
+      return () => window.removeEventListener('resize', handleResize);
+
+   }, []);
+   // Navigation hooks
+   // Using useNavigate from react-router-dom for navigation
+   const navigate = useNavigate();
+
+   // Metrics data
+   // Default metrics data if not provided
+   const defaultMetrics = {
+     orders: { pending: 0 },
+     performance: { slaRate: 0, throughput: 0 },
+     staff: { active: 0, total: 0 }
+   };
+
+   // Use provided metrics or default values
+   const metricsData = {
+     orders: metrics.orders || defaultMetrics.orders,
+     performance: metrics.performance || defaultMetrics.performance,
+     staff: metrics.staff || defaultMetrics.staff
+   };
+
+   // Destructure metrics data for easier access
+
+   const { orders, performance, staff } = metricsData;
+
+   // Ensure metrics data is valid
+   if (!orders || !performance || !staff) {
+     console.warn('Invalid metrics data provided, using default values');
+   }
+
+   // Ensure metrics data has the expected structure
+
+   if (typeof orders.pending !== 'number' || typeof performance.slaRate !== 'number' || typeof performance.throughput !== 'number' || typeof staff.active !== 'number' || typeof staff.total !== 'number') {
+     console.warn('Metrics data is missing or has incorrect types, using default values');
+   }
+
+   // Ensure metrics data is not empty
+
+   if (Object.keys(metricsData).length === 0) {
+     console.warn('Metrics data is empty, using default values');
+   }
+
+   // Ensure metrics data has the expected properties
+   if (!orders.hasOwnProperty('pending') || !performance.hasOwnProperty('slaRate') || !performance.hasOwnProperty('throughput') || !staff.hasOwnProperty('active') || !staff.hasOwnProperty('total')) {
+     console.warn('Metrics data is missing expected properties, using default values');
+   }
+
+   // Ensure metrics data is not null or undefined
+   if (orders === null || performance === null || staff === null) {
+     console.warn('Metrics data is null, using default values');
+   }
+
+
+   // Contexts
+   // Using useTheme to access theme context
+
+
+   const { darkMode, themeClasses } = useTheme();
+   // Using usePermissions to check user permissions
+   const { canAccess } = usePermissions();
+   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
+   const [currentTime, setCurrentTime] = useState(new Date());
+   const [activeTab, setActiveTab] = useState('dashboard');
+
+
+   // Update time every second
+   useEffect(() => {
+     const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Format date and time
+  const formatDateTime = (date: Date) => {
+    const day = date.toLocaleDateString('vi-VN', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const time = date.toLocaleTimeString('vi-VN', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+
+    return { day, time };
+  };
+
+  const { day, time } = formatDateTime(currentTime);
+
+  // Navigation configuration
+  const navigation: MenuItem[] = [
+    {
+      id: 'dashboard',
+      label: 'Tổng quan',
+      icon: Home,
+      path: ROUTES.DASHBOARD,
+      permissions: ['dashboard.view']
+    },
+    {
+      id: 'orders',
+      label: 'Quản lý đơn hàng',
+      icon: Package,
+      path: ROUTES.ORDERS,
+      permissions: ['warehouse.view'],
+      badge: metrics.orders.pending > 0 ? metrics.orders.pending : undefined,
+      hasSubmenu: true,
+      submenu: [
+        {
+          id: 'orders-overview',
+          label: 'Tổng quan đơn hàng',
+          icon: Package,
+          path: ROUTES.ORDERS
+        }
+      ]
+    },
+    {
+      id: 'staff',
+      label: 'Quản lý nhân sự',
+      icon: Users,
+      permissions: ['staff.view'],
+      hasSubmenu: true,
+      submenu: [
+        {
+          id: 'staff-overview',
+          label: 'Tổng quan nhân sự',
+          icon: Users
+        },
+        {
+          id: 'staff-performance',
+          label: 'Hiệu suất làm việc',
+          icon: TrendingUp
+        },
+        {
+          id: 'staff-schedule',
+          label: 'Lịch làm việc',
+          icon: Calendar,
+          path: ROUTES.SCHEDULE
+        },
+        {
+          id: 'staff-assignments',
+          label: 'Phân công công việc',
+          icon: UserCheck
+        },
+        {
+          id: 'staff-settings',
+          label: 'Cài đặt',
+          icon: Settings
+        }
+      ]
+    },
+    {
+      id: 'inventory',
+      label: 'Kho hàng',
+      icon: Package,
+      path: ROUTES.INVENTORY,
+      permissions: ['inventory.view'],
+      badge: 'New'
+    },
+    {
+      id: 'picking',
+      label: 'Picking',
+      icon: Truck,
+      permissions: ['picking.view'],
+      hasSubmenu: true,
+      submenu: [
+        {
+          id: 'picking-overview',
+          label: 'Tổng quan picking',
+          icon: Truck
+        }
+      ]
+    },
+    {
+      id: 'history',
+      label: 'Lịch sử',
+      icon: History,
+      permissions: ['history.view'],
+      hasSubmenu: true,
+      submenu: [
+        {
+          id: 'history-overview',
+          label: 'Tổng quan lịch sử',
+          icon: History
+        }
+      ]
+    },
+    {
+      id: 'alerts',
+      label: 'Cảnh báo',
+      icon: AlertTriangle,
+      permissions: ['alerts.view'],
+      hasSubmenu: true,
+      submenu: [
+        {
+          id: 'alerts-overview',
+          label: 'Tổng quan cảnh báo',
+          icon: AlertTriangle
+        }
+      ]
+    },
+    {
+      id: 'analytics',
+      label: 'Phân tích & Báo cáo',
+      icon: BarChart3,
+      path: ROUTES.REPORTS,
+      permissions: ['reports.view']
+    },
+    {
+      id: 'reports',
+      label: 'Báo cáo chi tiết',
+      icon: FileText,
+      permissions: ['reports.view']
+    },
+    {
+      id: 'settings',
+      label: 'Cài đặt hệ thống',
+      icon: Settings,
+      path: ROUTES.SETTINGS,
+      permissions: ['settings.view']
+    },
+    {
+      id: 'permissions',
+      label: 'Phân quyền',
+      icon: Shield,
+      permissions: ['permissions.view']
+    }
+  ];
+
+  // Filter menu items based on permissions
+  const filteredNavigation = navigation.filter(nav =>
+    !nav.permissions || (typeof canAccess === 'function' && canAccess(nav.permissions))
+  );
+
+  const toggleSubmenu = (id: string) => {
+    setExpandedMenus(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const handleItemClick = (item: MenuItem) => {
+    if (item.hasSubmenu) {
+      toggleSubmenu(item.id);
+    } else {
+      setActiveTab(item.id);
+      if (item.path) {
+        navigate(item.path); // Ensure navigate is called with the correct path
+      }
+    }
+  };
+
+  const handleSubmenuClick = (item: MenuItem) => {
+    setActiveTab(item.id);
+    if (item.path) {
+      navigate(item.path); // Ensure navigate is called with the correct path
+    }
+  };
+
+  // Handler functions for footer actions
+  const handleDownload = () => {
+    console.log('Downloading report...');
+  };
+
+  const handleSupport = () => {
+    console.log('Opening support...');
+  };
+
+  const handleUpdates = () => {
+    console.log('Checking updates...');
+  };
+
+  const sidebarClasses = `
+    fixed left-0 z-40
+    ${collapsed ? 'w-16' : 'w-64'}
+    ${themeClasses.bg} ${themeClasses.border} border-r
+    transform transition-all duration-300 ease-in-out
+    flex-shrink-0 shadow-lg
+    top-[${LAYOUT.header.height}] h-[calc(100vh-${LAYOUT.header.height})]
+    ${className}
+  `;
+
+  return (
+    <aside
+      className={sidebarClasses}
+    >
+      <div className="flex flex-col h-full">
+        {/* Sidebar controls */}
+        <div className="flex justify-between items-center p-4">
+          {!collapsed && (
+            <h2 className="font-semibold text-sm text-gray-500 uppercase tracking-wider">
+              Điều hướng
+            </h2>
+          )}
+          <button
+            onClick={onToggle}
+            title={collapsed ? "Mở rộng sidebar" : "Thu gọn sidebar"}
+            className={`p-2 rounded-lg ${
+              darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+            } transition-colors`}
+          >
+            <ChevronRight
+              size={16}
+              className={`transform transition-transform duration-200 ${
+                collapsed ? '' : 'rotate-180'
+              }`}
+            />
+          </button>
+        </div>
+
+        {/* Navigation menu */}
+        <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto">
+          {filteredNavigation.map((item) => (
+            <div key={item.id} className="mb-1">
+              <button
+                onClick={() => handleItemClick(item)}
+                className={`
+                  w-full flex items-center px-3 py-3 rounded-xl text-left transition-all duration-200
+                  ${activeTab === item.id || (item.hasSubmenu && activeTab.startsWith(item.id + '-'))
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
+                    : `${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'} hover:shadow-md`
+                  }
+                  ${collapsed ? 'justify-center' : ''}
+                `}
+                title={collapsed ? item.label : undefined}
+              >
+                <item.icon
+                  size={20}
+                  className={`flex-shrink-0 ${
+                    activeTab === item.id || (item.hasSubmenu && activeTab.startsWith(item.id + '-'))
+                      ? 'text-white' : ''
+                  }`}
+                />
+                {!collapsed && (
+                  <>
+                    <span className="ml-3 font-medium text-sm">{item.label}</span>
+                    {item.badge && (
+                      <span className="ml-auto bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                        {item.badge}
+                      </span>
+                    )}
+                    {item.hasSubmenu && (
+                      <ChevronRight
+                        size={16}
+                        className={`ml-auto transform transition-transform duration-200 ${
+                          expandedMenus[item.id] ? 'rotate-90' : ''
+                        }`}
+                      />
+                    )}
+                  </>
+                )}
+              </button>
+
+              {/* Submenu items */}
+              {!collapsed && item.hasSubmenu && expandedMenus[item.id] && (
+                <div className="ml-6 mt-1 space-y-1">
+                  {item.submenu?.map((subitem) => (
+                    <button
+                      key={subitem.id}
+                      onClick={() => handleSubmenuClick(subitem)}
+                      className={`
+                        w-full flex items-center px-3 py-2 rounded-lg text-left transition-colors
+                        ${activeTab === subitem.id
+                          ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                          : `hover:${darkMode ? 'bg-gray-700' : 'bg-gray-100'}`
+                        }
+                      `}
+                    >
+                      <subitem.icon size={16} className="flex-shrink-0" />
+                      <span className="ml-3 text-sm">{subitem.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>
+
+        {/* Quick stats panel */}
+        {!collapsed && (
+          <div className={`p-4 m-3 rounded-xl ${
+            darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+          } border`}>
+            <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wider">
+              Thống kê nhanh
+            </h3>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Đơn chờ xử lý</span>
+                <div className="flex items-center">
+                  <span className="font-bold text-orange-500">{metrics.orders.pending}</span>
+                  <div className="w-2 h-2 bg-orange-500 rounded-full ml-2 animate-pulse"></div>
+                </div>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Tỷ lệ SLA</span>
+                <span className="font-bold text-green-500">{metrics.performance.slaRate}%</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Nhân viên hoạt động</span>
+                <span className="font-bold text-blue-500">
+                  {metrics.staff.active}/{metrics.staff.total}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm">Throughput</span>
+                <span className="font-bold text-purple-500">{metrics.performance.throughput}/h</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Date and Time Display */}
+        <div className={`${
+          darkMode ? 'bg-slate-800/30 border-slate-700' : 'bg-slate-100/50 border-slate-200'
+        } mx-2 mb-3 rounded-lg p-3 border`}>
+          {!collapsed ? (
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <Clock size={16} className={`${
+                  darkMode ? 'text-blue-400' : 'text-blue-600'
+                } flex-shrink-0`} />
+                <span className={`text-xs font-medium ${
+                  darkMode ? 'text-slate-300' : 'text-slate-600'
+                } truncate`}>
+                  Thời gian hiện tại
+                </span>
+              </div>
+              <div className="space-y-1">
+                <div className={`text-sm font-semibold ${
+                  darkMode ? 'text-white' : 'text-slate-800'
+                } truncate`}>
+                  {time}
+                </div>
+                <div className={`text-xs ${
+                  darkMode ? 'text-slate-400' : 'text-slate-500'
+                } leading-tight line-clamp-2`}>
+                  {day}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center">
+              <Clock size={20} className={`${
+                darkMode ? 'text-blue-400' : 'text-blue-600'
+              } mx-auto mb-1`} />
+              <div className={`text-xs font-bold ${
+                darkMode ? 'text-white' : 'text-slate-800'
+              }`}>
+                {time.split(':').slice(0, 2).join(':')}
+              </div>
+              <div className={`text-[10px] ${
+                darkMode ? 'text-slate-400' : 'text-slate-500'
+              }`}>
+                {new Intl.DateTimeFormat('vi-VN', {day: '2-digit', month: '2-digit'}).format(currentTime)}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer actions */}
+        <div className={`${
+          darkMode ? 'bg-slate-800/50' : 'bg-slate-50'
+        } px-2 py-2 ${
+          collapsed ? 'flex flex-col items-center space-y-2' : 'flex flex-wrap justify-around gap-1'
+        }`}>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-2 rounded-lg ${
+              darkMode ? 'hover:bg-slate-700 text-slate-300' : 'hover:bg-slate-200 text-slate-600'
+            } transition-colors duration-200`}
+            onClick={handleDownload}
+            title="Xuất báo cáo"
+          >
+            <Download size={collapsed ? 16 : 18} />
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-2 rounded-lg ${
+              darkMode ? 'hover:bg-slate-700 text-slate-300' : 'hover:bg-slate-200 text-slate-600'
+            } transition-colors duration-200`}
+            onClick={handleSupport}
+            title="Liên hệ hỗ trợ"
+          >
+            <Mail size={collapsed ? 16 : 18} />
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={`p-2 rounded-lg ${
+              darkMode ? 'hover:bg-slate-700 text-slate-300' : 'hover:bg-slate-200 text-slate-600'
+            } transition-colors duration-200`}
+            onClick={handleUpdates}
+            title="Kiểm tra cập nhật"
+          >
+            <Info size={collapsed ? 16 : 18} />
+          </motion.button>
+        </div>
+      </div>
+    </aside>
+  );
+};
+
+export default Sidebar;

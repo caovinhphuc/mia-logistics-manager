@@ -224,9 +224,9 @@ const ApiDiagnostics = () => {
     setLoading((prev) => ({ ...prev, debug: true }));
 
     try {
-      // console.log('🔍 Starting debug test from UI...');
+      // logger.debug('🔍 Starting debug test from UI...');
       const results = await runDebugTest();
-      // console.log('Debug test completed:', results);
+      // logger.debug('Debug test completed:', results);
 
       if (results.error) {
         alert(`Debug test failed: ${results.error}`);
@@ -246,12 +246,12 @@ const ApiDiagnostics = () => {
     setFolderTestResult(null);
 
     try {
-      // console.log(`🧪 Testing folder creation${useREST ? ' (REST API)' : ' (gapi.client)'}...`);
+      // logger.debug(`🧪 Testing folder creation${useREST ? ' (REST API)' : ' (gapi.client)'}...`);
 
       const result = useREST ? await testCreateDriveFolderREST() : await testCreateDriveFolder();
 
       setFolderTestResult(result);
-      // console.log('Folder creation test result:', result);
+      // logger.debug('Folder creation test result:', result);
 
       if (result.success) {
         alert(

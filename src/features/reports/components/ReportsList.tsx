@@ -15,19 +15,11 @@ export const ReportsList: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <Typography color="error">
-        Error loading reports: {error.message}
-      </Typography>
-    );
+    return <Typography color="error">Error loading reports: {error.message}</Typography>;
   }
 
   if (!data || data.length === 0) {
-    return (
-      <Typography color="text.secondary">
-        No reports found
-      </Typography>
-    );
+    return <Typography color="text.secondary">No reports found</Typography>;
   }
 
   return (

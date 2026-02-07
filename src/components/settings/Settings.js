@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Box, Container, Paper, Tab, Tabs, Typography } from '@mui/material';
 import {
   Settings as SettingsIcon,
@@ -25,8 +26,23 @@ function TabPanel({ children, value, index }) {
   );
 }
 
+const TAB_KEYS = ['general', 'security', 'system', 'google', 'api', 'api-manager', 'diagnostics'];
+
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const tabIndexFromUrl = TAB_KEYS.indexOf(tabParam);
+  const initialIndex = tabIndexFromUrl >= 0 ? tabIndexFromUrl : 0;
+  const [activeTab, setActiveTab] = useState(initialIndex);
+
+  useEffect(() => {
+    if (tabIndexFromUrl >= 0) setActiveTab(tabIndexFromUrl);
+  }, [tabIndexFromUrl]);
+
+  const handleTabChange = (e, newValue) => {
+    setActiveTab(newValue);
+    setSearchParams({ tab: TAB_KEYS[newValue] });
+  };
 
   const tabs = [
     {
@@ -87,7 +103,7 @@ const Settings = () => {
         <Paper sx={{ mb: 3 }}>
           <Tabs
             value={activeTab}
-            onChange={(e, newValue) => setActiveTab(newValue)}
+            onChange={handleTabChange}
             variant="scrollable"
             scrollButtons="auto"
             sx={{

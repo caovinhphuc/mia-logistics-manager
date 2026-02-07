@@ -1,9 +1,9 @@
-import { renderWithProviders, screen } from '@/test-utils'
-import { CustomersList } from './CustomersList'
+import { render, screen } from '@testing-library/react';
+import { CustomersList } from './CustomersList';
 
 describe('CustomersList', () => {
   it('renders loading state', () => {
-    renderWithProviders(<CustomersList />)
+    render(<CustomersList />);
     // TODO: Implement test
   });
 

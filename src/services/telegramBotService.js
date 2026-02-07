@@ -41,7 +41,7 @@ export const telegramBotService = {
 
   sendMessage: async (message) => {
     // eslint-disable-next-line no-console
-    console.log('Telegram service mock - sendMessage:', message);
+    logger.debug('Telegram service mock - sendMessage:', message);
     return {
       success: false,
       error: 'Telegram service not fully implemented yet',
@@ -50,7 +50,7 @@ export const telegramBotService = {
 
   sendAlert: async (title, message, level, data) => {
     // eslint-disable-next-line no-console
-    console.log('Telegram service mock - sendAlert:', { title, message, level, data });
+    logger.debug('Telegram service mock - sendAlert:', { title, message, level, data });
     return {
       success: false,
       error: 'Telegram service not fully implemented yet',

@@ -37,8 +37,8 @@ console.warn = function (...args) {
 };
 
 // Suppress Google API migration warnings
-const originalConsoleLog = console.log;
-console.log = function (...args) {
+const originalConsoleLog = logger.debug;
+logger.debug = function (...args) {
   const message = args.join(' ');
 
   // Suppress all Google API related logs

@@ -1,9 +1,9 @@
-import { renderWithProviders, screen } from '@/test-utils'
-import { SettingsList } from './SettingsList'
+import { renderWithProviders, screen } from '@/test-utils';
+import { SettingsList } from './SettingsList';
 
 describe('SettingsList', () => {
   it('renders loading state', () => {
-    renderWithProviders(<SettingsList />)
+    renderWithProviders(<SettingsList />);
     // TODO: Implement test
   });
 

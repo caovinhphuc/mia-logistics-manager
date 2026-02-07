@@ -11,7 +11,7 @@ class GoogleAPIInitializer {
 
   async initialize() {
     try {
-      console.log('🔄 Khởi tạo Google API...');
+      logger.debug('🔄 Khởi tạo Google API...');
 
       // Kiểm tra API key
       if (!this.apiKey) {
@@ -29,7 +29,7 @@ class GoogleAPIInitializer {
           });
 
           this.isInitialized = true;
-          console.log('✅ Google API đã được khởi tạo');
+          logger.debug('✅ Google API đã được khởi tạo');
         });
       } else {
         throw new Error('Google API chưa được load');
@@ -46,7 +46,7 @@ class GoogleAPIInitializer {
         await this.initialize();
       }
 
-      console.log('🔄 Authenticate với Google...');
+      logger.debug('🔄 Authenticate với Google...');
 
       // Authenticate với Google
       const authInstance = window.gapi.auth2.getAuthInstance();
@@ -57,7 +57,7 @@ class GoogleAPIInitializer {
       const user = await authInstance.signIn();
       this.isAuthenticated = true;
 
-      console.log('✅ Đã authenticate với Google');
+      logger.debug('✅ Đã authenticate với Google');
       return user;
     } catch (error) {
       console.error('❌ Lỗi authenticate:', error);
@@ -112,7 +112,7 @@ if (typeof window !== 'undefined') {
   window.addEventListener('load', async () => {
     try {
       await googleAPIInitializer.initialize();
-      console.log('✅ Google API đã sẵn sàng');
+      logger.debug('✅ Google API đã sẵn sàng');
     } catch (error) {
       console.error('❌ Lỗi auto-initialize Google API:', error);
     }

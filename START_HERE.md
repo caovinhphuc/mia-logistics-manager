@@ -2,7 +2,9 @@
 
 **Welcome to MIA Logistics Manager v2.1.1!**
 
-Dự án đã hoàn thành **100%** và sẵn sàng cho production. File này sẽ hướng dẫn bạn bắt đầu.
+Dự án đã hoàn thành **100%** tính năng. Hiện đang có **kế hoạch tối ưu hóa** để cải thiện performance, security và code quality.
+
+⚡ **NEW**: Xem [ANALYSIS_REPORT.md](ANALYSIS_REPORT.md) và [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)
 
 ---
 
@@ -64,13 +66,15 @@ make test
 - Monitoring setup
 - Backup/restore
 - CI/CD configuration
+- Performance optimization
 
 **Đọc ngay:**
 
 1. ✅ [FINAL_DEPLOYMENT_CHECKLIST.md](FINAL_DEPLOYMENT_CHECKLIST.md) - **10 phút**
-2. 🐳 [docker-compose.yml](docker-compose.yml) - **5 phút**
-3. 🔄 [.github/workflows/ci.yml](.github/workflows/ci.yml) - **5 phút**
-4. 📊 [README.md - Services Status](README.md#-services-status) - **3 phút**
+2. 📊 [ANALYSIS_REPORT.md](ANALYSIS_REPORT.md) - **15 phút** ⭐ NEW
+3. 🐳 [docker-compose.yml](docker-compose.yml) - **5 phút**
+4. 🔄 [.github/workflows/ci.yml](.github/workflows/ci.yml) - **5 phút**
+5. 📊 [README.md - Services Status](README.md#-services-status) - **3 phút**
 
 **Sau đó:**
 
@@ -95,13 +99,15 @@ make deploy
 - How things work
 - Where to find information
 - Who to contact
+- Current optimization efforts
 
 **Đọc ngay:**
 
 1. 📖 [README.md](README.md) - **20 phút**
 2. 🗺️ [MASTER_INDEX.md](MASTER_INDEX.md) - **10 phút**
-3. 📚 [docs/README.md](docs/README.md) - **5 phút**
-4. 🎯 [docs/FEATURES_DETAIL.md](docs/FEATURES_DETAIL.md) - **15 phút**
+3. 📊 [ANALYSIS_REPORT.md](ANALYSIS_REPORT.md) - **10 phút** ⭐ Hiểu tình trạng dự án
+4. 📚 [docs/README.md](docs/README.md) - **5 phút**
+5. 🎯 [docs/FEATURES_DETAIL.md](docs/FEATURES_DETAIL.md) - **15 phút**
 
 ---
 
@@ -112,8 +118,10 @@ make deploy
 ```bash
 git clone [your-repo-url]
 cd mia-logistics-manager
-make install
+make install   # Dùng --legacy-peer-deps nếu gặp lỗi ERESOLVE
 ```
+
+> **Lỗi npm ERESOLVE?** Chạy: `npm install --legacy-peer-deps` rồi `cd backend && npm install --legacy-peer-deps`
 
 ### Step 2: Configure
 
@@ -132,8 +140,8 @@ cp .env.example .env
 ### Step 4: Access
 
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:3100
-- Health Check: http://localhost:3100/api/health
+- Backend API: http://localhost:5050 (hoặc 3100 nếu dùng dev:backend)
+- Health Check: http://localhost:5050/api/health
 
 ---
 
@@ -142,8 +150,10 @@ cp .env.example .env
 ```
 📖 Main Documentation
    ├── README.md (1,617 lines) ⭐ START HERE
-   ├── MASTER_INDEX.md (400+ lines) - Navigation
-   └── PROJECT_FINAL_REPORT.md (500+ lines) - Status
+   ├── MASTER_INDEX.md (600+ lines) - Navigation
+   ├── PROJECT_FINAL_REPORT.md (500+ lines) - Status
+   ├── ANALYSIS_REPORT.md (350+ lines) - Phân tích & đề xuất ⭐ NEW
+   └── OPTIMIZATION_PLAN.md (500+ lines) - Kế hoạch 4 tuần ⭐ NEW
 
 📊 For Developers
    ├── CONTRIBUTING.md (553 lines)
@@ -215,6 +225,43 @@ make deploy
 
 ---
 
+## ⚠️ Troubleshooting
+
+### Lỗi `make install` / `npm install` (ERESOLVE)
+
+Nếu gặp lỗi peer dependency conflict (ví dụ @mui/system vs @mui/x-date-pickers):
+
+```bash
+npm install --legacy-peer-deps
+cd backend && npm install --legacy-peer-deps
+```
+
+Makefile đã dùng `--legacy-peer-deps` mặc định; nếu vẫn lỗi, chạy lệnh trên thủ công.
+
+### "API trả về HTML" / "Backend API chưa sẵn sàng"
+
+**Nguyên nhân:** Frontend gọi `/api/*` nhưng backend chưa chạy hoặc thiếu proxy.
+
+**Cách fix:**
+
+1. **Luôn dùng `make start`** – khởi động cả backend + frontend (không chạy `npm start` riêng)
+2. **Proxy** – `package.json` phải có `"proxy": "http://localhost:5050"` để CRA chuyển `/api/*` tới backend
+3. Restart sau khi sửa proxy (CRA đọc proxy khi start)
+
+### Google Sheets "unregistered callers" / "connection failed"
+
+**Yêu cầu:**
+
+1. File Service Account JSON tại `backend/credentials/mia-logistics-*.json`
+2. `.env` có `GOOGLE_APPLICATION_CREDENTIALS` (đường dẫn tuyệt đối khuyến nghị)
+3. **Share Google Sheet** với email Service Account (`xxx@xxx.iam.gserviceaccount.com` trong file JSON) – quyền Editor
+
+### Backend dependencies (deploy-check)
+
+Backend dùng root `node_modules`, không có `backend/package.json` riêng. Deploy-check bỏ qua `backend/node_modules` khi không có package.json.
+
+---
+
 ## 📞 Getting Help
 
 ### Documentation
@@ -282,4 +329,5 @@ Before you start:
 
 Made with ❤️ for Vietnamese logistics industry
 
-**Last Updated**: November 12, 2025
+**Last Updated**: February 7, 2026
+**Latest Addition**: Analysis Report & Optimization Plan

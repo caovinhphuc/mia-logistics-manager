@@ -169,7 +169,7 @@ if (sendGridApiKey) {
       pass: sendGridApiKey,
     },
   });
-  console.log('📧 Email: Using SendGrid');
+  logger.debug('📧 Email: Using SendGrid');
 } else if (smtpHost && smtpUser && smtpPass) {
   // Use SMTP
   transporter = nodemailer.createTransport({
@@ -181,7 +181,7 @@ if (sendGridApiKey) {
       pass: smtpPass,
     },
   });
-  console.log('📧 Email: Using SMTP');
+  logger.debug('📧 Email: Using SMTP');
 } else if (process.env.REACT_APP_EMAIL_USER && process.env.REACT_APP_EMAIL_PASS) {
   // Legacy Gmail config
   transporter = nodemailer.createTransport({
@@ -191,7 +191,7 @@ if (sendGridApiKey) {
       pass: process.env.REACT_APP_EMAIL_PASS,
     },
   });
-  console.log('📧 Email: Using legacy Gmail config');
+  logger.debug('📧 Email: Using legacy Gmail config');
 }
 
 // Alert history storage (in-memory for demo)
@@ -730,7 +730,7 @@ const APPS_SCRIPT_DISTANCE_URL =
     : 'https://script.google.com/macros/s/AKfycbw8xo0xm576l67BXb2fVcEg4cOE4rQD7MgUKxAWZmTVK7-b2k5ZR303EEmOyvbd3nTQfQ/exec');
 
 if (!process.env.APPS_SCRIPT_DISTANCE_URL && APPS_SCRIPT_SCRIPT_ID) {
-  console.log(
+  logger.debug(
     `[Google Apps Script] Derived distance URL from script ID ${APPS_SCRIPT_SCRIPT_ID.slice(0, 8)}…`
   );
 }
@@ -886,7 +886,7 @@ app.post('/api/auth/login', async (req, res) => {
       attempts.count++;
       loginAttempts.set(email, attempts);
 
-      console.log(`Failed login attempt for ${email} at ${new Date().toISOString()}`);
+      logger.debug(`Failed login attempt for ${email} at ${new Date().toISOString()}`);
 
       return res.status(401).json({
         success: false,
@@ -920,7 +920,7 @@ app.post('/api/auth/login', async (req, res) => {
     };
 
     // Log successful login
-    console.log(`✅ User logged in: ${email} (${user.role}) at ${new Date().toISOString()}`);
+    logger.debug(`✅ User logged in: ${email} (${user.role}) at ${new Date().toISOString()}`);
 
     res.json({
       success: true,
@@ -1588,12 +1588,12 @@ app.post('/api/auth/forgot-password', async (req, res) => {
             <p>Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>
           `,
         });
-        console.log(`✅ Password reset email sent to ${email}`);
+        logger.debug(`✅ Password reset email sent to ${email}`);
       } catch (emailError) {
         console.error('Error sending email:', emailError);
       }
     } else {
-      console.log(`⚠️ Email not configured. Reset token for ${email}: ${resetToken}`);
+      logger.debug(`⚠️ Email not configured. Reset token for ${email}: ${resetToken}`);
     }
 
     res.json({
@@ -1647,7 +1647,7 @@ app.post('/api/auth/reset-password', async (req, res) => {
 
     // Update password in Google Sheets (this would need a write operation)
     // For now, just log it
-    console.log(`Password reset for ${decoded.email}: password updated`);
+    logger.debug(`Password reset for ${decoded.email}: password updated`);
 
     // Remove used token
     passwordResetTokens.delete(token);
@@ -1691,7 +1691,7 @@ app.get('/api/sheets/info', async (req, res) => {
     const { spreadsheetId } = req.query;
     const targetSpreadsheetId = spreadsheetId || DEFAULT_SPREADSHEET_ID;
 
-    console.log(`📊 Getting info for spreadsheet: ${targetSpreadsheetId}`);
+    logger.debug(`📊 Getting info for spreadsheet: ${targetSpreadsheetId}`);
 
     const response = await sheets.spreadsheets.get({
       spreadsheetId: targetSpreadsheetId,
@@ -2256,7 +2256,7 @@ app.get('/api/reports/overview', async (req, res) => {
 if (process.env.NODE_ENV !== 'development') {
   // Daily report at 9 AM
   cron.schedule('0 9 * * *', async () => {
-    console.log('Running daily report...');
+    logger.debug('Running daily report...');
 
     if (transporter) {
       try {
@@ -2278,7 +2278,7 @@ if (process.env.NODE_ENV !== 'development') {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log('Daily report sent successfully');
+        logger.debug('Daily report sent successfully');
       } catch (error) {
         console.error('Failed to send daily report:', error);
       }
@@ -2302,14 +2302,14 @@ app.use((req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(
+  logger.debug(`🚀 Server running on port ${PORT}`);
+  logger.debug(
     `📊 Google Sheets: ${
       !!process.env.REACT_APP_GOOGLE_CLIENT_EMAIL ? 'Configured' : 'Not configured'
     }`
   );
-  console.log(`📧 Email: ${!!transporter ? 'Configured' : 'Not configured'}`);
-  console.log(
+  logger.debug(`📧 Email: ${!!transporter ? 'Configured' : 'Not configured'}`);
+  logger.debug(
     `📱 Telegram: ${
       !!(process.env.REACT_APP_TELEGRAM_BOT_TOKEN && process.env.REACT_APP_TELEGRAM_CHAT_ID)
         ? 'Configured'

@@ -778,6 +778,7 @@ const TransportRequests: React.FC = () => {
     if (selectedStopPoints.size > 0 && newTransportForm.pickupLocation) {
       calculateStopPointDistances();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only run when stop/location change
   }, [selectedStopPoints, newTransportForm.pickupLocation]);
 
   // Xử lý click vào mã phiếu
@@ -916,6 +917,7 @@ const TransportRequests: React.FC = () => {
     });
 
     return Math.round(costBreakdown.totalCost);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- calculateCost is stable, deps are exhaustive
   }, [
     newTransportForm.baseRate,
     newTransportForm.pricePerKm,
@@ -1268,6 +1270,7 @@ const TransportRequests: React.FC = () => {
     if (selectedStopPoints.size > 0 && newTransportForm.pickupLocation) {
       calculateStopPointDistances();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: only when stop/location change
   }, [selectedStopPoints, newTransportForm.pickupLocation]);
 
   // Filter active locations only
@@ -1386,6 +1389,7 @@ const TransportRequests: React.FC = () => {
         pickupLocation: mostCommonPickup,
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- locations via sortedActiveLocations
   }, [
     newTransportForm.selectedTransfers,
     transportRequests,
@@ -1770,6 +1774,7 @@ const TransportRequests: React.FC = () => {
 
       return changed ? next : prev;
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- newTransportForm used for read-only comparison
   }, [
     newTransportForm.carrierName,
     newTransportForm.pricingMethod,

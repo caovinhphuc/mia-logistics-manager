@@ -191,7 +191,23 @@ const AppWrapper = () => {
 
 // Render app
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<AppWrapper />);
+
+if (process.env.REACT_APP_ENTRY === 'unified') {
+  import('./unified/app/App')
+    .then(({ default: UnifiedApp }) => {
+      root.render(
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <UnifiedApp />
+        </ErrorBoundary>
+      );
+    })
+    .catch((err) => {
+      console.error('Failed to load unified app:', err);
+      root.render(<AppWrapper />);
+    });
+} else {
+  root.render(<AppWrapper />);
+}
 
 // Performance monitoring
 if (process.env.REACT_APP_PERFORMANCE_MONITORING === 'true') {

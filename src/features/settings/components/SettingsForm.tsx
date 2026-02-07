@@ -5,7 +5,11 @@ import { useCreateSettings } from '../hooks';
 import type { SettingsFormData } from '../types';
 
 export const SettingsForm: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<SettingsFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SettingsFormData>();
   const { mutate: create, isPending } = useCreateSettings();
 
   const onSubmit = (data: SettingsFormData) => {
@@ -27,11 +31,7 @@ export const SettingsForm: React.FC = () => {
         sx={{ mb: 2 }}
       />
 
-      <Button
-        type="submit"
-        variant="contained"
-        disabled={isPending}
-      >
+      <Button type="submit" variant="contained" disabled={isPending}>
         {isPending ? 'Creating...' : 'Create Settings'}
       </Button>
     </Box>

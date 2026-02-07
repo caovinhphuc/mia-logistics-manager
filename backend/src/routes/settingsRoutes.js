@@ -12,6 +12,14 @@ const { getVietnamTimeString } = require("../utils/timeHelpers");
 
 const router = express.Router();
 
+/**
+ * GET /api/settings
+ * List settings (stub for frontend features/settings). Backend chủ yếu dùng /api/settings/volume-rules.
+ */
+router.get("/", (req, res) => {
+  res.json([]);
+});
+
 // Volume Rules Schema
 const VOLUME_SHEET = "VolumeRules";
 const VOLUME_HEADERS = ["id", "name", "unitVolume", "description", "createdAt", "updatedAt"];

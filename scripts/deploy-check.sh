@@ -62,7 +62,13 @@ check_warn "Backend .env exists" "test -f backend/.env"
 
 echo -e "\n${BLUE}2. Dependencies${NC}"
 check "node_modules installed" "test -d node_modules"
-check "Backend dependencies" "test -d backend/node_modules"
+# Chỉ kiểm tra backend/node_modules khi backend có package.json riêng
+if [ -f backend/package.json ]; then
+  check "Backend dependencies" "test -d backend/node_modules"
+else
+  echo -n "Checking Backend dependencies... "
+  echo -e "${GREEN}✅${NC} (backend dùng root node_modules)"
+fi
 
 echo -e "\n${BLUE}3. Build & Tests${NC}"
 check "Build successful" "npm run build"

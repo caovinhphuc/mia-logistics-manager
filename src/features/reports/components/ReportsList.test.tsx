@@ -1,9 +1,9 @@
-import { renderWithProviders, screen } from '@/test-utils'
-import { ReportsList } from './ReportsList'
+import { renderWithProviders, screen } from '@/test-utils';
+import { ReportsList } from './ReportsList';
 
 describe('ReportsList', () => {
   it('renders loading state', () => {
-    renderWithProviders(<ReportsList />)
+    renderWithProviders(<ReportsList />);
     // TODO: Implement test
   });
 

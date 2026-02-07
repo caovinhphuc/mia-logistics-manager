@@ -283,13 +283,12 @@ lsof -ti:8000 | xargs kill -9
    ls -la backend/sinuous-aviary-474820-e3-c442968a0e87.json
    ```
 
-### Connection Status Always Red
+### Connection Status Always Red / "API trả về HTML"
 
-1. **Backend phải chạy trước** - Port 5050
-2. **Check CORS settings** trong backend/index.js
-3. **Check firewall** không block ports
-4. **Verify API_URL** trong .env
-5. **Check proxy** trong package.json: `"proxy": "http://localhost:5050"`
+1. **Dùng `make start`** – khởi động cả backend + frontend (không chạy `npm start` riêng)
+2. **Proxy bắt buộc** – `package.json` phải có `"proxy": "http://localhost:5050"` để CRA chuyển `/api/*` tới backend
+3. **Backend phải chạy trước** – Port 5050
+4. **Restart** sau khi sửa proxy (CRA đọc proxy khi start)
 
 ### Google Sheets Connection Issues
 

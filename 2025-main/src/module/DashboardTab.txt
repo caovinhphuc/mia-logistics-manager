@@ -1,0 +1,810 @@
+import React, { useState } from 'react';
+import {
+  Package, Clock, AlertTriangle, Users, Activity,
+  TrendingUp, CheckCircle, BarChart2, ChevronDown, Eye, Bell,
+  FileText, Printer, Filter,  Download, RefreshCw,
+  Map, PieChart, ChevronUp, Zap
+} from 'lucide-react';
+
+/**
+ * Component OverviewTab - Hiển thị tổng quan hệ thống, KPI, biểu đồ hiệu suất và cảnh báo
+ */
+
+// Thêm các constants cho nguyên tắc 80/20
+const PARETO_PRINCIPLES = {
+  P1_FIRST: {
+    id: "p1_first",
+    name: "Xử lý đơn P1 trước 100%",
+    description: "Ưu tiên cao nhất cho đơn P1 để đảm bảo SLA",
+  },
+  SINGLE_PRODUCT: {
+    id: "single_product",
+    name: "Xử lý đơn 1 sản phẩm (nhanh chóng hoàn thành)",
+    description: "Đơn 1 sản phẩm được xử lý nhanh hơn, giúp giảm backlog",
+  },
+  SAME_PRODUCTS: {
+    id: "same_products",
+    name: "Gom nhóm đơn cùng loại sản phẩm (giảm di chuyển)",
+    description: "Cùng loại sản phẩm được gom nhóm để giảm thời gian di chuyển",
+  },
+  NEARBY_LOCATIONS: {
+    id: "nearby_locations",
+    name: "Nhóm đơn gần vị trí nhau (tối ưu lộ trình)",
+    description:
+      "Các vị trí gần nhau được gom nhóm để tối ưu lộ trình lấy hàng",
+  },
+  MULTI_PRODUCTS: {
+    id: "multi_products",
+    name: "Xử lý đơn nhiều loại sản phẩm sau cùng",
+    description:
+      "Đơn nhiều loại sản phẩm được xử lý sau để không làm chậm các đơn khác",
+  },
+};
+
+// Dữ liệu giả lập
+const mockOrders = [
+  {
+    id: "SO0405:123456",
+    customer: "Shopee",
+    channel: "Shopee",
+    date: "2025-05-04T08:15:30",
+    deadline: "2025-05-04T10:15:30",
+    status: "pending",
+    priority: "P1",
+    detail: "Vali Larita 28L (1), Luggage Tag (2)",
+    location: "A12",
+    transporter: "GHN Express",
+    productType: "vali-mix",
+    skuType: "multi-sku",
+    items: [
+      { sku: "VL28L", name: "Vali Larita 28L", location: "A12", quantity: 1 },
+      { sku: "LT01", name: "Luggage Tag", location: "B2", quantity: 2 },
+    ],
+  },
+  {
+    id: "SO0405:123457",
+    customer: "TikTok Shop",
+    channel: "TikTok",
+    date: "2025-05-04T08:30:45",
+    deadline: "2025-05-04T12:30:45",
+    status: "processing",
+    priority: "P2",
+    detail: "Vali Pisani 24M (1)",
+    location: "A5",
+    transporter: "J&T Express",
+    productType: "vali-only",
+    skuType: "single-sku",
+    items: [
+      { sku: "VP24M", name: "Vali Pisani 24M", location: "A5", quantity: 1 },
+    ],
+  },
+  {
+    id: "SO0405:123458",
+    customer: "Lazada",
+    channel: "Lazada",
+    date: "2025-05-04T09:15:20",
+    deadline: "2025-05-04T13:15:20",
+    status: "pending",
+    priority: "P2",
+    detail: "Travel Neck Pillow (1), Travel Pouch (2)",
+    location: "B8",
+    transporter: "Ninja Van",
+    productType: "no-vali",
+    skuType: "multi-sku",
+    items: [
+      { sku: "TNP01", name: "Travel Neck Pillow", location: "B8", quantity: 1 },
+      { sku: "TP01", name: "Travel Pouch", location: "B4", quantity: 2 },
+    ],
+  },
+  {
+    id: "SO0405:123459",
+    customer: "Mia Online",
+    channel: "Website",
+    date: "2025-05-04T10:20:10",
+    deadline: "2025-05-04T18:20:10",
+    status: "pending",
+    priority: "P3",
+    detail: "Mia Cover (2), Pack-it Cube (1)",
+    location: "B15",
+    transporter: "VNPost",
+    productType: "no-vali",
+    skuType: "multi-sku",
+    items: [
+      { sku: "MC01", name: "Mia Cover", location: "B15", quantity: 2 },
+      { sku: "PIC01", name: "Pack-it Cube", location: "B12", quantity: 1 },
+    ],
+  },
+  {
+    id: "SO0405:123460",
+    customer: "Shopee",
+    channel: "Shopee",
+    date: "2025-05-04T11:05:35",
+    deadline: "2025-05-04T13:05:35",
+    status: "pending",
+    priority: "P1",
+    detail: "Vali Larita 28L (1), Vali Larita 24M (1)",
+    location: "A12",
+    transporter: "Shopee Express",
+    productType: "vali-only",
+    skuType: "single-sku-multi",
+    items: [
+      { sku: "VL28L", name: "Vali Larita 28L", location: "A12", quantity: 1 },
+      { sku: "VL24M", name: "Vali Larita 24M", location: "A8", quantity: 1 },
+    ],
+  },
+];
+
+const mockEmployees = [
+  {
+    id: 1,
+    name: "Nguyễn Văn A",
+    role: "Nhân viên kho",
+    efficiency: 42,
+    status: "active",
+    currentOrders: 4,
+    completedToday: 15,
+    shift: "Ca sáng",
+    avatar: "/api/placeholder/40/40",
+  },
+  {
+    id: 2,
+    name: "Trần Thị B",
+    role: "Nhân viên kho",
+    efficiency: 38,
+    status: "active",
+    currentOrders: 3,
+    completedToday: 12,
+    shift: "Ca sáng",
+    avatar: "/api/placeholder/40/40",
+  },
+  {
+    id: 3,
+    name: "Lê Văn C",
+    role: "Nhân viên kho",
+    efficiency: 45,
+    status: "break",
+    currentOrders: 0,
+    completedToday: 18,
+    shift: "Ca sáng",
+    avatar: "/api/placeholder/40/40",
+  },
+  {
+    id: 4,
+    name: "Phạm Thị D",
+    role: "Nhân viên kho",
+    efficiency: 35,
+    status: "active",
+    currentOrders: 5,
+    completedToday: 10,
+    shift: "Ca sáng",
+    avatar: "/api/placeholder/40/40",
+  },
+];
+
+const mockAlerts = [
+  {
+    id: 1,
+    type: "urgent",
+    title: "Đơn sắp trễ hạn SLA",
+    message: "Đơn SO0405:123456 còn 15 phút để hoàn thành",
+    time: "09:30",
+  },
+  {
+    id: 2,
+    type: "warning",
+    title: "Khu vực kho quá tải",
+    message: "Khu vực A đang xử lý 15 đơn, vượt 30% công suất",
+    time: "09:45",
+  },
+  {
+    id: 3,
+    type: "info",
+    title: "Nhân viên hiệu suất cao",
+    message: "Lê Văn C đã hoàn thành 18 đơn, vượt KPI 20%",
+    time: "10:00",
+  },
+];
+
+const activityLogs = [
+  {
+    id: 1,
+    type: "order",
+    action: "Phân bổ đơn SO0405:123456 cho NV01",
+    user: "Admin",
+    time: "09:15:30",
+  },
+  {
+    id: 2,
+    type: "staff",
+    action: "NV02 bắt đầu ca làm việc",
+    user: "System",
+    time: "09:00:00",
+  },
+  {
+    id: 3,
+    type: "sla",
+    action: "Cảnh báo SLA cho đơn SO0405:123457",
+    user: "System",
+    time: "09:25:45",
+  },
+  {
+    id: 4,
+    type: "picking",
+    action: "Hoàn thành lộ trình picking Batch #1",
+    user: "NV01",
+    time: "09:35:20",
+  },
+];
+
+const mockHourlyPerformanceData = [
+  { hour: "08:00", orders: 5, completed: 3, sla: 80 },
+  { hour: "09:00", orders: 8, completed: 6, sla: 90 },
+  { hour: "10:00", orders: 10, completed: 8, sla: 85 },
+  { hour: "11:00", orders: 7, completed: 5, sla: 70 },
+  { hour: "12:00", orders: 6, completed: 4, sla: 75 },
+  { hour: "13:00", orders: 9, completed: 7, sla: 95 },
+  { hour: "14:00", orders: 11, completed: 9, sla: 80 },
+  { hour: "15:00", orders: 12, completed: 10, sla: 90 },
+  { hour: "16:00", orders: 8, completed: 6, sla: 85 },
+  { hour: "17:00", orders: 5, completed: 4, sla: 70 },
+  { hour: "18:00", orders: 4, completed: 3, sla: 60 },
+  { hour: "19:00", orders: 3, completed: 2, sla: 50 },
+  { hour: "20:00", orders: 2, completed: 1, sla: 40 },
+  { hour: "21:00", orders: 1, completed: 0, sla: 20 },
+  { hour: "22:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "23:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "00:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "01:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "02:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "03:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "04:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "05:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "06:00", orders: 0, completed: 0, sla: 0 },
+  { hour: "07:00", orders: 0, completed: 0, sla: 0 }
+];
+
+
+
+
+// Component OverviewTab
+const DashboardTab = ({
+  // Các props từ component cha
+  stats: mockStats,
+  filteredOrders: mockOrders,
+  hourlyPerformanceData: mockHourlyPerformanceData,
+  alerts: mockAlerts,
+  darkMode = false,
+  buttonSecondaryClass = "bg-gray-200 hover:bg-gray-300 text-gray-800",
+  cardClass = "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+}) => {
+  // Dữ liệu giả lập
+  const stats = mockStats || stats;
+  const filteredOrders = mockOrders || mockOrders;
+  const hourlyPerformanceData = mockHourlyPerformanceData || mockHourlyPerformanceData;
+  const alerts = mockAlerts || mockAlerts;
+
+  // State cho các filter và tuỳ chọn hiển thị
+  const [timeRangeFilter, setTimeRangeFilter] = useState('today');
+  const [showDetailedCharts, setShowDetailedCharts] = useState(false);
+  const [showAllAlerts, setShowAllAlerts] = useState(false);
+
+
+
+
+  // Nếu không có dữ liệu thống kê, trả về thông báo
+  if (!stats || Object.keys(stats).length === 0) {
+    return (<div>Không có dữ liệu thống kê</div>);
+  }
+  // Nếu không có dữ liệu orders, trả về thông báo
+  if (!filteredOrders || filteredOrders.length === 0) {
+    return (<div>Không có đơn hàng nào trong khoảng thời gian đã chọn</div>);
+  }
+
+  // Nếu không có dữ liệu hourlyPerformanceData, trả về thông báo
+  if (!hourlyPerformanceData || hourlyPerformanceData.length === 0) {
+    return (<div>Không có dữ liệu hiệu suất theo giờ</div>);
+  }
+  // Nếu không có dữ liệu alerts, trả về thông báo
+  if (!alerts || alerts.length === 0) {
+    return (<div>Không có cảnh báo hệ thống</div>);
+  }
+  // Nếu không có dữ liệu stats, trả về thông báo
+  if (!stats || Object.keys(stats).length === 0) {
+    return (<div>Không có dữ liệu thống kê</div>);
+  }
+  // Nếu không có dữ liệu orders, trả về thông báo
+  if (!filteredOrders || filteredOrders.length === 0) {
+    return (<div>Không có đơn hàng nào trong khoảng thời gian đã chọn</div>);
+  }
+  // Nếu không có dữ liệu hourlyPerformanceData, trả về thông báo
+  if (!hourlyPerformanceData || hourlyPerformanceData.length === 0) {
+    return (<div>Không có dữ liệu hiệu suất theo giờ</div>);
+  }
+
+  // Nếu không có dữ liệu alerts, trả về thông báo
+  if (!alerts || alerts.length === 0) {
+    return (<div>Không có cảnh báo hệ thống</div>);
+  }
+
+  // Tính toán số đơn P1, P2 và SLA
+  stats.p1Orders = filteredOrders.filter(order => order.priority === 'P1' && order.status !== 'completed').length;
+  stats.p2Orders = filteredOrders.filter(order => order.priority === 'P2' && order.status !== 'completed').length;
+  stats.slaRate = Math.round((stats.p1Orders + stats.p2Orders) / stats.totalOrders * 100);
+  stats.avgOrderTime = Math.round(filteredOrders.reduce((sum, order) => sum + order.processingTime, 0) / stats.totalOrders);
+  stats.pendingOrders = filteredOrders.filter(order => order.status === 'pending').length;
+  stats.processingOrders = filteredOrders.filter(order => order.status === 'processing').length;
+  stats.completedOrders = filteredOrders.filter(order => order.status === 'completed').length;
+
+  // Nếu không có đơn hàng, trả về thông báo
+  if (stats.totalOrders === 0) {
+    return (<div>Không có đơn hàng nào trong khoảng thời gian đã chọn</div>);
+  }
+  // Nếu không có đơn hàng P1, trả về thông báo
+  if (stats.p1Orders === 0) {
+    return (<div>Không có đơn hàng P1 nào trong khoảng thời gian đã chọn</div>);
+  }
+
+
+
+
+  // Tính toán số đơn còn lại (P3, P4)
+  const remainingOrders = stats.totalOrders - stats.p1Orders - stats.p2Orders;
+
+  // Lọc orders theo priority P1
+  const priorityP1Orders = filteredOrders ? filteredOrders.filter(order =>
+    order.priority === 'P1' && order.status !== 'completed'
+  ) : [];
+
+  // Format thời gian
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+  };
+
+  // Ước tính thời gian còn lại cho deadline
+  const getTimeLeft = (deadline) => {
+    const now = new Date();
+    const deadlineTime = new Date(deadline);
+    const diff = deadlineTime - now;
+
+    if (diff <= 0) return 'Quá hạn';
+
+    const minutes = Math.floor(diff / (1000 * 60));
+    if (minutes < 60) return `${minutes} phút`;
+
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    return `${hours}h${remainingMinutes > 0 ? ` ${remainingMinutes}m` : ''}`;
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Tiêu đề và filter */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
+        <h2 className="text-xl font-semibold mb-2 md:mb-0">Tổng quan hệ thống</h2>
+        <div className="flex items-center space-x-2">
+          <select
+            className={`border rounded py-1 px-3 text-sm ${darkMode ? 'bg-gray-700 border-gray-600 text-gray-200' : 'bg-white border-gray-300 text-gray-800'}`}
+            value={timeRangeFilter}
+            onChange={(e) => setTimeRangeFilter(e.target.value)}
+          >
+            <option value="today">Hôm nay</option>
+            <option value="yesterday">Hôm qua</option>
+            <option value="week">7 ngày qua</option>
+            <option value="month">30 ngày qua</option>
+          </select>
+          <button
+            className={`p-2 rounded ${buttonSecondaryClass}`}
+            onClick={() => setShowDetailedCharts(!showDetailedCharts)}
+            title="Hiển thị biểu đồ chi tiết"
+          >
+            <BarChart2 size={18} />
+          </button>
+          <button
+            className={`p-2 rounded ${buttonSecondaryClass}`}
+            title="Làm mới dữ liệu"
+          >
+            <RefreshCw size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* KPI Cards - Metric chính */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm opacity-70">Tổng đơn</p>
+              <p className="text-2xl font-bold">{stats.totalOrders}</p>
+            </div>
+            <div className="p-3 rounded-full bg-blue-500 bg-opacity-20">
+              <Package className="h-6 w-6 text-blue-500" />
+            </div>
+          </div>
+          <div className="mt-2 grid grid-cols-3 gap-1 text-xs">
+            <div className="flex flex-col items-center p-1 bg-yellow-500 bg-opacity-10 rounded">
+              <span className="opacity-70">Đang chờ</span>
+              <span className="font-medium">{stats.pendingOrders}</span>
+            </div>
+            <div className="flex flex-col items-center p-1 bg-blue-500 bg-opacity-10 rounded">
+              <span className="opacity-70">Xử lý</span>
+              <span className="font-medium">{stats.processingOrders}</span>
+            </div>
+            <div className="flex flex-col items-center p-1 bg-green-500 bg-opacity-10 rounded">
+              <span className="opacity-70">Hoàn thành</span>
+              <span className="font-medium">{stats.completedOrders}</span>
+            </div>
+          </div>
+          <div className="flex mt-2 text-xs">
+            <span className="flex items-center text-green-500">
+              <TrendingUp className="h-3 w-3 mr-1" /> +5% so với hôm qua
+            </span>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm opacity-70">Đơn P1 (Gấp)</p>
+              <p className="text-2xl font-bold text-red-500">{stats.p1Orders}</p>
+            </div>
+            <div className="p-3 rounded-full bg-red-500 bg-opacity-20">
+              <Clock className="h-6 w-6 text-red-500" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="w-full bg-gray-700 rounded-full h-2">
+              <div
+                className="h-2 bg-red-500 rounded-full"
+                style={{width: `${Math.round((stats.p1Orders/stats.totalOrders)*100)}%`}}
+              ></div>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-xs">
+            <span className="flex items-center text-orange-500">
+              <Clock className="h-3 w-3 mr-1" /> {Math.round((stats.p1Orders/stats.totalOrders)*100)}% tổng đơn
+            </span>
+            <span className="text-gray-400">SLA: 2 giờ</span>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm opacity-70">Tỷ lệ đạt SLA</p>
+              <p className="text-2xl font-bold text-green-500">{stats.slaRate}%</p>
+            </div>
+            <div className="p-3 rounded-full bg-green-500 bg-opacity-20">
+              <CheckCircle className="h-6 w-6 text-green-500" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="w-full bg-gray-700 rounded-full h-2">
+              <div
+                className="h-2 bg-green-500 rounded-full"
+                style={{width: `${stats.slaRate}%`}}
+              ></div>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-xs">
+            <span className="flex items-center text-green-500">
+              <TrendingUp className="h-3 w-3 mr-1" /> +1.2% so với hôm qua
+            </span>
+            <span className="text-gray-400">Mục tiêu: 95%</span>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm opacity-70">Thời gian xử lý TB</p>
+              <p className="text-2xl font-bold text-purple-500">{stats.avgOrderTime} phút</p>
+            </div>
+            <div className="p-3 rounded-full bg-purple-500 bg-opacity-20">
+              <Activity className="h-6 w-6 text-purple-500" />
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="text-xs font-medium mb-1 flex justify-between">
+              <span className="opacity-70">Thời gian TB theo sản phẩm:</span>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span>Vali: 28m</span>
+              <span>Phụ kiện: 15m</span>
+              <span>Mix: 32m</span>
+            </div>
+          </div>
+          <div className="flex justify-between mt-2 text-xs">
+            <span className="flex items-center text-green-500">
+              <TrendingUp className="h-3 w-3 mr-1" /> -3 phút so với hôm qua
+            </span>
+            <span className="text-gray-400">Tốc độ tốt</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Biểu đồ và phân tích */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className={`lg:col-span-2 p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-medium">Hiệu suất xử lý đơn theo giờ</h3>
+            {showDetailedCharts && (
+              <div className="flex items-center space-x-2">
+                <button className={`px-2 py-1 text-xs rounded ${buttonSecondaryClass}`}>
+                  <Download size={14} className="inline mr-1" /> Excel
+                </button>
+                <button className={`px-2 py-1 text-xs rounded ${buttonSecondaryClass}`}>
+                  <Filter size={14} className="inline mr-1" /> Lọc
+                </button>
+              </div>
+            )}
+          </div>
+          <div className={`h-${showDetailedCharts ? '80' : '64'}`}>
+            <div className="w-full h-full flex items-end">
+              {hourlyPerformanceData.map((item, index) => (
+                <div key={index} className="flex-1 flex flex-col items-center">
+                  <div className="relative w-full flex justify-center space-x-1 mb-1">
+                    <div
+                      className="w-5 bg-blue-500 rounded-t"
+                      style={{height: `${(item.orders/35)*100}%`}}
+                      title={`Tổng đơn: ${item.orders}`}
+                    ></div>
+                    <div
+                      className="w-5 bg-green-500 rounded-t"
+                      style={{height: `${(item.completed/35)*100}%`}}
+                      title={`Hoàn thành: ${item.completed}`}
+                    ></div>
+                  </div>
+                  <div className="text-xs pt-1">{item.hour}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex justify-center space-x-4 mt-2">
+            <div className="flex items-center text-xs">
+              <div className="w-3 h-3 bg-blue-500 rounded mr-1"></div>
+              <span>Tổng đơn: {hourlyPerformanceData.reduce((sum, item) => sum + item.orders, 0)}</span>
+            </div>
+            <div className="flex items-center text-xs">
+              <div className="w-3 h-3 bg-green-500 rounded mr-1"></div>
+              <span>Hoàn thành: {hourlyPerformanceData.reduce((sum, item) => sum + item.completed, 0)}</span>
+            </div>
+            <div className="flex items-center text-xs">
+              <div className="w-3 h-3 bg-yellow-500 rounded mr-1"></div>
+              <span>SLA TB: {(hourlyPerformanceData.reduce((sum, item) => sum + item.sla, 0) / hourlyPerformanceData.length).toFixed(1)}%</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-medium">Đơn hàng ưu tiên P1</h3>
+            <button className={`text-xs px-2 py-1 rounded ${buttonSecondaryClass}`}>
+              <Eye size={14} className="inline mr-1" /> Xem tất cả
+            </button>
+          </div>
+
+          <div className="space-y-3 max-h-64 overflow-y-auto">
+            {(priorityP1Orders && priorityP1Orders.length > 0) ? (
+              priorityP1Orders.slice(0, 4).map((order, index) => (
+                <div key={index} className="p-3 rounded-lg bg-red-900 bg-opacity-10 border border-red-900 border-opacity-10">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-sm font-medium">{order.id}</p>
+                      <p className="text-xs text-gray-400 mt-1">{order.detail}</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs px-1.5 py-0.5 rounded-full bg-red-500 bg-opacity-20 text-red-400">
+                        {getTimeLeft(order.deadline)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between mt-2 text-xs">
+                    <span className="text-gray-400">Vị trí: {order.location}</span>
+                    <span className="text-gray-400">{order.channel}</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-4 text-gray-500">
+                <p>Không có đơn P1 đang chờ xử lý</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Thống kê SLA */}
+      <div className={`p-4 rounded-lg border ${cardClass}`}>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-medium">Phân tích SLA theo trạng thái</h3>
+          <div className="flex items-center space-x-2">
+            <button className={`px-3 py-1 text-xs rounded ${buttonSecondaryClass}`}>
+              <Download size={14} className="inline mr-1" /> Xuất báo cáo
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+          <div className="p-3 rounded-lg bg-blue-900 bg-opacity-10 border border-blue-900 border-opacity-10">
+            <div className="flex justify-between items-center mb-2">
+              <h4 className="text-sm font-medium">Đơn P1 (gấp)</h4>
+              <span className="text-xs px-1.5 py-0.5 rounded-full bg-blue-500 bg-opacity-20 text-blue-400">
+                {stats.p1Orders} đơn
+              </span>
+            </div>
+            <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
+              <div
+                className="h-2 bg-blue-500 rounded-full"
+                style={{width: `${92}%`}}
+              ></div>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">SLA đạt: 92%</span>
+              <span className="text-gray-400">Thời gian TB: 22 phút</span>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-lg bg-green-900 bg-opacity-10 border border-green-900 border-opacity-10">
+            <div className="flex justify-between items-center mb-2">
+              <h4 className="text-sm font-medium">Đơn P2 (cảnh báo)</h4>
+              <span className="text-xs px-1.5 py-0.5 rounded-full bg-green-500 bg-opacity-20 text-green-400">
+                {stats.p2Orders} đơn
+              </span>
+            </div>
+            <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
+              <div
+                className="h-2 bg-green-500 rounded-full"
+                style={{width: `${96}%`}}
+              ></div>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">SLA đạt: 96%</span>
+              <span className="text-gray-400">Thời gian TB: 42 phút</span>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-lg bg-purple-900 bg-opacity-10 border border-purple-900 border-opacity-10">
+            <div className="flex justify-between items-center mb-2">
+              <h4 className="text-sm font-medium">Đơn P3-P4 (thường)</h4>
+              <span className="text-xs px-1.5 py-0.5 rounded-full bg-purple-500 bg-opacity-20 text-purple-400">
+                {remainingOrders} đơn
+              </span>
+            </div>
+            <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
+              <div
+                className="h-2 bg-purple-500 rounded-full"
+                style={{width: `${99}%`}}
+              ></div>
+            </div>
+            <div className="flex justify-between text-xs">
+              <span className="text-gray-400">SLA đạt: 99%</span>
+              <span className="text-gray-400">Thời gian TB: 4.2 giờ</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="p-3 rounded-lg bg-yellow-900 bg-opacity-10 border border-yellow-900 border-opacity-10">
+            <div className="flex justify-between items-center mb-2">
+              <h4 className="text-sm font-medium">Top 3 lý do không đạt SLA</h4>
+              <span className="text-xs px-1.5 py-0.5 rounded-full bg-yellow-500 bg-opacity-20 text-yellow-400">
+                {100 - stats.slaRate}% đơn hàng
+              </span>
+            </div>
+            <ul className="space-y-1 text-xs">
+              <li className="flex justify-between">
+                <span>1. Hết hàng tại kho</span>
+                <span>42%</span>
+              </li>
+              <li className="flex justify-between">
+                <span>2. Thiếu nhân sự vào giờ cao điểm</span>
+                <span>27%</span>
+              </li>
+              <li className="flex justify-between">
+                <span>3. Sai vị trí sản phẩm</span>
+                <span>18%</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="p-3 rounded-lg bg-orange-900 bg-opacity-10 border border-orange-900 border-opacity-10">
+            <div className="flex justify-between items-center mb-2">
+              <h4 className="text-sm font-medium">Khung giờ thường quá tải</h4>
+              <span className="text-xs px-1.5 py-0.5 rounded-full bg-orange-500 bg-opacity-20 text-orange-400">
+                Cần thêm nhân sự
+              </span>
+            </div>
+            <ul className="space-y-1 text-xs">
+              <li className="flex justify-between">
+                <span>1. 8:00 - 10:00</span>
+                <span>35% đơn P1</span>
+              </li>
+              <li className="flex justify-between">
+                <span>2. 13:00 - 15:00</span>
+                <span>28% đơn P1</span>
+              </li>
+              <li className="flex justify-between">
+                <span>3. 18:00 - 20:00</span>
+                <span>22% đơn P1</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Cảnh báo */}
+      {alerts && alerts.length > 0 && (
+        <div className={`p-4 rounded-lg border ${cardClass}`}>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-medium">Cảnh báo hệ thống</h3>
+            <button
+              className={`text-xs px-2 py-1 rounded ${buttonSecondaryClass}`}
+              onClick={() => setShowAllAlerts(!showAllAlerts)}
+            >
+              {showAllAlerts ? (
+                <>
+                  <ChevronUp size={14} className="inline mr-1" /> Thu gọn
+                </>
+              ) : (
+                <>
+                  <ChevronDown size={14} className="inline mr-1" /> Xem tất cả
+                </>
+              )}
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {(alerts.filter(a => a.type === "urgent") || []).map((alert, index) => (
+              <div key={index} className="p-3 rounded-lg bg-red-900 bg-opacity-10 border border-red-900 border-opacity-10">
+                <div className="flex">
+                  <AlertTriangle className="h-5 w-5 text-red-500 mr-2 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium">{alert.title}</p>
+                    <p className="text-xs text-gray-400 mt-1">{alert.message}</p>
+                    <div className="flex justify-between mt-2">
+                      <span className="text-xs text-gray-500">{alert.time}</span>
+                      <button className="text-xs text-blue-400 hover:text-blue-300">
+                        Xử lý ngay
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {showAllAlerts &&
+              (alerts.filter(a => a.type !== "urgent") || []).map((alert, index) => (
+                <div key={index} className={`p-3 rounded-lg ${
+                  alert.type === "warning"
+                    ? "bg-yellow-900 bg-opacity-10 border border-yellow-900 border-opacity-10"
+                    : "bg-blue-900 bg-opacity-10 border border-blue-900 border-opacity-10"
+                }`}>
+                  <div className="flex">
+                    {alert.type === "warning" ? (
+                      <AlertTriangle className="h-5 w-5 text-yellow-500 mr-2 flex-shrink-0" />
+                    ) : (
+                      <Bell className="h-5 w-5 text-blue-500 mr-2 flex-shrink-0" />
+                    )}
+                    <div>
+                      <p className="text-sm font-medium">{alert.title}</p>
+                      <p className="text-xs text-gray-400 mt-1">{alert.message}</p>
+                      <div className="flex justify-between mt-2">
+                        <span className="text-xs text-gray-500">{alert.time}</span>
+                        <button className="text-xs text-blue-400 hover:text-blue-300">
+                          Chi tiết
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default DashboardTab;

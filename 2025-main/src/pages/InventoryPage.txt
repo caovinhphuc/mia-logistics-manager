@@ -1,0 +1,284 @@
+import React, { useState } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { usePermissions } from '../context/PermissionContext';
+import {
+  Button,
+  Input,
+  Select,
+  Table,
+  TableColumn,
+  Pagination,
+  Card,
+  CardBody
+} from '../components/ui';
+
+interface InventoryItem {
+  id: string;
+  productCode: string;
+  productName: string;
+  category: string;
+  location: string;
+  quantity: number;
+  reserved: number;
+  available: number;
+  lastUpdated: string;
+}
+
+const InventoryPage: React.FC = () => {
+  const { darkMode } = useTheme();
+  const { canAccess } = usePermissions();
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  // Mock data for now
+  const [inventoryData] = useState<InventoryItem[]>([
+    {
+      id: '1',
+      productCode: 'MG0324_28',
+      productName: 'Larita Rota MG0324_28 L Pink',
+      category: 'Luggage',
+      location: 'A3-01',
+      quantity: 50,
+      reserved: 5,
+      available: 45,
+      lastUpdated: '2025-01-09T10:30:00Z'
+    },
+    {
+      id: '2',
+      productCode: 'MG0524_20',
+      productName: 'Larita Aly MG0524_20 S Yellow',
+      category: 'Luggage',
+      location: 'A1-02',
+      quantity: 30,
+      reserved: 2,
+      available: 28,
+      lastUpdated: '2025-01-09T09:15:00Z'
+    },
+    {
+      id: '3',
+      productCode: 'LUGGAGE_TAG',
+      productName: 'Mia Luggage Tag S Orange',
+      category: 'Accessories',
+      location: 'B1-03',
+      quantity: 200,
+      reserved: 15,
+      available: 185,
+      lastUpdated: '2025-01-09T11:45:00Z'
+    }
+  ]);
+
+  const columns: TableColumn<InventoryItem>[] = [
+    {
+      key: 'productCode',
+      title: 'Product Code',
+      dataIndex: 'productCode',
+      width: 150,
+      render: (value) => (
+        <span className="font-mono text-sm font-semibold">{value}</span>
+      )
+    },
+    {
+      key: 'productName',
+      title: 'Product Name',
+      dataIndex: 'productName',
+      width: 300,
+    },
+    {
+      key: 'category',
+      title: 'Category',
+      dataIndex: 'category',
+      width: 120,
+      render: (value) => (
+        <span className={`px-2 py-1 rounded text-xs ${
+          value === 'Luggage' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+        }`}>
+          {value}
+        </span>
+      )
+    },
+    {
+      key: 'location',
+      title: 'Location',
+      dataIndex: 'location',
+      width: 100,
+      align: 'center'
+    },
+    {
+      key: 'quantity',
+      title: 'Total Qty',
+      dataIndex: 'quantity',
+      width: 100,
+      align: 'center',
+      render: (value) => (
+        <span className="font-semibold">{value}</span>
+      )
+    },
+    {
+      key: 'reserved',
+      title: 'Reserved',
+      dataIndex: 'reserved',
+      width: 100,
+      align: 'center',
+      render: (value) => (
+        <span className="text-orange-600">{value}</span>
+      )
+    },
+    {
+      key: 'available',
+      title: 'Available',
+      dataIndex: 'available',
+      width: 100,
+      align: 'center',
+      render: (value) => (
+        <span className={`font-semibold ${
+          value < 10 ? 'text-red-600' : value < 20 ? 'text-orange-600' : 'text-green-600'
+        }`}>
+          {value}
+        </span>
+      )
+    },
+    {
+      key: 'actions',
+      title: 'Actions',
+      dataIndex: 'actions',
+      width: 120,
+      render: (_, _record) => (
+        <div className="flex space-x-2">
+          <Button size="xs" variant="ghost">
+            Edit
+          </Button>
+          <Button size="xs" variant="ghost">
+            Adjust
+          </Button>
+        </div>
+      )
+    }
+  ];
+
+  const filteredData = inventoryData.filter(item => {
+    const matchesSearch = !searchTerm ||
+      item.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.productName.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  if (!canAccess(['inventory.view'])) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+          You don't have permission to access this page.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">Inventory Management</h1>
+          <p className={`mt-1 text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+            Track and manage product inventory levels
+          </p>
+        </div>
+        <div className="flex space-x-2">
+          <Button variant="ghost">
+            Export
+          </Button>
+          <Button variant="primary">
+            Add Product
+          </Button>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <Card>
+        <CardBody>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Input
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              leftIcon={
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              }
+            />
+
+            <Select
+              value={categoryFilter}
+              onChange={(value) => setCategoryFilter(value as string)}
+              options={[
+                { value: 'all', label: 'All Categories' },
+                { value: 'Luggage', label: 'Luggage' },
+                { value: 'Accessories', label: 'Accessories' }
+              ]}
+            />
+
+            <Button onClick={() => setLoading(true)} loading={loading}>
+              Refresh Inventory
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
+
+      {/* Inventory Table */}
+      <Card>
+        <CardBody className="p-0">
+          <Table
+            columns={columns}
+            data={paginatedData}
+            loading={loading}
+            hoverable
+          />
+        </CardBody>
+      </Card>
+
+      {/* Pagination */}
+      {filteredData.length > 0 && (
+        <div className="flex justify-center">
+          <Pagination
+            current={currentPage}
+            total={filteredData.length}
+            pageSize={pageSize}
+            onChange={setCurrentPage}
+            onShowSizeChange={(_, size) => {
+              setPageSize(size);
+              setCurrentPage(1);
+            }}
+            showSizeChanger
+            showQuickJumper
+            showTotal={(total, range) =>
+              `${range[0]}-${range[1]} of ${total} items`
+            }
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default InventoryPage;
+
+// Real inventory management page
+// Using Table, Pagination, Search components
+
+// filepath: e:\All-in-one\2025\src\pages\StaffManagementPage.tsx
+// Staff CRUD operations
+// Using forms, modals, tables
+
+// filepath: e:\All-in-one\2025\src\pages\ReportsPage.tsx
+// Charts, analytics, export features

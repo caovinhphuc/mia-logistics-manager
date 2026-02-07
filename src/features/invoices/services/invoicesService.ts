@@ -1,9 +1,5 @@
 import { apiClient } from '@/services/api/client';
-import type {
-  Invoices,
-  InvoicesFormData,
-  InvoicesFilterParams,
-} from '../types';
+import type { Invoices, InvoicesFormData, InvoicesFilterParams } from '../types';
 
 export class InvoicesService {
   private static BASE_URL = '/invoices';
@@ -11,9 +7,7 @@ export class InvoicesService {
   /**
    * Get all invoices
    */
-  static async getAll(
-    params?: InvoicesFilterParams
-  ): Promise<Invoices[]> {
+  static async getAll(params?: InvoicesFilterParams): Promise<Invoices[]> {
     return apiClient.get<Invoices[]>(this.BASE_URL, { params });
   }
 
@@ -27,19 +21,14 @@ export class InvoicesService {
   /**
    * Create new invoices
    */
-  static async create(
-    data: InvoicesFormData
-  ): Promise<Invoices> {
+  static async create(data: InvoicesFormData): Promise<Invoices> {
     return apiClient.post<Invoices>(this.BASE_URL, data);
   }
 
   /**
    * Update invoices
    */
-  static async update(
-    id: string,
-    data: Partial<InvoicesFormData>
-  ): Promise<Invoices> {
+  static async update(id: string, data: Partial<InvoicesFormData>): Promise<Invoices> {
     return apiClient.put<Invoices>(`${this.BASE_URL}/${id}`, data);
   }
 

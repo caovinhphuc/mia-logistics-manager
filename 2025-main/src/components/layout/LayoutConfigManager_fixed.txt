@@ -1,0 +1,482 @@
+// LayoutConfigManager.jsx - Component quản lý cấu hình layout cho tất cả các trang
+import React, { useState, useEffect } from 'react';
+import {
+  Settings,
+  Monitor,
+  Smartphone,
+  Tablet,
+  RotateCcw,
+  Eye,
+  EyeOff,
+  Save,
+  X,
+  ChevronDown,
+  ChevronRight,
+  Layout,
+  PanelLeft,
+  Trash2
+} from 'lucide-react';
+import { useLayout } from '../../context/LayoutContext';
+import PropTypes from 'prop-types';
+
+const LayoutConfigManager = ({ themeClasses, isOpen, onClose }) => {
+  const {
+    layouts,
+    updateLayout,
+    toggleWidgetVisibility,
+    addWidgetToPage,
+    removeWidgetFromPage,
+    getPageList,
+    getPageName,
+    getAllAvailableWidgets,
+    getWidgetCategories,
+    getAvailableWidgetsByCategory,
+    getUnusedWidgets,
+    getWidgetInfo,
+    resetLayout,
+    resetAllLayouts
+  } = useLayout();
+
+  const [selectedPage, setSelectedPage] = useState(null);
+  const [viewMode, setViewMode] = useState('desktop');
+  const [expandedSections, setExpandedSections] = useState({});
+  const [pages, setPages] = useState([]);
+  const [availableWidgets, setAvailableWidgets] = useState({});
+  const [widgetCategories, setWidgetCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Load danh sách trang và widget khi component được tạo
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        // Simulate loading delay for smooth UX
+        await new Promise(resolve => setTimeout(resolve, 200));
+
+        setPages(getPageList());
+        setAvailableWidgets(getAllAvailableWidgets());
+        setWidgetCategories(getWidgetCategories());
+
+        // Mặc định chọn trang đầu tiên
+        if (getPageList().length > 0 && !selectedPage) {
+          setSelectedPage(getPageList()[0].id);
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isOpen) {
+      loadData();
+    }
+  }, [getPageList, getAllAvailableWidgets, getWidgetCategories, selectedPage, isOpen]);
+
+  // Toggle expanded state của một section
+  const toggleSectionExpand = (sectionId) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
+
+  // Hàm xử lý ẩn/hiện widget với smooth transition
+  const handleToggleWidgetVisibility = async (widgetId) => {
+    if (selectedPage && viewMode) {
+      setIsTransitioning(true);
+      try {
+        toggleWidgetVisibility(selectedPage, viewMode, widgetId);
+        // Small delay for visual feedback
+        await new Promise(resolve => setTimeout(resolve, 100));
+      } finally {
+        setIsTransitioning(false);
+      }
+    }
+  };
+
+  // Hàm xử lý chuyển đổi view mode với animation
+  const handleViewModeChange = async (newMode) => {
+    if (newMode !== viewMode) {
+      setIsTransitioning(true);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 150));
+        setViewMode(newMode);
+      } finally {
+        setIsTransitioning(false);
+      }
+    }
+  };
+
+  // Hàm xử lý chuyển đổi trang với animation
+  const handlePageChange = async (pageId) => {
+    if (pageId !== selectedPage) {
+      setIsTransitioning(true);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 150));
+        setSelectedPage(pageId);
+      } finally {
+        setIsTransitioning(false);
+      }
+    }
+  };
+
+  // Hàm xử lý reset layout cho trang hiện tại
+  const handleResetCurrentLayout = () => {
+    if (selectedPage) {
+      resetLayout(selectedPage);
+    }
+  };
+
+  // Hàm xử lý reset tất cả layout
+  const handleResetAllLayouts = () => {
+    if (window.confirm('Bạn có chắc chắn muốn đặt lại tất cả cấu hình layout về mặc định?')) {
+      resetAllLayouts();
+    }
+  };
+
+  // Nếu đang loading
+  if (isLoading) {
+    return (
+      <div className={`fixed inset-0 z-50 ${isOpen ? 'flex' : 'hidden'} items-center justify-center`}>
+        <div className="absolute inset-0 bg-black/50" onClick={onClose}></div>
+        <div className={`relative w-full max-w-4xl p-6 rounded-lg shadow-lg ${themeClasses.surface} max-h-[90vh] overflow-y-auto`}>
+          <div className="flex items-center justify-center h-64">
+            <div className="space-y-4 text-center">
+              <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <p className={`${themeClasses.text.primary} font-medium`}>Đang tải cấu hình...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Nếu không có trang nào được chọn, hiển thị thông báo
+  if (!selectedPage || !layouts[selectedPage]) {
+    return (
+      <div className={`fixed inset-0 z-50 ${isOpen ? 'flex' : 'hidden'} items-center justify-center`}>
+        <div className="absolute inset-0 bg-black/50" onClick={onClose}></div>
+        <div className={`relative w-full max-w-md p-6 rounded-lg shadow-lg ${themeClasses.surface} max-h-[90vh] overflow-y-auto transform transition-all duration-300 ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className={`text-lg font-semibold ${themeClasses.text.primary}`}>
+              Quản lý hiển thị
+            </h3>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="py-10 text-center">
+            <PanelLeft size={48} className={`mx-auto mb-4 ${themeClasses.text.muted} animate-pulse`} />
+            <p className={`${themeClasses.text.primary} font-medium`}>Không tìm thấy cấu hình layout nào</p>
+            <p className={`${themeClasses.text.muted} text-sm mt-2`}>Vui lòng kiểm tra lại cấu hình hệ thống</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Lấy layout hiện tại dựa vào trang và chế độ xem đã chọn
+  const currentLayout = layouts[selectedPage]?.[viewMode];
+
+  return (
+    <div className={`fixed inset-0 z-50 ${isOpen ? 'flex' : 'hidden'} items-center justify-center transition-all duration-300`}>
+      <div
+        className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        onClick={onClose}
+      ></div>
+      <div className={`relative w-full max-w-6xl p-6 rounded-xl shadow-2xl ${themeClasses.surface} max-h-[90vh] overflow-y-auto transform transition-all duration-300 ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'} ${isTransitioning ? 'opacity-75' : ''}`}>
+        {/* Enhanced Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+              <Settings size={24} className="text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <h3 className={`text-xl font-bold ${themeClasses.text.primary}`}>
+                Quản lý hiển thị và bố cục
+              </h3>
+              <p className={`text-sm ${themeClasses.text.muted} mt-1`}>
+                Tùy chỉnh widget và bố cục hiển thị cho từng trang
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 transform hover:scale-110"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Enhanced Left Sidebar - Page List */}
+          <div className={`col-span-1 ${themeClasses.border} border rounded-xl p-5 bg-gradient-to-br from-gray-50/50 to-white dark:from-gray-800/50 dark:to-gray-900 transition-all duration-300`}>
+            <h4 className={`font-semibold ${themeClasses.text.primary} mb-4 flex items-center gap-2`}>
+              <div className="p-1.5 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                <Layout size={16} className="text-blue-600 dark:text-blue-400" />
+              </div>
+              Danh sách trang
+            </h4>
+
+            {/* Search/Filter input */}
+            <div className="mb-4 relative">
+              <input
+                type="text"
+                placeholder="Tìm kiếm trang..."
+                className={`w-full px-3 py-2 text-sm rounded-lg border ${themeClasses.border} ${themeClasses.surface} ${themeClasses.text.primary} focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200`}
+              />
+            </div>
+
+            {/* Group pages by category with enhanced styling */}
+            <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar">
+              {(() => {
+                // Organize pages by group
+                const groupedPages = pages.reduce((acc, page) => {
+                  const group = page.group || 'Khác';
+                  if (!acc[group]) acc[group] = [];
+                  acc[group].push(page);
+                  return acc;
+                }, {});
+
+                return Object.entries(groupedPages).map(([groupName, groupPages]) => (
+                  <div key={groupName} className="mb-4">
+                    <div className={`text-xs font-bold uppercase tracking-wider ${themeClasses.text.muted} px-2 py-1 mb-2 bg-gray-100 dark:bg-gray-800 rounded-md`}>
+                      {groupName} ({groupPages.length})
+                    </div>
+                    <div className="space-y-1">
+                      {groupPages.map(page => (
+                        <button
+                          key={page.id}
+                          onClick={() => handlePageChange(page.id)}
+                          disabled={isTransitioning}
+                          className={`w-full text-left px-3 py-3 rounded-lg transition-all duration-200 flex items-center gap-3 group disabled:opacity-50 ${
+                            selectedPage === page.id
+                              ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 shadow-md border-l-4 border-blue-500'
+                              : `hover:${themeClasses.surfaceHover} ${themeClasses.text.primary} hover:shadow-sm border-l-4 border-transparent hover:border-gray-300`
+                          }`}
+                        >
+                          <div className={`p-1 rounded-md transition-all duration-200 ${
+                            selectedPage === page.id
+                              ? 'bg-blue-200 dark:bg-blue-800'
+                              : 'bg-gray-200 dark:bg-gray-700 group-hover:bg-gray-300 dark:group-hover:bg-gray-600'
+                          }`}>
+                            {selectedPage === page.id ? (
+                              <ChevronDown size={12} className="text-blue-600 dark:text-blue-400" />
+                            ) : (
+                              <ChevronRight size={12} className="text-gray-600 dark:text-gray-400" />
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <span className="font-medium truncate block">{page.name}</span>
+                            <span className={`text-xs ${themeClasses.text.muted} block`}>
+                              {page.path || 'No path'}
+                            </span>
+                          </div>
+                          {selectedPage === page.id && (
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ));
+              })()}
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={handleResetAllLayouts}
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+              >
+                <RotateCcw size={14} />
+                <span>Đặt lại tất cả</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Enhanced Right Content - Layout Configuration */}
+          <div className="col-span-1 md:col-span-3">
+            {/* Enhanced header with improved styling */}
+            <div className={`mb-6 pb-4 border-b ${themeClasses.border}`}>
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div>
+                  <h4 className={`text-lg font-bold ${themeClasses.text.primary} flex items-center gap-2`}>
+                    <div className="p-1.5 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                      <Settings size={16} className="text-purple-600 dark:text-purple-400" />
+                    </div>
+                    Cấu hình hiển thị
+                  </h4>
+                  <p className={`text-sm ${themeClasses.text.muted} mt-1`}>
+                    <span className="font-medium text-purple-600 dark:text-purple-400">{getPageName(selectedPage)}</span> - Tùy chỉnh widget và bố cục
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  {/* Enhanced View Mode Selector */}
+                  <div className="flex rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-800">
+                    {[
+                      { mode: 'mobile', icon: Smartphone, label: 'Mobile', color: 'green' },
+                      { mode: 'tablet', icon: Tablet, label: 'Tablet', color: 'blue' },
+                      { mode: 'desktop', icon: Monitor, label: 'Desktop', color: 'purple' }
+                    ].map(({ mode, icon: Icon, label, color }) => (
+                      <button
+                        key={mode}
+                        onClick={() => handleViewModeChange(mode)}
+                        disabled={isTransitioning}
+                        className={`px-3 md:px-4 py-2.5 flex items-center gap-2 text-xs md:text-sm font-medium transition-all duration-300 transform hover:scale-105 disabled:opacity-50 relative overflow-hidden ${
+                          viewMode === mode
+                            ? `bg-${color}-600 text-white shadow-lg`
+                            : `hover:bg-gray-200 dark:hover:bg-gray-700 ${themeClasses.text.primary}`
+                        }`}
+                        title={`Chuyển sang chế độ ${label}`}
+                      >
+                        <Icon size={16} className={`transition-transform duration-200 ${viewMode === mode ? 'scale-110' : ''}`} />
+                        <span className="hidden sm:inline">{label}</span>
+
+                        {/* Active indicator */}
+                        {viewMode === mode && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                        )}
+
+                        {/* Loading indicator */}
+                        {isTransitioning && viewMode === mode && (
+                          <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Reset current layout button */}
+                  <button
+                    onClick={handleResetCurrentLayout}
+                    className={`px-3 md:px-4 py-2.5 rounded-xl flex items-center gap-2 text-xs md:text-sm font-medium transition-all duration-200 hover:shadow-md transform hover:scale-105 ${themeClasses.buttonSecondary} hover:${themeClasses.buttonSecondaryHover}`}
+                    title="Đặt lại layout về mặc định"
+                  >
+                    <RotateCcw size={14} />
+                    <span className="hidden sm:inline">Đặt lại</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Widget visibility configuration */}
+            <div className={`p-4 rounded-lg ${themeClasses.border} border`}>
+              <h5 className={`text-sm font-medium ${themeClasses.text.primary} mb-4`}>
+                Quản lý widget hiện tại ({viewMode})
+              </h5>
+
+              {currentLayout && (
+                <div className="grid grid-cols-1 gap-2">
+                  {currentLayout.widgets.map(widget => {
+                    const widgetInfo = getWidgetInfo(widget.id);
+                    return (
+                      <div
+                        key={widget.id}
+                        className={`p-3 rounded-lg border ${themeClasses.border} ${
+                          widget.visible
+                            ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800'
+                            : 'bg-gray-50 border-gray-200 dark:bg-gray-900/20 dark:border-gray-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1">
+                              {widget.visible ? <Eye size={16} className="text-green-600" /> : <EyeOff size={16} className="text-gray-400" />}
+                              <h6 className={`font-medium text-sm ${widget.visible ? 'text-green-800 dark:text-green-400' : themeClasses.text.muted} truncate`}>
+                                {widgetInfo?.name || widget.id}
+                              </h6>
+                            </div>
+                            {widgetInfo?.description && (
+                              <p className={`text-xs ${widget.visible ? 'text-green-700 dark:text-green-300' : themeClasses.text.muted} mb-1`}>
+                                {widgetInfo.description}
+                              </p>
+                            )}
+                            <p className={`text-xs ${widget.visible ? 'text-green-600 dark:text-green-400' : themeClasses.text.muted}`}>
+                              Vị trí: {widget.row},{widget.col} | Kích thước: {widget.width}x{widget.height}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1 ml-2">
+                            <button
+                              onClick={() => handleToggleWidgetVisibility(widget.id)}
+                              className={`px-2 py-1 text-xs rounded transition-colors ${
+                                widget.visible
+                                  ? 'bg-green-600 text-white hover:bg-green-700'
+                                  : 'bg-gray-400 text-white hover:bg-gray-500'
+                              }`}
+                              title={widget.visible ? 'Ẩn widget' : 'Hiện widget'}
+                            >
+                              {widget.visible ? 'Hiện' : 'Ẩn'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {(!currentLayout || currentLayout.widgets.filter(w => w.visible).length === 0) && (
+                <div className={`text-center py-8 ${themeClasses.text.muted}`}>
+                  <PanelLeft size={32} className="mx-auto mb-2" />
+                  <p>Không có widget nào được hiển thị</p>
+                </div>
+              )}
+            </div>
+
+            {/* Layout Preview */}
+            <div className="mt-6">
+              <h5 className={`text-sm font-medium ${themeClasses.text.primary} mb-2`}>
+                Xem trước bố cục ({viewMode})
+              </h5>
+
+              <div className={`p-4 rounded-lg ${themeClasses.border} border bg-gray-50 dark:bg-gray-900`}>
+                {currentLayout && (
+                  <div
+                    className="grid gap-2"
+                    style={{
+                      gridTemplateColumns: `repeat(${currentLayout.columns}, 1fr)`,
+                    }}
+                  >
+                    {currentLayout.widgets
+                      .filter(widget => widget.visible)
+                      .sort((a, b) => (a.row * 100 + a.col) - (b.row * 100 + b.col))
+                      .map(widget => (
+                        <div
+                          key={widget.id}
+                          className={`${themeClasses.surface} border ${themeClasses.border} rounded-lg p-2 text-xs`}
+                          style={{
+                            gridColumn: `span ${widget.width}`,
+                            minHeight: '40px',
+                          }}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className={`font-medium ${themeClasses.text.primary}`}>
+                              {getWidgetInfo(widget.id)?.name || widget.id}
+                            </span>
+                            <span className={`text-xs ${themeClasses.text.muted}`}>
+                              {widget.width}x{widget.height}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+LayoutConfigManager.propTypes = {
+  themeClasses: PropTypes.object.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired
+};
+
+export default LayoutConfigManager;

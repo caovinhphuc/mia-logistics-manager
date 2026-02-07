@@ -35,7 +35,7 @@ const GeneralSettings = () => {
   const handleSave = () => {
     // TODO: Implement save to backend/Google Sheets
     // For now, settings are only stored in component state
-    // console.log("Saving general settings:", settings);
+    // logger.debug("Saving general settings:", settings);
   };
 
   const handlePreferenceChange = (key) => (event) => {

@@ -18,14 +18,24 @@ class GoogleSheetsService {
 
   async initialize() {
     if (this.sheets) return;
+    const keyPath = path.isAbsolute(this.keyFile)
+      ? this.keyFile
+      : path.resolve(process.cwd(), this.keyFile);
+    const fs = require("fs");
+    if (!fs.existsSync(keyPath)) {
+      throw new Error(
+        `Google credentials file not found: ${keyPath}. Set GOOGLE_APPLICATION_CREDENTIALS.`
+      );
+    }
     this.auth = new GoogleAuth({
-      keyFile: this.keyFile,
+      keyFile: keyPath,
       scopes: [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive",
       ],
     });
-    this.sheets = google.sheets({ version: "v4", auth: this.auth });
+    const client = await this.auth.getClient();
+    this.sheets = google.sheets({ version: "v4", auth: client });
   }
 
   async listSheetTitles() {

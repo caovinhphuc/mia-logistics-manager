@@ -1,0 +1,700 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import { usePermissions } from '../context/PermissionContext';
+import { useOrders, useEmployees, useApi } from '../hooks/useApi';
+import { useTableFilters } from '../hooks/useLocalStorage';
+import { googleSheetsApi, Order, Employee } from '../services/googleSheetsApi';
+import {
+  Button,
+  Input,
+  Select,
+  Table,
+  TableColumn,
+  Pagination,
+  Modal,
+  Card,
+  CardBody,
+  Switch
+} from '../components/ui';
+import { FormProvider, Form, FormField, useForm } from '../components/forms';
+import { useToast } from '../components/ui/Toast';
+
+interface OrderFilters {
+  platform: string;
+  sla: string;
+  status: string;
+  search: string;
+  employeeId: string;
+}
+
+const OrderManagementPage: React.FC = () => {
+  const { darkMode } = useTheme();
+  const permissionsContext = usePermissions();
+  const { success, error } = useToast();
+
+  // API Hooks
+  const ordersApi = useOrders();
+  const employeesApi = useEmployees();
+
+  // State Management
+  const [tableFilters, setTableFilters] = useTableFilters();
+  const [filters, setFilters] = useState<OrderFilters>({
+    platform: tableFilters.platform || 'all',
+    sla: tableFilters.sla || 'all',
+    status: tableFilters.status || 'all',
+    search: '',
+    employeeId: 'all'
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'mock' | 'error'>('checking');
+
+  // Test Google Sheets connection - MOVED TO TOP LEVEL
+  const testConnection = useCallback(async () => {
+    try {
+      setConnectionStatus('checking');
+      const result = await googleSheetsApi.getOrders();
+
+      if (result.success) {
+        if (process.env.NODE_ENV === 'development') {
+          setConnectionStatus('mock');
+          success('Connection Test', 'Using mock data in development mode');
+        } else {
+          setConnectionStatus('connected');
+          success('Connection Test', 'Successfully connected to Google Sheets');
+        }
+      } else {
+        setConnectionStatus('error');
+        error('Connection Test Failed', result.error || 'Unable to connect to Google Sheets');
+      }
+    } catch (err) {
+      setConnectionStatus('error');
+      error('Connection Test Failed', err instanceof Error ? err.message : 'Network error');
+    }
+  }, [success, error]);
+
+  // Memoized functions - FIXED dependencies
+  const refreshData = useCallback(() => {
+    const apiFilters = {
+      ...(filters.platform !== 'all' && { platform: filters.platform }),
+      ...(filters.sla !== 'all' && { sla: filters.sla }),
+      ...(filters.status !== 'all' && { status: filters.status }),
+      ...(filters.employeeId !== 'all' && { employeeId: parseInt(filters.employeeId) })
+    };
+
+    setConnectionStatus('checking');
+    ordersApi.execute(apiFilters).then(() => {
+      if (process.env.NODE_ENV === 'development') {
+        setConnectionStatus('mock');
+      } else {
+        setConnectionStatus('connected');
+      }
+    }).catch(() => {
+      setConnectionStatus('error');
+    });
+  }, [filters.platform, filters.sla, filters.status, filters.employeeId, ordersApi]);
+
+  const loadEmployees = useCallback(() => {
+    employeesApi.execute();
+  }, [employeesApi]);
+
+  // Initialize APIs with stable references - FIXED
+  const updateStatusApi = useApi(googleSheetsApi.updateOrderStatus, {
+    showSuccessToast: true,
+    onSuccess: useCallback(() => {
+      ordersApi.execute();
+    }, [ordersApi])
+  });
+
+  const assignOrderApi = useApi(googleSheetsApi.assignOrder, {
+    showSuccessToast: true,
+    onSuccess: useCallback(() => {
+      ordersApi.execute();
+    }, [ordersApi])
+  });
+
+  const autoAssignApi = useApi(googleSheetsApi.autoAssignOrders, {
+    showSuccessToast: true,
+    onSuccess: useCallback(() => {
+      ordersApi.execute();
+    }, [ordersApi])
+  });
+
+  // SIMPLIFIED useEffect - Load initial data ONCE
+  useEffect(() => {
+    loadEmployees();
+    refreshData();
+  }, [loadEmployees, refreshData]); // Add dependencies to fix warning
+
+  // Auto refresh - SIMPLIFIED
+  useEffect(() => {
+    if (!autoRefresh) return;
+
+    const interval = setInterval(() => {
+      ordersApi.execute();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [autoRefresh, ordersApi]);
+
+  // Update table filters - DEBOUNCED
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setTableFilters(prev => ({
+        ...prev,
+        platform: filters.platform,
+        sla: filters.sla,
+        status: filters.status
+      }));
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [filters.platform, filters.sla, filters.status, setTableFilters]);
+
+  // Filter and search orders
+  const filteredOrders = React.useMemo(() => {
+    if (!ordersApi.data) return [];
+
+    return ordersApi.data.filter((order: Order) => {
+      const matchesSearch = !filters.search ||
+        order.id.toLowerCase().includes(filters.search.toLowerCase()) ||
+        order.productDetails.toLowerCase().includes(filters.search.toLowerCase());
+
+      return matchesSearch;
+    });
+  }, [ordersApi.data, filters.search]);
+
+  // Paginated orders
+  const paginatedOrders = React.useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredOrders.slice(startIndex, startIndex + pageSize);
+  }, [filteredOrders, currentPage, pageSize]);
+
+  // Table columns configuration
+  const columns: TableColumn<Order>[] = [
+    {
+      key: 'id',
+      title: 'Order ID',
+      dataIndex: 'id',
+      width: 200,
+      render: (value, record) => (
+        <div className="font-mono text-xs">
+          <div className="font-semibold">{value}</div>
+          <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            {record.platform}
+          </div>
+        </div>
+      )
+    },
+    {
+      key: 'sla',
+      title: 'SLA',
+      dataIndex: 'sla',
+      width: 80,
+      align: 'center',
+      render: (value) => (
+        <span className={`px-2 py-1 rounded text-xs font-semibold ${
+          value === 'P1' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' :
+          value === 'P2' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
+          value === 'P3' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+          'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+        }`}>
+          {value}
+        </span>
+      )
+    },
+    {
+      key: 'timeRemaining',
+      title: 'Time Left',
+      dataIndex: 'timeRemaining',
+      width: 100,
+      align: 'center',
+      render: (value) => (
+        <span className={`text-xs font-mono ${
+          value.includes('-') ? 'text-red-600' : 'text-green-600'
+        }`}>
+          {value}
+        </span>
+      )
+    },
+    {
+      key: 'productDetails',
+      title: 'Product Details',
+      dataIndex: 'productDetails',
+      width: 300,
+      render: (value, record) => (
+        <div>
+          <div className="font-medium text-sm truncate">{value}</div>
+          <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            Qty: {record.quantity} | {record.location}
+          </div>
+        </div>
+      )
+    },
+    {
+      key: 'status',
+      title: 'Status',
+      dataIndex: 'status',
+      width: 120,
+      render: (value, record) => (
+        <Select
+          value={value}
+          onChange={(newStatus) => handleStatusUpdate(record.id, newStatus as string)}
+          options={[
+            { value: 'pending', label: 'Pending' },
+            { value: 'processing', label: 'Processing' },
+            { value: 'completed', label: 'Completed' }
+          ]}
+        />
+      )
+    },
+    {
+      key: 'assignedTo',
+      title: 'Assigned To',
+      dataIndex: 'assignedTo',
+      width: 150,
+      render: (value, record) => {
+        const employee = employeesApi.data?.find((emp: Employee) => emp.id === value);
+
+        return (
+          <div className="flex items-center space-x-2">
+            {employee ? (
+              <div>
+                <div className="text-sm font-medium">{employee.name}</div>
+                <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                  {employee.role}
+                </div>
+              </div>
+            ) : (
+              <Button
+                size="xs"
+                variant="ghost"
+                onClick={() => {
+                  setSelectedOrder(record);
+                  setShowAssignModal(true);
+                }}
+              >
+                Assign
+              </Button>
+            )}
+          </div>
+        );
+      }
+    },
+    {
+      key: 'actions',
+      title: 'Actions',
+      dataIndex: 'actions',
+      width: 120,
+      render: (_, record) => (
+        <div className="flex space-x-1">
+          <Button
+            size="xs"
+            variant="ghost"
+            onClick={() => window.open(`https://one.tga.com.vn/so/prepare?id=${record.id}`, '_blank')}
+            title="Prepare Order"
+          >
+            📦
+          </Button>
+          <Button
+            size="xs"
+            variant="ghost"
+            onClick={() => window.open(`https://one.tga.com.vn/so/invoicePrint?id=${record.id}`, '_blank')}
+            title="Print Invoice"
+          >
+            🖨️
+          </Button>
+        </div>
+      )
+    }
+  ];
+
+  // Row selection configuration
+  const rowSelection = {
+    selectedRowKeys: selectedOrders,
+    onChange: (selectedKeys: (string | number)[], _selectedRows: Order[]) => {
+      setSelectedOrders(selectedKeys.map(key => String(key)));
+    },
+  };
+
+  // Handle order actions - STABLE FUNCTIONS
+  const handleStatusUpdate = useCallback(async (orderId: string, newStatus: string) => {
+    await updateStatusApi.execute(orderId, newStatus);
+  }, [updateStatusApi]);
+
+  const handleAssignOrder = useCallback(async (values: any) => {
+    if (!selectedOrder) return;
+
+    const employeeId = typeof values.employeeId === 'string'
+      ? parseInt(values.employeeId)
+      : values.employeeId;
+
+    await assignOrderApi.execute(selectedOrder.id, employeeId);
+    setShowAssignModal(false);
+    setSelectedOrder(null);
+  }, [selectedOrder, assignOrderApi]);
+
+  const handleAutoAssign = useCallback(async () => {
+    await autoAssignApi.execute();
+  }, [autoAssignApi]);
+
+  const handleBulkAction = useCallback(async (action: string) => {
+    if (selectedOrders.length === 0) {
+      error('No orders selected', 'Please select orders to perform bulk action');
+      return;
+    }
+
+    success('Bulk Action', `${action} applied to ${selectedOrders.length} orders`);
+  }, [selectedOrders.length, error, success]);
+
+  // Fix permission check - use the correct method or provide fallback
+  const canAccess = useCallback((permissions: string[]) => {
+    // Option 1: If PermissionContext has hasPermission method
+    if (permissionsContext?.hasPermission) {
+      return permissions.some(permission => permissionsContext.hasPermission(permission));
+    }
+
+    // Option 2: If PermissionContext has checkPermission method
+    if (permissionsContext?.checkPermission) {
+      return permissions.some(permission => permissionsContext.checkPermission(permission));
+    }
+
+    // Option 3: If PermissionContext has permissions array
+    if (permissionsContext?.permissions) {
+      return permissions.some(permission =>
+        permissionsContext.permissions.includes(permission)
+      );
+    }
+
+    // Option 4: Fallback - allow access if no permission system is available
+    console.warn('Permission system not properly configured, allowing access');
+    return true;
+  }, [permissionsContext]);
+
+  // Permission check first
+  if (!canAccess(['warehouse.view'])) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>
+          You don't have permission to access this page.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+        <div className="flex items-center space-x-4">
+          {/* Connection Status Indicator */}
+          <div className="flex items-center space-x-2">
+            <div className={`w-3 h-3 rounded-full ${
+              connectionStatus === 'connected' ? 'bg-green-500' :
+              connectionStatus === 'mock' ? 'bg-yellow-500' :
+              connectionStatus === 'error' ? 'bg-red-500' :
+              'bg-gray-400 animate-pulse'
+            }`}></div>
+            <span className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              {connectionStatus === 'connected' ? 'Google Sheets Connected' :
+               connectionStatus === 'mock' ? 'Mock Data (Dev Mode)' :
+               connectionStatus === 'error' ? 'Connection Error' :
+               'Checking...'}
+            </span>
+          </div>
+
+          <Button
+            variant="primary"
+            onClick={handleAutoAssign}
+            loading={autoAssignApi.loading}
+            leftIcon={
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            }
+          >
+            Auto Assign
+          </Button>
+
+          <Button
+            variant="ghost"
+            onClick={refreshData}
+            loading={ordersApi.loading}
+            leftIcon={
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            }
+          >
+            Refresh
+          </Button>
+
+          {/* Test Connection Button */}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={testConnection}
+            loading={connectionStatus === 'checking'}
+            leftIcon={
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+          >
+            Test Connection
+          </Button>
+
+          <div className="flex items-center space-x-2">
+            <Switch
+              checked={autoRefresh}
+              onChange={setAutoRefresh}
+              size="sm"
+            />
+            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              Auto Refresh
+            </span>
+          </div>
+        </div>
+
+        {selectedOrders.length > 0 && (
+          <div className="flex items-center space-x-2">
+            <span className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+              {selectedOrders.length} selected
+            </span>
+            <Button size="sm" onClick={() => handleBulkAction('process')}>
+              Bulk Process
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => handleBulkAction('export')}>
+              Export
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Development Info Panel */}
+      {process.env.NODE_ENV === 'development' && (
+        <Card>
+          <CardBody>
+            <div className={`p-4 rounded-lg border ${
+              darkMode ? 'bg-blue-900/20 border-blue-700' : 'bg-blue-50 border-blue-200'
+            }`}>
+              <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200 mb-2">
+                🔧 Development Mode - Google Sheets Integration
+              </h3>
+              <div className="text-xs space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-blue-700 dark:text-blue-300">Status:</span>
+                  <span className={`font-semibold ${
+                    connectionStatus === 'mock' ? 'text-yellow-600' :
+                    connectionStatus === 'connected' ? 'text-green-600' :
+                    connectionStatus === 'error' ? 'text-red-600' : 'text-gray-600'
+                  }`}>
+                    {connectionStatus === 'mock' ? 'Using Mock Data' :
+                     connectionStatus === 'connected' ? 'Real API Connected' :
+                     connectionStatus === 'error' ? 'Connection Failed' : 'Checking...'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-blue-700 dark:text-blue-300">Data Source:</span>
+                  <span className="text-blue-600 dark:text-blue-400">
+                    {connectionStatus === 'mock' ? 'googleSheetsApi.getMockResponse()' : 'Google Sheets API'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-blue-700 dark:text-blue-300">Orders Count:</span>
+                  <span className="text-blue-600 dark:text-blue-400">{ordersApi.data?.length || 0}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-blue-700 dark:text-blue-300">Employees Count:</span>
+                  <span className="text-blue-600 dark:text-blue-400">{employeesApi.data?.length || 0}</span>
+                </div>
+              </div>
+              <div className="mt-3 text-xs text-blue-600 dark:text-blue-400">
+                💡 To connect to real Google Sheets: Update SCRIPT_ID in googleSheetsApi.ts and set NODE_ENV=production
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      )}
+
+      {/* Filters */}
+      <Card>
+        <CardBody>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <Input
+              placeholder="Search orders..."
+              value={filters.search}
+              onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+              leftIcon={
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              }
+            />
+
+            <Select
+              value={filters.platform}
+              onChange={(value) => setFilters(prev => ({ ...prev, platform: value as string }))}
+              options={[
+                { value: 'all', label: 'All Platforms' },
+                { value: 'Shopee', label: 'Shopee' },
+                { value: 'TikTok', label: 'TikTok' },
+                { value: 'Lazada', label: 'Lazada' }
+              ]}
+            />
+
+            <Select
+              value={filters.sla}
+              onChange={(value) => setFilters(prev => ({ ...prev, sla: value as string }))}
+              options={[
+                { value: 'all', label: 'All SLA' },
+                { value: 'P1', label: 'P1 - Urgent' },
+                { value: 'P2', label: 'P2 - High' },
+                { value: 'P3', label: 'P3 - Normal' },
+                { value: 'P4', label: 'P4 - Low' }
+              ]}
+            />
+
+            <Select
+              value={filters.status}
+              onChange={(value) => setFilters(prev => ({ ...prev, status: value as string }))}
+              options={[
+                { value: 'all', label: 'All Status' },
+                { value: 'pending', label: 'Pending' },
+                { value: 'processing', label: 'Processing' },
+                { value: 'completed', label: 'Completed' }
+              ]}
+            />
+
+            <Select
+              value={filters.employeeId}
+              onChange={(value) => setFilters(prev => ({ ...prev, employeeId: value as string }))}
+              options={[
+                { value: 'all', label: 'All Employees' },
+                ...(employeesApi.data?.map((emp: Employee) => ({
+                  value: emp.id.toString(),
+                  label: emp.name
+                })) || [])
+              ]}
+            />
+          </div>
+        </CardBody>
+      </Card>
+
+      {/* Orders Table */}
+      <Card>
+        <CardBody className="p-0">
+          <Table
+            columns={columns}
+            data={paginatedOrders}
+            loading={ordersApi.loading}
+            rowSelection={rowSelection}
+            hoverable
+            size="sm"
+          />
+        </CardBody>
+      </Card>
+
+      {/* Pagination */}
+      {filteredOrders.length > 0 && (
+        <div className="flex justify-center">
+          <Pagination
+            current={currentPage}
+            total={filteredOrders.length}
+            pageSize={pageSize}
+            onChange={setCurrentPage}
+            onShowSizeChange={(_, size) => {
+              setPageSize(size);
+              setCurrentPage(1);
+            }}
+            showSizeChanger
+            showQuickJumper
+            showTotal={(total, range) =>
+              `${range[0]}-${range[1]} of ${total} orders`
+            }
+          />
+        </div>
+      )}
+
+      {/* Assign Order Modal */}
+      <Modal
+        isOpen={showAssignModal}
+        onClose={() => {
+          setShowAssignModal(false);
+          setSelectedOrder(null);
+        }}
+        title="Assign Order"
+        size="sm"
+      >
+        <FormProvider
+          initialValues={{ employeeId: '' }}
+          validationSchema={{
+            employeeId: { required: true }
+          }}
+        >
+          <Form onSubmit={handleAssignOrder}>
+            <div className="space-y-4">
+              <div>
+                <h4 className="font-medium">Order: {selectedOrder?.id}</h4>
+                <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {selectedOrder?.productDetails}
+                </p>
+              </div>
+
+              <AssignEmployeeField employees={employeesApi.data || []} />
+
+              <div className="flex justify-end space-x-3">
+                <Button
+                  variant="ghost"
+                  onClick={() => setShowAssignModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  loading={assignOrderApi.loading}
+                >
+                  Assign
+                </Button>
+              </div>
+            </div>
+          </Form>
+        </FormProvider>
+      </Modal>
+    </div>
+  );
+};
+
+// Assign Employee Field Component
+const AssignEmployeeField: React.FC<{ employees: Employee[] }> = ({ employees }) => {
+  const { values, setValue, errors } = useForm();
+
+  return (
+    <FormField
+      label="Select Employee"
+      error={errors.employeeId}
+      required
+    >
+      <Select
+        value={values.employeeId}
+        onChange={(value) => setValue('employeeId', value as string)}
+        placeholder="Choose an employee"
+        options={employees
+          .filter(emp => emp.status === 'active')
+          .map(emp => ({
+            value: emp.id.toString(),
+            label: `${emp.name} (${emp.role}) - ${emp.currentLoad}/${emp.maxLoad} orders`
+          }))
+        }
+        searchable
+      />
+    </FormField>
+  );
+};
+
+export default OrderManagementPage;

@@ -20,6 +20,8 @@ backend/service-account-key.json
 backend/*.json
 backend/sinuous-aviary-*.json
 backend/mia-logistics-*.json
+backend/credentials/
+mia-logistics-*.json
 scripts/credentials.json
 *.key
 *.p12

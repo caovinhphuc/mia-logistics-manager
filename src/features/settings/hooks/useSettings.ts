@@ -1,10 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { SettingsService } from '../services';
-import type {
-  Settings,
-  SettingsFormData,
-  SettingsFilterParams,
-} from '../types';
+import type { SettingsFormData, SettingsFilterParams } from '../types';
 
 const QUERY_KEY = 'settings';
 
@@ -36,8 +32,7 @@ export const useCreateSettings = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: SettingsFormData) =>
-      SettingsService.create(data),
+    mutationFn: (data: SettingsFormData) => SettingsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },

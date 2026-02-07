@@ -1,19 +1,13 @@
-import { apiClient } from '@/services/api/client';
-import type {
-  Settings,
-  SettingsFormData,
-  SettingsFilterParams,
-} from '../types';
+import { apiClient } from '../../../services/api/client';
+import type { Settings, SettingsFormData, SettingsFilterParams } from '../types';
 
 export class SettingsService {
-  private static BASE_URL = '/settings';
+  private static BASE_URL = '/api/settings';
 
   /**
    * Get all settings
    */
-  static async getAll(
-    params?: SettingsFilterParams
-  ): Promise<Settings[]> {
+  static async getAll(params?: SettingsFilterParams): Promise<Settings[]> {
     return apiClient.get<Settings[]>(this.BASE_URL, { params });
   }
 
@@ -27,19 +21,14 @@ export class SettingsService {
   /**
    * Create new settings
    */
-  static async create(
-    data: SettingsFormData
-  ): Promise<Settings> {
+  static async create(data: SettingsFormData): Promise<Settings> {
     return apiClient.post<Settings>(this.BASE_URL, data);
   }
 
   /**
    * Update settings
    */
-  static async update(
-    id: string,
-    data: Partial<SettingsFormData>
-  ): Promise<Settings> {
+  static async update(id: string, data: Partial<SettingsFormData>): Promise<Settings> {
     return apiClient.put<Settings>(`${this.BASE_URL}/${id}`, data);
   }
 

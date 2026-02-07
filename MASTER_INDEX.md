@@ -8,20 +8,20 @@
 
 ### New to the Project?
 
-👉 **Start Here**: [Main README](README.md)  
-👉 **Installation**: [README - Setup Section](README.md#-cài-đặt-và-chạy)  
+👉 **Start Here**: [Main README](README.md)
+👉 **Installation**: [README - Setup Section](README.md#-cài-đặt-và-chạy)
 👉 **Quick Start**: Run `./start-project.sh`
 
 ### Developer?
 
-👉 **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)  
-👉 **API Docs**: [docs/API.md](docs/API.md)  
+👉 **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
+👉 **API Docs**: [docs/API.md](docs/API.md)
 👉 **Code Style**: [CONTRIBUTING - Code Style](CONTRIBUTING.md#code-style)
 
 ### DevOps/SRE?
 
-👉 **Deployment**: [FINAL_DEPLOYMENT_CHECKLIST.md](FINAL_DEPLOYMENT_CHECKLIST.md)  
-👉 **Docker**: [docker-compose.yml](docker-compose.yml)  
+👉 **Deployment**: [FINAL_DEPLOYMENT_CHECKLIST.md](FINAL_DEPLOYMENT_CHECKLIST.md)
+👉 **Docker**: [docker-compose.yml](docker-compose.yml)
 👉 **Monitoring**: [scripts/health-monitor.sh](scripts/health-monitor.sh)
 
 ---
@@ -37,13 +37,26 @@
    - Troubleshooting
    - Complete feature list
 
-2. **[PROJECT_COMPLETION_SUMMARY.md](PROJECT_COMPLETION_SUMMARY.md)** - 433 lines
+2. **[ANALYSIS_REPORT.md](ANALYSIS_REPORT.md)** - 350+ lines ⭐ **NEW**
+   - Tình trạng dự án hiện tại
+   - Phân tích chi tiết: Security, Performance, Dependencies
+   - Metrics & statistics
+   - Đề xuất cải thiện
+   - ROI analysis
+
+3. **[OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)** - 500+ lines ⭐ **NEW**
+   - Kế hoạch tối ưu 4 tuần
+   - Chi tiết từng bước thực hiện
+   - Commands và ví dụ cụ thể
+   - Checklist đầy đủ
+
+4. **[PROJECT_COMPLETION_SUMMARY.md](PROJECT_COMPLETION_SUMMARY.md)** - 433 lines
    - What's been built
    - Files created
    - Statistics
    - Status overview
 
-3. **[COMPREHENSIVE_PROJECT_SUMMARY.md](COMPREHENSIVE_PROJECT_SUMMARY.md)** - 600+ lines
+5. **[COMPREHENSIVE_PROJECT_SUMMARY.md](COMPREHENSIVE_PROJECT_SUMMARY.md)** - 600+ lines
    - Executive summary
    - Metrics & KPIs
    - Technology stack
@@ -76,6 +89,30 @@
    - Business logic flows
    - Use cases
    - Implementation details
+
+---
+
+### Level 2.5: Optimization & Improvement (For All) ⭐ **NEW**
+
+**21. [ANALYSIS_REPORT.md](ANALYSIS_REPORT.md)** - 350+ lines
+
+- Phân tích toàn diện dự án
+- 41 security vulnerabilities (37 high)
+- 157 unused packages
+- Bundle size issues (13MB)
+- Performance bottlenecks
+- Quick wins (37 phút)
+- ROI: 230% Year 1
+
+**22. [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)** - 500+ lines
+
+- Kế hoạch 4 tuần chi tiết
+- Tuần 1: Security & Dependencies cleanup
+- Tuần 2: Performance optimization
+- Tuần 3: Code quality & TypeScript
+- Tuần 4: Monitoring & Documentation
+- Commands & examples cụ thể
+- Expected results: -60% bundle, -75% vulnerabilities
 
 ---
 
@@ -276,7 +313,7 @@ make clean                   # Clean artifacts
 
 | Category      | Count   | Lines       | Status      |
 | ------------- | ------- | ----------- | ----------- |
-| Main Docs     | 8       | 3,500+      | ✅ Complete |
+| Main Docs     | 10      | 4,350+      | ✅ Complete |
 | API Docs      | 3       | 1,200+      | ✅ Complete |
 | Feature Docs  | 3       | 1,250+      | ✅ Complete |
 | Schema Docs   | 4       | 1,700+      | ✅ Complete |
@@ -284,7 +321,7 @@ make clean                   # Clean artifacts
 | Docker        | 3       | 195         | ✅ Complete |
 | CI/CD         | 4       | 400+        | ✅ Complete |
 | Scripts       | 9       | 1,900+      | ✅ Complete |
-| **TOTAL**     | **47+** | **10,645+** | ✅ **100%** |
+| **TOTAL**     | **49+** | **11,495+** | ✅ **100%** |
 
 ### Coverage
 
@@ -302,50 +339,56 @@ make clean                   # Clean artifacts
 
 ### I need to...
 
-**Install the system**  
+**Install the system**
 → [README - Installation](README.md#-cài-đặt-và-chạy)
 
-**Understand features**  
+**Understand features**
 → [FEATURES_DETAIL.md](docs/FEATURES_DETAIL.md)
 
-**Use the API**  
+**Use the API**
 → [API.md](docs/API.md)
 
-**Work with InboundSchedule**  
+**Work with InboundSchedule**
 → [INBOUND_SCHEDULE.md](docs/schemas/INBOUND_SCHEDULE.md)
 
-**Deploy to production**  
+**Deploy to production**
 → [DEPLOYMENT_CHECKLIST.md](FINAL_DEPLOYMENT_CHECKLIST.md)
 
-**Report a bug**  
+**Report a bug**
 → [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.md)
 
-**Request a feature**  
+**Request a feature**
 → [Feature Request Template](.github/ISSUE_TEMPLATE/feature_request.md)
 
-**Contribute code**  
+**Contribute code**
 → [CONTRIBUTING.md](CONTRIBUTING.md)
 
-**Report security issue**  
+**Report security issue**
 → [SECURITY.md](SECURITY.md)
 
-**Setup Google Apps Script**  
+**Setup Google Apps Script**
 → [GOOGLE_APPS_SCRIPT_SETUP.md](docs/GOOGLE_APPS_SCRIPT_SETUP.md)
 
-**Understand login system**  
+**Understand login system**
 → [LOGIN_SYSTEM_VERSIONS.md](docs/LOGIN_SYSTEM_VERSIONS.md)
 
-**Backup data**  
+**Backup data**
 → `npm run backup:sheets` or see [README - Backup](README.md#-backup--recovery)
 
-**Monitor health**  
+**Monitor health**
 → `./scripts/health-monitor.sh` or `make health`
 
-**Check version history**  
+**Check version history**
 → [CHANGELOG.md](CHANGELOG.md)
 
-**See roadmap**  
+**See roadmap**
 → [README - Roadmap](README.md#-roadmap)
+
+**Analyze project status** ⭐
+→ [ANALYSIS_REPORT.md](ANALYSIS_REPORT.md)
+
+**See optimization plan** ⭐
+→ [OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)
 
 ---
 
@@ -412,7 +455,7 @@ make clean                   # Clean artifacts
 ### Documentation
 
 - ✅ 5,000+ lines of documentation
-- ✅ 19 specialized documents
+- ✅ 21 specialized documents
 - ✅ 100% feature coverage
 - ✅ API fully documented
 
@@ -600,11 +643,15 @@ This comprehensive documentation was created to ensure:
 
 ---
 
-**Last Updated**: November 12, 2025  
-**Documentation Version**: 2.1.1  
-**Total Documents**: 49 files  
-**Total Lines**: 10,854+ lines  
+**Last Updated**: February 7, 2026
+**Documentation Version**: 2.1.1
+**Total Documents**: 51 files (+2 new)
+**Total Lines**: 11,495+ lines
 **Coverage**: 100% ✅
+
+**Latest Additions**:
+⭐ ANALYSIS_REPORT.md - Project analysis & recommendations
+⭐ OPTIMIZATION_PLAN.md - 4-week optimization roadmap
 
 ---
 

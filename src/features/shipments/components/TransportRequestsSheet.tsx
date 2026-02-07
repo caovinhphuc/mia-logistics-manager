@@ -364,6 +364,14 @@ const TransportRequestsSheet: React.FC = () => {
 
   const [view, setView] = useState<'table' | 'grid'>('table');
 
+  // PascalCase aliases for eslint react/jsx-pascal-case
+  const ViewIcon = ActionIcons.view;
+  const PdfIcon = ActionIcons.pdf;
+  const PrintIcon = ActionIcons.print;
+  const GridIcon = ViewIcons.grid;
+  const ListIcon = ViewIcons.list;
+  const RefreshIcon = ActionIcons.refresh;
+
   const pagedData = useMemo(
     () => transportRequests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
     [transportRequests, page, rowsPerPage]
@@ -664,7 +672,7 @@ const TransportRequestsSheet: React.FC = () => {
       actions: [
         {
           label: 'Xem chi tiết',
-          icon: <ActionIcons.View />,
+          icon: <ViewIcon />,
           onClick: (item) => {
             const selectedItem = transportRequests.find((req) => req.requestId === item.id);
             if (selectedItem) {
@@ -679,14 +687,14 @@ const TransportRequestsSheet: React.FC = () => {
         },
         {
           label: isGeneratingPDF ? 'Đang tạo PDF...' : 'Xuất PDF',
-          icon: isGeneratingPDF ? <CircularProgress size={16} /> : <ActionIcons.Pdf />,
+          icon: isGeneratingPDF ? <CircularProgress size={16} /> : <PdfIcon />,
           onClick: () => generatePDF(row),
           color: 'secondary' as const,
           variant: 'outlined' as const,
         },
       ],
     }));
-  }, [pagedData, generatePDF, isGeneratingPDF, transportRequests]);
+  }, [pagedData, generatePDF, isGeneratingPDF, transportRequests, ViewIcon, PdfIcon]);
 
   return (
     <Box>
@@ -699,14 +707,14 @@ const TransportRequestsSheet: React.FC = () => {
           <ActionButton
             variant="secondary"
             onClick={() => setView(view === 'table' ? 'grid' : 'table')}
-            startIcon={view === 'table' ? <ViewIcons.Grid /> : <ViewIcons.List />}
+            startIcon={view === 'table' ? <GridIcon /> : <ListIcon />}
           >
             {view === 'table' ? 'Chế độ Grid' : 'Chế độ Bảng'}
           </ActionButton>
           <ActionButton
             variant="primary"
             onClick={fetchTransportRequests}
-            startIcon={loading ? <CircularProgress size={16} /> : <ActionIcons.Refresh />}
+            startIcon={loading ? <CircularProgress size={16} /> : <RefreshIcon />}
             disabled={loading}
           >
             Làm mới
@@ -934,7 +942,7 @@ const TransportRequestsSheet: React.FC = () => {
               <ActionButton
                 variant="secondary"
                 size="small"
-                startIcon={<ActionIcons.Print />}
+                startIcon={<PrintIcon />}
                 onClick={() => {
                   const ids: string[] = [];
                   if (detailDialog.item) {
@@ -953,7 +961,7 @@ const TransportRequestsSheet: React.FC = () => {
               <ActionButton
                 variant="primary"
                 size="small"
-                startIcon={<ActionIcons.Print />}
+                startIcon={<PrintIcon />}
                 onClick={() => {
                   const ids: string[] = [];
                   if (detailDialog.item) {
@@ -1084,7 +1092,7 @@ const TransportRequestsSheet: React.FC = () => {
                       <ActionButton
                         variant="secondary"
                         size="small"
-                        startIcon={<ActionIcons.Print />}
+                        startIcon={<PrintIcon />}
                         onClick={() => {
                           const ids = parseTransferIds(stop.transferIds);
                           const url = buildSerialPrintUrl(ids);
@@ -1096,7 +1104,7 @@ const TransportRequestsSheet: React.FC = () => {
                       <ActionButton
                         variant="primary"
                         size="small"
-                        startIcon={<ActionIcons.Print />}
+                        startIcon={<PrintIcon />}
                         onClick={() => {
                           const ids = parseTransferIds(stop.transferIds);
                           const url = buildPickingPrintUrl(ids);

@@ -40,7 +40,7 @@ const SecuritySettings = () => {
   });
 
   const handleSave = () => {
-    // console.log('Saving security settings:', settings);
+    // logger.debug('Saving security settings:', settings);
   };
 
   return (

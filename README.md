@@ -623,6 +623,10 @@ railway up
 
 ## 🔧 Troubleshooting
 
+### "API trả về HTML" / "Backend API chưa sẵn sàng"
+
+**Nguyên nhân:** Frontend gọi `/api/*` nhưng không nhận JSON (nhận HTML). **Cách fix:** Dùng `make start` (khởi động cả backend + frontend), đảm bảo `package.json` có `"proxy": "http://localhost:5050"`, restart sau khi sửa proxy.
+
 ### Backend không start được
 
 ```bash
@@ -630,7 +634,7 @@ railway up
 lsof -ti:5050 | xargs kill -9
 
 # Kiểm tra service account
-ls -la server/sinuous-aviary-474820-e3-c442968a0e87.json
+ls -la backend/credentials/*.json
 
 # Check logs
 tail -f logs/backend-startup.log
@@ -665,19 +669,14 @@ npm install -D tailwindcss@^3.4.18 postcss@^8.5.6 autoprefixer@^10.4.22
 
 ### Google Sheets không kết nối được
 
-1. Kiểm tra service account email có được share không
-2. Kiểm tra spreadsheet ID trong `backend/.env`
-3. Test connection:
+1. **Share Google Sheet** với email Service Account (xem trong file JSON, field `client_email`, ví dụ `xxx@xxx.iam.gserviceaccount.com`) – quyền Editor
+2. **GOOGLE_APPLICATION_CREDENTIALS** trong `.env` trỏ đúng file JSON (đường dẫn tuyệt đối khuyến nghị)
+3. File credentials: `backend/credentials/mia-logistics-*.json`
+4. Test connection:
 
    ```bash
    curl http://localhost:5050/api/google-sheets-auth/status
    curl http://localhost:5050/api/sheets/info
-   ```
-
-4. Verify service account file:
-
-   ```bash
-   ls -la backend/sinous-aviary-474820-e3-c442968a0e87.json
    ```
 
 ### Telegram không gửi được
