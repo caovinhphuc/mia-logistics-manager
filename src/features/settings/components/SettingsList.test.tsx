@@ -1,9 +1,9 @@
 import { renderWithProviders, screen } from '@/test-utils'
-import { InvoicesList } from './InvoicesList'
+import { SettingsList } from './SettingsList'
 
-describe('InvoicesList', () => {
+describe('SettingsList', () => {
   it('renders loading state', () => {
-    renderWithProviders(<InvoicesList />)
+    renderWithProviders(<SettingsList />)
     // TODO: Implement test
   });
 
@@ -11,7 +11,7 @@ describe('InvoicesList', () => {
     // TODO: Implement test
   });
 
-  it('renders invoices list', () => {
+  it('renders settings list', () => {
     // TODO: Implement test
   });
 });

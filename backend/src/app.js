@@ -207,8 +207,8 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// 404 handler
-app.all("*", (req, res) => {
+// 404 handler (Express 5 / path-to-regexp v8: use named splat /*path)
+app.all("/*path", (req, res) => {
   res.status(404).json({
     success: false,
     message: `Route ${req.originalUrl} not found`,

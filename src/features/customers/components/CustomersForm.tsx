@@ -5,11 +5,7 @@ import { useCreateCustomers } from '../hooks';
 import type { CustomersFormData } from '../types';
 
 export const CustomersForm: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<CustomersFormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<CustomersFormData>();
   const { mutate: create, isPending } = useCreateCustomers();
 
   const onSubmit = (data: CustomersFormData) => {
@@ -31,7 +27,11 @@ export const CustomersForm: React.FC = () => {
         sx={{ mb: 2 }}
       />
 
-      <Button type="submit" variant="contained" disabled={isPending}>
+      <Button
+        type="submit"
+        variant="contained"
+        disabled={isPending}
+      >
         {isPending ? 'Creating...' : 'Create Customers'}
       </Button>
     </Box>

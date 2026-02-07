@@ -1,17 +1,17 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Button, TextField } from '@mui/material';
-import { useCreateReports } from '../hooks';
-import type { ReportsFormData } from '../types';
+import { useCreateSettings } from '../hooks';
+import type { SettingsFormData } from '../types';
 
-export const ReportsForm: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<ReportsFormData>();
-  const { mutate: create, isPending } = useCreateReports();
+export const SettingsForm: React.FC = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm<SettingsFormData>();
+  const { mutate: create, isPending } = useCreateSettings();
 
-  const onSubmit = (data: ReportsFormData) => {
+  const onSubmit = (data: SettingsFormData) => {
     create(data, {
       onSuccess: () => {
-        alert('Reports created successfully!');
+        alert('Settings created successfully!');
       },
     });
   };
@@ -32,7 +32,7 @@ export const ReportsForm: React.FC = () => {
         variant="contained"
         disabled={isPending}
       >
-        {isPending ? 'Creating...' : 'Create Reports'}
+        {isPending ? 'Creating...' : 'Create Settings'}
       </Button>
     </Box>
   );

@@ -1,43 +1,43 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ReportsService } from '../services';
+import { SettingsService } from '../services';
 import type {
-  Reports,
-  ReportsFormData,
-  ReportsFilterParams,
+  Settings,
+  SettingsFormData,
+  SettingsFilterParams,
 } from '../types';
 
-const QUERY_KEY = 'reports';
+const QUERY_KEY = 'settings';
 
 /**
- * Hook to fetch all reports
+ * Hook to fetch all settings
  */
-export const useReportsList = (params?: ReportsFilterParams) => {
+export const useSettingsList = (params?: SettingsFilterParams) => {
   return useQuery({
     queryKey: [QUERY_KEY, params],
-    queryFn: () => ReportsService.getAll(params),
+    queryFn: () => SettingsService.getAll(params),
   });
 };
 
 /**
- * Hook to fetch single reports
+ * Hook to fetch single settings
  */
-export const useReports = (id: string) => {
+export const useSettings = (id: string) => {
   return useQuery({
     queryKey: [QUERY_KEY, id],
-    queryFn: () => ReportsService.getById(id),
+    queryFn: () => SettingsService.getById(id),
     enabled: !!id,
   });
 };
 
 /**
- * Hook to create reports
+ * Hook to create settings
  */
-export const useCreateReports = () => {
+export const useCreateSettings = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: ReportsFormData) =>
-      ReportsService.create(data),
+    mutationFn: (data: SettingsFormData) =>
+      SettingsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },
@@ -45,14 +45,14 @@ export const useCreateReports = () => {
 };
 
 /**
- * Hook to update reports
+ * Hook to update settings
  */
-export const useUpdateReports = () => {
+export const useUpdateSettings = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<ReportsFormData> }) =>
-      ReportsService.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Partial<SettingsFormData> }) =>
+      SettingsService.update(id, data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY, variables.id] });
@@ -61,13 +61,13 @@ export const useUpdateReports = () => {
 };
 
 /**
- * Hook to delete reports
+ * Hook to delete settings
  */
-export const useDeleteReports = () => {
+export const useDeleteSettings = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => ReportsService.delete(id),
+    mutationFn: (id: string) => SettingsService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },

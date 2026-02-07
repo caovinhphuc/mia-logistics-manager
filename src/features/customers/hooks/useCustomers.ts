@@ -1,6 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { CustomersService } from '../services';
-import type { Customers, CustomersFormData, CustomersFilterParams } from '../types';
+import type {
+  Customers,
+  CustomersFormData,
+  CustomersFilterParams,
+} from '../types';
 
 const QUERY_KEY = 'customers';
 
@@ -32,7 +36,8 @@ export const useCreateCustomers = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CustomersFormData) => CustomersService.create(data),
+    mutationFn: (data: CustomersFormData) =>
+      CustomersService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },

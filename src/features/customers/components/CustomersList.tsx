@@ -15,11 +15,19 @@ export const CustomersList: React.FC = () => {
   }
 
   if (error) {
-    return <Typography color="error">Error loading customers: {error.message}</Typography>;
+    return (
+      <Typography color="error">
+        Error loading customers: {error.message}
+      </Typography>
+    );
   }
 
   if (!data || data.length === 0) {
-    return <Typography color="text.secondary">No customers found</Typography>;
+    return (
+      <Typography color="text.secondary">
+        No customers found
+      </Typography>
+    );
   }
 
   return (

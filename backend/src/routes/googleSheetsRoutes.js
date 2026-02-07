@@ -127,8 +127,8 @@ router.post("/append", async (req, res) => {
   }
 });
 
-// Get spreadsheet info
-router.get("/info/:spreadsheetId?", async (req, res) => {
+// Get spreadsheet info (Express 5: optional param split into 2 routes)
+const getSpreadsheetInfo = async (req, res) => {
   try {
     const spreadsheetId = req.params.spreadsheetId || DEFAULT_SPREADSHEET_ID;
 
@@ -157,6 +157,9 @@ router.get("/info/:spreadsheetId?", async (req, res) => {
       details: error.message,
     });
   }
-});
+};
+
+router.get("/info", getSpreadsheetInfo);
+router.get("/info/:spreadsheetId", getSpreadsheetInfo);
 
 module.exports = router;
