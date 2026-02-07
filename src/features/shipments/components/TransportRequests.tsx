@@ -778,7 +778,7 @@ const TransportRequests: React.FC = () => {
     if (selectedStopPoints.size > 0 && newTransportForm.pickupLocation) {
       calculateStopPointDistances();
     }
-  }, [selectedStopPoints, newTransportForm.pickupLocation, calculateStopPointDistances]);
+  }, [selectedStopPoints, newTransportForm.pickupLocation]);
 
   // Xử lý click vào mã phiếu
   const handleTransferClick = (transferId: string, address: string) => {
@@ -916,7 +916,6 @@ const TransportRequests: React.FC = () => {
     });
 
     return Math.round(costBreakdown.totalCost);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     newTransportForm.baseRate,
     newTransportForm.pricePerKm,
@@ -1269,7 +1268,7 @@ const TransportRequests: React.FC = () => {
     if (selectedStopPoints.size > 0 && newTransportForm.pickupLocation) {
       calculateStopPointDistances();
     }
-  }, [selectedStopPoints, newTransportForm.pickupLocation, calculateStopPointDistances]);
+  }, [selectedStopPoints, newTransportForm.pickupLocation]);
 
   // Filter active locations only
   const activeLocations = useMemo(() => {
@@ -1392,7 +1391,6 @@ const TransportRequests: React.FC = () => {
     transportRequests,
     newTransportForm.pickupLocation,
     sortedActiveLocations,
-    locations,
   ]);
 
   // Auto-select pickup location when selected transfers change
@@ -1778,7 +1776,6 @@ const TransportRequests: React.FC = () => {
     newTransportForm.serviceArea,
     newTransportForm.vehicleType,
     carriers,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   ]);
 
   // Fetch carriers
