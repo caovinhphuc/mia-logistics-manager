@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import { useReportsList } from '../hooks';
-import { ReportsCard } from './ReportsCard';
+import { useAnalyticsList } from '../hooks';
+import { AnalyticsCard } from './AnalyticsCard';
 
-export const ReportsList: React.FC = () => {
-  const { data, isLoading, error } = useReportsList();
+export const AnalyticsList: React.FC = () => {
+  const { data, isLoading, error } = useAnalyticsList();
 
   if (isLoading) {
     return (
@@ -17,7 +17,7 @@ export const ReportsList: React.FC = () => {
   if (error) {
     return (
       <Typography color="error">
-        Error loading reports: {error.message}
+        Error loading analytics: {error.message}
       </Typography>
     );
   }
@@ -25,7 +25,7 @@ export const ReportsList: React.FC = () => {
   if (!data || data.length === 0) {
     return (
       <Typography color="text.secondary">
-        No reports found
+        No analytics found
       </Typography>
     );
   }
@@ -33,7 +33,7 @@ export const ReportsList: React.FC = () => {
   return (
     <Box>
       {data.map((item) => (
-        <ReportsCard key={item.id} reports={item} />
+        <AnalyticsCard key={item.id} analytics={item} />
       ))}
     </Box>
   );

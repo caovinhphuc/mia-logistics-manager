@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import { ReportsList } from './ReportsList';
+import { AnalyticsList } from './AnalyticsList';
 
-describe('ReportsList', () => {
+describe('AnalyticsList', () => {
   it('renders loading state', () => {
-    render(<ReportsList />);
+    render(<AnalyticsList />);
     // TODO: Implement test
   });
 
@@ -11,7 +11,7 @@ describe('ReportsList', () => {
     // TODO: Implement test
   });
 
-  it('renders reports list', () => {
+  it('renders analytics list', () => {
     // TODO: Implement test
   });
 });

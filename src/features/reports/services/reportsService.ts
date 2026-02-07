@@ -1,5 +1,9 @@
 import { apiClient } from '@/services/api/client';
-import type { Reports, ReportsFormData, ReportsFilterParams } from '../types';
+import type {
+  Reports,
+  ReportsFormData,
+  ReportsFilterParams,
+} from '../types';
 
 export class ReportsService {
   private static BASE_URL = '/reports';
@@ -7,7 +11,9 @@ export class ReportsService {
   /**
    * Get all reports
    */
-  static async getAll(params?: ReportsFilterParams): Promise<Reports[]> {
+  static async getAll(
+    params?: ReportsFilterParams
+  ): Promise<Reports[]> {
     return apiClient.get<Reports[]>(this.BASE_URL, { params });
   }
 
@@ -21,14 +27,19 @@ export class ReportsService {
   /**
    * Create new reports
    */
-  static async create(data: ReportsFormData): Promise<Reports> {
+  static async create(
+    data: ReportsFormData
+  ): Promise<Reports> {
     return apiClient.post<Reports>(this.BASE_URL, data);
   }
 
   /**
    * Update reports
    */
-  static async update(id: string, data: Partial<ReportsFormData>): Promise<Reports> {
+  static async update(
+    id: string,
+    data: Partial<ReportsFormData>
+  ): Promise<Reports> {
     return apiClient.put<Reports>(`${this.BASE_URL}/${id}`, data);
   }
 
