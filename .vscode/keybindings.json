@@ -1,0 +1,42 @@
+[
+  // Toggle terminal
+  {
+    "key": "ctrl+`",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  // Inline Suggest (AI gợi ý trong dòng)
+  {
+    "key": "cmd+;",
+    "command": "editor.action.inlineSuggest.trigger",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "cmd+shift+;",
+    "command": "editor.action.inlineSuggest.acceptNextWord",
+    "when": "inlineSuggestionVisible"
+  },
+  // Format & fix
+  {
+    "key": "cmd+shift+f",
+    "command": "editor.action.formatDocument"
+  },
+  {
+    "key": "cmd+alt+f",
+    "command": "eslint.executeAutofix"
+  },
+  // Organize imports
+  {
+    "key": "cmd+shift+o",
+    "command": "editor.action.organizeImports"
+  },
+  // Mở nhanh Settings JSON
+  {
+    "key": "cmd+shift+,",
+    "command": "workbench.action.openSettingsJson"
+  },
+  // Toggle Sidebar
+  {
+    "key": "cmd+b",
+    "command": "workbench.action.toggleSidebarVisibility"
+  }
+]

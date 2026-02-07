@@ -1,0 +1,99 @@
+{
+  // ===== Look & Feel =====
+  "workbench.colorTheme": "Default Dark+",
+  "workbench.iconTheme": "material-icon-theme",
+  "window.zoomLevel": 0,
+  "workbench.editor.enablePreview": false,
+  "workbench.startupEditor": "none",
+  "breadcrumbs.enabled": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "selection",
+  "editor.renderControlCharacters": false,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.smoothScrolling": true,
+  "editor.fontFamily": "'JetBrains Mono', 'Fira Code', Menlo, monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 11,
+  "editor.lineHeight": 23,
+  "editor.rulers": [
+    100
+  ],
+  "editor.guides.bracketPairs": true,
+  "editor.bracketPairColorization.enabled": true,
+  // ===== Typing & IntelliSense =====
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+  "editor.suggestSelection": "first",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  // ===== AI & Inline Suggest =====
+  "editor.inlineSuggest.enabled": true,
+  "editor.inlineSuggest.showToolbar": "onHover",
+  "editor.acceptSuggestionOnEnter": "smart",
+  // ===== JavaScript/TypeScript =====
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "javascript.suggest.completeFunctionCalls": true,
+  "typescript.suggest.completeFunctionCalls": true,
+  // ===== React / JSX / TSX =====
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "css.validate": false,
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "clsx\\(([^)]*)\\)",
+      "(?:'|\"|`)([^'\"`]*)(?:'|\"|`)"
+    ],
+    [
+      "cva\\(([^)]*)\\)",
+      "(?:'|\"|`)([^'\"`]*)(?:'|\"|`)"
+    ]
+  ],
+  // ===== Prettier & ESLint =====
+  "prettier.singleQuote": true,
+  "prettier.semi": false,
+  "prettier.trailingComma": "all",
+  "prettier.printWidth": 100,
+  "eslint.useFlatConfig": false,
+  "eslint.format.enable": true,
+  // ===== Markdown & Writing =====
+  "markdown.preview.breaks": true,
+  "markdown.updateLinksOnFileMove.enabled": "prompt",
+  // ===== Git =====
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  // ===== Terminal =====
+  "terminal.integrated.fontFamily": "'JetBrains Mono', Menlo, monospace",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  // ===== Python (tuỳ chọn) =====
+  "python.analysis.autoImportCompletions": true,
+  "python.terminal.activateEnvironment": true,
+  // ===== AppScript (tuỳ chọn) =====
+  "files.eol": "\n",
+  // ===== Files & Explorer =====
+  "explorer.compactFolders": false,
+  "search.useGlobalIgnoreFiles": true,
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.turbo": true
+  },
+  // ===== Workspace Recommendations =====
+  "extensions.ignoreRecommendations": true
+}
