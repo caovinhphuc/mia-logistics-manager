@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-02-07T20:42:24.852Z",
+  "overall": "unhealthy",
+  "services": {
+    "file-system": {
+      "status": "error",
+      "message": "Missing files/directories: src/App.jsx, src/components, src/services",
+      "details": null,
+      "timestamp": "2026-02-07T20:42:24.867Z"
+    },
+    "dependencies": {
+      "status": "error",
+      "message": "Error checking dependencies: Cannot read properties of undefined (reading 'googleapis')",
+      "details": null,
+      "timestamp": "2026-02-07T20:42:24.868Z"
+    },
+    "environment": {
+      "status": "error",
+      "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+      "details": null,
+      "timestamp": "2026-02-07T20:42:24.868Z"
+    }
+  },
+  "errors": [
+    {
+      "service": "file-system",
+      "message": "Missing files/directories: src/App.jsx, src/components, src/services",
+      "details": null
+    },
+    {
+      "service": "dependencies",
+      "message": "Error checking dependencies: Cannot read properties of undefined (reading 'googleapis')",
+      "details": null
+    },
+    {
+      "service": "environment",
+      "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+      "details": null
+    }
+  ],
+  "warnings": []
+}
