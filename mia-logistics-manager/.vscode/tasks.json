@@ -1,0 +1,55 @@
+{
+  // Build
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "label": "npm: start",
+      "detail": "react-scripts start",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "webpack compiled"
+          }
+        }
+      }
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "label": "npm: build",
+      "detail": "react-scripts build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$tsc"
+      ]
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "label": "npm: test",
+      "detail": "react-scripts test",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": ".*"
+        }
+      }
+    }
+  ]
+}

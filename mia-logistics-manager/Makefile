@@ -45,13 +45,7 @@ help:
 install:
 	@echo "📦 Installing dependencies..."
 	npm install --legacy-peer-deps
-	cd backend && npm install --legacy-peer-deps
 	@echo "✅ Installation complete!"
-
-install-backend:
-	@echo "📦 Installing backend dependencies..."
-	cd backend && npm install --legacy-peer-deps
-	@echo "✅ Backend dependencies installed!"
 
 install-frontend:
 	@echo "📦 Installing frontend dependencies..."

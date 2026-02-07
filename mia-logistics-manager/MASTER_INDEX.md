@@ -9,20 +9,20 @@
 ### New to the Project?
 
 👉 **Start Here**: [Main README](README.md)
-👉 **Installation**: [README - Setup Section](README.md#-cài-đặt-và-chạy)
-👉 **Quick Start**: Run `./start-project.sh`
+👉 **Installation**: Run `make install`
+👉 **Quick Start**: Run `make start` or `./start-project.sh`
 
 ### Developer?
 
-👉 **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
-👉 **API Docs**: [docs/API.md](docs/API.md)
-👉 **Code Style**: [CONTRIBUTING - Code Style](CONTRIBUTING.md#code-style)
+👉 **TypeScript Setup**: [tsconfig.json](tsconfig.json)
+👉 **Component Library**: [src/components/](src/components/)
+👉 **Code Style**: Use TypeScript strict mode
+👉 **Scripts**: [scripts/](scripts/) - Shell utilities
 
 ### DevOps/SRE?
 
-👉 **Deployment**: [FINAL_DEPLOYMENT_CHECKLIST.md](FINAL_DEPLOYMENT_CHECKLIST.md)
-👉 **Docker**: [docker-compose.yml](docker-compose.yml)
-👉 **Monitoring**: [scripts/health-monitor.sh](scripts/health-monitor.sh)
+👉 **Deployment**: Use deployment scripts in [scripts/shell/](scripts/shell/)
+👉 **Monitoring**: [scripts/core/health-check.js](scripts/core/health-check.js)
 
 ---
 
@@ -30,74 +30,204 @@
 
 ### Level 1: Essential (Must Read)
 
-1. **[README.md](README.md)** - 1,617 lines
+1. **[README.md](README.md)**
    - Project overview
    - Installation guide
    - Configuration
-   - Troubleshooting
-   - Complete feature list
+   - Usage examples
+   - Scripts reference
 
-2. **[ANALYSIS_REPORT.md](ANALYSIS_REPORT.md)** - 350+ lines ⭐ **NEW**
-   - Tình trạng dự án hiện tại
-   - Phân tích chi tiết: Security, Performance, Dependencies
-   - Metrics & statistics
-   - Đề xuất cải thiện
-   - ROI analysis
-
-3. **[OPTIMIZATION_PLAN.md](OPTIMIZATION_PLAN.md)** - 500+ lines ⭐ **NEW**
-   - Kế hoạch tối ưu 4 tuần
-   - Chi tiết từng bước thực hiện
-   - Commands và ví dụ cụ thể
-   - Checklist đầy đủ
-
-4. **[PROJECT_COMPLETION_SUMMARY.md](PROJECT_COMPLETION_SUMMARY.md)** - 433 lines
-   - What's been built
-   - Files created
-   - Statistics
-   - Status overview
-
-5. **[COMPREHENSIVE_PROJECT_SUMMARY.md](COMPREHENSIVE_PROJECT_SUMMARY.md)** - 600+ lines
-   - Executive summary
-   - Metrics & KPIs
-   - Technology stack
-   - Success criteria
+2. **[tsconfig.json](tsconfig.json)**
+   - TypeScript configuration
+   - Path aliases (@components, @hooks, etc.)
+   - Compiler options
 
 ---
 
-### Level 2: Development (For Developers)
+## 📂 Project Structure
 
-4. **[CONTRIBUTING.md](CONTRIBUTING.md)** - 553 lines
-   - Code style guidelines
-   - Git workflow
-   - Commit conventions
-   - PR process
-   - Testing requirements
+### Source Code (`src/`)
 
-5. **[docs/API.md](docs/API.md)** - 467 lines
-   - REST API endpoints
-   - Authentication
-   - Request/Response formats
-   - Error handling
-   - Code examples
+```
+src/
+├── components/          # React components
+│   ├── common/          # Shared components (Button, Card)
+│   └── index.ts         # Component exports
+├── features/            # Feature modules
+├── hooks/               # Custom React hooks
+│   └── index.ts         # useLocalStorage, useWindowSize, etc.
+├── services/            # API services
+│   ├── api.service.ts   # Main API service with axios
+│   └── index.ts         # Service exports
+├── types/               # TypeScript type definitions
+│   ├── common.ts        # Common types
+│   ├── api.ts           # API types
+│   └── index.ts         # Type exports
+├── utils/               # Utility functions
+│   ├── helpers.ts       # Helper functions
+│   └── index.ts         # Utility exports
+├── config/              # App configuration
+│   └── index.ts         # Config with env variables
+├── constants/           # App constants
+│   └── index.ts         # API endpoints, routes, etc.
+├── App.tsx              # Main App component
+└── index.tsx            # Entry point
+```
 
-6. **[docs/SWAGGER.yaml](docs/SWAGGER.yaml)**
-   - OpenAPI 3.0 specification
-   - Interactive API documentation
+### Scripts (`scripts/`)
 
-7. **[docs/FEATURES_DETAIL.md](docs/FEATURES_DETAIL.md)** - 500+ lines
-   - Detailed feature descriptions
-   - Business logic flows
-   - Use cases
-   - Implementation details
+```
+scripts/
+├── shell/               # Shell scripts
+│   ├── start-project.sh      # Khởi động dự án
+│   ├── stop-project.sh       # Dừng dự án
+│   ├── restart-project.sh    # Khởi động lại
+│   ├── force-restart.sh      # Force restart
+│   ├── setup-env.sh          # Setup môi trường
+│   ├── test-connections.sh   # Test kết nối
+│   └── deploy*.sh            # Các script deploy
+├── core/                # Core utilities
+│   ├── health-check.js       # Health monitoring
+│   ├── email-notifier.js     # Email notifications
+│   └── telegram-notifier.js  # Telegram notifications
+├── deploy/              # Deployment scripts
+├── tests/               # Test scripts
+└── checks/              # System checks
+```
 
 ---
 
-### Level 2.5: Optimization & Improvement (For All) ⭐ **NEW**
+## 🎯 Key Features
 
-**21. [ANALYSIS_REPORT.md](ANALYSIS_REPORT.md)** - 350+ lines
+### 1. TypeScript Support ⭐ **NEW**
 
-- Phân tích toàn diện dự án
-- 41 security vulnerabilities (37 high)
+- Full TypeScript setup with strict mode
+- Type definitions for all modules
+- Path aliases for clean imports
+
+### 2. Component Library
+
+- **Button** - Customizable button component
+- **Card** - Container component with header/footer
+- More components in `src/components/common/`
+
+### 3. Custom Hooks
+
+- `useLocalStorage` - Persistent state management
+- `useWindowSize` - Responsive design helper
+- `useDebounce` - Debounced values
+
+### 4. API Service Layer
+
+- Centralized API service with axios
+- Request/response interceptors
+- Error handling
+- Authentication token management
+
+### 5. Utility Functions
+
+- Date formatting
+- Currency formatting
+- Debounce function
+- isEmpty checker
+
+---
+
+## 🛠️ Development Workflow
+
+### 1. Setup
+
+```bash
+make install
+cp .env.example .env
+```
+
+### 2. Development
+
+```bash
+make start              # Start dev server
+make test               # Run tests
+make lint               # Run linter
+```
+
+### 3. Build
+
+```bash
+make build              # Production build
+```
+
+### 4. Deployment
+
+```bash
+make deploy             # Deploy to production
+make deploy-staging     # Deploy to staging
+```
+
+---
+
+## 📜 Available Make Commands
+
+```bash
+make help               # Show all commands
+make install            # Install dependencies
+make start              # Start development
+make build              # Build production
+make test               # Run tests
+make clean              # Clean artifacts
+make deploy             # Deploy production
+```
+
+---
+
+## 🔧 Configuration Files
+
+- **tsconfig.json** - TypeScript configuration
+- **package.json** - Dependencies and scripts
+- **.env** - Environment variables
+- **Makefile** - Make commands
+- **.gitignore** - Git ignore rules
+
+---
+
+## 📦 Key Dependencies
+
+### Runtime
+
+- react: 19.2.4
+- react-dom: 19.2.4
+- axios: Latest
+- TypeScript: Latest
+
+### Development
+
+- @types/react
+- @types/react-dom
+- @types/node
+- @types/jest
+
+---
+
+## 🚀 Getting Started Checklist
+
+- [ ] Clone repository
+- [ ] Run `make install`
+- [ ] Copy `.env.example` to `.env`
+- [ ] Configure environment variables
+- [ ] Run `make start`
+- [ ] Open http://localhost:3000
+
+---
+
+## 📝 Notes
+
+- Always use `--legacy-peer-deps` when installing packages
+- Use TypeScript for new files (.tsx/.ts)
+- Follow the established folder structure
+- Use path aliases (@components, @hooks, etc.)
+- Run `make clean` if you encounter build issues
+
+---
+
 - 157 unused packages
 - Bundle size issues (13MB)
 - Performance bottlenecks
