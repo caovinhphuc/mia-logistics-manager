@@ -1,0 +1,26 @@
+node_modules/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+build/
+dist/
+.DS_Store
+*.log
+
+# Logs and uploads - có thể gây hot reload giật
+logs/
+uploads/
+*.log
+
+# Service Account Keys - Không commit secret keys
+**/service-account*.json
+**/*service-account*.json
+**/*mia-logistics*.json
+**/*sinuous-aviary*.json
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.*.json
+.vercel
