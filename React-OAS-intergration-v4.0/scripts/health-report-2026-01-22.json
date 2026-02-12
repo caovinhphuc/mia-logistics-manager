@@ -1,0 +1,68 @@
+{
+<<<<<<< HEAD
+  "timestamp": "2026-01-22T17:47:46.076Z",
+=======
+  "timestamp": "2026-01-22T08:02:09.780Z",
+>>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1
+  "overall": "unhealthy",
+  "services": {
+    "file-system": {
+      "status": "error",
+<<<<<<< HEAD
+      "message": "Missing files/directories: package.json, .env, src/App.jsx, src, src/components, src/services, public",
+      "details": null,
+      "timestamp": "2026-01-22T17:47:46.077Z"
+=======
+      "message": "Missing files/directories: package.json, src/App.jsx, src, src/components, src/services, public",
+      "details": null,
+      "timestamp": "2026-01-22T08:02:09.781Z"
+>>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1
+    },
+    "dependencies": {
+      "status": "error",
+      "message": "Error checking dependencies: ENOENT: no such file or directory, open 'package.json'",
+      "details": null,
+<<<<<<< HEAD
+      "timestamp": "2026-01-22T17:47:46.077Z"
+=======
+      "timestamp": "2026-01-22T08:02:09.781Z"
+>>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1
+    },
+    "environment": {
+      "status": "error",
+      "message": "Missing required environment variables: REACT_APP_GOOGLE_CLIENT_EMAIL, REACT_APP_GOOGLE_PRIVATE_KEY, REACT_APP_GOOGLE_PROJECT_ID, REACT_APP_GOOGLE_SHEET_ID",
+      "details": null,
+<<<<<<< HEAD
+      "timestamp": "2026-01-22T17:47:46.077Z"
+=======
+      "timestamp": "2026-01-22T08:02:09.781Z"
+>>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1
+    }
+  },
+  "errors": [
+    {
+      "service": "file-system",
+<<<<<<< HEAD
+      "message": "Missing files/directories: package.json, .env, src/App.jsx, src, src/components, src/services, public",
+=======
+      "message": "Missing files/directories: package.json, src/App.jsx, src, src/components, src/services, public",
+>>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1
+      "details": null
+    },
+    {
+      "service": "dependencies",
+      "message": "Error checking dependencies: ENOENT: no such file or directory, open 'package.json'",
+      "details": null
+    },
+    {
+      "service": "environment",
+      "message": "Missing required environment variables: REACT_APP_GOOGLE_CLIENT_EMAIL, REACT_APP_GOOGLE_PRIVATE_KEY, REACT_APP_GOOGLE_PROJECT_ID, REACT_APP_GOOGLE_SHEET_ID",
+      "details": null
+    }
+  ],
+  "warnings": []
+<<<<<<< HEAD
+}
+=======
+}
+>>>>>>> d51d89a947d33681cac8af9437ded7ec6ffa01e1

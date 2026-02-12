@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "source-map-explorer": "^2.5.3",
+    "webpack-bundle-analyzer": "^5.2.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^8.0.1"
+  }
+}
