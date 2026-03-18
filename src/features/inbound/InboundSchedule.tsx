@@ -44,7 +44,7 @@ import { TableView } from './components/table';
 import { CalendarView } from './components/calendar';
 import { AddEditDialog } from './components/dialogs';
 import { InboundItem } from './types/inbound';
-import { InboundScheduleService } from '../../../services/googleSheets/inboundScheduleService';
+import { InboundScheduleService } from '../../services/googleSheets/inboundScheduleService';
 import {
   addTimelineDescription,
   addDocumentStatusDescription,

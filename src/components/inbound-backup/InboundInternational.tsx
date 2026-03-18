@@ -33,7 +33,7 @@ import {
 import {
   InboundInternationalService,
   InboundInternationalRecord,
-} from '../../../services/googleSheets/inboundInternationalService';
+} from '../../services/googleSheets/inboundInternationalService';
 // Removed unused import: InboundScheduleService
 import {
   Add as AddIcon,
@@ -79,7 +79,7 @@ interface TimelineItem {
   name: string; // Tên mốc thời gian
   date: string; // Ngày thực tế
   estimatedDate?: string; // Ngày dự kiến (nếu có)
-  status: 'completed' | 'pending' | 'in-progress' | 'confirmed'; // Trạng thái
+  status: 'completed' | 'pending' | 'in-progress' | 'confirmed' | 'delayed'; // Trạng thái
   description?: string; // Mô tả thêm
 }
 
@@ -88,7 +88,7 @@ interface DocumentStatusItem {
   name: string; // Tên trạng thái chứng từ
   date: string; // Ngày thực tế
   estimatedDate?: string; // Ngày dự kiến (nếu có)
-  status: 'completed' | 'pending' | 'in-progress' | 'confirmed'; // Trạng thái
+  status: 'completed' | 'pending' | 'in-progress' | 'confirmed' | 'delayed'; // Trạng thái
   description?: string; // Mô tả thêm
 }
 
@@ -591,7 +591,7 @@ const InboundInternational: React.FC = () => {
     }
   };
 
-  const getStatusColorForChip = (status: string) => {
+  const getStatusColorForChip = (status: string): string => {
     switch (status) {
       case 'pending':
         return 'warning';

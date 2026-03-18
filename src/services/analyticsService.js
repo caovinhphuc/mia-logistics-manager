@@ -19,7 +19,7 @@ class AnalyticsService {
       session_id: this.sessionId,
       timestamp: new Date().toISOString(),
       user_agent: navigator.userAgent,
-      referrer: document.referrer,
+      referrer: document.referrer
     });
   }
 
@@ -30,7 +30,7 @@ class AnalyticsService {
       session_id: this.sessionId,
       timestamp: new Date().toISOString(),
       page_url: window.location.href,
-      page_title: document.title,
+      page_title: document.title
     });
   }
 
@@ -43,7 +43,7 @@ class AnalyticsService {
       response_time: responseTime,
       error_message: errorMessage,
       session_id: this.sessionId,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 
@@ -54,7 +54,7 @@ class AnalyticsService {
       value: value,
       metadata: metadata,
       session_id: this.sessionId,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 
@@ -68,7 +68,7 @@ class AnalyticsService {
       session_id: this.sessionId,
       timestamp: new Date().toISOString(),
       page_url: window.location.href,
-      user_agent: navigator.userAgent,
+      user_agent: navigator.userAgent
     });
   }
 
@@ -85,7 +85,7 @@ class AnalyticsService {
     const payload = {
       event_type: eventType,
       data: eventData,
-      api_key: this.apiKey,
+      api_key: this.apiKey
     };
 
     fetch(this.endpoint, {
@@ -94,7 +94,7 @@ class AnalyticsService {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
-    }).catch((error) => {
+    }).catch(error => {
       console.error('Analytics error:', error);
     });
   }
@@ -104,7 +104,7 @@ class AnalyticsService {
     const sessionDuration = Date.now() - this.startTime;
     this.trackEvent('session_end', {
       session_duration: sessionDuration,
-      session_id: this.sessionId,
+      session_id: this.sessionId
     });
   }
 }

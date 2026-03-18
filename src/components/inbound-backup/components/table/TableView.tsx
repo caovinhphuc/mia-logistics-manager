@@ -331,7 +331,7 @@ const TableView: React.FC<TableViewProps> = ({ items, onAction, showAddCalendar 
 
                       return (
                         <StatusChip
-                          status={status}
+                          status={status as any}
                           variant="filled"
                           size="small"
                           sx={{
@@ -379,7 +379,7 @@ const TableView: React.FC<TableViewProps> = ({ items, onAction, showAddCalendar 
                   </TableCell>
                   <TableCell sx={{ width: '100px', textAlign: 'center' }}>
                     <StatusChip
-                      status={isOnline ? 'Online' : 'Offline'}
+                      status={(isOnline ? 'active' : 'inactive') as any}
                       variant="filled"
                       size="small"
                       sx={{
@@ -408,7 +408,7 @@ const TableView: React.FC<TableViewProps> = ({ items, onAction, showAddCalendar 
                     />
                   </TableCell>
                   <TableCell sx={{ textAlign: 'center' }}>
-                    <ActionMenu item={item} onAction={onAction} showAddCalendar={showAddCalendar} />
+                    <ActionMenu item={item} onAction={onAction as any} showAddCalendar={showAddCalendar} />
                   </TableCell>
                 </TableRow>
               );

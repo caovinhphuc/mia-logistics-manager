@@ -87,7 +87,7 @@ export class CarriersService extends BaseGoogleSheetsService {
     // Ensure boolean values are properly formatted for Google Sheets
     const formattedUpdates = { ...updates };
     if ('isActive' in formattedUpdates) {
-      formattedUpdates.isActive = formattedUpdates.isActive ? 'TRUE' : 'FALSE';
+      (formattedUpdates as any).isActive = formattedUpdates.isActive ? 'TRUE' : 'FALSE';
     }
 
     const updatedCarrier = (await this.updateRecord(
@@ -95,7 +95,7 @@ export class CarriersService extends BaseGoogleSheetsService {
       carrierId,
       'carrierId',
       formattedUpdates as unknown as Record<string, unknown>
-    )) as unknown as Promise<Carrier>;
+    )) as unknown as Carrier;
 
     // Return normalized data
     return {

@@ -152,7 +152,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
       <DialogContent>
         <Box sx={{ pt: 2 }}>
           <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
                 label="Mã địa điểm *"
@@ -161,7 +161,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 required
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel>Avatar</InputLabel>
                 <Select
@@ -177,7 +177,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel>Danh mục</InputLabel>
                 <Select
@@ -193,7 +193,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
                 label="Hạng mục"
@@ -201,7 +201,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 onChange={(e) => handleChange('subcategory', e.target.value)}
               />
             </Grid>
-            <Grid size={12}>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Địa chỉ"
@@ -211,7 +211,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 rows={2}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
                 label="Phường/Xã"
@@ -219,7 +219,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 onChange={(e) => handleChange('ward', e.target.value)}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 fullWidth
                 label="Quận/Huyện"
@@ -227,7 +227,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 onChange={(e) => handleChange('district', e.target.value)}
               />
             </Grid>
-            <Grid size={{ xs: 12, sm: 4 }}>
+            <Grid item xs={12} sm={4}>
               <FormControl fullWidth>
                 <InputLabel>Tỉnh/Thành phố</InputLabel>
                 <Select
@@ -243,7 +243,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel>Trạng thái</InputLabel>
                 <Select
@@ -256,7 +256,7 @@ const CreateLocationDialog: React.FC<CreateLocationDialogProps> = ({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid size={12}>
+            <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="Ghi chú"

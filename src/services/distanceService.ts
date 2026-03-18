@@ -156,7 +156,7 @@ export class DistanceService {
 
       // Tìm điểm gần nhất
       const nearest = distances.reduce((prev, curr) =>
-        curr.distance.value < prev.distance.value ? curr : prev
+        curr.distance.distance.value < prev.distance.distance.value ? curr : prev
       );
 
       return nearest;

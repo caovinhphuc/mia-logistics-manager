@@ -1,6 +1,9 @@
 import {
+  ArrowBack as ArrowBackIcon,
+  ArrowForward as ArrowForwardIcon,
   Campaign as CampaignIcon,
   CheckCircle as CheckCircleIcon,
+  Clear as ClearIcon,
   Delete as DeleteIcon,
   Download as DownloadIcon,
   Edit as EditIcon,
@@ -290,6 +293,9 @@ const TransferList: React.FC = () => {
     province: '',
   });
 
+  // Add/create transfer dialog
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_open, setOpen] = useState(false);
   // Edit dialog states (chỉnh sửa địa chỉ)
   const [editOpen, setEditOpen] = useState(false);
   const [editTransfer, setEditTransfer] = useState<Transfer | null>(null);
@@ -2414,10 +2420,10 @@ const TransferList: React.FC = () => {
             <Grid item xs={12} sm={6} md={2}>
               <ActionButton
                 fullWidth
-                variant="error"
+                variant="outlined"
                 size="small"
                 onClick={clearFilters}
-                startIcon={<ActionIcons.Clear />}
+                startIcon={<ClearIcon />}
                 sx={{
                   borderRadius: 2,
                   textTransform: 'none',
@@ -3059,7 +3065,7 @@ const TransferList: React.FC = () => {
             ]}
             data={filteredTransfers}
             selectable
-            onSelectionChange={(ids) => setSelected(ids)}
+            onSelectionChange={(ids: any) => setSelected(ids)}
             getRowId={(row: any) => row.transfer_id}
             rowsPerPageOptions={[5, 10, 25, 50]}
             defaultRowsPerPage={rowsPerPage}
@@ -3131,7 +3137,7 @@ const TransferList: React.FC = () => {
                       </Grid>
                       <Grid item xs={7}>
                         <StatusChip
-                          status={getStatusLabel(gridTransfer.state).toLowerCase()}
+                          status={getStatusLabel(gridTransfer.state).toLowerCase() as any}
                           label={getStatusLabel(gridTransfer.state)}
                         />
                       </Grid>
@@ -3142,7 +3148,7 @@ const TransferList: React.FC = () => {
                       </Grid>
                       <Grid item xs={7}>
                         <StatusChip
-                          status={(gridTransfer.transportStatus || 'Chưa có').toLowerCase()}
+                          status={(gridTransfer.transportStatus || 'Chưa có').toLowerCase() as any}
                           label={gridTransfer.transportStatus || 'Chưa có'}
                         />
                       </Grid>
@@ -3304,7 +3310,7 @@ const TransferList: React.FC = () => {
                           </Typography>
                         </Box>
                       </Grid>
-                      {gridTransfer.pkgOther > 0 && (
+                      {(gridTransfer.pkgOther ?? 0) > 0 && (
                         <Grid item xs={12}>
                           <Box
                             textAlign="center"
@@ -3456,7 +3462,7 @@ const TransferList: React.FC = () => {
                           </Typography>
                         </Box>
                       </Grid>
-                      {gridTransfer.volOther > 0 && (
+                      {(gridTransfer.volOther ?? 0) > 0 && (
                         <Grid item xs={12}>
                           <Box
                             textAlign="center"
@@ -3518,7 +3524,7 @@ const TransferList: React.FC = () => {
                 disabled={gridIndex <= 0}
                 variant="secondary"
                 size="small"
-                startIcon={<ActionIcons.Back />}
+                startIcon={<ArrowBackIcon />}
               >
                 Trước
               </ActionButton>
@@ -3527,7 +3533,7 @@ const TransferList: React.FC = () => {
                 disabled={gridIndex >= selected.length - 1}
                 variant="secondary"
                 size="small"
-                startIcon={<ActionIcons.Forward />}
+                startIcon={<ArrowForwardIcon />}
               >
                 Sau
               </ActionButton>

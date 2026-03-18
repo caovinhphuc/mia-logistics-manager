@@ -15,6 +15,7 @@ export interface DataTableColumn<T = any> {
   id: string;
   label: string;
   width?: number;
+  align?: 'left' | 'center' | 'right';
   render?: (item: T) => React.ReactNode;
 }
 
@@ -27,6 +28,11 @@ interface DataTableProps<T = any> {
   alternateRowColors?: boolean;
   hoverEffects?: boolean;
   emptyMessage?: string;
+  selectable?: boolean;
+  onSelectionChange?: (ids: any[]) => void;
+  getRowId?: (row: T) => any;
+  rowsPerPageOptions?: number[];
+  defaultRowsPerPage?: number;
 }
 
 export function DataTable<T>({

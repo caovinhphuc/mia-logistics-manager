@@ -24,11 +24,11 @@ import {
   BarChart as BarChartIcon,
   Timeline as TimelineIcon,
 } from '@mui/icons-material';
-import { InboundScheduleService } from '../../../services/googleSheets/inboundScheduleService';
-import { getInboundDomesticItems } from '../../../services/googleSheets/inboundDomesticService';
+import { InboundScheduleService } from '../../services/googleSheets/inboundScheduleService';
+import { getInboundDomesticItems } from '../../services/googleSheets/inboundDomesticService';
 import { InboundItem } from './types/inbound';
-import { AdvancedDataTable, StatCard } from '../../../components/ui';
-import type { AdvancedTableColumn } from '../../../components/ui/AdvancedDataTable';
+import { AdvancedDataTable, StatCard } from '../../components/ui';
+import type { AdvancedTableColumn } from '../../components/ui/AdvancedDataTable';
 
 const InboundReports: React.FC = () => {
   // States

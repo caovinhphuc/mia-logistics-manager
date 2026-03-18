@@ -2,6 +2,7 @@
 import { BaseGoogleSheetsService } from './baseService';
 
 export interface GoogleSheetsUser {
+  [key: string]: unknown;
   id: string;
   email: string;
   passwordHash: string;
@@ -193,7 +194,7 @@ class UsersService extends BaseGoogleSheetsService {
         updatedAt: new Date().toISOString(),
       };
 
-      const createdUser = await this.addRecord<GoogleSheetsUser>(this.sheetName, newUser);
+      const createdUser = await this.addRecord<GoogleSheetsUser>(this.sheetName, newUser as GoogleSheetsUser);
       return this.convertToAppUser(createdUser);
     } catch (error) {
       console.error('Error creating user:', error);

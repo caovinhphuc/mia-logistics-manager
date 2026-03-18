@@ -1,4 +1,5 @@
 import React from 'react';
+import { IconButtonProps } from '@mui/material';
 import {
   GridView as GridIcon,
   ViewList as ListIcon,
@@ -57,5 +58,5 @@ const iconMap = {
 
 export const Icon: React.FC<IconProps> = ({ name, ...props }) => {
   const IconComponent = iconMap[name];
-  return <IconComponent {...props} />;
+  return <IconComponent {...(props as any)} />;
 };

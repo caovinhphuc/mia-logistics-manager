@@ -1,4 +1,4 @@
-import { AddCircle, Clear, Delete, Edit, FilterList, Sync, ViewList } from '@mui/icons-material';
+import { AddCircle, Clear, Delete, Edit, FilterList, GridView as GridViewIcon, Sync, ViewList } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -51,7 +51,7 @@ const LocationsList: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('grid');
   // Biến để chuyển đổi Location sang định dạng GridViewItem
-  const mapLocationsToGridItems = (locations: Location[]) => {
+  const mapLocationsToGridItems = (locations: Location[]): any[] => {
     return locations.map((location) => ({
       id: location.id,
       title: location.code,
@@ -61,7 +61,7 @@ const LocationsList: React.FC = () => {
         active: location.status === 'active',
         label: location.status === 'active' ? 'Hoạt động' : 'Tạm dừng',
         // Use allowed union colors only (omit color when inactive)
-        color: location.status === 'active' ? 'success' : undefined,
+        color: (location.status === 'active' ? 'success' : 'default') as 'success' | 'default',
       },
       details: [
         {
@@ -407,7 +407,7 @@ const LocationsList: React.FC = () => {
           <Button
             variant="outlined"
             onClick={() => setViewMode(viewMode === 'table' ? 'grid' : 'table')}
-            startIcon={viewMode === 'table' ? <GridView /> : <ViewList />}
+            startIcon={viewMode === 'table' ? <GridViewIcon /> : <ViewList />}
             sx={{ mr: 1 }}
           >
             {viewMode === 'table' ? 'Lưới' : 'Bảng'}
@@ -584,9 +584,7 @@ const LocationsList: React.FC = () => {
                 items={mapLocationsToGridItems(
                   showAllGrid ? filteredLocations : filteredLocations.slice(0, 8)
                 )}
-                gridSpacing={3}
-                maxItemsPerRow={{ xs: 12, sm: 6, md: 4, lg: 3, xl: 3 }}
-                onStatusToggle={handleGridStatusToggle}
+                {...({ gridSpacing: 3, maxItemsPerRow: { xs: 12, sm: 6, md: 4, lg: 3, xl: 3 }, onStatusToggle: handleGridStatusToggle } as any)}
                 emptyMessage="Chưa có địa điểm nào"
                 emptyAction={{
                   label: 'Thêm địa điểm',

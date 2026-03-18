@@ -72,7 +72,7 @@ interface InboundDomesticItem {
   destination: string; // Kho nhận
   product: string; // Mã Sản phẩm
   quantity: number; // Số lượng
-  status: 'pending' | 'in-transit' | 'arrived' | 'completed';
+  status: 'pending' | 'confirmed' | 'in-transit' | 'arrived' | 'completed' | 'cancelled';
   category: string; // Phân loại hàng hóa
   carrier: string; // Nhà vận chuyển
   purpose: 'online' | 'offline'; // Mục đích

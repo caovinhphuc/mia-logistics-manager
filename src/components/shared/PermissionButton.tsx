@@ -23,7 +23,7 @@ const PermissionButton = ({
   fullWidth = false,
   sx = {},
   ...otherProps
-}) => {
+}: any) => {
   const { user } = useAuth();
 
   if (!user) return null;
@@ -83,7 +83,7 @@ export const PermissionIconButton = ({
   size = 'medium',
   sx = {},
   ...otherProps
-}) => {
+}: any) => {
   const { user } = useAuth();
 
   if (!user) return null;

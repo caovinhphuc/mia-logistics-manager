@@ -1,12 +1,14 @@
 // Sentry Configuration
-import * as Sentry from '@sentry/react';
-import { Integrations } from '@sentry/tracing';
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
 // Initialize Sentry
 Sentry.init({
-  dsn: process.env.REACT_APP_SENTRY_DSN || 'YOUR_SENTRY_DSN_HERE',
+  dsn: process.env.REACT_APP_SENTRY_DSN || "YOUR_SENTRY_DSN_HERE",
   environment: process.env.NODE_ENV,
-  integrations: [new Integrations.BrowserTracing()],
+  integrations: [
+    new Integrations.BrowserTracing(),
+  ],
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
   beforeSend(event) {
     // Filter out development errors
@@ -21,7 +23,7 @@ Sentry.init({
       return null;
     }
     return breadcrumb;
-  },
+  }
 });
 
 export default Sentry;

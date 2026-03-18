@@ -2,7 +2,7 @@
 
 // Backend API URL
 
-import type { PackagingItem } from '../inbound/types/inbound';
+import type { PackagingItem } from '../../features/inbound/types/inbound';
 const API_BASE_URL = 'http://localhost:3100';
 
 export interface InboundDomesticItem {
@@ -54,7 +54,7 @@ const deserializePackaging = (record: any): PackagingItem[] => {
   const quantities = (record.packagingQuantities || '').split(';').filter(Boolean);
   const descriptions = (record.packagingDescriptions || '').split(';').filter(Boolean);
 
-  return types.map((type, index) => ({
+  return (types as string[]).map((type: string, index: number) => ({
     id: `${record.id}-pkg-${index}`,
     type: type.trim(),
     quantity: parseInt(quantities[index] || '0', 10),

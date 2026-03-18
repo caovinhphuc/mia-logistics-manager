@@ -5,6 +5,11 @@ export const hasPermission = (_resource: string, _action: string): boolean => {
   return true;
 };
 
+// Alias used by router for route-level permission gating
+export const requirePermission = (_resource: string, _action: string): boolean => {
+  return true;
+};
+
 // Mock session utility
 export const getSession = () => {
   // Mock session data

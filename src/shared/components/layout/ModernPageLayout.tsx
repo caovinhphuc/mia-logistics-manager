@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Paper } from '@mui/material';
 
 interface ModernPageLayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   title?: string;
   subtitle?: string;
 }

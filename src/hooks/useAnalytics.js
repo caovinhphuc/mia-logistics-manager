@@ -6,7 +6,10 @@ import { MONITORING_CONFIG } from '../config/monitoring';
 export const useAnalytics = () => {
   useEffect(() => {
     if (MONITORING_CONFIG.CUSTOM_ANALYTICS.ENABLED) {
-      analytics.trackPageView(document.title, window.location.href);
+      analytics.trackPageView(
+        document.title,
+        window.location.href
+      );
     }
   }, []);
 
@@ -38,6 +41,6 @@ export const useAnalytics = () => {
     trackEvent,
     trackGoogleAPIUsage,
     trackBusinessMetric,
-    trackError,
+    trackError
   };
 };

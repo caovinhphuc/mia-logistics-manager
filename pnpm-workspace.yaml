@@ -1,0 +1,4 @@
+allowBuilds:
+  bcrypt: true
+  core-js: true
+  core-js-pure: true

@@ -15,8 +15,10 @@ interface DataTableColumn {
   id: string;
   label: string;
   minWidth?: number;
+  width?: number | string;
   align?: 'left' | 'right' | 'center';
   format?: (value: any) => React.ReactNode;
+  render?: (...args: any[]) => React.ReactNode;
 }
 
 interface DataTableProps {
@@ -24,6 +26,12 @@ interface DataTableProps {
   data: any[];
   onEdit?: (item: any) => void;
   onDelete?: (item: any) => void;
+  title?: string;
+  emptyMessage?: string;
+  rowsPerPageOptions?: number[];
+  defaultRowsPerPage?: number;
+  getRowId?: (row: any) => any;
+  [key: string]: any;
 }
 
 const DataTable: React.FC<DataTableProps> = ({ columns, data, onEdit, onDelete }) => {

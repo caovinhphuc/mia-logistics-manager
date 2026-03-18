@@ -56,7 +56,7 @@ export const validateFormData = (formData, schema) => {
   const errors = {};
   const sanitizedData = {};
 
-  Object.keys(schema).forEach((field) => {
+  Object.keys(schema).forEach(field => {
     const value = formData[field];
     const rules = schema[field];
 
@@ -116,7 +116,7 @@ export const validateFormData = (formData, schema) => {
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
-    data: sanitizedData,
+    data: sanitizedData
   };
 };
 
@@ -127,40 +127,40 @@ export const VALIDATION_SCHEMAS = {
       required: true,
       type: 'email',
       minLength: 10,
-      maxLength: 100,
+      maxLength: 100
     },
     spreadsheetId: {
       required: true,
-      type: 'sheets_id',
+      type: 'sheets_id'
     },
     appsScriptId: {
       required: true,
-      type: 'script_id',
+      type: 'script_id'
     },
     mapsApiKey: {
       required: true,
-      type: 'api_key',
-    },
+      type: 'api_key'
+    }
   },
 
   USER_PROFILE: {
     firstName: {
       required: true,
       minLength: 2,
-      maxLength: 50,
+      maxLength: 50
     },
     lastName: {
       required: true,
       minLength: 2,
-      maxLength: 50,
+      maxLength: 50
     },
     email: {
       required: true,
-      type: 'email',
+      type: 'email'
     },
     phone: {
       required: false,
-      type: 'phone',
-    },
-  },
+      type: 'phone'
+    }
+  }
 };

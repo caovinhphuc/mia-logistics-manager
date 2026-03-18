@@ -20,6 +20,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
+import { DataTableColumn } from '../../components/ui';
 import GridView from '../../components/shared/GridView';
 import { employeesService } from '../../services/googleSheets/employeesService';
 
@@ -61,7 +62,7 @@ const Employees: React.FC = () => {
     try {
       setLoading(true);
       const data = await employeesService.getEmployees();
-      setEmployees(data);
+      setEmployees(data as any);
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Không thể tải danh sách nhân viên');
@@ -163,7 +164,7 @@ const Employees: React.FC = () => {
       id: 'status',
       label: 'TRẠNG THÁI',
       width: 120,
-      render: (emp) => (
+      render: (emp: Employee) => (
         <Box
           sx={{
             px: 1.5,
@@ -184,7 +185,7 @@ const Employees: React.FC = () => {
       id: 'actions',
       label: 'THAO TÁC',
       width: 150,
-      render: (emp) => (
+      render: (emp: Employee) => (
         <Box sx={{ display: 'flex', gap: 1 }}>
           <IconButton size="small" onClick={() => handleEdit(emp)} color="primary">
             <Edit />

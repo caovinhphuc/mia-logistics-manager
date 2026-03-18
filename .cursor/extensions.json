@@ -1,0 +1,20 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss",
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "Prisma.prisma",
+    "GraphQL.vscode-graphql",
+    "pkief.material-icon-theme",
+    "styled-components.vscode-styled-components",
+    "csstools.postcss",
+    "formulahendry.code-runner",
+    "ms-python.black-formatter",
+    "ms-python.flake8",
+    "ms-python.isort"
+  ]
+}

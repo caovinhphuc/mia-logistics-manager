@@ -4,9 +4,11 @@
 
 [![Status](https://img.shields.io/badge/Status-Active-success)](https://github.com/your-username/mia-logistics-manager)
 [![Version](https://img.shields.io/badge/Version-2.1.1-blue)](https://github.com/your-username/mia-logistics-manager)
-[![Node](https://img.shields.io/badge/Node-16%2B-green)](https://nodejs.org/)
+[![Node](https://img.shields.io/badge/Node-18%2B-green)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-blue)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+![Build](https://img.shields.io/badge/Build-Passing-brightgreen)
 
 ## 🚀 Quick Start
 
@@ -637,6 +639,36 @@ tail -f logs/backend-startup.log
 ```
 
 ### Frontend compile errors
+
+### Vercel error: missing `sheets_id` secret
+
+Nếu gặp lỗi:
+
+```text
+Environment Variable "NEXT_PUBLIC_GOOGLE_SHEETS_ID" references Secret "sheets_id", which does not exist.
+```
+
+Nguyên nhân: project đang dùng mapping secret cũ (`@secret_name`) trên Vercel.
+
+Cách xử lý nhanh:
+
+```bash
+# Link project (nếu chưa link)
+vercel link
+
+# Thêm env trực tiếp theo môi trường
+vercel env add NEXT_PUBLIC_GOOGLE_SHEETS_ID production
+vercel env add NEXT_PUBLIC_GOOGLE_SHEETS_ID preview
+vercel env add NEXT_PUBLIC_GOOGLE_SHEETS_ID development
+```
+
+Sau đó redeploy:
+
+```bash
+vercel --prod
+```
+
+Gợi ý: với repo này, [vercel.json](vercel.json) đã được chuẩn hóa sang static build cho React (`build/`) và không còn phụ thuộc `@sheets_id` secret.
 
 ```bash
 # Clean và reinstall

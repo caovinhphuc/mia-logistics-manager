@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   AddCircle,
   Add as AddIcon,

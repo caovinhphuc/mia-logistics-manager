@@ -6,6 +6,7 @@ import {
   Delete,
   Edit,
   FilterList,
+  GridView as GridViewIcon,
   LocationCity,
   LocationOn,
   Sync,
@@ -31,9 +32,9 @@ import {
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import DataTable from '../../components/shared/DataTable.tsx';
-import GridView, { type GridViewItem } from '../../components/shared/GridView.tsx';
-import CreateLocationDialog from './CreateLocationDialog.tsx';
+import DataTable from '../../components/shared/DataTable';
+import GridView, { type GridViewItem } from '../../components/shared/GridView';
+import CreateLocationDialog from './CreateLocationDialog';
 
 interface LocationData {
   id: string;
@@ -619,7 +620,7 @@ const Locations = () => {
           <Button
             variant="outlined"
             onClick={() => setViewMode(viewMode === 'table' ? 'grid' : 'table')}
-            startIcon={viewMode === 'table' ? <GridView /> : <ViewList />}
+            startIcon={viewMode === 'table' ? <GridViewIcon /> : <ViewList />}
             sx={{ mr: 1 }}
           >
             {viewMode === 'table' ? 'Lưới' : 'Bảng'}
@@ -783,7 +784,7 @@ const Locations = () => {
       ) : locations && locations.length > 0 ? (
         viewMode === 'table' ? (
           <DataTable
-            columns={tableColumns}
+            columns={tableColumns as any}
             data={filteredLocations}
             rowsPerPageOptions={[5, 10, 25, 50]}
             defaultRowsPerPage={10}

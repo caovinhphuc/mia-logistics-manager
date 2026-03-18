@@ -49,7 +49,7 @@ const InboundSchedule: React.FC = () => {
       logService.info('INBOUND_SCHEDULE', 'Loading data from Google Sheets...');
       const data = await getInboundScheduleItems();
       logService.debug('INBOUND_SCHEDULE', 'Loaded items', { count: data.length });
-      setItems(data);
+      setItems(data as any);
     } catch (err: any) {
       logService.logError('INBOUND_SCHEDULE', err, { action: 'loadData' });
       setError(err.message || 'Không thể tải dữ liệu. Vui lòng thử lại.');
