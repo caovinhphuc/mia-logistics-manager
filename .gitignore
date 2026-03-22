@@ -131,3 +131,7 @@ coverage/
 # Vercel
 .vercel
 .env*.local
+automation/.env
+automation/config/service_account.json
+automation/config/google-credentials.json
+src/config/service-account-key.json
