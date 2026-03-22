@@ -108,7 +108,7 @@ InboundSchedule manages the complete lifecycle of inbound shipments from interna
 
 6 milestones × 3 fields each (estimated, actual, status)
 
-#### Milestones:
+#### Milestones
 
 1. **Cargo Ready** - Hàng sẵn sàng
 2. **ETD** (Estimated Time of Departure) - Khởi hành dự kiến
@@ -117,7 +117,7 @@ InboundSchedule manages the complete lifecycle of inbound shipments from interna
 5. **Arrival Port** - Đến cảng
 6. **Receive** - Nhận hàng
 
-#### Fields for each milestone:
+#### Fields for each milestone
 
 | Field Pattern                 | Type | Format       | Description    |
 | ----------------------------- | ---- | ------------ | -------------- |
@@ -157,7 +157,7 @@ InboundSchedule manages the complete lifecycle of inbound shipments from interna
 
 5 milestones × 3 fields each (estimated, actual, status)
 
-#### Milestones:
+#### Milestones
 
 1. **Check Bill** - Kiểm tra Bill of Lading
 2. **Check CO** - Kiểm tra Certificate of Origin
@@ -165,7 +165,7 @@ InboundSchedule manages the complete lifecycle of inbound shipments from interna
 4. **Customs** - Thông quan
 5. **Tax** - Nộp thuế
 
-#### Fields for each milestone:
+#### Fields for each milestone
 
 | Field Pattern            | Type | Format           | Description    |
 | ------------------------ | ---- | ---------------- | -------------- |

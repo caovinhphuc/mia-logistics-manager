@@ -19,6 +19,7 @@ chmod +x scripts/setup.sh
 ```
 
 **Chức năng:**
+
 - ✅ Check prerequisites (Node.js, npm, Git)
 - ✅ Create `.env` from template
 - ✅ Install dependencies
@@ -44,6 +45,7 @@ chmod +x scripts/generate-structure.sh
 ```
 
 **Tạo được gì:**
+
 - 📁 Complete directory structure (features, shared, services, etc.)
 - 📄 ~100+ template files
 - ⚙️ Configuration files (tsconfig, eslint, prettier)
@@ -52,6 +54,7 @@ chmod +x scripts/generate-structure.sh
 - 🔌 API client setup
 
 **Output:**
+
 ```
 ✓ Directories created: 80+
 ✓ Files created: 100+
@@ -79,6 +82,7 @@ chmod +x scripts/generate-feature.sh
 ```
 
 **Tạo được gì:**
+
 ```
 src/features/<feature-name>/
 ├── components/
@@ -105,6 +109,7 @@ src/features/<feature-name>/
 ```
 
 **Plus:**
+
 - ✅ Complete CRUD hooks
 - ✅ React Query integration
 - ✅ TypeScript types
@@ -162,6 +167,7 @@ git commit -m "feat: add my-new-feature module"
 ### Feature Names Convention
 
 **Good:**
+
 ```bash
 ./scripts/generate-feature.sh customers
 ./scripts/generate-feature.sh order-items
@@ -169,6 +175,7 @@ git commit -m "feat: add my-new-feature module"
 ```
 
 **Bad:**
+
 ```bash
 ./scripts/generate-feature.sh Customer  # Should be lowercase
 ./scripts/generate-feature.sh order_items  # Use hyphens, not underscores
@@ -176,7 +183,8 @@ git commit -m "feat: add my-new-feature module"
 
 ### What Gets Generated
 
-#### Component Example:
+#### Component Example
+
 ```typescript
 // CustomerList.tsx
 import React from 'react';
@@ -188,7 +196,8 @@ export const CustomerList: React.FC = () => {
 };
 ```
 
-#### Hook Example:
+#### Hook Example
+
 ```typescript
 // useCustomer.ts
 export const useCustomerList = (params?) => {
@@ -199,7 +208,8 @@ export const useCustomerList = (params?) => {
 };
 ```
 
-#### Service Example:
+#### Service Example
+
 ```typescript
 // customerService.ts
 export class CustomerService {

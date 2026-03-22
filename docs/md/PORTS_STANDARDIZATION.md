@@ -8,9 +8,9 @@
 
 | Service | Port | URL | Config File |
 |---------|------|-----|-------------|
-| **Frontend (React)** | `3000` | http://localhost:3000 | ports.config.sh |
-| **Backend API** | `3001` | http://localhost:3001 | ports.config.sh |
-| **AI Service** | `8000` | http://localhost:8000 | ports.config.sh |
+| **Frontend (React)** | `3000` | <http://localhost:3000> | ports.config.sh |
+| **Backend API** | `3001` | <http://localhost:3001> | ports.config.sh |
+| **AI Service** | `8000` | <http://localhost:8000> | ports.config.sh |
 | **Google Sheets** | `3001` | (Same as Backend) | ports.config.sh |
 
 ---
@@ -32,6 +32,7 @@ $BACKEND_URL        # http://localhost:3001
 ```
 
 ### **Exported Variables:**
+
 ```bash
 FRONTEND_PORT=3000
 BACKEND_PORT=3001
@@ -45,6 +46,7 @@ AI_SERVICE_NAME="AI Service (Python)"
 ```
 
 ### **Helper Functions:**
+
 ```bash
 kill_port <port> <service_name>      # Kill process on port
 check_port <port>                     # Check if port in use
@@ -97,6 +99,7 @@ show_ports_config                     # Display ports banner
 ## 🔄 Before vs After
 
 ### **BEFORE (Không đồng bộ):**
+
 ```bash
 start_ai_platform.sh  → Frontend: 8080 ❌
 quick_deploy.sh       → Frontend: 8080 ❌
@@ -105,6 +108,7 @@ start.sh              → Frontend: 3000 ✅
 ```
 
 ### **AFTER (Đồng bộ):**
+
 ```bash
 ALL SCRIPTS           → Frontend: 3000 ✅
 ALL SCRIPTS           → Backend:  3001 ✅
@@ -118,12 +122,14 @@ ALL SCRIPTS           → AI:       8000 ✅
 ### **File: `fix-ports.sh`**
 
 Script tự động cập nhật ports:
+
 ```bash
 chmod +x fix-ports.sh
 ./fix-ports.sh
 ```
 
 **Chức năng:**
+
 - ✅ Scan tất cả .sh files
 - ✅ Replace 8080 → 3000
 - ✅ Create backups (.sh.backup)
@@ -135,6 +141,7 @@ chmod +x fix-ports.sh
 ## 📋 Verification
 
 ### **Check Port Usage:**
+
 ```bash
 # Xem port nào script dùng
 grep -h "localhost:" *.sh | grep -oE ":[0-9]+" | sort -u
@@ -146,6 +153,7 @@ grep -h "localhost:" *.sh | grep -oE ":[0-9]+" | sort -u
 ```
 
 ### **Verify Specific Script:**
+
 ```bash
 grep "localhost:" start_ai_platform.sh
 # Should show:
@@ -159,11 +167,13 @@ grep "localhost:" start_ai_platform.sh
 ## 🚀 Usage
 
 ### **Recommended Start Method:**
+
 ```bash
 ./start.sh
 ```
 
 ### **Alternative Methods:**
+
 ```bash
 ./start-mia.sh           # Smart startup
 ./start_ai_platform.sh   # Full AI platform
@@ -171,6 +181,7 @@ grep "localhost:" start_ai_platform.sh
 ```
 
 **Tất cả đều dùng ports đồng nhất:**
+
 - Frontend: 3000
 - Backend: 3001
 - AI: 8000
@@ -179,13 +190,14 @@ grep "localhost:" start_ai_platform.sh
 
 ## 🎯 Connection Status
 
-Sau khi start, mở http://localhost:3000 và check header:
+Sau khi start, mở <http://localhost:3000> và check header:
 
 ```
 [🟢 Backend: Kết nối :3001] [🟢 Google Sheets: Kết nối]
 ```
 
 ### **Status Indicators:**
+
 - 🟢 **Green** = Connected & Healthy
 - 🔴 **Red** = Disconnected or Error
 
@@ -200,6 +212,7 @@ vim ports.config.sh
 ```
 
 Thay đổi:
+
 ```bash
 export FRONTEND_PORT=4000    # Thay vì 3000
 export BACKEND_PORT=4001     # Thay vì 3001
@@ -213,12 +226,14 @@ export AI_SERVICE_PORT=9000  # Thay vì 8000
 ## 🔒 Prevent Future Conflicts
 
 ### **Rules:**
+
 1. ❌ **KHÔNG** hardcode ports trong scripts
 2. ✅ **LUÔN** dùng `source ./ports.config.sh`
 3. ✅ **LUÔN** dùng `${FRONTEND_PORT}` thay vì `3000`
 4. ✅ **LUÔN** dùng `${BACKEND_PORT}` thay vì `3001`
 
 ### **Example Good Practice:**
+
 ```bash
 #!/bin/bash
 source ./ports.config.sh  # ✅ Load config
@@ -233,12 +248,14 @@ npm start --port ${FRONTEND_PORT}  # ✅ Good
 ## 📈 Impact
 
 ### **Before Standardization:**
+
 - 🔴 6 scripts với port 8080
 - 🔴 2 scripts với port 3000
 - 🔴 Conflicts và confusion
 - 🔴 Hard to maintain
 
 ### **After Standardization:**
+
 - ✅ 100% scripts dùng port 3000
 - ✅ Single source of truth
 - ✅ Easy to maintain
@@ -276,4 +293,3 @@ curl http://localhost:3000         # Frontend
 ---
 
 **🎉 No more port conflicts! Clean & Professional!** 🚀
-

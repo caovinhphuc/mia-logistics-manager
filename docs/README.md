@@ -289,7 +289,7 @@ A: Follow [Security Policy](../SECURITY.md)
 ### Support Channels
 
 1. **GitHub Issues**: Report bugs, request features
-2. **Email**: kho.1@mia.vn
+2. **Email**: <kho.1@mia.vn>
 3. **Telegram**: MIA Logistics Group
 4. **Documentation**: Search this docs first
 
