@@ -1,0 +1,13 @@
+{
+  "last_update": "2026-03-15T16:20:46.919082",
+  "files": {
+    "orders": "data/orders_dashboard_20260315_162046.csv",
+    "sla": "data/sla_summary_20260315_162046.txt"
+  },
+  "stats": {
+    "total_orders": 3,
+    "total_products": 0,
+    "has_sla_data": true,
+    "automation_version": "2.1_enhanced"
+  }
+}

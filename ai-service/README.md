@@ -5,6 +5,7 @@ AI Service cho dự đoán và phân tích logistics trong hệ thống MIA Logi
 ## 📋 Tổng quan
 
 Service này cung cấp các tính năng AI/ML cho logistics:
+
 - ⏱️ **Dự đoán thời gian giao hàng** - Dựa trên khoảng cách, loại xe, giao thông
 - 💰 **Ước tính chi phí vận chuyển** - Tính toán chi phí dựa trên khoảng cách, khối, trọng lượng
 - 📊 **Dự báo nhu cầu** - Dự báo nhu cầu vận chuyển tại các địa điểm
@@ -42,6 +43,7 @@ GET /health
 ```
 
 Response:
+
 ```json
 {
   "status": "OK",
@@ -58,6 +60,7 @@ POST /api/ml/predict-delivery-time
 ```
 
 Request:
+
 ```json
 {
   "distance_km": 150,
@@ -68,6 +71,7 @@ Request:
 ```
 
 Response:
+
 ```json
 {
   "predicted_hours": 3,
@@ -89,6 +93,7 @@ POST /api/ml/estimate-cost
 ```
 
 Request:
+
 ```json
 {
   "distance_km": 200,
@@ -100,6 +105,7 @@ Request:
 ```
 
 Response:
+
 ```json
 {
   "estimated_cost_vnd": 1150000,
@@ -121,6 +127,7 @@ POST /api/ml/forecast-demand
 ```
 
 Request:
+
 ```json
 {
   "location": "Hà Nội",
@@ -130,6 +137,7 @@ Request:
 ```
 
 Response:
+
 ```json
 {
   "forecasted_demand": 65,
@@ -151,6 +159,7 @@ POST /api/ml/optimize-route
 ```
 
 Request:
+
 ```json
 [
   {"lat": 21.0285, "lng": 105.8542, "name": "Điểm A"},
@@ -160,6 +169,7 @@ Request:
 ```
 
 Response:
+
 ```json
 {
   "optimized_route": [
@@ -224,6 +234,7 @@ AI_SERVICE_PORT=8000
 ### Cải thiện predictions
 
 Hiện tại model sử dụng heuristic-based predictions. Để cải thiện:
+
 1. Thu thập dữ liệu lịch sử
 2. Train ML model (scikit-learn, TensorFlow, etc.)
 3. Update `LogisticsPredictor` class
@@ -251,4 +262,3 @@ python main_simple.py
 ---
 
 **Made with ❤️ for MIA Logistics Manager**
-

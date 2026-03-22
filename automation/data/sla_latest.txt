@@ -1,0 +1,8 @@
+📊 BÁO CÁO SLA - GIÁM SÁT THỜI HẠN BÀN GIAO
+============================================================
+🕐 Thời gian phân tích: 2026-03-15T16:20:46.918714
+📦 Tổng đơn Shopee: 2
+🚨 Quá hạn xác nhận: 1
+🚨 Quá hạn bàn giao: 0
+📦 Tổng đơn TikTok: 1
+🚨 Quá hạn bàn giao: 0
