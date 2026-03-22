@@ -235,11 +235,11 @@ All critical files present and verified:
 
 ## 📞 Support Resources
 
-- React: https://react.dev
-- Material-UI: https://mui.com
-- Google Sheets API: https://developers.google.com/sheets
-- Jest: https://jestjs.io
-- Express: https://expressjs.com
+- React: <https://react.dev>
+- Material-UI: <https://mui.com>
+- Google Sheets API: <https://developers.google.com/sheets>
+- Jest: <https://jestjs.io>
+- Express: <https://expressjs.com>
 
 ---
 

@@ -92,6 +92,7 @@ GOOGLE_CREDENTIALS='{...json content base64 encoded...}'
 ### 3. Rotate Compromised Credentials
 
 Since credentials were exposed:
+
 1. Go to Google Cloud Console
 2. Disable old service account
 3. Create new service account
@@ -111,4 +112,3 @@ git commit -m "feat: initial commit v2.1.1"
 git remote add origin https://github.com/caovinhphuc/mia-logistics-manager.git
 git push -u origin main
 ```
-

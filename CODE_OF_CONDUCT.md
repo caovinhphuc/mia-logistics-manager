@@ -34,7 +34,7 @@ Quy tắc ứng xử này áp dụng trong cả không gian dự án và không 
 
 ## Thực thi
 
-Các trường hợp hành vi lạm dụng, quấy rối hoặc không thể chấp nhận khác có thể được báo cáo bằng cách liên hệ với nhóm dự án tại kho.1@mia.vn. Tất cả các khiếu nại sẽ được xem xét và điều tra và sẽ dẫn đến phản hồi được coi là cần thiết và phù hợp với hoàn cảnh. Nhóm dự án có nghĩa vụ duy trì bảo mật đối với người báo cáo sự cố.
+Các trường hợp hành vi lạm dụng, quấy rối hoặc không thể chấp nhận khác có thể được báo cáo bằng cách liên hệ với nhóm dự án tại <kho.1@mia.vn>. Tất cả các khiếu nại sẽ được xem xét và điều tra và sẽ dẫn đến phản hồi được coi là cần thiết và phù hợp với hoàn cảnh. Nhóm dự án có nghĩa vụ duy trì bảo mật đối với người báo cáo sự cố.
 
 ## Attribution
 
@@ -70,7 +70,7 @@ Code of Conduct này được điều chỉnh từ [Contributor Covenant](https:
 
 Nếu bạn gặp hoặc chứng kiến vi phạm Code of Conduct:
 
-- **Email**: kho.1@mia.vn
+- **Email**: <kho.1@mia.vn>
 - **GitHub**: Tạo private issue
 - **Telegram**: Liên hệ admin của group
 

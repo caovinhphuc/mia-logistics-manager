@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-03-18T07:27:15.914Z",
+  "overall": "unhealthy",
+  "services": {
+    "file-system": {
+      "status": "error",
+      "message": "Missing files/directories: src/App.jsx",
+      "details": null,
+      "timestamp": "2026-03-18T07:27:15.915Z"
+    },
+    "dependencies": {
+      "status": "healthy",
+      "message": "All critical dependencies present",
+      "details": null,
+      "timestamp": "2026-03-18T07:27:15.916Z"
+    },
+    "environment": {
+      "status": "error",
+      "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+      "details": null,
+      "timestamp": "2026-03-18T07:27:15.916Z"
+    }
+  },
+  "errors": [
+    {
+      "service": "file-system",
+      "message": "Missing files/directories: src/App.jsx",
+      "details": null
+    },
+    {
+      "service": "environment",
+      "message": "Missing required environment variables: GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_PRIVATE_KEY, REACT_APP_GOOGLE_SHEETS_SPREADSHEET_ID",
+      "details": null
+    }
+  ],
+  "warnings": []
+}

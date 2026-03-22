@@ -278,7 +278,7 @@ tail -f logs/backend.log
 
 ## 🔄 Rollback Plan
 
-### If deployment fails:
+### If deployment fails
 
 1. **Stop new deployment**
 
@@ -303,6 +303,7 @@ tail -f logs/backend.log
    ```
 
 4. **Verify rollback**
+
    ```bash
    curl https://your-domain.com/api/health
    ```
@@ -317,7 +318,7 @@ tail -f logs/backend.log
 
 ### Support Channels
 
-- **Email**: kho.1@mia.vn
+- **Email**: <kho.1@mia.vn>
 - **Telegram**: [MIA Logistics Group]
 - **GitHub Issues**: [Repository]
 
@@ -344,7 +345,7 @@ tail -f logs/backend.log
 
 ---
 
-## 🎉 Deployment Complete!
+## 🎉 Deployment Complete
 
 **Deployed Version**: 2.1.1  
 **Deployment Date**: \_\_\_\_\_\_\_\_\_\_\_\_  

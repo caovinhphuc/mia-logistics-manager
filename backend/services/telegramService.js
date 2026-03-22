@@ -1,98 +1,113 @@
-import TelegramBot from 'node-telegram-bot-api'
-import { notificationConfig } from '../config/notification.js'
+import TelegramBot from 'node-telegram-bot-api';
+import { notificationConfig } from '../config/notification.js';
 
 class TelegramService {
   constructor() {
-    this.bot = null
-    this.isInitialized = false
-    this.commandHandlers = new Map()
-    this.init()
+    this.bot = null;
+    this.isInitialized = false;
+    this.commandHandlers = new Map();
+    this.init();
+  }
+
+  isValidTelegramToken(token) {
+    if (!token || typeof token !== 'string') return false;
+    const normalized = token.trim();
+    // Telegram bot token format: <bot_id>:<secret>
+    return /^[0-9]{8,12}:[A-Za-z0-9_-]{30,}$/.test(normalized);
   }
 
   init() {
     if (!notificationConfig.telegram.token) {
-      console.log('⚠️ Telegram Bot: CHƯA CẤU HÌNH TOKEN')
-      return
+      console.log('⚠️ Telegram Bot: CHƯA CẤU HÌNH TOKEN');
+      return;
+    }
+
+    if (!this.isValidTelegramToken(notificationConfig.telegram.token)) {
+      console.error(
+        '❌ Telegram Bot: TOKEN KHÔNG HỢP LỆ (định dạng sai, ví dụ đúng: 123456789:AA...)'
+      );
+      return;
     }
 
     try {
+      const token = notificationConfig.telegram.token.trim();
       if (notificationConfig.telegram.webhookUrl) {
         // Webhook mode for production
-        this.bot = new TelegramBot(notificationConfig.telegram.token)
-        this.setupWebhook()
+        this.bot = new TelegramBot(token);
+        this.setupWebhook();
       } else {
         // Polling mode for development
-        this.bot = new TelegramBot(notificationConfig.telegram.token, {
+        this.bot = new TelegramBot(token, {
           polling: true,
-        })
-        console.log('🤖 Telegram Bot: ✅ ĐÃ KHỞI ĐỘNG (Polling Mode)')
+        });
+        console.log('🤖 Telegram Bot: ✅ ĐÃ KHỞI ĐỘNG (Polling Mode)');
       }
 
-      this.setupCommandHandlers()
-      this.setupMessageHandlers()
-      this.isInitialized = true
+      this.setupCommandHandlers();
+      this.setupMessageHandlers();
+      this.isInitialized = true;
     } catch (error) {
-      console.error('❌ Telegram Bot: LỖI KHỞI TẠO:', error)
+      console.error('❌ Telegram Bot: LỖI KHỞI TẠO:', error);
     }
   }
 
   setupWebhook() {
-    const hookUrl = `${notificationConfig.telegram.webhookUrl.replace(/\/$/, '')}/webhook/telegram`
+    const hookUrl = `${notificationConfig.telegram.webhookUrl.replace(/\/$/, '')}/webhook/telegram`;
 
     this.bot
       .setWebHook(hookUrl)
       .then(() => {
-        console.log('✅ Telegram webhook set:', hookUrl)
+        console.log('✅ Telegram webhook set:', hookUrl);
       })
       .catch((error) => {
-        console.error('❌ Webhook setup error:', error.response?.body || error.message)
-      })
+        console.error('❌ Webhook setup error:', error.response?.body || error.message);
+      });
   }
 
   setupCommandHandlers() {
     // Register command handlers
-    this.registerCommand('/start', this.handleStart.bind(this))
-    this.registerCommand('/help', this.handleHelp.bind(this))
-    this.registerCommand('/status', this.handleStatus.bind(this))
-    this.registerCommand('/carriers', this.handleCarriers.bind(this))
-    this.registerCommand('/orders', this.handleOrders.bind(this))
-    this.registerCommand('/report', this.handleReport.bind(this))
-    this.registerCommand('/settings', this.handleSettings.bind(this))
+    this.registerCommand('/start', this.handleStart.bind(this));
+    this.registerCommand('/help', this.handleHelp.bind(this));
+    this.registerCommand('/status', this.handleStatus.bind(this));
+    this.registerCommand('/carriers', this.handleCarriers.bind(this));
+    this.registerCommand('/orders', this.handleOrders.bind(this));
+    this.registerCommand('/report', this.handleReport.bind(this));
+    this.registerCommand('/settings', this.handleSettings.bind(this));
 
     // Setup bot command listeners
     if (this.bot) {
       this.bot.on('message', (msg) => {
-        this.handleMessage(msg)
-      })
+        this.handleMessage(msg);
+      });
     }
   }
 
   setupMessageHandlers() {
     if (this.bot) {
       this.bot.on('message', (msg) => {
-        const chatId = msg.chat?.id
+        const chatId = msg.chat?.id;
         if (chatId) {
-          console.log(`📨 [Telegram] Message from chatId: ${chatId}`)
+          console.log(`📨 [Telegram] Message from chatId: ${chatId}`);
         }
-      })
+      });
     }
   }
 
   registerCommand(command, handler) {
-    this.commandHandlers.set(command, handler)
+    this.commandHandlers.set(command, handler);
   }
 
   handleMessage(msg) {
-    const { text, chat } = msg
-    if (!text || !chat) return
+    const { text, chat } = msg;
+    if (!text || !chat) return;
 
-    const command = text.split(' ')[0].toLowerCase()
-    const handler = this.commandHandlers.get(command)
+    const command = text.split(' ')[0].toLowerCase();
+    const handler = this.commandHandlers.get(command);
 
     if (handler) {
-      handler(msg)
+      handler(msg);
     } else if (text.startsWith('/')) {
-      this.sendMessage(chat.id, '❌ Lệnh không được hỗ trợ. Gõ /help để xem danh sách lệnh.')
+      this.sendMessage(chat.id, '❌ Lệnh không được hỗ trợ. Gõ /help để xem danh sách lệnh.');
     }
   }
 
@@ -109,9 +124,9 @@ class TelegramService {
 /report - Báo cáo nhanh
 /settings - Cài đặt thông báo
 
-💡 Gõ /help để biết thêm chi tiết!`
+💡 Gõ /help để biết thêm chi tiết!`;
 
-    await this.sendMessage(msg.chat.id, welcomeMessage)
+    await this.sendMessage(msg.chat.id, welcomeMessage);
   }
 
   async handleHelp(msg) {
@@ -136,9 +151,9 @@ class TelegramService {
 • Báo cáo hàng ngày/tuần/tháng
 • Cảnh báo hệ thống
 
-💬 *Hỗ trợ:* Liên hệ admin nếu cần hỗ trợ thêm.`
+💬 *Hỗ trợ:* Liên hệ admin nếu cần hỗ trợ thêm.`;
 
-    await this.sendMessage(msg.chat.id, helpMessage)
+    await this.sendMessage(msg.chat.id, helpMessage);
   }
 
   async handleStatus(msg) {
@@ -153,9 +168,9 @@ class TelegramService {
 
 🔔 **Thông báo:** Đang hoạt động
 📧 **Email:** ${notificationConfig.email.sendgrid.enabled ? '✅' : '❌'}
-🌐 **Webhook:** ${notificationConfig.telegram.webhookUrl ? '✅' : '❌ (Polling)'}`
+🌐 **Webhook:** ${notificationConfig.telegram.webhookUrl ? '✅' : '❌ (Polling)'}`;
 
-    await this.sendMessage(msg.chat.id, statusMessage)
+    await this.sendMessage(msg.chat.id, statusMessage);
   }
 
   async handleCarriers(msg) {
@@ -174,9 +189,9 @@ class TelegramService {
 • PER_KM: 1
 • PER_M3: 1
 
-📈 **Đánh giá trung bình:** 4.35/5.0`
+📈 **Đánh giá trung bình:** 4.35/5.0`;
 
-    await this.sendMessage(msg.chat.id, carriersMessage)
+    await this.sendMessage(msg.chat.id, carriersMessage);
   }
 
   async handleOrders(msg) {
@@ -191,9 +206,9 @@ class TelegramService {
 • Đã hủy: 0
 
 💰 **Doanh thu hôm nay:** 0 VNĐ
-📈 **So với hôm qua:** 0%`
+📈 **So với hôm qua:** 0%`;
 
-    await this.sendMessage(msg.chat.id, ordersMessage)
+    await this.sendMessage(msg.chat.id, ordersMessage);
   }
 
   async handleReport(msg) {
@@ -216,9 +231,9 @@ class TelegramService {
 
 📈 **Hiệu suất:**
 • Tỷ lệ giao hàng thành công: N/A
-• Thời gian giao hàng trung bình: N/A`
+• Thời gian giao hàng trung bình: N/A`;
 
-    await this.sendMessage(msg.chat.id, reportMessage)
+    await this.sendMessage(msg.chat.id, reportMessage);
   }
 
   async handleSettings(msg) {
@@ -235,91 +250,91 @@ class TelegramService {
 • Hàng tháng: Ngày 1, 10:00 AM ✅
 
 🔧 **Để thay đổi cài đặt:**
-Liên hệ admin để cập nhật cấu hình.`
+Liên hệ admin để cập nhật cấu hình.`;
 
-    await this.sendMessage(msg.chat.id, settingsMessage)
+    await this.sendMessage(msg.chat.id, settingsMessage);
   }
 
   async sendMessage(chatId, text, options = {}) {
     if (!this.bot || !this.isInitialized) {
-      console.error('❌ Telegram bot not initialized')
-      return false
+      console.error('❌ Telegram bot not initialized');
+      return false;
     }
 
     try {
       const defaultOptions = {
         disable_web_page_preview: true,
-      }
+      };
 
       await this.bot.sendMessage(chatId, text, {
         ...defaultOptions,
         ...options,
-      })
-      return true
+      });
+      return true;
     } catch (error) {
-      console.error('❌ Telegram send message error:', error)
-      return false
+      console.error('❌ Telegram send message error:', error);
+      return false;
     }
   }
 
   // Debug helper: return error details to caller
   async sendMessageDebug(chatId, text, options = {}) {
     if (!this.bot || !this.isInitialized) {
-      return { ok: false, error: 'Telegram bot not initialized' }
+      return { ok: false, error: 'Telegram bot not initialized' };
     }
     try {
-      const defaultOptions = { disable_web_page_preview: true }
+      const defaultOptions = { disable_web_page_preview: true };
       const res = await this.bot.sendMessage(chatId, text, {
         ...defaultOptions,
         ...options,
-      })
-      return { ok: true, result: res }
+      });
+      return { ok: true, result: res };
     } catch (error) {
-      const errMsg = error?.response?.body || error?.message || String(error)
-      return { ok: false, error: errMsg }
+      const errMsg = error?.response?.body || error?.message || String(error);
+      return { ok: false, error: errMsg };
     }
   }
 
   async sendNotification(template, data, priority = 'medium') {
-    const channels = notificationConfig.channels[priority] || notificationConfig.channels.medium
+    const channels = notificationConfig.channels[priority] || notificationConfig.channels.medium;
 
     if (channels.includes('telegram')) {
-      const chatId = notificationConfig.telegram.chatId
-      const message = this.formatTemplate(template, data)
+      const chatId = notificationConfig.telegram.chatId;
+      const message = this.formatTemplate(template, data);
 
       if (message) {
-        await this.sendMessage(chatId, message)
+        await this.sendMessage(chatId, message);
       }
     }
   }
 
   formatTemplate(templateName, data) {
-    const template = notificationConfig.templates[templateName]
-    if (!template || !template.telegram) return null
+    const template = notificationConfig.templates[templateName];
+    if (!template || !template.telegram) return null;
 
-    let message = template.telegram
+    let message = template.telegram;
 
     // Replace placeholders with actual data
     Object.keys(data).forEach((key) => {
-      const placeholder = `{${key}}`
-      message = message.replace(new RegExp(placeholder, 'g'), data[key] || 'N/A')
-    })
+      const placeholder = `{${key}}`;
+      message = message.replace(new RegExp(placeholder, 'g'), data[key] || 'N/A');
+    });
 
-    return message
+    return message;
   }
 
   // Webhook handler for production
   handleWebhook(req, res) {
     if (!this.bot) {
-      return res.sendStatus(500)
+      return res.sendStatus(500);
     }
 
     try {
-      this.bot.processUpdate(req.body)
-      res.sendStatus(200)
+      this.bot.processUpdate(req.body);
+      res.sendStatus(200);
     } catch (error) {
-      console.error('❌ Webhook processing error:', error)
-      res.sendStatus(500)
+      console.error('❌ Webhook processing error:', error);
+      res.sendStatus(500);
     }
   }
 
@@ -330,8 +345,8 @@ Liên hệ admin để cập nhật cấu hình.`
       hasToken: !!notificationConfig.telegram.token,
       webhookUrl: notificationConfig.telegram.webhookUrl,
       chatId: notificationConfig.telegram.chatId,
-    }
+    };
   }
 }
 
-export default new TelegramService()
+export default new TelegramService();

@@ -336,6 +336,51 @@
         }
       });
     </script>
+  
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID', {
+        page_title: document.title,
+        page_location: window.location.href,
+        custom_map: {
+          'custom_parameter_1': 'user_type',
+          'custom_parameter_2': 'feature_used'
+        }
+      });
+    </script>
+  
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'GA_MEASUREMENT_ID', {
+        page_title: document.title,
+        page_location: window.location.href,
+        custom_map: {
+          'custom_parameter_1': 'user_type',
+          'custom_parameter_2': 'feature_used'
+        }
+      });
+    </script>
+      <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' *.googleapis.com *.google.com *.gstatic.com;
+      style-src 'self' 'unsafe-inline' *.googleapis.com fonts.googleapis.com;
+      font-src 'self' fonts.gstatic.com data:;
+      img-src 'self' data: *.googleapis.com *.google.com *.gstatic.com;
+      connect-src 'self' http://localhost:3100 http://localhost:3000 *.googleapis.com *.google.com *.gstatic.com;
+      frame-src 'self' *.google.com;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+    ">
   </head>
 
   <body>

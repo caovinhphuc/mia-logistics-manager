@@ -5,6 +5,7 @@
 ## 🎯 TỔNG QUAN HỆ THỐNG
 
 ### **Architecture:**
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    FRONTEND (React)                         │
@@ -53,6 +54,7 @@
 ## 🌊 LUỒNG DỮ LIỆU CHI TIẾT
 
 ### **1. User → Frontend (Port 3000)**
+
 ```
 User opens: http://localhost:3000
     ↓
@@ -66,6 +68,7 @@ Outlet (React Router) renders child routes
 ```
 
 ### **2. Frontend → Backend (Port 5050)**
+
 ```
 Component (e.g., AIDashboard)
     ↓
@@ -85,6 +88,7 @@ UI re-renders
 ```
 
 ### **3. ConnectionStatus Monitoring**
+
 ```
 ConnectionStatus Component
     ↓
@@ -143,6 +147,7 @@ Display in Header
 ```
 
 ### **Header với Connection Status:**
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  Quản lý vận chuyển                   [🟢 Backend: :5050]  │
@@ -269,6 +274,7 @@ Display in Header
 ## 🎨 GIAO DIỆN HIỆN TẠI
 
 ### **Entry Point: `src/index.tsx`**
+
 ```typescript
 ✅ CORRECT (Sau khi fix):
 import { RouterProvider } from "react-router-dom";
@@ -279,6 +285,7 @@ import { router } from "./config/router";
 ```
 
 ### **Main Router: `src/config/router.tsx`**
+
 ```typescript
 Defines 20+ routes:
 - / → Dashboard (with Layout)
@@ -291,6 +298,7 @@ Defines 20+ routes:
 ```
 
 ### **Layout: `src/shared/components/layout/Layout.tsx`**
+
 ```typescript
 Structure:
 ┌─ Sidebar (260px)
@@ -328,6 +336,7 @@ Structure:
 ### **Google Sheets Integration Ready:**
 
 **Services in `src/services/googleSheets/`:**
+
 - ✅ `authService.ts` - Authentication
 - ✅ `baseService.ts` - Base CRUD operations
 - ✅ `carriersService.ts` - Carriers data
@@ -343,6 +352,7 @@ Structure:
 ## 🔌 PORTS & ENDPOINTS
 
 ### **Port Assignment:**
+
 ```
 Frontend:     :3000  ← React app (MAIN)
 Backend:      :5050  ← Express API
@@ -352,6 +362,7 @@ AI Service:   :8000  ← Python FastAPI (optional)
 ### **Backend API Endpoints:**
 
 #### **Health & Status:**
+
 ```
 GET /health
     → Service health check
@@ -364,6 +375,7 @@ GET /api/sheets/test
 ```
 
 #### **Custom Metrics:**
+
 ```
 GET /api/custom/logistics-overview
     → Total shipments, revenue, rates
@@ -390,6 +402,7 @@ POST /api/custom/predict-demand
 ## 🎯 COMPONENTS HIERARCHY
 
 ### **Top Level:**
+
 ```
 index.tsx
 └── RouterProvider (router.tsx)
@@ -422,16 +435,19 @@ index.tsx
 ## 📱 RESPONSIVE BEHAVIOR
 
 ### **Desktop (> 1024px):**
+
 - Sidebar: 260px (expanded)
 - Content: Fluid (max 1400px)
 - ConnectionStatus: Full text
 
 ### **Tablet (768px - 1024px):**
+
 - Sidebar: 60px (collapsed icons only)
 - Content: Full width
 - ConnectionStatus: Icons only
 
 ### **Mobile (< 768px):**
+
 - Sidebar: Overlay (toggle)
 - Content: 100% width
 - ConnectionStatus: Compact
@@ -443,6 +459,7 @@ index.tsx
 ### **Component: `ConnectionStatus.jsx`**
 
 **Logic Flow:**
+
 ```
 Component Mount
     ↓
@@ -460,6 +477,7 @@ fetchConnectionStatus()
 ```
 
 **Display States:**
+
 ```
 ✅ Both Connected:
 [🟢 Backend: Kết nối :5050] [🟢 Google Sheets: Kết nối]
@@ -476,6 +494,7 @@ fetchConnectionStatus()
 ## 📦 FEATURES & DATA MAPPING
 
 ### **1. Dashboard (Trang chủ)**
+
 ```
 Path: /
 Component: Dashboard.tsx
@@ -491,6 +510,7 @@ Display:
 ```
 
 ### **2. AI Analytics**
+
 ```
 Path: /ai-analytics (nếu thêm route)
 Component: AIDashboard.jsx
@@ -505,6 +525,7 @@ Display:
 ```
 
 ### **3. Shipments Features**
+
 ```
 Paths: /shipments/*
 Components:
@@ -519,6 +540,7 @@ Data từ Google Sheets:
 ```
 
 ### **4. Inbound Features**
+
 ```
 Paths: /inbound/*
 Components:
@@ -605,6 +627,7 @@ Re-render UI
 ## 🎨 CURRENT UI vs PREVIOUS
 
 ### **PREVIOUS (OAS Demo - Port 8080):**
+
 ```
 ❌ Build cũ từ Vite
 ❌ Assets không tồn tại
@@ -613,6 +636,7 @@ Re-render UI
 ```
 
 ### **CURRENT (MIA Logistics - Port 3000):**
+
 ```
 ✅ React Scripts build
 ✅ Full MIA features
@@ -630,6 +654,7 @@ Re-render UI
 ### **Cần làm:**
 
 1. **Setup Service Account:**
+
    ```bash
    # Xem GOOGLE_SHEETS_SETUP.md
    - Tạo service account
@@ -638,6 +663,7 @@ Re-render UI
    ```
 
 2. **Update Backend:**
+
    ```javascript
    // backend/server.js
    const { google } = require('googleapis');
@@ -651,6 +677,7 @@ Re-render UI
    ```
 
 3. **Test Connection:**
+
    ```bash
    curl http://localhost:5050/api/sheets/test
    ```
@@ -660,6 +687,7 @@ Re-render UI
 ## 📊 THỐNG KÊ DỰ ÁN
 
 ### **Files Count:**
+
 ```
 Total Files:     ~800+
 React Components: 128+
@@ -670,6 +698,7 @@ Documentation:   12 guides
 ```
 
 ### **Features:**
+
 ```
 ✅ Dashboard - Tổng quan
 ✅ Shipments - 4 sub-features
@@ -694,6 +723,7 @@ Documentation:   12 guides
 ### **Hiện Tại Frontend Đang Hiển Thị:**
 
 ✅ **Full MIA Logistics Manager System**
+
 - Layout với Sidebar professional
 - 14 menu items chính
 - 20+ routes functional
@@ -703,6 +733,7 @@ Documentation:   12 guides
 - Port 3000 (standardized)
 
 ### **Không Còn:**
+
 ❌ Trang demo "củi bắp" (App.jsx đơn giản)
 ❌ Port 8080 (Vite cũ)
 ❌ White screen errors
@@ -710,4 +741,3 @@ Documentation:   12 guides
 ---
 
 **🎉 Frontend giờ hiển thị CHÍNH XÁC hệ thống MIA Logistics Manager đầy đủ!** ✅
-

@@ -37,6 +37,7 @@ curl http://localhost:5050/api/telegram/env
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -57,6 +58,7 @@ curl -X GET http://localhost:5050/api/telegram/test
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -91,6 +93,7 @@ curl -X POST http://localhost:5050/api/telegram/send \
 ```
 
 **Request Body:**
+
 ```json
 {
   "text": "Nội dung tin nhắn cần gửi"
@@ -98,6 +101,7 @@ curl -X POST http://localhost:5050/api/telegram/send \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -222,6 +226,7 @@ const response = await fetch('/api/telegram/send', {
 ### 🎉 **INTEGRATION STATUS: 100% COMPLETE** ✅
 
 **Đã hoàn thành:**
+
 - ✅ Bot đã được tạo và cấu hình
 - ✅ Backend routes đã triển khai đầy đủ
 - ✅ Environment variables đã cấu hình

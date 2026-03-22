@@ -1,71 +1,117 @@
-// Performance Monitoring with Web Vitals
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+// Performance Optimization Configuration
+export const PERFORMANCE_CONFIG = {
+  // Image optimization
+  IMAGE_OPTIMIZATION: {
+    ENABLED: true,
+    QUALITY: 80,
+    MAX_WIDTH: 1920,
+    MAX_HEIGHT: 1080,
+    FORMATS: ['webp', 'jpeg', 'png']
+  },
 
-// Send metrics to analytics service
-function sendToAnalytics(metric) {
-  const body = JSON.stringify(metric);
+  // Code splitting
+  CODE_SPLITTING: {
+    ENABLED: true,
+    CHUNK_SIZE_LIMIT: 244000, // 244KB
+    MAX_CHUNKS: 10
+  },
 
-  // Send to Google Analytics
-  if (window.gtag) {
-    window.gtag('event', metric.name, {
-      event_category: 'Web Vitals',
-      event_label: metric.id,
-      value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-      non_interaction: true,
-    });
+  // Caching
+  CACHING: {
+    STATIC_ASSETS: '1y',
+    HTML_FILES: '0',
+    API_RESPONSES: '5m'
+  },
+
+  // Lazy loading
+  LAZY_LOADING: {
+    ENABLED: true,
+    THRESHOLD: 0.1,
+    ROOT_MARGIN: '50px'
+  },
+
+  // Preloading
+  PRELOADING: {
+    ENABLED: true,
+    CRITICAL_ROUTES: ['/dashboard', '/transport', '/warehouse']
+  }
+};
+
+// Performance optimization utilities
+export const optimizeImage = (src, options = {}) => {
+  const {
+    quality = PERFORMANCE_CONFIG.IMAGE_OPTIMIZATION.QUALITY,
+    width = PERFORMANCE_CONFIG.IMAGE_OPTIMIZATION.MAX_WIDTH,
+    height = PERFORMANCE_CONFIG.IMAGE_OPTIMIZATION.MAX_HEIGHT
+  } = options;
+
+  // If using a CDN or image optimization service
+  if (src.includes('googleapis.com') || src.includes('gstatic.com')) {
+    return `${src}?w=${width}&h=${height}&q=${quality}`;
   }
 
-  // Send to custom analytics endpoint
-  if (process.env.REACT_APP_ANALYTICS_ENDPOINT) {
-    fetch(process.env.REACT_APP_ANALYTICS_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+  return src;
+};
+
+// Lazy loading hook
+export const useLazyLoading = (ref, options = {}) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
       },
-      body: body,
-    }).catch(console.error);
-  }
+      {
+        threshold: options.threshold || PERFORMANCE_CONFIG.LAZY_LOADING.THRESHOLD,
+        rootMargin: options.rootMargin || PERFORMANCE_CONFIG.LAZY_LOADING.ROOT_MARGIN
+      }
+    );
 
-  // Log to console in development
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Web Vital:', metric);
-  }
-}
+    observer.observe(ref.current);
 
-// Initialize Web Vitals monitoring
-function initPerformanceMonitoring() {
-  getCLS(sendToAnalytics);
-  getFID(sendToAnalytics);
-  getFCP(sendToAnalytics);
-  getLCP(sendToAnalytics);
-  getTTFB(sendToAnalytics);
+    return () => observer.disconnect();
+  }, [ref, options]);
 
-  // Additional performance metrics
-  if ('performance' in window) {
-    // Monitor page load time
-    window.addEventListener('load', () => {
-      const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-      sendToAnalytics({
-        name: 'PageLoadTime',
-        value: loadTime,
-        id: 'page-load',
-        delta: loadTime,
-        entries: []
-      });
-    });
+  return isVisible;
+};
 
-    // Monitor memory usage (if available)
-    if ('memory' in performance) {
-      const memoryInfo = performance.memory;
-      sendToAnalytics({
-        name: 'MemoryUsage',
-        value: memoryInfo.usedJSHeapSize / 1024 / 1024, // MB
-        id: 'memory-usage',
-        delta: memoryInfo.usedJSHeapSize / 1024 / 1024,
-        entries: []
-      });
+// Performance monitoring
+export const measurePerformance = (name, fn) => {
+  return async (...args) => {
+    const start = performance.now();
+    try {
+      const result = await fn(...args);
+      const end = performance.now();
+
+      // Track performance metric
+      if (window.gtag) {
+        window.gtag('event', 'performance', {
+          event_category: 'Performance',
+          event_label: name,
+          value: Math.round(end - start)
+        });
+      }
+
+      return result;
+    } catch (error) {
+      const end = performance.now();
+
+      // Track error performance
+      if (window.gtag) {
+        window.gtag('event', 'performance_error', {
+          event_category: 'Performance',
+          event_label: name,
+          value: Math.round(end - start)
+        });
+      }
+
+      throw error;
     }
-  }
-}
-
-export { initPerformanceMonitoring, sendToAnalytics };
+  };
+};

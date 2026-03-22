@@ -68,7 +68,7 @@ NODE_ENV=production npm start
 ### Step 6: Test Production
 
 1. Visit domain
-2. Test login (admin@mia.vn)
+2. Test login (<admin@mia.vn>)
 3. Check console for errors
 4. Verify Google Sheets sync
 5. Test all features

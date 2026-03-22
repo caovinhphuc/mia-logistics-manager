@@ -18,6 +18,7 @@ Hệ thống phân quyền dựa trên vai trò (RBAC) cho MIA Logistics Manager
 Format: `resource:action`
 
 ### Resources & Actions
+
 - `employees` - view, create, update, delete
 - `transfers` - view, create, update, delete
 - `carriers` - view, create, update, delete
@@ -151,4 +152,3 @@ const actions = getAvailableActions(user.role, 'employees');
 3. **Use PermissionGate** để ẩn/hiện sections lớn
 4. **Use HOC guards** cho component-level protection
 5. **Validate on backend** - Frontend checks chỉ là UX, không phải security
-

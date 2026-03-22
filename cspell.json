@@ -1,0 +1,22 @@
+{
+  "version": "0.2",
+  "ignorePaths": [
+    "**/*.md",
+    "**/*.sh",
+    "**/*.txt",
+    "**/*.csv",
+    "**/*.yaml",
+    "**/*.yml",
+    "**/*.json",
+    "node_modules",
+    ".git",
+    "pnpm-lock.yaml",
+    "package-lock.json"
+  ],
+  "enabledLanguageIds": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact"
+  ]
+}

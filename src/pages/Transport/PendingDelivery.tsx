@@ -1257,13 +1257,13 @@ const PendingDelivery: React.FC = () => {
                       setOrderVehicleForm({
                         ...orderVehicleForm,
                         carrierName: e.target.value,
-                        carrierId: carrier?.id || '',
+                        carrierId: carrier?.carrierId || carrier?.id || '',
                       });
                     }}
                     label="Nhà vận chuyển *"
                   >
                     {carriers.map((carrier) => (
-                      <MenuItem key={carrier.id || carrier.name} value={carrier.name}>
+                      <MenuItem key={carrier.carrierId || carrier.id || carrier.name} value={carrier.name}>
                         {carrier.name}
                       </MenuItem>
                     ))}

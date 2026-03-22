@@ -181,7 +181,7 @@ Dự án MIA Logistics Manager đã được hoàn thiện với đầy đủ do
 
 ## 🚀 Deployment Options
 
-### Ready for:
+### Ready for
 
 1. ✅ **Vercel** - Primary (configured)
 2. ✅ **Netlify** - Alternative
@@ -203,7 +203,7 @@ Dự án MIA Logistics Manager đã được hoàn thiện với đầy đủ do
 
 ### Available Commands
 
-#### Via npm:
+#### Via npm
 
 ```bash
 npm start                    # Start frontend
@@ -218,7 +218,7 @@ npm run security:audit       # Security audit
 npm run deps:check           # Check dependencies
 ```
 
-#### Via Makefile:
+#### Via Makefile
 
 ```bash
 make install                 # Install dependencies
@@ -233,7 +233,7 @@ make security                # Security audit
 make clean                   # Clean artifacts
 ```
 
-#### Via Scripts:
+#### Via Scripts
 
 ```bash
 ./start-project.sh           # Full startup with notifications
@@ -359,7 +359,7 @@ make clean                   # Clean artifacts
 
 ### Contact
 
-- **Email**: kho.1@mia.vn
+- **Email**: <kho.1@mia.vn>
 - **GitHub**: [Repository URL]
 - **Telegram**: [MIA Logistics Group]
 

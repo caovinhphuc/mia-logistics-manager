@@ -7,7 +7,7 @@
 1. **Đăng nhập GitHub**: Truy cập [github.com](https://github.com)
 2. **Tạo Repository mới**:
    - Click "New repository" hoặc "+" → "New repository"
-   - Repository name: ` `
+   - Repository name: ``
    - Description: `MIA.vn Google Integration Platform - Comprehensive automation and data management system`
    - Visibility: Public hoặc Prreact-oas-integration-projectivate (tùy chọn)
    - **KHÔNG** check "Initialize with README" (vì đã có code)

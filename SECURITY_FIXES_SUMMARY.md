@@ -136,7 +136,7 @@ Before going live, ensure:
 - **Full Audit Report**: [SECURITY_AUDIT_REPORT.md](./SECURITY_AUDIT_REPORT.md)
 - **Security Issues**: [SECURITY.md](./SECURITY.md)
 
-## 🎉 You're Ready!
+## 🎉 You're Ready
 
 Your application is now:
 

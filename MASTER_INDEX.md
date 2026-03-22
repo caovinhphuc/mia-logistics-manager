@@ -300,7 +300,7 @@ make clean                   # Clean artifacts
 
 ## 🔍 Search Guide
 
-### I need to...
+### I need to
 
 **Install the system**  
 → [README - Installation](README.md#-cài-đặt-và-chạy)
@@ -388,7 +388,7 @@ make clean                   # Clean artifacts
 
 ### Contact
 
-- **Email**: kho.1@mia.vn
+- **Email**: <kho.1@mia.vn>
 - **GitHub**: [Project Repository]
 - **Telegram**: MIA Logistics Group
 

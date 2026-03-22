@@ -23,12 +23,14 @@
 ## 📝 Login Credentials
 
 ### Admin Account
+
 ```
 Email: admin@mia.vn
 Password: admin123
 ```
 
 ### Test Account
+
 ```
 Email: test@mia.vn
 Password: test123
@@ -37,8 +39,8 @@ Password: test123
 ## 🎯 Next Steps
 
 Để production-ready, cần:
+
 1. Backend API với bcrypt
 2. JWT tokens
 3. Server-side validation
 4. Rate limiting
-

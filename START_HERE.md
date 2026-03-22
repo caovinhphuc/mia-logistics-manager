@@ -131,9 +131,9 @@ cp .env.example .env
 
 ### Step 4: Access
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:3100
-- Health Check: http://localhost:3100/api/health
+- Frontend: <http://localhost:3000>
+- Backend API: <http://localhost:3100>
+- Health Check: <http://localhost:3100/api/health>
 
 ---
 
@@ -225,7 +225,7 @@ make deploy
 
 ### Contact
 
-- **Email**: kho.1@mia.vn
+- **Email**: <kho.1@mia.vn>
 - **GitHub Issues**: For bugs & features
 - **Telegram**: MIA Logistics Group
 
@@ -246,7 +246,7 @@ Before you start:
 - [ ] Setup development environment
 - [ ] Run `make install`
 - [ ] Run `make start`
-- [ ] Access http://localhost:3000
+- [ ] Access <http://localhost:3000>
 - [ ] Explore the application
 - [ ] Read relevant docs for your role
 

@@ -134,7 +134,7 @@ pm2 start npm --name "mia-logistics" -- start
 
 ## Security Best Practices
 
-### ✅ DO:
+### ✅ DO
 
 - Use strong, randomly generated secrets for SESSION_SECRET and JWT_SECRET
 - Use app-specific passwords for Gmail (not your main password)
@@ -144,7 +144,7 @@ pm2 start npm --name "mia-logistics" -- start
 - Use HTTPS in production
 - Restrict API keys to specific domains/IPs when possible
 
-### ❌ DON'T:
+### ❌ DON'T
 
 - Commit `.env` files to Git
 - Use default/placeholder values in production
@@ -252,4 +252,4 @@ For additional help:
 
 ## Security Contact
 
-If you discover a security vulnerability, please email: security@mia-logistics.com
+If you discover a security vulnerability, please email: <security@mia-logistics.com>

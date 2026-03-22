@@ -467,7 +467,7 @@ For questions or issues related to InboundSchedule implementation:
 - **Documentation**: `docs/schemas/INBOUND_SCHEDULE.md`
 - **Types**: `src/types/inboundSchedule.ts`
 - **Helpers**: `src/utils/inboundScheduleHelpers.ts`
-- **Email**: kho.1@mia.vn
+- **Email**: <kho.1@mia.vn>
 
 ---
 

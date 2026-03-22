@@ -90,29 +90,34 @@ Dự án MIA Logistics Manager đã được hoàn thiện toàn diện với **
 ### 4. DevOps Package ✅
 
 **Docker (3 files):**
+
 - `Dockerfile` - Frontend multi-stage build
 - `backend/Dockerfile` - Backend container
 - `docker-compose.yml` - Multi-service orchestration
 
 **CI/CD (4 files):**
+
 - `.github/workflows/ci.yml` - 8-job pipeline
 - Bug report template
 - Feature request template
 - Pull request template
 
 **Git Hooks (2 files):**
+
 - `.husky/pre-commit` - Quality checks
 - `.husky/commit-msg` - Commit validation
 
 ### 5. Automation Scripts ✅
 
 **Backend Scripts (4 files):**
+
 - `export-all-sheets.js` - Backup to JSON
 - `import-sheets.js` - Restore from backup
 - `verify-migration.js` - Data verification
 - `import-csv-to-sheets.js` - CSV import
 
 **Helper Scripts (5 files):**
+
 - `backup-before-migration.sh` - Pre-migration backup
 - `test-all.sh` - Run all tests
 - `deploy-check.sh` - Pre-deployment checks

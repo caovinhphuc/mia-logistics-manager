@@ -6,9 +6,9 @@ Quick guide để commit lên GitHub và deploy production.
 
 ## 📊 Current Status
 
-✅ **Code**: Committed locally (335 files)  
-✅ **Archive**: 38 old files backed up  
-⚠️ **GitHub**: Remote URL needs update  
+✅ **Code**: Committed locally (335 files)
+✅ **Archive**: 38 old files backed up
+⚠️ **GitHub**: Remote URL needs update
 ⏳ **Deploy**: Ready after GitHub setup
 
 ---
@@ -17,11 +17,11 @@ Quick guide để commit lên GitHub và deploy production.
 
 ### Create New Repository
 
-1. **Truy cập**: https://github.com/new
+1. **Truy cập**: [https://github.com/new](https://github.com/new)
 
 2. **Repository Info**:
 
-   ```
+   ```text
    Name: mia-logistics-manager
    Description: MIA Logistics Manager - Hệ thống quản lý logistics chuyên nghiệp v2.1.1
    Visibility: Private (recommended) or Public
@@ -81,7 +81,7 @@ vercel --prod
 
 **Environment Variables** (add in Vercel dashboard):
 
-```
+```text
 REACT_APP_GOOGLE_SPREADSHEET_ID=your_value
 REACT_APP_TELEGRAM_BOT_TOKEN=your_value
 REACT_APP_TELEGRAM_CHAT_ID=your_value
@@ -236,13 +236,13 @@ curl https://your-domain.com/api/health
 
 - **GitHub Issues**: Repository setup problems
 - **Deployment Docs**: [FINAL_DEPLOYMENT_CHECKLIST.md](FINAL_DEPLOYMENT_CHECKLIST.md)
-- **Vercel Docs**: https://vercel.com/docs
-- **Netlify Docs**: https://docs.netlify.com
+- **Vercel Docs**: [https://vercel.com/docs](https://vercel.com/docs)
+- **Netlify Docs**: [https://docs.netlify.com](https://docs.netlify.com)
 
 ---
 
-**Status**: ✅ Ready to Deploy  
-**Commit**: ✅ Completed (335 files)  
+**Status**: ✅ Ready to Deploy
+**Commit**: ✅ Completed (335 files)
 **Next**: Setup GitHub remote → Push → Deploy
 
-_Last Updated: November 12, 2025_
+Last Updated: November 12, 2025

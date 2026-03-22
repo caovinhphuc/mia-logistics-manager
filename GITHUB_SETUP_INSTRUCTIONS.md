@@ -2,7 +2,7 @@
 
 ## Bước 1: Tạo GitHub Repository
 
-1. Truy cập https://github.com/new
+1. Truy cập <https://github.com/new>
 2. Tạo repository mới với thông tin:
    - **Repository name**: `mia-vn-google-integration`
    - **Description**: `MIA.vn Google Integration Platform - React automation system`
@@ -24,13 +24,15 @@ git push -u origin main
 ## Bước 3: Deploy lên Vercel
 
 ### Option A: Deploy từ GitHub (Recommended)
-1. Truy cập https://vercel.com
+
+1. Truy cập <https://vercel.com>
 2. Click "New Project"
 3. Import từ GitHub repo vừa tạo
 4. Vercel sẽ tự động detect React app
 5. Click "Deploy"
 
 ### Option B: Deploy từ CLI
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel

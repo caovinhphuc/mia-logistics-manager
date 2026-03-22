@@ -1,7 +1,7 @@
 # 📋 MIA Logistics Manager - Tiến độ và Checklist
 
 > **Cập nhật:** 8 tháng 10, 2025
-> **Status:** ✅ App đang chạy thành công tại http://localhost:3000
+> **Status:** ✅ App đang chạy thành công tại <http://localhost:3000>
 
 ---
 
@@ -10,6 +10,7 @@
 ### ✅ **ĐÃ HOÀN THÀNH** (100%)
 
 #### **Phase 0: Project Setup & UI Foundation**
+
 - [x] **React App Setup** - Cấu trúc project React 18 với TypeScript
 - [x] **Material-UI Integration** - Theme và component library
 - [x] **PWA Configuration** - Service Worker, manifest.json, icons
@@ -25,9 +26,11 @@
 ## 🚧 **ĐANG THỰC HIỆN** (0%)
 
 ### **Phase 1: Google Cloud Foundation**
+
 **Timeline:** Tuần 1 (9-15 tháng 10, 2025)
 
 #### **Sprint 1.1: Google Cloud Setup** (3/4 tasks) 🚧
+
 - [x] **Google Cloud Project** ✅
   - [x] ✅ Google Cloud Console opened
   - [x] ✅ Tạo project: "mia-logistics-manager-2025"
@@ -76,9 +79,11 @@
 ## 📅 **KẾ HOẠCH TIẾP THEO**
 
 ### **Phase 2: Core Data Management**
+
 **Timeline:** Tuần 2-3 (16-29 tháng 10, 2025)
 
 #### **Sprint 2.1: Locations Management** (0/4 tasks)
+
 - [ ] **LocationsList Enhancement**
   - [ ] Connect với Google Sheets data
   - [ ] Implement search/filter functionality
@@ -102,6 +107,7 @@
   - [ ] Error scenario handling
 
 #### **Sprint 2.2: Employees Management** (0/4 tasks)
+
 - [ ] **Employee Data Integration**
   - [ ] Connect Employees page với Google Sheets
   - [ ] Implement employee CRUD operations
@@ -123,9 +129,11 @@
   - [ ] Activity tracking
 
 ### **Phase 3: Transport & Operations**
+
 **Timeline:** Tuần 4-5 (30 tháng 10 - 12 tháng 11, 2025)
 
 #### **Sprint 3.1: Transport Requests** (0/3 tasks)
+
 - [ ] **Transport Request Management**
   - [ ] Create transport request form
   - [ ] Request status workflow
@@ -142,6 +150,7 @@
   - [ ] Notification system
 
 #### **Sprint 3.2: Warehouse Operations** (0/3 tasks)
+
 - [ ] **Transfer Management**
   - [ ] Warehouse transfer operations
   - [ ] Inventory tracking
@@ -158,9 +167,11 @@
   - [ ] Inventory reports
 
 ### **Phase 4: Advanced Features**
+
 **Timeline:** Tuần 6-7 (13-26 tháng 11, 2025)
 
 #### **Sprint 4.1: Maps Integration** (0/2 tasks)
+
 - [ ] **Google Maps Integration**
   - [ ] Location picker component
   - [ ] Route visualization
@@ -172,6 +183,7 @@
   - [ ] Real-time tracking
 
 #### **Sprint 4.2: Reports & Analytics** (0/2 tasks)
+
 - [ ] **Dashboard Enhancement**
   - [ ] Real data cho all stats cards
   - [ ] Interactive charts
@@ -187,24 +199,28 @@
 ## 🔧 **TECHNICAL CHECKLIST**
 
 ### **Environment Setup**
+
 - [ ] Node.js 16+ installed
 - [ ] npm 8+ installed
 - [ ] Google Cloud CLI installed
 - [ ] VS Code với React extensions
 
 ### **Project Configuration**
+
 - [x] `package.json` dependencies updated
 - [ ] `.env` file configured
 - [ ] `service-account-key.json` in place
 - [ ] Google Cloud credentials verified
 
 ### **Development Workflow**
+
 - [x] Development server running
 - [ ] Hot reload working
 - [ ] Error boundaries in place
 - [ ] Console clean (no errors/warnings)
 
 ### **Code Quality**
+
 - [x] ESLint configuration
 - [x] TypeScript setup
 - [ ] Unit tests setup (Jest)
@@ -215,6 +231,7 @@
 ## 🚀 **IMMEDIATE NEXT STEPS** (Tuần này) - 🔥 IN PROGRESS
 
 ### **Ưu tiên số 1: Google Cloud Setup**
+
 ```bash
 ⏰ Deadline: 12 tháng 10, 2025 (4 ngày)
 🎯 Goal: Enable Google Sheets integration
@@ -222,16 +239,19 @@
 ```
 
 #### **✅ COMPLETED TODAY (8 tháng 10)**
+
 - [x] ✅ GitHub repository created & pushed
 - [x] ✅ PROJECT_PROGRESS.md roadmap established
 - [x] ✅ Security gitignore setup
 - [x] ✅ Google Cloud Console opened
 
 #### **🔥 CURRENT TASK: Complete Service Account & Create Spreadsheet**
+
 **Status:** 🚧 Ready for execution
 **Next Action:** Service Account creation → Spreadsheet setup
 
 **Service Account Steps (In Browser):**
+
 1. **Google Cloud Console - Credentials:**
    - Go to: APIs & Services > Credentials
    - Click "+ CREATE CREDENTIALS" > "Service account"
@@ -246,6 +266,7 @@
    - Move to `/server/service-account-key.json`
 
 **Spreadsheet Setup Steps:**
+
 1. **Create Google Spreadsheet:**
    - Go to [Google Sheets](https://sheets.google.com/)
    - Create new → Name: "MIA Logistics Manager"
@@ -257,6 +278,7 @@
    - Add headers to each sheet
 
 #### **📋 AFTER COMPLETION (Tonight)**
+
 - [ ] **Test Integration:**
   - [ ] Run test script: `testGoogleSheets.js`
   - [ ] Verify connection works
@@ -270,6 +292,7 @@
   - [ ] Secure file placement
 
 #### **📋 REMAINING THIS WEEK:**
+
 3. **Ngày 10 tháng 10:**
    - [ ] Create Google Spreadsheet
    - [ ] Share with service account
@@ -285,6 +308,7 @@
 ## 📊 **METRICS & TRACKING**
 
 ### **Development Velocity**
+
 - **Completed Tasks:** 27/68 (39.7%) ⬆️⬆️⬆️
 - **Current Sprint:** Phase 1 - Google Cloud Foundation (Sprint 1.1: 75% complete)
 - **Today's Achievement:** Complete Google Sheets integration framework ready
@@ -292,12 +316,14 @@
 - **Estimated Completion:** 26 tháng 11, 2025
 
 ### **Technical Debt**
+
 - [ ] Add unit tests for existing components
 - [ ] Improve TypeScript coverage
 - [ ] Optimize bundle size
 - [ ] Add proper error logging
 
 ### **Performance Goals**
+
 - [ ] Page load time < 2s
 - [ ] First meaningful paint < 1s
 - [ ] Google Sheets API response < 500ms
@@ -308,12 +334,14 @@
 ## 📞 **SUPPORT & RESOURCES**
 
 ### **Documentation**
+
 - [📚 Google Cloud Setup Guide](./docs/GOOGLE_CLOUD_SETUP.md)
 - [🚀 Quick Setup Guide](./docs/QUICK_SETUP.md)
 - [🔧 Deployment Guide](./docs/DEPLOYMENT.md)
 - [📝 Contributing Guidelines](./docs/CONTRIBUTING.md)
 
 ### **External Resources**
+
 - [Google Sheets API Documentation](https://developers.google.com/sheets/api)
 - [Google Cloud Console](https://console.cloud.google.com/)
 - [Material-UI Documentation](https://mui.com/)
@@ -324,18 +352,21 @@
 ## 🎯 **SUCCESS CRITERIA**
 
 ### **Phase 1 Success (Target: 15 tháng 10)**
+
 - ✅ Google Cloud project setup hoàn tất
 - ✅ Google Sheets API integration working
 - ✅ LocationsList page hiển thị real data từ Google Sheets
 - ✅ Basic CRUD operations working
 
 ### **Phase 2 Success (Target: 29 tháng 10)**
+
 - ✅ Tất cả pages connect với Google Sheets
 - ✅ Full CRUD operations cho Locations và Employees
 - ✅ Stats cards hiển thị real data
 - ✅ Authentication system working
 
 ### **MVP Success (Target: 26 tháng 11)**
+
 - ✅ Full logistics management system working
 - ✅ Google Maps integration complete
 - ✅ Reports và analytics functional

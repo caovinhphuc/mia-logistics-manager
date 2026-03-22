@@ -44,10 +44,10 @@ export const sanitizeInput = (input) => {
 
   // Remove potentially dangerous characters
   return input
-    .replace(/<script[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<iframe[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/<script[^<]*(?:(?!</script>)<[^<]*)*</script>/gi, '')
+    .replace(/<iframe[^<]*(?:(?!</iframe>)<[^<]*)*</iframe>/gi, '')
     .replace(/javascript:/gi, '')
-    .replace(/on\w+\s*=/gi, '')
+    .replace(/onw+s*=/gi, '')
     .trim();
 };
 

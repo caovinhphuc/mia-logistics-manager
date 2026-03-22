@@ -7,15 +7,18 @@
 ## Contents
 
 ### Old README Files
+
 - README-OLD.md
 - README-NEW.md
 - README copy.md
 
 ### Backup Files
+
 - index-backup.js
 - package copy.json
 
 ### Analysis Reports
+
 - Authentication audits
 - RBAC audits
 - Navigation updates
@@ -24,12 +27,14 @@
 - And more...
 
 ### Old Setup/Config Docs
+
 - Config standardization
 - Ports configuration
 - Demo presentations
 - Installation reports
 
 ### Old Setup Guides
+
 - GitHub setup guides
 - Google Sheets setup
 - Telegram integration guides
@@ -38,6 +43,7 @@
 ## Why Archived?
 
 These files were:
+
 - Replaced by newer, better versions
 - Analysis reports that served their purpose
 - Backup files no longer needed
@@ -46,6 +52,7 @@ These files were:
 ## Restoration
 
 If you need any file:
+
 ```bash
 cp archive/session-20251112-023751/path/to/file ./
 ```
@@ -54,4 +61,3 @@ cp archive/session-20251112-023751/path/to/file ./
 
 - **Keep**: If you might need reference later
 - **Delete**: After 30 days if not needed
-
