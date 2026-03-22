@@ -659,7 +659,7 @@ app.get('/api/auth/role-permissions', async (req, res) => {
     const sheets = getSheetsClient();
     await ensureHeaders(sheets, ROLE_PERMS_SHEET, ROLE_PERMS_HEADERS);
     const list = await getAllRecords(sheets, ROLE_PERMS_SHEET);
-    return res.json((list || []).filter((r) => r.roleId === roleId));
+    return res.json(roleId ? (list || []).filter((r) => r.roleId === roleId) : (list || []));
   } catch (e) {
     console.error('GET /api/auth/role-permissions error:', e);
     res.status(500).json({ error: e.message });
@@ -4247,6 +4247,27 @@ app.get("/api/roles", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Alias: /api/role-permissions -> /api/auth/role-permissions
+app.get("/api/role-permissions", async (req, res) => {
+  const roleId = String(req.query.roleId || "");
+
+  await resolveSpreadsheetId();
+  const sheets = getSheetsClient();
+  await ensureHeaders(sheets, ROLE_PERMS_SHEET, ROLE_PERMS_HEADERS);
+  const list = await getAllRecords(sheets, ROLE_PERMS_SHEET);
+  return res.json(roleId ? (list || []).filter((r) => r.roleId === roleId) : (list || []));
+});
+app.post("/api/role-permissions", async (req, res) => {
+  try {
+    const { roleId, permissions } = req.body;
+    if (!roleId || !permissions) return res.status(400).json({ error: "roleId and permissions required" });
+    await resolveSpreadsheetId();
+    const sheets = getSheetsClient();
+    res.json({ success: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 
 
 app.post("/api/auth/verify-password", async (req, res) => {
