@@ -50,7 +50,7 @@ class JuneFreshSessionWithProducts:
 
             # Setup date range
             date_customizer = DateCustomizer(driver, logger)
-            if not date_customizer.set_date_range('2025-06-01', '2025-06-30', 'ecom'):
+            if not date_customizer.set_date_range('2026-03-01', '2026-03-22', 'ecom'):
                 return None, None, None, None, None
             if not date_customizer.set_display_limit(2000):
                 return None, None, None, None, None
@@ -155,7 +155,7 @@ class JuneFreshSessionWithProducts:
 
                 order['month'] = 'June'
                 order['year'] = '2025'
-                order['date_range'] = 'June 2025'
+                order['date_range'] = 'March 2026'
 
                 # Add product details if available
                 order_id_str = str(order_id).strip()
@@ -362,7 +362,7 @@ class JuneFreshSessionWithProducts:
             print("💾 Saving enhanced page data...")
 
             # Local backup
-            filename = f"data/june_2025_enhanced_page_{page_number:02d}_{self.session_id}.json"
+            filename = f"data/march_2026_enhanced_page_{page_number:02d}_{self.session_id}.json"
             os.makedirs('data', exist_ok=True)
 
             # Calculate statistics
@@ -378,7 +378,7 @@ class JuneFreshSessionWithProducts:
                     'total_products': total_products,
                     'orders_with_products': orders_with_products,
                     'product_extraction_rate': f"{orders_with_products/len(page_data)*100:.1f}%",
-                    'date_range': 'June 2025',
+                    'date_range': 'March 2026',
                     'processing_method': 'Fresh Session Per Page WITH Products',
                     'target_total': self.target_records
                 },
@@ -423,7 +423,13 @@ class JuneFreshSessionWithProducts:
             print(f"🆔 Session: {self.session_id}")
             print("=" * 70)
 
-            estimated_pages = 12
+            # Dynamic page count from first login
+            _lm, _drv, _lgr, _ph, _es = self.login_and_setup()
+            total_records = _ph.get_total_records() if _ph else 23452
+            self.target_records = total_records
+            estimated_pages = max(1, (total_records + 1999) // 2000)
+            print(f"📊 Actual records: {total_records:,} → {estimated_pages} pages")
+            self.logout_and_cleanup(_drv, _lgr)
             successful_pages = []
             failed_pages = []
 

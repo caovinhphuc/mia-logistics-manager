@@ -22,7 +22,7 @@ class SystemSetup:
         self.sla_monitor = None
         self.sheets_config_service = None
 
-    def setup_driver(self, headless=True):
+    def setup_driver(self, headless=False):
         """Setup Chrome WebDriver với tối ưu performance"""
         try:
             self.logger.info("🌐 Setting up WebDriver...")
@@ -174,7 +174,7 @@ class SystemSetup:
             self.logger.error(f"❌ Session Manager setup failed: {e}")
             return None
 
-    def setup_all_components(self, headless=True):
+    def setup_all_components(self, headless=False):
         """Setup tất cả các thành phần"""
         try:
             self.logger.info("🔧 Setting up all system components...")
@@ -226,7 +226,7 @@ class SystemSetup:
             self.logger.warning(f"⚠️ Cleanup warning: {e}")
 
 
-def setup_automation_system(logger, headless=True):
+def setup_automation_system(logger, headless=False):
     """Convenience function để setup hệ thống"""
     setup_manager = SystemSetup(logger)
     return setup_manager.setup_all_components(headless)

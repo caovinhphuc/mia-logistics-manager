@@ -187,10 +187,11 @@ class LoginManager:
                 WebDriverWait(self.driver, 15).until(
                     EC.any_of(
                         EC.presence_of_element_located((By.CSS_SELECTOR, "[data-testid='user-name'], .user-name, .username")),
-                        EC.url_contains("/so"),
+                        # EC.url_contains("/so") removed - url stays same
                         EC.url_contains("dashboard"),
                         EC.url_contains("home"),
-                        EC.url_changes(login_url)
+                        EC.url_changes(login_url),
+                        EC.presence_of_element_located((By.CSS_SELECTOR, ".navbar-user, .user-info"))
                     )
                 )
                 self.logger.info("✅ Đăng nhập thành công")
