@@ -273,7 +273,7 @@ def main():
         return False
 
     # Step 2: Create user verification sheet
-    sheet_success = create_user_verification_sheet(sheets_service)
+    sheet_success = True  # Disabled auto-create verification sheet
 
     if not sheet_success:
         print("\n⚠️ Failed to create user verification sheet.")
